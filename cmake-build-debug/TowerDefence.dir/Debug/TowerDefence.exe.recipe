@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <ProjectOutputs>
+    <ProjectOutput>
+      <FullPath>D:\codes\TowerDefence\cmake-build-debug\Debug\ZERO_CHECK</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>D:\codes\TowerDefence\cmake-build-debug\Debug\SYNC_RESOURCE-TowerDefence</FullPath>
+    </ProjectOutput>
+    <ProjectOutput>
+      <FullPath>D:\codes\TowerDefence\cmake-build-debug\bin\TowerDefence\Debug\TowerDefence.exe</FullPath>
+    </ProjectOutput>
+  </ProjectOutputs>
+  <ContentFiles />
+  <SatelliteDlls />
+  <NonRecipeFileRefs />
+</Project>

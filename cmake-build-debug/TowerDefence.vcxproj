@@ -1,0 +1,888 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|Win32">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|Win32">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{18FBAAE7-E03B-3461-8DFB-6821B4866983}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
+    <Platform>Win32</Platform>
+    <ProjectName>TowerDefence</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\codes\TowerDefence\cmake-build-debug\bin\TowerDefence\Debug\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">TowerDefence.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">TowerDefence</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\codes\TowerDefence\cmake-build-debug\bin\TowerDefence\Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">TowerDefence.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">TowerDefence</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\codes\TowerDefence\cmake-build-debug\bin\TowerDefence\MinSizeRel\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">TowerDefence.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">TowerDefence</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">true</GenerateManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\codes\TowerDefence\cmake-build-debug\bin\TowerDefence\RelWithDebInfo\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">TowerDefence.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">TowerDefence</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">.exe</TargetExt>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">true</GenerateManifest>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\codes\TowerDefence\Classes;D:\codes\TowerDefence\cocos2d\cocos\audio\include;D:\codes\TowerDefence\cocos2d;D:\codes\TowerDefence\cocos2d\cocos;D:\codes\TowerDefence\cocos2d\extensions;D:\codes\TowerDefence\cocos2d\cocos\platform;D:\codes\TowerDefence\cocos2d\cocos\editor-support;D:\codes\TowerDefence\cocos2d\cocos\base;D:\codes\TowerDefence\cocos2d\cocos\platform\win32;D:\codes\TowerDefence\cocos2d\external\recast\..;D:\codes\TowerDefence\cocos2d\external\tinyxml2\.;D:\codes\TowerDefence\cocos2d\external\xxhash\.;D:\codes\TowerDefence\cocos2d\external\xxtea\.;D:\codes\TowerDefence\cocos2d\external\clipper\.;D:\codes\TowerDefence\cocos2d\external\edtaa3func\.;D:\codes\TowerDefence\cocos2d\external\ConvertUTF\.;D:\codes\TowerDefence\cocos2d\external\poly2tri\..;D:\codes\TowerDefence\cocos2d\external\md5\..;D:\codes\TowerDefence\cocos2d\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/codes/TowerDefence/cocos2d/external/Box2D/include" /external:I "D:/codes/TowerDefence/cocos2d/external/chipmunk/include" /external:I "D:/codes/TowerDefence/cocos2d/external/freetype2/include/win32/freetype2" /external:I "D:/codes/TowerDefence/cocos2d/external/bullet/include" /external:I "D:/codes/TowerDefence/cocos2d/external/bullet/include/bullet" /external:I "D:/codes/TowerDefence/cocos2d/external/jpeg/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/openssl/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/uv/include" /external:I "D:/codes/TowerDefence/cocos2d/external/webp/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/websockets/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/curl/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/png/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/gles/include/OGLES" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/icon/include" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/MP3Decoder/include" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/include" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/OpenalSoft/include" /external:I "D:/codes/TowerDefence/cocos2d/external/glfw3/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/zlib/../win32-specific/zlib/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;COCOS2D_DEBUG=1;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;COCOS2D_DEBUG=1;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\codes\TowerDefence\Classes;D:\codes\TowerDefence\cocos2d\cocos\audio\include;D:\codes\TowerDefence\cocos2d;D:\codes\TowerDefence\cocos2d\cocos;D:\codes\TowerDefence\cocos2d\extensions;D:\codes\TowerDefence\cocos2d\cocos\platform;D:\codes\TowerDefence\cocos2d\cocos\editor-support;D:\codes\TowerDefence\cocos2d\cocos\base;D:\codes\TowerDefence\cocos2d\cocos\platform\win32;D:\codes\TowerDefence\cocos2d\external\recast\..;D:\codes\TowerDefence\cocos2d\external\tinyxml2\.;D:\codes\TowerDefence\cocos2d\external\xxhash\.;D:\codes\TowerDefence\cocos2d\external\xxtea\.;D:\codes\TowerDefence\cocos2d\external\clipper\.;D:\codes\TowerDefence\cocos2d\external\edtaa3func\.;D:\codes\TowerDefence\cocos2d\external\ConvertUTF\.;D:\codes\TowerDefence\cocos2d\external\poly2tri\..;D:\codes\TowerDefence\cocos2d\external\md5\..;D:\codes\TowerDefence\cocos2d\external\unzip\.;D:\codes\TowerDefence\cocos2d\external\Box2D\include;D:\codes\TowerDefence\cocos2d\external\chipmunk\include;D:\codes\TowerDefence\cocos2d\external\freetype2\include\win32\freetype2;D:\codes\TowerDefence\cocos2d\external\bullet\include;D:\codes\TowerDefence\cocos2d\external\bullet\include\bullet;D:\codes\TowerDefence\cocos2d\external\jpeg\include\win32;D:\codes\TowerDefence\cocos2d\external\openssl\include\win32;D:\codes\TowerDefence\cocos2d\external\uv\include;D:\codes\TowerDefence\cocos2d\external\webp\include\win32;D:\codes\TowerDefence\cocos2d\external\websockets\include\win32;D:\codes\TowerDefence\cocos2d\external\curl\include\win32;D:\codes\TowerDefence\cocos2d\external\png\include\win32;D:\codes\TowerDefence\cocos2d\external\win32-specific\gles\include\OGLES;D:\codes\TowerDefence\cocos2d\external\win32-specific\icon\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\MP3Decoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OpenalSoft\include;D:\codes\TowerDefence\cocos2d\external\glfw3\include\win32;D:\codes\TowerDefence\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\codes\TowerDefence\Classes;D:\codes\TowerDefence\cocos2d\cocos\audio\include;D:\codes\TowerDefence\cocos2d;D:\codes\TowerDefence\cocos2d\cocos;D:\codes\TowerDefence\cocos2d\extensions;D:\codes\TowerDefence\cocos2d\cocos\platform;D:\codes\TowerDefence\cocos2d\cocos\editor-support;D:\codes\TowerDefence\cocos2d\cocos\base;D:\codes\TowerDefence\cocos2d\cocos\platform\win32;D:\codes\TowerDefence\cocos2d\external\recast\..;D:\codes\TowerDefence\cocos2d\external\tinyxml2\.;D:\codes\TowerDefence\cocos2d\external\xxhash\.;D:\codes\TowerDefence\cocos2d\external\xxtea\.;D:\codes\TowerDefence\cocos2d\external\clipper\.;D:\codes\TowerDefence\cocos2d\external\edtaa3func\.;D:\codes\TowerDefence\cocos2d\external\ConvertUTF\.;D:\codes\TowerDefence\cocos2d\external\poly2tri\..;D:\codes\TowerDefence\cocos2d\external\md5\..;D:\codes\TowerDefence\cocos2d\external\unzip\.;D:\codes\TowerDefence\cocos2d\external\Box2D\include;D:\codes\TowerDefence\cocos2d\external\chipmunk\include;D:\codes\TowerDefence\cocos2d\external\freetype2\include\win32\freetype2;D:\codes\TowerDefence\cocos2d\external\bullet\include;D:\codes\TowerDefence\cocos2d\external\bullet\include\bullet;D:\codes\TowerDefence\cocos2d\external\jpeg\include\win32;D:\codes\TowerDefence\cocos2d\external\openssl\include\win32;D:\codes\TowerDefence\cocos2d\external\uv\include;D:\codes\TowerDefence\cocos2d\external\webp\include\win32;D:\codes\TowerDefence\cocos2d\external\websockets\include\win32;D:\codes\TowerDefence\cocos2d\external\curl\include\win32;D:\codes\TowerDefence\cocos2d\external\png\include\win32;D:\codes\TowerDefence\cocos2d\external\win32-specific\gles\include\OGLES;D:\codes\TowerDefence\cocos2d\external\win32-specific\icon\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\MP3Decoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OpenalSoft\include;D:\codes\TowerDefence\cocos2d\external\glfw3\include\win32;D:\codes\TowerDefence\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>												</Message>
+      <Command>setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/openssl/prebuilt/win32/libssl-1_1.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/libssl-1_1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/openssl/prebuilt/win32/libcrypto-1_1.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/libcrypto-1_1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/uv/prebuilt/win32/uv.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/uv.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/websockets/prebuilt/win32/websockets.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/websockets.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/curl/prebuilt/win32/libcurl.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/libcurl.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/gles/prebuilt/glew32.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/glew32.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/icon/prebuilt/iconv.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/iconv.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/libmpg123.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/prebuilt/libogg.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/libogg.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/libvorbis.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/libvorbisfile.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/OpenAL32.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/zlib1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\Debug\cocos2d.lib;lib\Debug\external.lib;D:\codes\TowerDefence\cocos2d\external\Box2D\prebuilt\win32\debug\libbox2d.lib;D:\codes\TowerDefence\cocos2d\external\chipmunk\prebuilt\win32\debug-lib\libchipmunk.lib;D:\codes\TowerDefence\cocos2d\external\freetype2\prebuilt\win32\freetype.lib;lib\Debug\ext_recast.lib;D:\codes\TowerDefence\cocos2d\external\bullet\prebuilt\win32\debug\libbullet.lib;D:\codes\TowerDefence\cocos2d\external\jpeg\prebuilt\win32\libjpeg.lib;D:\codes\TowerDefence\cocos2d\external\webp\prebuilt\win32\libwebp.lib;D:\codes\TowerDefence\cocos2d\external\websockets\prebuilt\win32\websockets.lib;D:\codes\TowerDefence\cocos2d\external\openssl\prebuilt\win32\libssl.lib;D:\codes\TowerDefence\cocos2d\external\openssl\prebuilt\win32\libcrypto.lib;D:\codes\TowerDefence\cocos2d\external\uv\prebuilt\win32\uv_a.lib;lib\Debug\ext_tinyxml2.lib;lib\Debug\ext_xxhash.lib;lib\Debug\ext_xxtea.lib;lib\Debug\ext_clipper.lib;lib\Debug\ext_edtaa3func.lib;lib\Debug\ext_convertUTF.lib;lib\Debug\ext_poly2tri.lib;lib\Debug\ext_md5.lib;D:\codes\TowerDefence\cocos2d\external\curl\prebuilt\win32\libcurl.lib;D:\codes\TowerDefence\cocos2d\external\png\prebuilt\win32\libpng.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\gles\prebuilt\glew32.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\icon\prebuilt\libiconv.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\prebuilt\libogg.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;D:\codes\TowerDefence\cocos2d\external\glfw3\prebuilt\win32\glfw3.lib;D:\codes\TowerDefence\cocos2d\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\Debug\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/codes/TowerDefence/cmake-build-debug/Debug/TowerDefence.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Debug/TowerDefence.pdb</ProgramDataBaseFile>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\codes\TowerDefence\Classes;D:\codes\TowerDefence\cocos2d\cocos\audio\include;D:\codes\TowerDefence\cocos2d;D:\codes\TowerDefence\cocos2d\cocos;D:\codes\TowerDefence\cocos2d\extensions;D:\codes\TowerDefence\cocos2d\cocos\platform;D:\codes\TowerDefence\cocos2d\cocos\editor-support;D:\codes\TowerDefence\cocos2d\cocos\base;D:\codes\TowerDefence\cocos2d\cocos\platform\win32;D:\codes\TowerDefence\cocos2d\external\recast\..;D:\codes\TowerDefence\cocos2d\external\tinyxml2\.;D:\codes\TowerDefence\cocos2d\external\xxhash\.;D:\codes\TowerDefence\cocos2d\external\xxtea\.;D:\codes\TowerDefence\cocos2d\external\clipper\.;D:\codes\TowerDefence\cocos2d\external\edtaa3func\.;D:\codes\TowerDefence\cocos2d\external\ConvertUTF\.;D:\codes\TowerDefence\cocos2d\external\poly2tri\..;D:\codes\TowerDefence\cocos2d\external\md5\..;D:\codes\TowerDefence\cocos2d\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/codes/TowerDefence/cocos2d/external/Box2D/include" /external:I "D:/codes/TowerDefence/cocos2d/external/chipmunk/include" /external:I "D:/codes/TowerDefence/cocos2d/external/freetype2/include/win32/freetype2" /external:I "D:/codes/TowerDefence/cocos2d/external/bullet/include" /external:I "D:/codes/TowerDefence/cocos2d/external/bullet/include/bullet" /external:I "D:/codes/TowerDefence/cocos2d/external/jpeg/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/openssl/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/uv/include" /external:I "D:/codes/TowerDefence/cocos2d/external/webp/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/websockets/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/curl/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/png/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/gles/include/OGLES" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/icon/include" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/MP3Decoder/include" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/include" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/OpenalSoft/include" /external:I "D:/codes/TowerDefence/cocos2d/external/glfw3/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/zlib/../win32-specific/zlib/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\codes\TowerDefence\Classes;D:\codes\TowerDefence\cocos2d\cocos\audio\include;D:\codes\TowerDefence\cocos2d;D:\codes\TowerDefence\cocos2d\cocos;D:\codes\TowerDefence\cocos2d\extensions;D:\codes\TowerDefence\cocos2d\cocos\platform;D:\codes\TowerDefence\cocos2d\cocos\editor-support;D:\codes\TowerDefence\cocos2d\cocos\base;D:\codes\TowerDefence\cocos2d\cocos\platform\win32;D:\codes\TowerDefence\cocos2d\external\recast\..;D:\codes\TowerDefence\cocos2d\external\tinyxml2\.;D:\codes\TowerDefence\cocos2d\external\xxhash\.;D:\codes\TowerDefence\cocos2d\external\xxtea\.;D:\codes\TowerDefence\cocos2d\external\clipper\.;D:\codes\TowerDefence\cocos2d\external\edtaa3func\.;D:\codes\TowerDefence\cocos2d\external\ConvertUTF\.;D:\codes\TowerDefence\cocos2d\external\poly2tri\..;D:\codes\TowerDefence\cocos2d\external\md5\..;D:\codes\TowerDefence\cocos2d\external\unzip\.;D:\codes\TowerDefence\cocos2d\external\Box2D\include;D:\codes\TowerDefence\cocos2d\external\chipmunk\include;D:\codes\TowerDefence\cocos2d\external\freetype2\include\win32\freetype2;D:\codes\TowerDefence\cocos2d\external\bullet\include;D:\codes\TowerDefence\cocos2d\external\bullet\include\bullet;D:\codes\TowerDefence\cocos2d\external\jpeg\include\win32;D:\codes\TowerDefence\cocos2d\external\openssl\include\win32;D:\codes\TowerDefence\cocos2d\external\uv\include;D:\codes\TowerDefence\cocos2d\external\webp\include\win32;D:\codes\TowerDefence\cocos2d\external\websockets\include\win32;D:\codes\TowerDefence\cocos2d\external\curl\include\win32;D:\codes\TowerDefence\cocos2d\external\png\include\win32;D:\codes\TowerDefence\cocos2d\external\win32-specific\gles\include\OGLES;D:\codes\TowerDefence\cocos2d\external\win32-specific\icon\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\MP3Decoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OpenalSoft\include;D:\codes\TowerDefence\cocos2d\external\glfw3\include\win32;D:\codes\TowerDefence\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\codes\TowerDefence\Classes;D:\codes\TowerDefence\cocos2d\cocos\audio\include;D:\codes\TowerDefence\cocos2d;D:\codes\TowerDefence\cocos2d\cocos;D:\codes\TowerDefence\cocos2d\extensions;D:\codes\TowerDefence\cocos2d\cocos\platform;D:\codes\TowerDefence\cocos2d\cocos\editor-support;D:\codes\TowerDefence\cocos2d\cocos\base;D:\codes\TowerDefence\cocos2d\cocos\platform\win32;D:\codes\TowerDefence\cocos2d\external\recast\..;D:\codes\TowerDefence\cocos2d\external\tinyxml2\.;D:\codes\TowerDefence\cocos2d\external\xxhash\.;D:\codes\TowerDefence\cocos2d\external\xxtea\.;D:\codes\TowerDefence\cocos2d\external\clipper\.;D:\codes\TowerDefence\cocos2d\external\edtaa3func\.;D:\codes\TowerDefence\cocos2d\external\ConvertUTF\.;D:\codes\TowerDefence\cocos2d\external\poly2tri\..;D:\codes\TowerDefence\cocos2d\external\md5\..;D:\codes\TowerDefence\cocos2d\external\unzip\.;D:\codes\TowerDefence\cocos2d\external\Box2D\include;D:\codes\TowerDefence\cocos2d\external\chipmunk\include;D:\codes\TowerDefence\cocos2d\external\freetype2\include\win32\freetype2;D:\codes\TowerDefence\cocos2d\external\bullet\include;D:\codes\TowerDefence\cocos2d\external\bullet\include\bullet;D:\codes\TowerDefence\cocos2d\external\jpeg\include\win32;D:\codes\TowerDefence\cocos2d\external\openssl\include\win32;D:\codes\TowerDefence\cocos2d\external\uv\include;D:\codes\TowerDefence\cocos2d\external\webp\include\win32;D:\codes\TowerDefence\cocos2d\external\websockets\include\win32;D:\codes\TowerDefence\cocos2d\external\curl\include\win32;D:\codes\TowerDefence\cocos2d\external\png\include\win32;D:\codes\TowerDefence\cocos2d\external\win32-specific\gles\include\OGLES;D:\codes\TowerDefence\cocos2d\external\win32-specific\icon\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\MP3Decoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OpenalSoft\include;D:\codes\TowerDefence\cocos2d\external\glfw3\include\win32;D:\codes\TowerDefence\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>												</Message>
+      <Command>setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/openssl/prebuilt/win32/libssl-1_1.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/libssl-1_1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/openssl/prebuilt/win32/libcrypto-1_1.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/libcrypto-1_1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/uv/prebuilt/win32/uv.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/uv.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/websockets/prebuilt/win32/websockets.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/websockets.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/curl/prebuilt/win32/libcurl.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/libcurl.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/gles/prebuilt/glew32.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/glew32.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/icon/prebuilt/iconv.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/iconv.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/libmpg123.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/prebuilt/libogg.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/libogg.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/libvorbis.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/libvorbisfile.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/OpenAL32.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/zlib1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\Release\cocos2d.lib;lib\Release\external.lib;D:\codes\TowerDefence\cocos2d\external\Box2D\prebuilt\win32\release\libbox2d.lib;D:\codes\TowerDefence\cocos2d\external\chipmunk\prebuilt\win32\release-lib\libchipmunk.lib;D:\codes\TowerDefence\cocos2d\external\freetype2\prebuilt\win32\freetype.lib;lib\Release\ext_recast.lib;D:\codes\TowerDefence\cocos2d\external\bullet\prebuilt\win32\release\libbullet.lib;D:\codes\TowerDefence\cocos2d\external\jpeg\prebuilt\win32\libjpeg.lib;D:\codes\TowerDefence\cocos2d\external\webp\prebuilt\win32\libwebp.lib;D:\codes\TowerDefence\cocos2d\external\websockets\prebuilt\win32\websockets.lib;D:\codes\TowerDefence\cocos2d\external\openssl\prebuilt\win32\libssl.lib;D:\codes\TowerDefence\cocos2d\external\openssl\prebuilt\win32\libcrypto.lib;D:\codes\TowerDefence\cocos2d\external\uv\prebuilt\win32\uv_a.lib;lib\Release\ext_tinyxml2.lib;lib\Release\ext_xxhash.lib;lib\Release\ext_xxtea.lib;lib\Release\ext_clipper.lib;lib\Release\ext_edtaa3func.lib;lib\Release\ext_convertUTF.lib;lib\Release\ext_poly2tri.lib;lib\Release\ext_md5.lib;D:\codes\TowerDefence\cocos2d\external\curl\prebuilt\win32\libcurl.lib;D:\codes\TowerDefence\cocos2d\external\png\prebuilt\win32\libpng.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\gles\prebuilt\glew32.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\icon\prebuilt\libiconv.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\prebuilt\libogg.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;D:\codes\TowerDefence\cocos2d\external\glfw3\prebuilt\win32\glfw3.lib;D:\codes\TowerDefence\cocos2d\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\Release\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/codes/TowerDefence/cmake-build-debug/Release/TowerDefence.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/Release/TowerDefence.pdb</ProgramDataBaseFile>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\codes\TowerDefence\Classes;D:\codes\TowerDefence\cocos2d\cocos\audio\include;D:\codes\TowerDefence\cocos2d;D:\codes\TowerDefence\cocos2d\cocos;D:\codes\TowerDefence\cocos2d\extensions;D:\codes\TowerDefence\cocos2d\cocos\platform;D:\codes\TowerDefence\cocos2d\cocos\editor-support;D:\codes\TowerDefence\cocos2d\cocos\base;D:\codes\TowerDefence\cocos2d\cocos\platform\win32;D:\codes\TowerDefence\cocos2d\external\recast\..;D:\codes\TowerDefence\cocos2d\external\tinyxml2\.;D:\codes\TowerDefence\cocos2d\external\xxhash\.;D:\codes\TowerDefence\cocos2d\external\xxtea\.;D:\codes\TowerDefence\cocos2d\external\clipper\.;D:\codes\TowerDefence\cocos2d\external\edtaa3func\.;D:\codes\TowerDefence\cocos2d\external\ConvertUTF\.;D:\codes\TowerDefence\cocos2d\external\poly2tri\..;D:\codes\TowerDefence\cocos2d\external\md5\..;D:\codes\TowerDefence\cocos2d\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/codes/TowerDefence/cocos2d/external/Box2D/include" /external:I "D:/codes/TowerDefence/cocos2d/external/chipmunk/include" /external:I "D:/codes/TowerDefence/cocos2d/external/freetype2/include/win32/freetype2" /external:I "D:/codes/TowerDefence/cocos2d/external/bullet/include" /external:I "D:/codes/TowerDefence/cocos2d/external/bullet/include/bullet" /external:I "D:/codes/TowerDefence/cocos2d/external/jpeg/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/openssl/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/uv/include" /external:I "D:/codes/TowerDefence/cocos2d/external/webp/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/websockets/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/curl/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/png/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/gles/include/OGLES" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/icon/include" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/MP3Decoder/include" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/include" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/OpenalSoft/include" /external:I "D:/codes/TowerDefence/cocos2d/external/glfw3/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/zlib/../win32-specific/zlib/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\codes\TowerDefence\Classes;D:\codes\TowerDefence\cocos2d\cocos\audio\include;D:\codes\TowerDefence\cocos2d;D:\codes\TowerDefence\cocos2d\cocos;D:\codes\TowerDefence\cocos2d\extensions;D:\codes\TowerDefence\cocos2d\cocos\platform;D:\codes\TowerDefence\cocos2d\cocos\editor-support;D:\codes\TowerDefence\cocos2d\cocos\base;D:\codes\TowerDefence\cocos2d\cocos\platform\win32;D:\codes\TowerDefence\cocos2d\external\recast\..;D:\codes\TowerDefence\cocos2d\external\tinyxml2\.;D:\codes\TowerDefence\cocos2d\external\xxhash\.;D:\codes\TowerDefence\cocos2d\external\xxtea\.;D:\codes\TowerDefence\cocos2d\external\clipper\.;D:\codes\TowerDefence\cocos2d\external\edtaa3func\.;D:\codes\TowerDefence\cocos2d\external\ConvertUTF\.;D:\codes\TowerDefence\cocos2d\external\poly2tri\..;D:\codes\TowerDefence\cocos2d\external\md5\..;D:\codes\TowerDefence\cocos2d\external\unzip\.;D:\codes\TowerDefence\cocos2d\external\Box2D\include;D:\codes\TowerDefence\cocos2d\external\chipmunk\include;D:\codes\TowerDefence\cocos2d\external\freetype2\include\win32\freetype2;D:\codes\TowerDefence\cocos2d\external\bullet\include;D:\codes\TowerDefence\cocos2d\external\bullet\include\bullet;D:\codes\TowerDefence\cocos2d\external\jpeg\include\win32;D:\codes\TowerDefence\cocos2d\external\openssl\include\win32;D:\codes\TowerDefence\cocos2d\external\uv\include;D:\codes\TowerDefence\cocos2d\external\webp\include\win32;D:\codes\TowerDefence\cocos2d\external\websockets\include\win32;D:\codes\TowerDefence\cocos2d\external\curl\include\win32;D:\codes\TowerDefence\cocos2d\external\png\include\win32;D:\codes\TowerDefence\cocos2d\external\win32-specific\gles\include\OGLES;D:\codes\TowerDefence\cocos2d\external\win32-specific\icon\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\MP3Decoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OpenalSoft\include;D:\codes\TowerDefence\cocos2d\external\glfw3\include\win32;D:\codes\TowerDefence\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\codes\TowerDefence\Classes;D:\codes\TowerDefence\cocos2d\cocos\audio\include;D:\codes\TowerDefence\cocos2d;D:\codes\TowerDefence\cocos2d\cocos;D:\codes\TowerDefence\cocos2d\extensions;D:\codes\TowerDefence\cocos2d\cocos\platform;D:\codes\TowerDefence\cocos2d\cocos\editor-support;D:\codes\TowerDefence\cocos2d\cocos\base;D:\codes\TowerDefence\cocos2d\cocos\platform\win32;D:\codes\TowerDefence\cocos2d\external\recast\..;D:\codes\TowerDefence\cocos2d\external\tinyxml2\.;D:\codes\TowerDefence\cocos2d\external\xxhash\.;D:\codes\TowerDefence\cocos2d\external\xxtea\.;D:\codes\TowerDefence\cocos2d\external\clipper\.;D:\codes\TowerDefence\cocos2d\external\edtaa3func\.;D:\codes\TowerDefence\cocos2d\external\ConvertUTF\.;D:\codes\TowerDefence\cocos2d\external\poly2tri\..;D:\codes\TowerDefence\cocos2d\external\md5\..;D:\codes\TowerDefence\cocos2d\external\unzip\.;D:\codes\TowerDefence\cocos2d\external\Box2D\include;D:\codes\TowerDefence\cocos2d\external\chipmunk\include;D:\codes\TowerDefence\cocos2d\external\freetype2\include\win32\freetype2;D:\codes\TowerDefence\cocos2d\external\bullet\include;D:\codes\TowerDefence\cocos2d\external\bullet\include\bullet;D:\codes\TowerDefence\cocos2d\external\jpeg\include\win32;D:\codes\TowerDefence\cocos2d\external\openssl\include\win32;D:\codes\TowerDefence\cocos2d\external\uv\include;D:\codes\TowerDefence\cocos2d\external\webp\include\win32;D:\codes\TowerDefence\cocos2d\external\websockets\include\win32;D:\codes\TowerDefence\cocos2d\external\curl\include\win32;D:\codes\TowerDefence\cocos2d\external\png\include\win32;D:\codes\TowerDefence\cocos2d\external\win32-specific\gles\include\OGLES;D:\codes\TowerDefence\cocos2d\external\win32-specific\icon\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\MP3Decoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OpenalSoft\include;D:\codes\TowerDefence\cocos2d\external\glfw3\include\win32;D:\codes\TowerDefence\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>												</Message>
+      <Command>setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/openssl/prebuilt/win32/libssl-1_1.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/libssl-1_1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/openssl/prebuilt/win32/libcrypto-1_1.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/libcrypto-1_1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/uv/prebuilt/win32/uv.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/uv.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/websockets/prebuilt/win32/websockets.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/websockets.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/curl/prebuilt/win32/libcurl.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/libcurl.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/gles/prebuilt/glew32.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/glew32.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/icon/prebuilt/iconv.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/iconv.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/libmpg123.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/prebuilt/libogg.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/libogg.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/libvorbis.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/libvorbisfile.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/OpenAL32.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/zlib1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\MinSizeRel\cocos2d.lib;lib\MinSizeRel\external.lib;D:\codes\TowerDefence\cocos2d\external\Box2D\prebuilt\win32\release\libbox2d.lib;D:\codes\TowerDefence\cocos2d\external\chipmunk\prebuilt\win32\release-lib\libchipmunk.lib;D:\codes\TowerDefence\cocos2d\external\freetype2\prebuilt\win32\freetype.lib;lib\MinSizeRel\ext_recast.lib;D:\codes\TowerDefence\cocos2d\external\bullet\prebuilt\win32\release\libbullet.lib;D:\codes\TowerDefence\cocos2d\external\jpeg\prebuilt\win32\libjpeg.lib;D:\codes\TowerDefence\cocos2d\external\webp\prebuilt\win32\libwebp.lib;D:\codes\TowerDefence\cocos2d\external\websockets\prebuilt\win32\websockets.lib;D:\codes\TowerDefence\cocos2d\external\openssl\prebuilt\win32\libssl.lib;D:\codes\TowerDefence\cocos2d\external\openssl\prebuilt\win32\libcrypto.lib;D:\codes\TowerDefence\cocos2d\external\uv\prebuilt\win32\uv_a.lib;lib\MinSizeRel\ext_tinyxml2.lib;lib\MinSizeRel\ext_xxhash.lib;lib\MinSizeRel\ext_xxtea.lib;lib\MinSizeRel\ext_clipper.lib;lib\MinSizeRel\ext_edtaa3func.lib;lib\MinSizeRel\ext_convertUTF.lib;lib\MinSizeRel\ext_poly2tri.lib;lib\MinSizeRel\ext_md5.lib;D:\codes\TowerDefence\cocos2d\external\curl\prebuilt\win32\libcurl.lib;D:\codes\TowerDefence\cocos2d\external\png\prebuilt\win32\libpng.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\gles\prebuilt\glew32.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\icon\prebuilt\libiconv.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\prebuilt\libogg.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;D:\codes\TowerDefence\cocos2d\external\glfw3\prebuilt\win32\glfw3.lib;D:\codes\TowerDefence\cocos2d\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\MinSizeRel\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/codes/TowerDefence/cmake-build-debug/MinSizeRel/TowerDefence.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/MinSizeRel/TowerDefence.pdb</ProgramDataBaseFile>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>D:\codes\TowerDefence\Classes;D:\codes\TowerDefence\cocos2d\cocos\audio\include;D:\codes\TowerDefence\cocos2d;D:\codes\TowerDefence\cocos2d\cocos;D:\codes\TowerDefence\cocos2d\extensions;D:\codes\TowerDefence\cocos2d\cocos\platform;D:\codes\TowerDefence\cocos2d\cocos\editor-support;D:\codes\TowerDefence\cocos2d\cocos\base;D:\codes\TowerDefence\cocos2d\cocos\platform\win32;D:\codes\TowerDefence\cocos2d\external\recast\..;D:\codes\TowerDefence\cocos2d\external\tinyxml2\.;D:\codes\TowerDefence\cocos2d\external\xxhash\.;D:\codes\TowerDefence\cocos2d\external\xxtea\.;D:\codes\TowerDefence\cocos2d\external\clipper\.;D:\codes\TowerDefence\cocos2d\external\edtaa3func\.;D:\codes\TowerDefence\cocos2d\external\ConvertUTF\.;D:\codes\TowerDefence\cocos2d\external\poly2tri\..;D:\codes\TowerDefence\cocos2d\external\md5\..;D:\codes\TowerDefence\cocos2d\external\unzip\.;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /external:I "D:/codes/TowerDefence/cocos2d/external/Box2D/include" /external:I "D:/codes/TowerDefence/cocos2d/external/chipmunk/include" /external:I "D:/codes/TowerDefence/cocos2d/external/freetype2/include/win32/freetype2" /external:I "D:/codes/TowerDefence/cocos2d/external/bullet/include" /external:I "D:/codes/TowerDefence/cocos2d/external/bullet/include/bullet" /external:I "D:/codes/TowerDefence/cocos2d/external/jpeg/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/openssl/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/uv/include" /external:I "D:/codes/TowerDefence/cocos2d/external/webp/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/websockets/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/curl/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/png/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/gles/include/OGLES" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/icon/include" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/MP3Decoder/include" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/include" /external:I "D:/codes/TowerDefence/cocos2d/external/win32-specific/OpenalSoft/include" /external:I "D:/codes/TowerDefence/cocos2d/external/glfw3/include/win32" /external:I "D:/codes/TowerDefence/cocos2d/external/zlib/../win32-specific/zlib/include"</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <ExternalWarningLevel>TurnOffAllWarnings</ExternalWarningLevel>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <UseFullPaths>false</UseFullPaths>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_WIN32;UNICODE;_UNICODE;_CRT_SECURE_NO_WARNINGS;_SCL_SECURE_NO_WARNINGS;CC_STATIC;LWS_WITH_LIBUV;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>D:\codes\TowerDefence\Classes;D:\codes\TowerDefence\cocos2d\cocos\audio\include;D:\codes\TowerDefence\cocos2d;D:\codes\TowerDefence\cocos2d\cocos;D:\codes\TowerDefence\cocos2d\extensions;D:\codes\TowerDefence\cocos2d\cocos\platform;D:\codes\TowerDefence\cocos2d\cocos\editor-support;D:\codes\TowerDefence\cocos2d\cocos\base;D:\codes\TowerDefence\cocos2d\cocos\platform\win32;D:\codes\TowerDefence\cocos2d\external\recast\..;D:\codes\TowerDefence\cocos2d\external\tinyxml2\.;D:\codes\TowerDefence\cocos2d\external\xxhash\.;D:\codes\TowerDefence\cocos2d\external\xxtea\.;D:\codes\TowerDefence\cocos2d\external\clipper\.;D:\codes\TowerDefence\cocos2d\external\edtaa3func\.;D:\codes\TowerDefence\cocos2d\external\ConvertUTF\.;D:\codes\TowerDefence\cocos2d\external\poly2tri\..;D:\codes\TowerDefence\cocos2d\external\md5\..;D:\codes\TowerDefence\cocos2d\external\unzip\.;D:\codes\TowerDefence\cocos2d\external\Box2D\include;D:\codes\TowerDefence\cocos2d\external\chipmunk\include;D:\codes\TowerDefence\cocos2d\external\freetype2\include\win32\freetype2;D:\codes\TowerDefence\cocos2d\external\bullet\include;D:\codes\TowerDefence\cocos2d\external\bullet\include\bullet;D:\codes\TowerDefence\cocos2d\external\jpeg\include\win32;D:\codes\TowerDefence\cocos2d\external\openssl\include\win32;D:\codes\TowerDefence\cocos2d\external\uv\include;D:\codes\TowerDefence\cocos2d\external\webp\include\win32;D:\codes\TowerDefence\cocos2d\external\websockets\include\win32;D:\codes\TowerDefence\cocos2d\external\curl\include\win32;D:\codes\TowerDefence\cocos2d\external\png\include\win32;D:\codes\TowerDefence\cocos2d\external\win32-specific\gles\include\OGLES;D:\codes\TowerDefence\cocos2d\external\win32-specific\icon\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\MP3Decoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OpenalSoft\include;D:\codes\TowerDefence\cocos2d\external\glfw3\include\win32;D:\codes\TowerDefence\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>D:\codes\TowerDefence\Classes;D:\codes\TowerDefence\cocos2d\cocos\audio\include;D:\codes\TowerDefence\cocos2d;D:\codes\TowerDefence\cocos2d\cocos;D:\codes\TowerDefence\cocos2d\extensions;D:\codes\TowerDefence\cocos2d\cocos\platform;D:\codes\TowerDefence\cocos2d\cocos\editor-support;D:\codes\TowerDefence\cocos2d\cocos\base;D:\codes\TowerDefence\cocos2d\cocos\platform\win32;D:\codes\TowerDefence\cocos2d\external\recast\..;D:\codes\TowerDefence\cocos2d\external\tinyxml2\.;D:\codes\TowerDefence\cocos2d\external\xxhash\.;D:\codes\TowerDefence\cocos2d\external\xxtea\.;D:\codes\TowerDefence\cocos2d\external\clipper\.;D:\codes\TowerDefence\cocos2d\external\edtaa3func\.;D:\codes\TowerDefence\cocos2d\external\ConvertUTF\.;D:\codes\TowerDefence\cocos2d\external\poly2tri\..;D:\codes\TowerDefence\cocos2d\external\md5\..;D:\codes\TowerDefence\cocos2d\external\unzip\.;D:\codes\TowerDefence\cocos2d\external\Box2D\include;D:\codes\TowerDefence\cocos2d\external\chipmunk\include;D:\codes\TowerDefence\cocos2d\external\freetype2\include\win32\freetype2;D:\codes\TowerDefence\cocos2d\external\bullet\include;D:\codes\TowerDefence\cocos2d\external\bullet\include\bullet;D:\codes\TowerDefence\cocos2d\external\jpeg\include\win32;D:\codes\TowerDefence\cocos2d\external\openssl\include\win32;D:\codes\TowerDefence\cocos2d\external\uv\include;D:\codes\TowerDefence\cocos2d\external\webp\include\win32;D:\codes\TowerDefence\cocos2d\external\websockets\include\win32;D:\codes\TowerDefence\cocos2d\external\curl\include\win32;D:\codes\TowerDefence\cocos2d\external\png\include\win32;D:\codes\TowerDefence\cocos2d\external\win32-specific\gles\include\OGLES;D:\codes\TowerDefence\cocos2d\external\win32-specific\icon\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\MP3Decoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\include;D:\codes\TowerDefence\cocos2d\external\win32-specific\OpenalSoft\include;D:\codes\TowerDefence\cocos2d\external\glfw3\include\win32;D:\codes\TowerDefence\cocos2d\external\zlib\..\win32-specific\zlib\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <PostBuildEvent>
+      <Message>												</Message>
+      <Command>setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/openssl/prebuilt/win32/libssl-1_1.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/libssl-1_1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/openssl/prebuilt/win32/libcrypto-1_1.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/libcrypto-1_1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/uv/prebuilt/win32/uv.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/uv.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/websockets/prebuilt/win32/websockets.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/websockets.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/curl/prebuilt/win32/libcurl.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/libcurl.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/gles/prebuilt/glew32.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/glew32.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/icon/prebuilt/iconv.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/iconv.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/MP3Decoder/prebuilt/libmpg123.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/libmpg123.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/prebuilt/libogg.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/libogg.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbis.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/libvorbis.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OggDecoder/prebuilt/libvorbisfile.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/libvorbisfile.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/win32-specific/OpenalSoft/prebuilt/OpenAL32.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/OpenAL32.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -E copy_if_different D:/codes/TowerDefence/cocos2d/external/zlib/../win32-specific/zlib/prebuilt/zlib1.dll D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/zlib1.dll
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+    </PostBuildEvent>
+    <Link>
+      <AdditionalDependencies>lib\RelWithDebInfo\cocos2d.lib;lib\RelWithDebInfo\external.lib;D:\codes\TowerDefence\cocos2d\external\Box2D\prebuilt\win32\release\libbox2d.lib;D:\codes\TowerDefence\cocos2d\external\chipmunk\prebuilt\win32\release-lib\libchipmunk.lib;D:\codes\TowerDefence\cocos2d\external\freetype2\prebuilt\win32\freetype.lib;lib\RelWithDebInfo\ext_recast.lib;D:\codes\TowerDefence\cocos2d\external\bullet\prebuilt\win32\release\libbullet.lib;D:\codes\TowerDefence\cocos2d\external\jpeg\prebuilt\win32\libjpeg.lib;D:\codes\TowerDefence\cocos2d\external\webp\prebuilt\win32\libwebp.lib;D:\codes\TowerDefence\cocos2d\external\websockets\prebuilt\win32\websockets.lib;D:\codes\TowerDefence\cocos2d\external\openssl\prebuilt\win32\libssl.lib;D:\codes\TowerDefence\cocos2d\external\openssl\prebuilt\win32\libcrypto.lib;D:\codes\TowerDefence\cocos2d\external\uv\prebuilt\win32\uv_a.lib;lib\RelWithDebInfo\ext_tinyxml2.lib;lib\RelWithDebInfo\ext_xxhash.lib;lib\RelWithDebInfo\ext_xxtea.lib;lib\RelWithDebInfo\ext_clipper.lib;lib\RelWithDebInfo\ext_edtaa3func.lib;lib\RelWithDebInfo\ext_convertUTF.lib;lib\RelWithDebInfo\ext_poly2tri.lib;lib\RelWithDebInfo\ext_md5.lib;D:\codes\TowerDefence\cocos2d\external\curl\prebuilt\win32\libcurl.lib;D:\codes\TowerDefence\cocos2d\external\png\prebuilt\win32\libpng.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\gles\prebuilt\glew32.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\icon\prebuilt\libiconv.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\MP3Decoder\prebuilt\libmpg123.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\prebuilt\libogg.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbis.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OggDecoder\prebuilt\libvorbisfile.lib;D:\codes\TowerDefence\cocos2d\external\win32-specific\OpenalSoft\prebuilt\OpenAL32.lib;D:\codes\TowerDefence\cocos2d\external\glfw3\prebuilt\win32\glfw3.lib;D:\codes\TowerDefence\cocos2d\external\zlib\..\win32-specific\zlib\prebuilt\libzlib.lib;lib\RelWithDebInfo\ext_unzip.lib;ws2_32.lib;userenv.lib;psapi.lib;winmm.lib;Version.lib;Iphlpapi.lib;opengl32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>%(AdditionalOptions) /machine:X86</AdditionalOptions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ImportLibrary>D:/codes/TowerDefence/cmake-build-debug/RelWithDebInfo/TowerDefence.lib</ImportLibrary>
+      <ProgramDataBaseFile>D:/codes/TowerDefence/cmake-build-debug/bin/TowerDefence/RelWithDebInfo/TowerDefence.pdb</ProgramDataBaseFile>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\codes\TowerDefence\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Building Custom Rule D:/codes/TowerDefence/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -SD:/codes/TowerDefence -BD:/codes/TowerDefence/cmake-build-debug --check-stamp-file D:/codes/TowerDefence/cmake-build-debug/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCCompiler.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCCompilerABI.c;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCXXCompiler.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCXXCompilerABI.cpp;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCXXInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCompilerIdDetection.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCXXCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompileFeatures.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompilerABI.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompilerId.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineRCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineSystem.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeFindBinUtils.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeGenericSystem.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeInitializeConfigs.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeLanguageInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseArguments.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseImplicitIncludeInfo.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseImplicitLinkInfo.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseLibraryArchitecture.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeRCCompiler.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeRCInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeSystem.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeSystemSpecificInitialize.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestCXXCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestCompilerCommon.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestRCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\ADSP-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\ARMCC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\ARMClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\AppleClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Borland-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Cray-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\CrayClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\GHS-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\GNU-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\HP-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IAR-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Intel-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\LCC-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC-C.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\NVHPC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\OrangeC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\PGI-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\PathScale-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SCO-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\TI-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Tasking-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Watcom-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XL-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\zOS-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CompilerId\VS-10.vcxproj.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Internal\FeatureTesting.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-Determine-CXX.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-Initialize.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-MSVC.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\WindowsPaths.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeCCompiler.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeCXXCompiler.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeRCCompiler.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeSystem.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosBuildHelpers.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosBuildSet.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosConfigDefine.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosConfigDepend.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Building Custom Rule D:/codes/TowerDefence/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -SD:/codes/TowerDefence -BD:/codes/TowerDefence/cmake-build-debug --check-stamp-file D:/codes/TowerDefence/cmake-build-debug/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCCompiler.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCCompilerABI.c;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCXXCompiler.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCXXCompilerABI.cpp;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCXXInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCompilerIdDetection.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCXXCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompileFeatures.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompilerABI.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompilerId.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineRCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineSystem.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeFindBinUtils.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeGenericSystem.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeInitializeConfigs.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeLanguageInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseArguments.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseImplicitIncludeInfo.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseImplicitLinkInfo.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseLibraryArchitecture.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeRCCompiler.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeRCInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeSystem.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeSystemSpecificInitialize.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestCXXCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestCompilerCommon.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestRCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\ADSP-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\ARMCC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\ARMClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\AppleClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Borland-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Cray-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\CrayClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\GHS-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\GNU-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\HP-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IAR-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Intel-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\LCC-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC-C.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\NVHPC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\OrangeC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\PGI-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\PathScale-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SCO-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\TI-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Tasking-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Watcom-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XL-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\zOS-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CompilerId\VS-10.vcxproj.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Internal\FeatureTesting.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-Determine-CXX.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-Initialize.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-MSVC.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\WindowsPaths.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeCCompiler.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeCXXCompiler.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeRCCompiler.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeSystem.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosBuildHelpers.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosBuildSet.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosConfigDefine.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosConfigDepend.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">Building Custom Rule D:/codes/TowerDefence/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -SD:/codes/TowerDefence -BD:/codes/TowerDefence/cmake-build-debug --check-stamp-file D:/codes/TowerDefence/cmake-build-debug/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCCompiler.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCCompilerABI.c;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCXXCompiler.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCXXCompilerABI.cpp;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCXXInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCompilerIdDetection.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCXXCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompileFeatures.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompilerABI.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompilerId.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineRCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineSystem.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeFindBinUtils.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeGenericSystem.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeInitializeConfigs.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeLanguageInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseArguments.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseImplicitIncludeInfo.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseImplicitLinkInfo.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseLibraryArchitecture.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeRCCompiler.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeRCInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeSystem.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeSystemSpecificInitialize.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestCXXCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestCompilerCommon.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestRCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\ADSP-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\ARMCC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\ARMClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\AppleClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Borland-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Cray-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\CrayClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\GHS-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\GNU-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\HP-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IAR-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Intel-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\LCC-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC-C.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\NVHPC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\OrangeC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\PGI-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\PathScale-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SCO-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\TI-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Tasking-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Watcom-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XL-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\zOS-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CompilerId\VS-10.vcxproj.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Internal\FeatureTesting.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-Determine-CXX.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-Initialize.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-MSVC.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\WindowsPaths.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeCCompiler.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeCXXCompiler.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeRCCompiler.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeSystem.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosBuildHelpers.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosBuildSet.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosConfigDefine.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosConfigDepend.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|Win32'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">Building Custom Rule D:/codes/TowerDefence/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">setlocal
+"D:\Program Files (x86)\CLion\bin\cmake\win\x64\bin\cmake.exe" -SD:/codes/TowerDefence -BD:/codes/TowerDefence/cmake-build-debug --check-stamp-file D:/codes/TowerDefence/cmake-build-debug/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCCompiler.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCCompilerABI.c;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCXXCompiler.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCXXCompilerABI.cpp;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCXXInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCommonLanguageInclude.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeCompilerIdDetection.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCXXCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompileFeatures.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompilerABI.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineCompilerId.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineRCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeDetermineSystem.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeFindBinUtils.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeGenericSystem.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeInitializeConfigs.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeLanguageInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseArguments.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseImplicitIncludeInfo.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseImplicitLinkInfo.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeParseLibraryArchitecture.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeRCCompiler.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeRCInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeSystem.cmake.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeSystemSpecificInformation.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeSystemSpecificInitialize.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestCXXCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestCompilerCommon.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CMakeTestRCCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\ADSP-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\ARMCC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\ARMClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\AppleClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Borland-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Bruce-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\CMakeCommonCompilerMacros.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Clang-DetermineCompilerInternal.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Comeau-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Compaq-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Compaq-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Cray-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\CrayClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Embarcadero-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Fujitsu-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\FujitsuClang-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\GHS-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\GNU-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\GNU-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\HP-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\HP-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IAR-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMCPP-C-DetermineVersionInternal.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMCPP-CXX-DetermineVersionInternal.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMClang-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IBMClang-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Intel-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\IntelLLVM-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\LCC-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\LCC-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC-C.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC-CXX.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\MSVC.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\NVHPC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\NVIDIA-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\OpenWatcom-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\OrangeC-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\PGI-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\PathScale-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SCO-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SDCC-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SunPro-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\SunPro-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\TI-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Tasking-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\TinyCC-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\VisualAge-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\VisualAge-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\Watcom-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XL-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XL-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XLClang-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\XLClang-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\zOS-C-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Compiler\zOS-CXX-DetermineCompiler.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\CompilerId\VS-10.vcxproj.in;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Internal\FeatureTesting.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-Determine-CXX.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-Initialize.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-MSVC-C.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-MSVC-CXX.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows-MSVC.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\Windows.cmake;D:\Program Files (x86)\CLion\bin\cmake\win\x64\share\cmake-3.28\Modules\Platform\WindowsPaths.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeCCompiler.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeCXXCompiler.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeRCCompiler.cmake;D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\3.28.1\CMakeSystem.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosBuildHelpers.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosBuildSet.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosConfigDefine.cmake;D:\codes\TowerDefence\cocos2d\cmake\Modules\CocosConfigDepend.cmake;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">D:\codes\TowerDefence\cmake-build-debug\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|Win32'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\codes\TowerDefence\Classes\AppDelegate.h" />
+    <ClInclude Include="D:\codes\TowerDefence\Classes\HelloWorldScene.h" />
+    <ClInclude Include="D:\codes\TowerDefence\proj.win32\main.h" />
+    <ClInclude Include="D:\codes\TowerDefence\proj.win32\resource.h" />
+    <ClCompile Include="D:\codes\TowerDefence\Classes\AppDelegate.cpp" />
+    <ClCompile Include="D:\codes\TowerDefence\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="D:\codes\TowerDefence\proj.win32\main.cpp" />
+    <ResourceCompile Include="D:\codes\TowerDefence\proj.win32\game.rc" />
+    <ClInclude Include="D:\codes\TowerDefence\Resources\CloseNormal.png" />
+    <ClInclude Include="D:\codes\TowerDefence\Resources\CloseSelected.png" />
+    <ClInclude Include="D:\codes\TowerDefence\Resources\HelloWorld.png" />
+    <ClInclude Include="D:\codes\TowerDefence\Resources\fonts\Marker Felt.ttf" />
+    <ClInclude Include="D:\codes\TowerDefence\Resources\fonts\arial.ttf" />
+    <ClInclude Include="D:\codes\TowerDefence\Resources\res\.gitkeep" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\ZERO_CHECK.vcxproj">
+      <Project>{E461D4A4-3B29-3198-B2C5-F1B66D4CEFB3}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\SYNC_RESOURCE-TowerDefence.vcxproj">
+      <Project>{1A85B7C6-8694-3D47-9A71-CDA53D22BE6B}</Project>
+      <Name>SYNC_RESOURCE-TowerDefence</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\engine\cocos\core\cocos2d.vcxproj">
+      <Project>{800AD108-0FC1-3860-81C6-97FAC41FE796}</Project>
+      <Name>cocos2d</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\engine\external\clipper\ext_clipper.vcxproj">
+      <Project>{EB82E030-8EFC-3132-AE3A-65DEC439DA85}</Project>
+      <Name>ext_clipper</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\engine\external\ConvertUTF\ext_convertUTF.vcxproj">
+      <Project>{B867864F-5E81-3D95-ABAF-EB661B2AC254}</Project>
+      <Name>ext_convertUTF</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\engine\external\edtaa3func\ext_edtaa3func.vcxproj">
+      <Project>{A1764A3F-D0E6-3012-81FE-2BBD5B0F32CB}</Project>
+      <Name>ext_edtaa3func</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\engine\external\md5\ext_md5.vcxproj">
+      <Project>{862288F7-7AF7-31EB-ACBE-7537BC07049F}</Project>
+      <Name>ext_md5</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\engine\external\poly2tri\ext_poly2tri.vcxproj">
+      <Project>{8FEE91DB-2A11-38D5-8A2A-0696F9318486}</Project>
+      <Name>ext_poly2tri</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\engine\external\recast\ext_recast.vcxproj">
+      <Project>{D8D39013-2897-31D0-9D36-F02E7914C395}</Project>
+      <Name>ext_recast</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\engine\external\tinyxml2\ext_tinyxml2.vcxproj">
+      <Project>{8BCCDDF1-BB44-3D62-877B-F82FEE3DCAA5}</Project>
+      <Name>ext_tinyxml2</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\engine\external\unzip\ext_unzip.vcxproj">
+      <Project>{9E99D172-38B2-3449-9CD4-A4D8E39FD233}</Project>
+      <Name>ext_unzip</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\engine\external\xxhash\ext_xxhash.vcxproj">
+      <Project>{38417DC5-167E-395A-9FE6-5E147C1BDB03}</Project>
+      <Name>ext_xxhash</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\engine\external\xxtea\ext_xxtea.vcxproj">
+      <Project>{0BCFB87B-8EDB-3CB5-9BF0-A1B3F3C37A37}</Project>
+      <Name>ext_xxtea</Name>
+    </ProjectReference>
+    <ProjectReference Include="D:\codes\TowerDefence\cmake-build-debug\engine\external\external.vcxproj">
+      <Project>{2B984CB6-EA45-3894-BD6C-3B8BC8C51615}</Project>
+      <Name>external</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
