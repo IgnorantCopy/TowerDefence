@@ -33,3 +33,4 @@
 
 # Customize
 cmake-build-debug
+*.mp4

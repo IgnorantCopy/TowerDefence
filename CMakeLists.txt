@@ -24,6 +24,8 @@
 # ****************************************************************************/
 
 cmake_minimum_required(VERSION 3.6)
+set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(APP_NAME TowerDefence)
 
@@ -120,7 +122,7 @@ endif()
 set(all_code_files
     ${GAME_HEADER}
     ${GAME_SOURCE}
-    )
+)
 if(NOT ANDROID)
     add_executable(${APP_NAME} ${all_code_files})
 else()
