@@ -33,4 +33,9 @@
 
 # Customize
 cmake-build-debug
+build
 *.mp4
+
+.cache
+.devenv
+.direnv
