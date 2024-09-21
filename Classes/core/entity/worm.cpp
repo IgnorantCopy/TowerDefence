@@ -1,5 +1,5 @@
 #include "worm.h"
-#include "core/map.h"
+#include "../map.h"
 
 namespace towerdefence {
 namespace core {
