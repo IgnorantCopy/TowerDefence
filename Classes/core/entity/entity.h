@@ -1,3 +1,6 @@
+#ifndef TOWERDEFENCE_CORE_ENTITY_ENTITY
+#define TOWERDEFENCE_CORE_ENTITY_ENTITY
+
 #include <cstdint>
 
 namespace towerdefence {
@@ -31,3 +34,5 @@ struct Tower {
 
 } // namespace core
 } // namespace towerdefence
+
+#endif
