@@ -23,7 +23,6 @@
  ****************************************************************************/
 
 #include "HelloWorldScene.h"
-#include "ui/CocosGUI.h"
 
 USING_NS_CC;
 
@@ -56,27 +55,29 @@ bool HelloWorld::init()
     //    you may modify it.
 
     // add a "close" icon to exit the progress. it's an autorelease object
-//    auto closeItem = MenuItemImage::create(
-//                                           "CloseNormal.png",
-//                                           "CloseSelected.png",
-//                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
-//
-//    if (closeItem == nullptr ||
-//        closeItem->getContentSize().width <= 0 ||
-//        closeItem->getContentSize().height <= 0) {
-//        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-//    } else {
-//        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
-//        float y = origin.y + closeItem->getContentSize().height/2;
-//        closeItem->setPosition(Vec2(x,y));
-//    }
+    auto closeItem = MenuItemImage::create(
+                                           "CloseNormal.png",
+                                           "CloseSelected.png",
+                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+
+    if (closeItem == nullptr ||
+        closeItem->getContentSize().width <= 0 ||
+        closeItem->getContentSize().height <= 0) {
+        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
+    } else {
+        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
+        float y = origin.y + closeItem->getContentSize().height/2;
+        closeItem->setPosition(Vec2(x,y));
+    }
 
     auto labelPlay = Label::createWithTTF("Play", "fonts/Bender/BENDER.OTF", 100);
     auto playItem =  MenuItemLabel::create(
             labelPlay,
-            CC_CALLBACK_1(HelloWorld::menuCloseCallback, this)
+            [this](Ref *ref){
+                log("create PlayScene");//TODO: create a playScene
+            }
     );
-    labelPlay->setPosition(Vec2(origin.x + visibleSize.width / 2,
+    playItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
                                origin.y + visibleSize.height / 2+200));
 
     auto labelQuit = Label::createWithTTF("Quit", "fonts/Bender/BENDER.OTF", 100);
