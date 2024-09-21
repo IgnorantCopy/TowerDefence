@@ -49,6 +49,8 @@ add_library(core
     Classes/core/map.h
     Classes/core/entity/entity.h
     Classes/core/entity/worm.cpp
+        Classes/core/entity/dog.cpp
+        Classes/core/entity/dog.h
 )
 
 set_property(TARGET core PROPERTY CXX_STANDARD 23)
