@@ -53,6 +53,8 @@ add_library(core
 
 set_property(TARGET core PROPERTY CXX_STANDARD 23)
 
+set(CXX_STANDARD 17)
+
 # record sources, headers, resources...
 set(GAME_SOURCE)
 set(GAME_HEADER)
