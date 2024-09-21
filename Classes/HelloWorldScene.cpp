@@ -23,6 +23,9 @@
  ****************************************************************************/
 
 #include "HelloWorldScene.h"
+#include "Gif/GIFMovie.h"
+#include "Gif/CacheGif.h"
+#include "Gif/InstantGif.h"
 
 USING_NS_CC;
 
