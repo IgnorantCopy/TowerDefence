@@ -60,10 +60,15 @@ endif()
 list(APPEND GAME_SOURCE
      Classes/AppDelegate.cpp
      Classes/HelloWorldScene.cpp
+     Classes/core/map.cpp
+     Classes/core/entity/worm.h
      )
 list(APPEND GAME_HEADER
      Classes/AppDelegate.h
      Classes/HelloWorldScene.h
+     Classes/core/map.h
+     Classes/core/entity/entity.h
+     Classes/core/entity/worm.cpp
      )
 
 if(ANDROID)
