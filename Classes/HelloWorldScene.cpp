@@ -73,6 +73,23 @@ bool HelloWorld::init()
         closeItem->setPosition(Vec2(x,y));
     }
 
+    auto labelPlay = Label::createWithTTF("Play", "fonts/Bender/BENDER.OTF", 100);
+    auto playItem =  MenuItemLabel::create(
+            labelPlay,
+            [this](Ref *ref){
+                log("create PlayScene");//TODO: create a playScene
+            }
+    );
+    playItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                               origin.y + visibleSize.height / 2+200));
+
+    auto labelQuit = Label::createWithTTF("Quit", "fonts/Bender/BENDER.OTF", 100);
+    auto quitItem = MenuItemLabel::create(
+            labelQuit,
+            CC_CALLBACK_1(HelloWorld::menuCloseCallback, this)
+    );
+    quitItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                               origin.y + visibleSize.height / 2));
     /////////////////////////////
     // 3. add your codes below...
 
@@ -109,9 +126,12 @@ bool HelloWorld::init()
     }
     
     // create menu, it's an autorelease object
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
+    Vector<MenuItem*> MenuItems;
+    MenuItems.pushBack(playItem);
+    MenuItems.pushBack(quitItem);
+    auto menu = Menu::createWithArray(MenuItems);
     this->addChild(menu, 2);
+    menu->setPosition(Vec2::ZERO);
     return true;
 }
 
