@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <functional>
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace towerdefence {
@@ -32,7 +33,7 @@ struct Map {
     Shape shape;
 
     explicit Map(std::vector<Grid> &&grids_, size_t width_, size_t height_)
-        : grids(grids_), shape{.width = width_, .height = height_} {
+        : grids(std::move(grids_)), shape{.width = width_, .height = height_} {
         assert(width_ * height_ == grids_.size());
     }
 
