@@ -81,37 +81,47 @@ bool HelloWorld::init()
             }
     );
     playItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                               origin.y + visibleSize.height / 2+200));
-
+                               origin.y + visibleSize.height / 2));
+    
+    auto labelManual = Label::createWithTTF("Manual", "fonts/Bender/BENDER.OTF", 100);
+    auto manualItem = MenuItemLabel::create(
+            labelManual,
+            [this](Ref *ref){
+                log("create ManualScene");//TODO: create a manualScene
+            }
+    );
+    manualItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                               origin.y + visibleSize.height / 2 - 200));
+    
     auto labelQuit = Label::createWithTTF("Quit", "fonts/Bender/BENDER.OTF", 100);
     auto quitItem = MenuItemLabel::create(
             labelQuit,
             CC_CALLBACK_1(HelloWorld::menuCloseCallback, this)
     );
     quitItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                               origin.y + visibleSize.height / 2));
+                               origin.y + visibleSize.height / 2 - 400));
     /////////////////////////////
     // 3. add your codes below...
 
-    // add a label shows "Hello World"
-    // create and initialize a label
+    // add a labelTitle shows "Hello World"
+    // create and initialize a labelTitle
 
-    auto label = Label::createWithTTF("Tower Defence", "fonts/Bender/BENDER.OTF", 200);
-    if (label == nullptr) {
+    auto labelTitle = Label::createWithTTF("Tower Defence", "fonts/Bender/BENDER.OTF", 200);
+    if (labelTitle == nullptr) {
         problemLoading("'fonts/Bender/BENDER.OTF'");
     } else {
-        // position the label on the center of the screen
-        label->setPosition(Vec2(origin.x + visibleSize.width / 2,
+        // position the labelTitle on the center of the screen
+        labelTitle->setPosition(Vec2(origin.x + visibleSize.width / 2,
                                 origin.y + visibleSize.height / 2));
-        label->setOpacity(0);
-        // add the label as a child to this layer
-        this->addChild(label, 1);
+        labelTitle->setOpacity(0);
+        // add the labelTitle as a child to this layer
+        this->addChild(labelTitle, 1);
         auto delay = DelayTime::create(1);
         auto fadeIn = FadeIn::create(3.0f);
         auto move = MoveBy::create(1, Vec2(0, 400));
         auto move_ease = EaseBackOut::create(move->clone());
         auto seq = Sequence::create(fadeIn, delay, move_ease, NULL);
-        label->runAction(seq);
+        labelTitle->runAction(seq);
     }
 
     auto background = Sprite::create("images/menu_background_copy.png", Rect(0, 0, 2500, 1500));
@@ -129,9 +139,22 @@ bool HelloWorld::init()
     Vector<MenuItem*> MenuItems;
     MenuItems.pushBack(playItem);
     MenuItems.pushBack(quitItem);
+    MenuItems.pushBack(manualItem);
     auto menu = Menu::createWithArray(MenuItems);
     this->addChild(menu, 2);
     menu->setPosition(Vec2::ZERO);
+    
+    // animation for menu
+    menu->setOpacity(0);
+    auto delay1 = DelayTime::create(3.8f);
+    auto scaleDown = ScaleBy::create(0.1f, 0.1f);
+    auto fadeIn = FadeIn::create(0.1f);
+    auto scaleUp = ScaleBy::create(0.5f, 10.0f);
+    auto scaleEase = EaseBackOut::create(scaleUp->clone());
+    auto delay2 = DelayTime::create(0.8f);
+    auto seq = Sequence::create(delay1, scaleDown, fadeIn, delay2, scaleEase, NULL);
+    menu->runAction(seq);
+    
     return true;
 }
 
