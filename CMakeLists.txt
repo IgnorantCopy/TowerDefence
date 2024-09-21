@@ -24,8 +24,6 @@
 # ****************************************************************************/
 
 cmake_minimum_required(VERSION 3.6)
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 set(APP_NAME TowerDefence)
 
@@ -44,6 +42,18 @@ if(NOT DEFINED BUILD_ENGINE_DONE) # to test TowerDefence into root project
     include(CocosBuildSet)
     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 endif()
+
+add_library(core
+    Classes/core/map.cpp
+    Classes/core/entity/worm.cpp
+    Classes/core/map.h
+    Classes/core/entity/entity.h
+    Classes/core/entity/worm.cpp
+)
+
+set_property(TARGET core PROPERTY CXX_STANDARD 23)
+
+set(CXX_STANDARD 17)
 
 # record sources, headers, resources...
 set(GAME_SOURCE)
@@ -122,6 +132,8 @@ endif()
 set(all_code_files
     ${GAME_HEADER}
     ${GAME_SOURCE}
+        Classes/SelectLevelScene.h
+        Classes/SelectLevelScene.cpp
 )
 if(NOT ANDROID)
     add_executable(${APP_NAME} ${all_code_files})
@@ -131,7 +143,7 @@ else()
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 endif()
 
-target_link_libraries(${APP_NAME} cocos2d)
+target_link_libraries(${APP_NAME} cocos2d core)
 target_include_directories(${APP_NAME}
         PRIVATE Classes
         PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/

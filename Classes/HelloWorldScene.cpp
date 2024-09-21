@@ -23,6 +23,7 @@
  ****************************************************************************/
 
 #include "HelloWorldScene.h"
+#include "SelectLevelScene.h"
 #include "Gif/GIFMovie.h"
 #include "Gif/CacheGif.h"
 #include "Gif/InstantGif.h"
@@ -78,6 +79,7 @@ bool HelloWorld::init()
             labelPlay,
             [this](Ref *ref){
                 log("create PlayScene");//TODO: create a playScene
+                Director::getInstance()->replaceScene(SelectLevelScene::createScene());
             }
     );
     playItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
@@ -168,6 +170,5 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
-
 
 }
