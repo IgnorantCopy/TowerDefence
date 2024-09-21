@@ -3,30 +3,30 @@
 namespace towerdefence {
 namespace core {
 struct Defence {
-  int32_t physics;
-  int32_t magic;
+    int32_t physics;
+    int32_t magic;
 };
 
 struct EnemyInfo {
-  int32_t health;
-  Defence defence;
-  int32_t speed;
+    int32_t health;
+    Defence defence;
+    int32_t speed;
 };
 
 struct Enemy {
-  virtual EnemyInfo info() const = 0;
+    virtual EnemyInfo info() const = 0;
 };
 
 enum class AttackType { Physics, Magic, Real };
 
 struct TowerInfo {
-  int32_t attack;
-  int32_t cost;
-  int32_t deploy_interval;
+    int32_t attack;
+    int32_t cost;
+    int32_t deploy_interval;
 };
 
 struct Tower {
-  virtual TowerInfo info() const = 0;
+    virtual TowerInfo info() const = 0;
 };
 
 } // namespace core
