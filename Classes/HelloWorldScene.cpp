@@ -78,7 +78,6 @@ bool HelloWorld::init()
     auto playItem =  MenuItemLabel::create(
             labelPlay,
             [this](Ref *ref){
-                log("create PlayScene");//TODO: create a playScene
                 Director::getInstance()->replaceScene(SelectLevelScene::createScene());
             }
     );
