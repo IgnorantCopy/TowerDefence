@@ -1,3 +1,6 @@
+#ifndef TOWERDEFENCE_CORE_MAP
+#define TOWERDEFENCE_CORE_MAP
+
 #include "./entity/entity.h"
 
 #include <cassert>
@@ -61,3 +64,5 @@ struct GridRef {
 
 } // namespace core
 } // namespace towerdefence
+
+#endif
