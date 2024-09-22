@@ -4,7 +4,7 @@
 namespace towerdefence {
     namespace core {
 
-        void Boss_1::update(GridRef g) {}
+        void Boss1::update(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

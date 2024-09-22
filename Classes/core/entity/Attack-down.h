@@ -6,7 +6,7 @@
 namespace towerdefence {
     namespace core {
 
-        struct Attack_down final : Enemy {
+        struct AttackDown final : Enemy {
 
             EnemyInfo info() const override {
                 return {

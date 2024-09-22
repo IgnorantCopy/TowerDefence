@@ -4,7 +4,7 @@
 namespace towerdefence {
     namespace core {
 
-        void Speed_up::update(GridRef g) {}
+        void SpeedUp::update(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence
