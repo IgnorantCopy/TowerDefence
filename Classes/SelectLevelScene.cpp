@@ -46,9 +46,9 @@ bool SelectLevelScene::init()
     } else {
         background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
         this->addChild(background, 0);
-        background->setOpacity(0);
-        auto fadeIn = FadeIn::create(1.0f);
-        background->runAction(fadeIn);
+//        background->setOpacity(0);
+//        auto fadeIn = FadeIn::create(1.0f);
+//        background->runAction(fadeIn);
     }
     return true;
 }
