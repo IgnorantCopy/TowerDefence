@@ -294,6 +294,26 @@ public:
      * ONLY call it if there is a running scene.
      */
     void popScene();
+    
+    /**
+     * Pops out a scene from the stack with animation.
+     */
+    template<class T>
+    void popSceneWithTransition(float time) {
+        CCASSERT(_runningScene != nullptr, "running scene should not null");
+        
+        _scenesStack.popBack();
+        ssize_t c = _scenesStack.size();
+        
+        if (c == 0) {
+            end();
+        } else {
+            _sendCleanupToScene = true;
+            Scene* scene = T::create(time, _scenesStack.at(c - 1));
+            _scenesStack.replace(c - 1, scene);
+            _nextScene = scene;
+        }
+    }
 
     /** 
      * Pops out all scenes from the stack until the root scene in the queue.

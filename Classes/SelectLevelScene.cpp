@@ -1,7 +1,9 @@
 #include "SelectLevelScene.h"
+#include "HelloWorldScene.h"
 #include "Gif/GIFMovie.h"
 #include "Gif/CacheGif.h"
 #include "Gif/InstantGif.h"
+#include "ui/CocosGUI.h"
 
 USING_NS_CC;
 
@@ -39,17 +41,72 @@ bool SelectLevelScene::init()
         closeItem->setPosition(Vec2(x,y));
     }
 
-    auto Back=Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 100);
+    // the background image
     auto background=Sprite::create("images/sellect_background.jpg", Rect(0, 0, 2500, 1500));
     if (background == nullptr) {
-        problemLoading("'images/menu_background_copy.png'");
+        problemLoading("'images/sellect_background.jpg'");
     } else {
         background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
         this->addChild(background, 0);
-//        background->setOpacity(0);
-//        auto fadeIn = FadeIn::create(1.0f);
-//        background->runAction(fadeIn);
     }
+
+    // the back button to go back to the HelloWorld scene
+    auto Back=Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
+    auto backItem=MenuItemLabel::create(
+            Back,
+            [this](Ref *ref){
+                Director::getInstance()->popSceneWithTransition<TransitionCrossFade>(0.4f);
+            }
+    );
+    backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
+                               origin.y + visibleSize.height - 50));
+
+    auto level1=MenuItemImage::create(
+            "images/in.png",
+            "images/in.png",
+            [this](Ref *ref){
+                // TODO: fill the below code with the class level1
+                //Director::getInstance()->replaceScene(*****::createScene());
+            }
+    );
+    level1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 600,
+                               origin.y + visibleSize.height / 2 + 300));
+    // TODO: the animation of the Level1 button
+
+    auto level2=MenuItemImage::create(
+            "images/in.png",
+            "images/in.png",
+            [this](Ref *ref){
+                // TODO: fill the below code with the class level2
+                //Director::getInstance()->replaceScene(*****::createScene());
+            }
+    );
+    level2->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                             origin.y + visibleSize.height / 2 + 300));
+    // TODO: the animation of the Level2 button
+
+    auto level3=MenuItemImage::create(
+            "images/in.png",
+            "images/in.png",
+            [this](Ref *ref){
+                // TODO: fill the below code with the class level3
+                //Director::getInstance()->replaceScene(*****::createScene());
+            }
+    );
+    level3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 600,
+                             origin.y + visibleSize.height / 2 + 300));
+    // TODO: the animation of the Level3 button
+
+    // create menu, it's an autorelease object
+    Vector<MenuItem*> MenuItems;
+    MenuItems.pushBack(backItem);
+    MenuItems.pushBack(level1);
+    MenuItems.pushBack(level2);
+    MenuItems.pushBack(level3);
+    auto menu = Menu::createWithArray(MenuItems);
+    this->addChild(menu, MenuItems.size());
+    menu->setPosition(Vec2::ZERO);
+
     return true;
 }
 

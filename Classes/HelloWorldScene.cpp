@@ -78,16 +78,7 @@ bool HelloWorld::init()
     auto playItem =  MenuItemLabel::create(
             labelPlay,
             [this](Ref *ref){
-//                Director::getInstance()->replaceScene(TransitionFade::create(0.5f, SelectLevelScene::createScene()));
-//                Director::getInstance()->replaceScene(TransitionFadeBL::create(0.5f, SelectLevelScene::createScene()));
-//                Director::getInstance()->replaceScene(TransitionFadeTR::create(0.5f, SelectLevelScene::createScene()));
-                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.5f, SelectLevelScene::createScene()));
-//                Director::getInstance()->replaceScene(TransitionFadeDown::create(0.5f, SelectLevelScene::createScene()));
-//                Director::getInstance()->replaceScene(TransitionFadeUp::create(0.5f, SelectLevelScene::createScene()));
-//                Director::getInstance()->replaceScene(TransitionFlipAngular::create(0.5f, SelectLevelScene::createScene()));
-//                Director::getInstance()->replaceScene(TransitionFlipX::create(0.5f, SelectLevelScene::createScene()));
-//                Director::getInstance()->replaceScene(TransitionFlipY::create(0.5f, SelectLevelScene::createScene()));
-//                Director::getInstance()->replaceScene(TransitionJumpZoom::create(0.5f, SelectLevelScene::createScene()));
+                Director::getInstance()->pushScene(TransitionCrossFade::create(0.5f, SelectLevelScene::createScene()));
             }
     );
     playItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
