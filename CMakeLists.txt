@@ -73,6 +73,34 @@ add_library(core
         Classes/core/entity/Boss-1.h
         Classes/core/entity/Boss-2.cpp
         Classes/core/entity/Boss-2.h
+        Classes/core/entity/aggressive_magician.cpp
+        Classes/core/entity/aggressive_magician.h
+        Classes/core/entity/archor.cpp
+        Classes/core/entity/archor.h
+        Classes/core/entity/archor_base.cpp
+        Classes/core/entity/archor_base.h
+        Classes/core/entity/bomber.cpp
+        Classes/core/entity/bomber.h
+        Classes/core/entity/core_magician.cpp
+        Classes/core/entity/core_magician.h
+        Classes/core/entity/decelerate_magician.cpp
+        Classes/core/entity/decelerate_magician.h
+        Classes/core/entity/diffusive_magician.cpp
+        Classes/core/entity/diffusive_magician.h
+        Classes/core/entity/helper_base.cpp
+        Classes/core/entity/helper_base.h
+        Classes/core/entity/highspeed_archor.cpp
+        Classes/core/entity/highspeed_archor.h
+        Classes/core/entity/magician_base.cpp
+        Classes/core/entity/magician_base.h
+        Classes/core/entity/special_magician.cpp
+        Classes/core/entity/special_magician.h
+        Classes/core/entity/weaken_magician.cpp
+        Classes/core/entity/weaken_magician.h
+        Classes/core/entity/aggressive_magician_plus.cpp
+        Classes/core/entity/aggressive_magician_plus.h
+        Classes/core/entity/archor_plus.cpp
+        Classes/core/entity/archor_plus.h
 )
 
 set_property(TARGET core PROPERTY CXX_STANDARD 23)
