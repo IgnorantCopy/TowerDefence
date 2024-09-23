@@ -7,6 +7,7 @@
 #include <cstddef>
 #include <functional>
 #include <memory>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -14,7 +15,7 @@ namespace towerdefence {
 namespace core {
 struct Grid {
     std::vector<Enemy> enemies;
-    std::unique_ptr<Tower> tower;
+    std::optional<std::unique_ptr<Tower>> tower;
 };
 
 struct Shape {
@@ -49,6 +50,8 @@ struct Map {
     }
 
     GridRef get_ref(size_t row, size_t column);
+
+    void update();
 };
 
 static size_t absdiff(size_t x, size_t y) { return (x > y) ? x - y : y - x; }
