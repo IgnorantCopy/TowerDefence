@@ -34,6 +34,7 @@ struct TowerInfo {
     int32_t attack;
     int32_t cost;
     int32_t deploy_interval;
+    AttackType attack_type;
 };
 
 struct Tower : Entity {
