@@ -48,6 +48,7 @@ add_library(core
     Classes/core/entity/worm.cpp
     Classes/core/map.h
     Classes/core/entity/entity.h
+    Classes/core/entity/entity.cpp
     Classes/core/entity/worm.cpp
     Classes/core/entity/dog.cpp
     Classes/core/entity/dog.h
