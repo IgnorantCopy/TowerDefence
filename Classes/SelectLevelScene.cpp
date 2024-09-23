@@ -42,9 +42,9 @@ bool SelectLevelScene::init()
     }
 
     // the background image
-    auto background=Sprite::create("images/sellect_background.jpg", Rect(0, 0, 2500, 1500));
+    auto background=Sprite::create("images/select_background.jpg", Rect(0, 0, 2500, 1500));
     if (background == nullptr) {
-        problemLoading("'images/sellect_background.jpg'");
+        problemLoading("'images/select_background.jpg'");
     } else {
         background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
         this->addChild(background, 0);
@@ -62,39 +62,39 @@ bool SelectLevelScene::init()
                                origin.y + visibleSize.height - 50));
 
     auto level1=MenuItemImage::create(
-            "images/in.png",
-            "images/in.png",
+            "images/locked.png",
+            "images/locked.png",
             [this](Ref *ref){
                 // TODO: fill the below code with the class level1
                 //Director::getInstance()->replaceScene(*****::createScene());
             }
     );
-    level1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 600,
-                               origin.y + visibleSize.height / 2 + 300));
+    level1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800,
+                               origin.y + visibleSize.height / 2));
     // TODO: the animation of the Level1 button
 
     auto level2=MenuItemImage::create(
-            "images/in.png",
-            "images/in.png",
+            "images/locked.png",
+            "images/locked.png",
             [this](Ref *ref){
                 // TODO: fill the below code with the class level2
                 //Director::getInstance()->replaceScene(*****::createScene());
             }
     );
     level2->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                             origin.y + visibleSize.height / 2 + 300));
+                             origin.y + visibleSize.height / 2));
     // TODO: the animation of the Level2 button
 
     auto level3=MenuItemImage::create(
-            "images/in.png",
-            "images/in.png",
+            "images/locked.png",
+            "images/locked.png",
             [this](Ref *ref){
                 // TODO: fill the below code with the class level3
                 //Director::getInstance()->replaceScene(*****::createScene());
             }
     );
-    level3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 600,
-                             origin.y + visibleSize.height / 2 + 300));
+    level3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800,
+                             origin.y + visibleSize.height / 2));
     // TODO: the animation of the Level3 button
 
     // create menu, it's an autorelease object
