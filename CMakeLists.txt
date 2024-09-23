@@ -51,6 +51,28 @@ add_library(core
     Classes/core/entity/worm.cpp
     Classes/core/entity/dog.cpp
     Classes/core/entity/dog.h
+        Classes/core/entity/Soldier.cpp
+        Classes/core/entity/Soldier.h
+        Classes/core/entity/Warlock.cpp
+        Classes/core/entity/Warlock.h
+        Classes/core/entity/Destroyer.cpp
+        Classes/core/entity/Destroyer.h
+        Classes/core/entity/Tank.cpp
+        Classes/core/entity/Tank.h
+        Classes/core/entity/Crab.cpp
+        Classes/core/entity/Crab.h
+        Classes/core/entity/Speed-up.cpp
+        Classes/core/entity/Speed-up.h
+        Classes/core/entity/Attack-down.cpp
+        Classes/core/entity/Attack-down.h
+        Classes/core/entity/Life-up.cpp
+        Classes/core/entity/Life-up.h
+        Classes/core/entity/Not-attacked.cpp
+        Classes/core/entity/Not-attacked.h
+        Classes/core/entity/Boss-1.cpp
+        Classes/core/entity/Boss-1.h
+        Classes/core/entity/Boss-2.cpp
+        Classes/core/entity/Boss-2.h
 )
 
 set_property(TARGET core PROPERTY CXX_STANDARD 23)
