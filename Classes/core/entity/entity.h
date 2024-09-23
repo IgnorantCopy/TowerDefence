@@ -10,6 +10,7 @@ struct GridRef;
 
 struct Entity {
     virtual void update(GridRef g) = 0;
+    virtual ~Entity() = 0;
 };
 
 struct Defence {
@@ -33,6 +34,7 @@ struct TowerInfo {
     int32_t attack;
     int32_t cost;
     int32_t deploy_interval;
+    AttackType attack_type;
 };
 
 struct Tower : Entity {
