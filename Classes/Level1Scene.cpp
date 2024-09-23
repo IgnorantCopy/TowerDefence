@@ -50,6 +50,43 @@ bool Level1Scene::init()
         this->addChild(background, 0);
     }
 
+    //create map
+    float delta = 140;
+    float x = origin.x + 70 + delta;
+    float y = origin.y + visibleSize.height - 70 - delta;
+    float SIZE = 140.0;
+    ui::Button* grid[7][12]={};
+    std::string type[7][12]={};
+    type[0][0]=type[0][11]=type[2][11]=type[3][11]=type[4][11]=type[6][0]="out";
+    type[2][0]=type[3][0]=type[4][0]=type[6][11]="in";
+    type[0][7]=type[6][7]="block_transport";
+    type[0][5]=type[0][6]=type[1][0]=type[1][8]=type[1][9]=type[1][10]=type[1][11]=type[5][0]=type[5][7]=type[5][11]=type[6][6]="none";
+    type[1][1]=type[1][2]=type[1][3]=type[1][5]=type[1][6]=type[1][7]=type[3][2]=type[4][6]=type[4][7]=type[5][1]=type[5][2]=
+    type[5][3]=type[5][4]=type[5][6]=type[5][8]=type[5][9]=type[5][10]="block_high";
+    for(int i = 0; i < 7; i++) {
+        for (int j = 0; j < 12; j++) {
+            if (type[i][j] == "out") {
+                grid[i][j] = ui::Button::create("images/out.png","images/out.png");
+            }
+            else if (type[i][j] == "in") {
+                grid[i][j] = ui::Button::create("images/in.png","images/in.png");
+            }
+            else if (type[i][j] == "block_transport") {
+                grid[i][j] = ui::Button::create("images/block_transport.png", "images/block_transport.png");
+            }
+            else if (type[i][j] == "block_high") {
+                grid[i][j] = ui::Button::create("images/block_high.png", "images/block_high.png");
+            }
+            else if (type[i][j] == "none") {
+                grid[i][j] = ui::Button::create();
+            }
+            else {
+                grid[i][j] = ui::Button::create("images/block_low.png", "images/block_low.png");
+            }
+            grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
+            this->addChild(grid[i][j], 1);
+        }
+    }
     return true;
 }
 
