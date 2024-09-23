@@ -17,6 +17,12 @@ namespace core {
 struct Grid {
     std::vector<Enemy> enemies;
     std::optional<std::unique_ptr<Tower>> tower;
+
+    template <std::invocable<std::unique_ptr<Tower> &> F> void with_tower(F f) {
+        if (tower.has_value()) {
+            f(tower.value());
+        }
+    }
 };
 
 struct Shape {
