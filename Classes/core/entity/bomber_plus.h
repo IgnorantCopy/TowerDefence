@@ -1,16 +1,16 @@
-#ifndef TOWERDEFENCE_CORE_MAGICIAN_H
-#define TOWERDEFENCE_CORE_MAGICIAN_H
+#ifndef TOWERDEFENCE_BOMBER_PLUS_H
+#define TOWERDEFENCE_BOMBER_PLUS_H
 
 #include "entity.h"
 
 namespace towerdefence {
     namespace core {
 
-        struct coreMagician final : Tower {
+        struct bomberPlus final : Tower {
 
             TowerInfo info() const override {
                 return {
-                        .attack = 700, .cost = 12, .deploy_interval = 0, .attack_interval = 16, .attack_type = AttackType::Magic
+                        .attack = 2000, .cost = 20, .deploy_interval = 0, .attack_interval = 20, .attack_type = AttackType::Physics
                 };
             }
 
@@ -21,4 +21,4 @@ namespace towerdefence {
 
 
 
-#endif //TOWERDEFENCE_CORE_MAGICIAN_H
+#endif //TOWERDEFENCE_BOMBER_PLUS_H

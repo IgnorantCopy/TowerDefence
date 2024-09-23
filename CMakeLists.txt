@@ -102,6 +102,20 @@ add_library(core
         Classes/core/entity/aggressive_magician_plus.h
         Classes/core/entity/archor_plus.cpp
         Classes/core/entity/archor_plus.h
+        Classes/core/entity/bomber_plus.cpp
+        Classes/core/entity/bomber_plus.h
+        Classes/core/entity/core_magician_plus.cpp
+        Classes/core/entity/core_magician_plus.h
+        Classes/core/entity/decelerate_magician_plus.cpp
+        Classes/core/entity/decelerate_magician_plus.h
+        Classes/core/entity/diffusive_magician_plus.cpp
+        Classes/core/entity/diffusive_magician_plus.h
+        Classes/core/entity/highspeed_archor_plus.cpp
+        Classes/core/entity/highspeed_archor_plus.h
+        Classes/core/entity/special_magician_plus.cpp
+        Classes/core/entity/special_magician_plus.h
+        Classes/core/entity/weaken_magician_plus.cpp
+        Classes/core/entity/weaken_magician_plus.h
 )
 
 set_property(TARGET core PROPERTY CXX_STANDARD 23)

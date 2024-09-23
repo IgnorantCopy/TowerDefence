@@ -1,12 +1,12 @@
-#ifndef TOWERDEFENCE_DECELERATE_MAGICIAN_H
-#define TOWERDEFENCE_DECELERATE_MAGICIAN_H
+#ifndef TOWERDEFENCE_DECELERATE_MAGICIAN_PLUS_H
+#define TOWERDEFENCE_DECELERATE_MAGICIAN_PLUS_H
 
 #include "entity.h"
 
 namespace towerdefence {
     namespace core {
 
-        struct decelerateMagician final : Tower {
+        struct decelerateMagicianPlus final : Tower {
 
             TowerInfo info() const override {
                 return {
@@ -21,4 +21,4 @@ namespace towerdefence {
 
 
 
-#endif //TOWERDEFENCE_DECELERATE_MAGICIAN_H
+#endif //TOWERDEFENCE_DECELERATE_MAGICIAN_PLUS_H

@@ -10,7 +10,7 @@ namespace towerdefence {
 
             TowerInfo info() const override {
                 return {
-                        .attack = 1400, .cost = 14, .deploy_interval = 0, .attack_type = AttackType::Magic
+                        .attack = 1400, .cost = 14, .deploy_interval = 0, .attack_interval = 30, .attack_type = AttackType::Magic
                 };
             }
 
