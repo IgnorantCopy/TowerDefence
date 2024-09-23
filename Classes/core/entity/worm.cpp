@@ -7,10 +7,11 @@
 namespace towerdefence {
 namespace core {
 
-void Worm::update(GridRef g) {
+void Worm::update(GridRef g) {}
+
+void Worm::on_death(GridRef g) {
     for (auto grid : g.with_radix(1, linf_dis)) {
-        grid.grid.with_tower([](std::unique_ptr<Tower> &tower) {
-        });
+        grid.grid.with_tower([](std::unique_ptr<Tower> &tower) {});
     }
 }
 
