@@ -47,7 +47,8 @@ bool Level1Scene::init()
         problemLoading("'images/sellect_background.jpg'");
     } else {
         background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
-        this->addChild(background, 0)
+        this->addChild(background, 0);
+    }
 
     return true;
 }
