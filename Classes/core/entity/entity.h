@@ -10,6 +10,7 @@ struct GridRef;
 
 struct Entity {
     virtual void update(GridRef g) = 0;
+    virtual ~Entity() = 0;
 };
 
 struct Defence {
