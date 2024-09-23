@@ -3,6 +3,7 @@
 
 #include "./entity/entity.h"
 
+#include <algorithm>
 #include <cassert>
 #include <cstddef>
 #include <functional>
@@ -60,6 +61,10 @@ static size_t l1_dis(size_t x1, size_t y1, size_t x2, size_t y2) {
     return absdiff(x1, x2) + absdiff(y1, y2);
 }
 
+static size_t linf_dis(size_t x1, size_t y1, size_t x2, size_t y2) {
+    return std::max(absdiff(x1, x2), absdiff(y1, y2));
+}
+
 struct GridRef {
     Map &map;
     Grid &grid;
@@ -72,12 +77,13 @@ struct GridRef {
           column(column_) {}
 
     // Returns points whose distance between self <= radix
-    std::vector<GridRef> with_radix(size_t radix) {
+    template <std::invocable<size_t, size_t, size_t, size_t> D>
+    std::vector<GridRef> with_radix(size_t radix, D dis) {
         std::vector<GridRef> res;
         // todo: optimize to O(radix) algorithm
         for (size_t i = 0; i < map.shape.height; ++i) {
             for (size_t j = 0; j < map.shape.width; ++j) {
-                if (l1_dis(row, column, i, j) <= radix) {
+                if (dis(row, column, i, j) <= radix) {
                     res.emplace_back(map, i, j);
                 }
             }
