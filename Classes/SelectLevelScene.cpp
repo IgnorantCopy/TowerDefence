@@ -1,5 +1,6 @@
 #include "SelectLevelScene.h"
 #include "HelloWorldScene.h"
+#include "Level1Scene.h"
 #include "Gif/GIFMovie.h"
 #include "Gif/CacheGif.h"
 #include "Gif/InstantGif.h"
@@ -12,6 +13,7 @@ Scene* SelectLevelScene::createScene()
     return SelectLevelScene::create();
 }
 
+// Print useful error message instead of segfaulting when files are not there.
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
@@ -65,13 +67,11 @@ bool SelectLevelScene::init()
             "images/in.png",
             "images/in.png",
             [this](Ref *ref){
-                // TODO: fill the below code with the class level1
-                //Director::getInstance()->replaceScene(*****::createScene());
+                Director::getInstance()->replaceScene(Level1Scene::createScene());
             }
     );
     level1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 600,
                                origin.y + visibleSize.height / 2 + 300));
-    // TODO: the animation of the Level1 button
 
     auto level2=MenuItemImage::create(
             "images/in.png",
@@ -83,7 +83,6 @@ bool SelectLevelScene::init()
     );
     level2->setPosition(Vec2(origin.x + visibleSize.width / 2,
                              origin.y + visibleSize.height / 2 + 300));
-    // TODO: the animation of the Level2 button
 
     auto level3=MenuItemImage::create(
             "images/in.png",
@@ -95,7 +94,6 @@ bool SelectLevelScene::init()
     );
     level3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 600,
                              origin.y + visibleSize.height / 2 + 300));
-    // TODO: the animation of the Level3 button
 
     // create menu, it's an autorelease object
     Vector<MenuItem*> MenuItems;

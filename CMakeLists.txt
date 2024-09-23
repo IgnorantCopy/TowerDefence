@@ -48,6 +48,7 @@ add_library(core
     Classes/core/entity/worm.cpp
     Classes/core/map.h
     Classes/core/entity/entity.h
+    Classes/core/entity/entity.cpp
     Classes/core/entity/worm.cpp
     Classes/core/entity/dog.cpp
     Classes/core/entity/dog.h
@@ -186,6 +187,9 @@ set(all_code_files
     ${GAME_SOURCE}
         Classes/SelectLevelScene.h
         Classes/SelectLevelScene.cpp
+        Classes/Level1Scene.h
+        Classes/Level1Scene.cpp
+        Classes/Level1Scene.cpp
 )
 if(NOT ANDROID)
     add_executable(${APP_NAME} ${all_code_files})
