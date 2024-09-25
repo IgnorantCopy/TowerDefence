@@ -27,6 +27,7 @@ struct BuffMixin {
 struct Entity {
     virtual void update(GridRef g) = 0;
     virtual void on_death(GridRef g) = 0;
+    virtual void on_tick(GridRef g) = 0;
     virtual ~Entity() = 0;
 };
 
