@@ -48,6 +48,8 @@ add_library(core
     Classes/core/map.h
     Classes/core/entity/entity.h
     Classes/core/entity/entity.cpp
+    Classes/core/timer.h
+    Classes/core/id.h
     Classes/core/entity/enemy/Attack-down.cpp
     Classes/core/entity/enemy/Attack-down.h
     Classes/core/entity/enemy/Boss-1.cpp
@@ -72,7 +74,6 @@ add_library(core
     Classes/core/entity/enemy/Warlock.h
     Classes/core/entity/enemy/dog.cpp
     Classes/core/entity/enemy/dog.h
-    Classes/core/entity/enemy/entity.h
     Classes/core/entity/enemy/worm.cpp
     Classes/core/entity/enemy/worm.h
     Classes/core/entity/tower/aggressive_magician.cpp
@@ -118,7 +119,7 @@ add_library(core
     Classes/core/entity/tower/weaken_magician_plus.cpp
     Classes/core/entity/tower/weaken_magician_plus.h)
 
-set_property(TARGET core PROPERTY CXX_STANDARD 23)
+set_property(TARGET core PROPERTY CXX_STANDARD 17)
 
 set(CXX_STANDARD 17)
 
@@ -213,6 +214,7 @@ else()
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 endif()
 
+set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD 17)
 target_link_libraries(${APP_NAME} cocos2d core)
 target_include_directories(${APP_NAME}
         PRIVATE Classes
