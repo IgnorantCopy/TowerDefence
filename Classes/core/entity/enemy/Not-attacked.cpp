@@ -1,5 +1,5 @@
 #include "Not-attacked.h"
-#include "../map.h"
+#include "../../map.h"
 
 namespace towerdefence {
     namespace core {

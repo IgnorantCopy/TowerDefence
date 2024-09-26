@@ -1,10 +1,10 @@
 #include "weaken_magician_plus.h"
-#include "../map.h"
+#include "../../map.h"
 
 namespace towerdefence {
     namespace core {
 
-        void weakenMagicianPlus::update(GridRef g) {}
+        void weakenMagicianPlus::on_tick(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

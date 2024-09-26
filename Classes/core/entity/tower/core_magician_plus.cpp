@@ -1,10 +1,10 @@
 #include "core_magician_plus.h"
-#include "../map.h"
+#include "../../map.h"
 
 namespace towerdefence {
     namespace core {
 
-        void coreMagicianPlus::update(GridRef g) {}
+        void coreMagicianPlus::on_tick(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

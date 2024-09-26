@@ -1,5 +1,5 @@
 #include "Boss-2.h"
-#include "../map.h"
+#include "../../map.h"
 
 namespace towerdefence {
     namespace core {

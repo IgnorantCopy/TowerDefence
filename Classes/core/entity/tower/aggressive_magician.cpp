@@ -1,10 +1,10 @@
 #include "aggressive_magician.h"
-#include "../map.h"
+#include "../../map.h"
 
 namespace towerdefence {
     namespace core {
 
-        void aggressiveMagician::update(GridRef g) {}
+        void aggressiveMagician::on_tick(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

@@ -1,5 +1,5 @@
 #include "Soldier.h"
-#include "../map.h"
+#include "../../map.h"
 
 namespace towerdefence {
     namespace core {

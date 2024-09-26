@@ -1,5 +1,5 @@
 #include "Life-up.h"
-#include "../map.h"
+#include "../../map.h"
 
 namespace towerdefence {
     namespace core {

@@ -1,10 +1,10 @@
 #include "archor.h"
-#include "../map.h"
+#include "../../map.h"
 
 namespace towerdefence {
     namespace core {
 
-        void archor::update(GridRef g) {}
+        void archor::on_tick(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

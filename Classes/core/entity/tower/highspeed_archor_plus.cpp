@@ -1,10 +1,10 @@
 #include "highspeed_archor_plus.h"
-#include "../map.h"
+#include "../../map.h"
 
 namespace towerdefence {
     namespace core {
 
-        void highspeedArchorPlus::update(GridRef g) {}
+        void highspeedArchorPlus::on_tick(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

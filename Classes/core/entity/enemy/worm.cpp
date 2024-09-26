@@ -1,5 +1,5 @@
 #include "worm.h"
-#include "../map.h"
+#include "../../map.h"
 #include "../entity.h"
 
 #include <memory>
