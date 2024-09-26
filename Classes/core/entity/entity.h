@@ -13,16 +13,40 @@ struct AttackMixin {
     int32_t realized_attack = 0;
 };
 
+#define BUFF_CONSTUCTOR(type, name)                                            \
+    static constexpr Buff name(type name) {                                    \
+        Buff b;                                                                \
+        b.name##_ = name;                                                      \
+        return b;                                                              \
+    }
+
 struct Buff {
     // actual_attack_speed = base_attack_speed + attack_speed
-    int32_t attack_speed = 0;
+    int32_t attack_speed_ = 0;
     // actual_speed = base_speed * (1 + speed)
-    double speed = 0;
+    double speed_ = 0;
     // actual_attack = base_attack * (1 + attack)
-    double attack = 0;
-    bool invincible = false;
-    bool not_hit = true;
-    bool silent = false;
+    double attack_ = 0;
+    bool invincible_ = false;
+    bool silent_ = false;
+
+    BUFF_CONSTUCTOR(int32_t, attack_speed)
+    BUFF_CONSTUCTOR(double, speed)
+    BUFF_CONSTUCTOR(double, attack)
+    BUFF_CONSTUCTOR(bool, invincible)
+    BUFF_CONSTUCTOR(bool, silent)
+
+    constexpr Buff() = default;
+    constexpr Buff(int32_t attack_speed, double speed, double attack,
+                   bool invincible, bool silent)
+        : attack_speed_(attack_speed), speed_(speed), attack_(attack),
+          invincible_(invincible), silent_(silent) {}
+
+    Buff operator&(const Buff &rhs) const {
+        return Buff(attack_speed_ + rhs.attack_speed_, speed_ + rhs.speed_,
+                    attack_ + rhs.attack_, invincible_ || rhs.invincible_,
+                    silent_ || rhs.silent_);
+    }
 };
 
 struct IdMixin {

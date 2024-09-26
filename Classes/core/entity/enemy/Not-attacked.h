@@ -7,6 +7,7 @@ namespace towerdefence {
     namespace core {
 
         struct NotAttacked final : Enemy {
+            bool not_hit_ = true;
 
             EnemyInfo info() const override {
                 return { 16000, { 500, 20 }, 8 };
@@ -15,7 +16,6 @@ namespace towerdefence {
             void on_tick(GridRef g) override;
             
             void on_hit(GridRef g) override;
-
         };
     } // namespace core
 } // namespace towerdefence
