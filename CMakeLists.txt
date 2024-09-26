@@ -45,36 +45,78 @@ endif()
 
 add_library(core
     Classes/core/map.cpp
-    Classes/core/entity/worm.cpp
     Classes/core/map.h
     Classes/core/entity/entity.h
     Classes/core/entity/entity.cpp
-    Classes/core/entity/worm.cpp
-    Classes/core/entity/dog.cpp
-    Classes/core/entity/dog.h
-        Classes/core/entity/Soldier.cpp
-        Classes/core/entity/Soldier.h
-        Classes/core/entity/Warlock.cpp
-        Classes/core/entity/Warlock.h
-        Classes/core/entity/Destroyer.cpp
-        Classes/core/entity/Destroyer.h
-        Classes/core/entity/Tank.cpp
-        Classes/core/entity/Tank.h
-        Classes/core/entity/Crab.cpp
-        Classes/core/entity/Crab.h
-        Classes/core/entity/Speed-up.cpp
-        Classes/core/entity/Speed-up.h
-        Classes/core/entity/Attack-down.cpp
-        Classes/core/entity/Attack-down.h
-        Classes/core/entity/Life-up.cpp
-        Classes/core/entity/Life-up.h
-        Classes/core/entity/Not-attacked.cpp
-        Classes/core/entity/Not-attacked.h
-        Classes/core/entity/Boss-1.cpp
-        Classes/core/entity/Boss-1.h
-        Classes/core/entity/Boss-2.cpp
-        Classes/core/entity/Boss-2.h
-)
+    Classes/core/entity/enemy/Attack-down.cpp
+    Classes/core/entity/enemy/Attack-down.h
+    Classes/core/entity/enemy/Boss-1.cpp
+    Classes/core/entity/enemy/Boss-1.h
+    Classes/core/entity/enemy/Boss-2.cpp
+    Classes/core/entity/enemy/Boss-2.h
+    Classes/core/entity/enemy/Crab.cpp
+    Classes/core/entity/enemy/Crab.h
+    Classes/core/entity/enemy/Destroyer.cpp
+    Classes/core/entity/enemy/Destroyer.h
+    Classes/core/entity/enemy/Life-up.cpp
+    Classes/core/entity/enemy/Life-up.h
+    Classes/core/entity/enemy/Not-attacked.cpp
+    Classes/core/entity/enemy/Not-attacked.h
+    Classes/core/entity/enemy/Soldier.cpp
+    Classes/core/entity/enemy/Soldier.h
+    Classes/core/entity/enemy/Speed-up.cpp
+    Classes/core/entity/enemy/Speed-up.h
+    Classes/core/entity/enemy/Tank.cpp
+    Classes/core/entity/enemy/Tank.h
+    Classes/core/entity/enemy/Warlock.cpp
+    Classes/core/entity/enemy/Warlock.h
+    Classes/core/entity/enemy/dog.cpp
+    Classes/core/entity/enemy/dog.h
+    Classes/core/entity/enemy/entity.h
+    Classes/core/entity/enemy/worm.cpp
+    Classes/core/entity/enemy/worm.h
+    Classes/core/entity/tower/aggressive_magician.cpp
+    Classes/core/entity/tower/aggressive_magician.h
+    Classes/core/entity/tower/aggressive_magician_plus.cpp
+    Classes/core/entity/tower/aggressive_magician_plus.h
+    Classes/core/entity/tower/archor.cpp
+    Classes/core/entity/tower/archor.h
+    Classes/core/entity/tower/archor_base.cpp
+    Classes/core/entity/tower/archor_base.h
+    Classes/core/entity/tower/archor_plus.cpp
+    Classes/core/entity/tower/archor_plus.h
+    Classes/core/entity/tower/bomber.cpp
+    Classes/core/entity/tower/bomber.h
+    Classes/core/entity/tower/bomber_plus.cpp
+    Classes/core/entity/tower/bomber_plus.h
+    Classes/core/entity/tower/core_magician.cpp
+    Classes/core/entity/tower/core_magician.h
+    Classes/core/entity/tower/core_magician_plus.cpp
+    Classes/core/entity/tower/core_magician_plus.h
+    Classes/core/entity/tower/decelerate_magician.cpp
+    Classes/core/entity/tower/decelerate_magician.h
+    Classes/core/entity/tower/decelerate_magician_plus.cpp
+    Classes/core/entity/tower/decelerate_magician_plus.h
+    Classes/core/entity/tower/diffusive_magician.cpp
+    Classes/core/entity/tower/diffusive_magician.h
+    Classes/core/entity/tower/diffusive_magician_plus.cpp
+    Classes/core/entity/tower/diffusive_magician_plus.h
+    Classes/core/entity/tower/helper_base.cpp
+    Classes/core/entity/tower/helper_base.h
+    Classes/core/entity/tower/highspeed_archor.cpp
+    Classes/core/entity/tower/highspeed_archor.h
+    Classes/core/entity/tower/highspeed_archor_plus.cpp
+    Classes/core/entity/tower/highspeed_archor_plus.h
+    Classes/core/entity/tower/magician_base.cpp
+    Classes/core/entity/tower/magician_base.h
+    Classes/core/entity/tower/special_magician.cpp
+    Classes/core/entity/tower/special_magician.h
+    Classes/core/entity/tower/special_magician_plus.cpp
+    Classes/core/entity/tower/special_magician_plus.h
+    Classes/core/entity/tower/weaken_magician.cpp
+    Classes/core/entity/tower/weaken_magician.h
+    Classes/core/entity/tower/weaken_magician_plus.cpp
+    Classes/core/entity/tower/weaken_magician_plus.h)
 
 set_property(TARGET core PROPERTY CXX_STANDARD 23)
 

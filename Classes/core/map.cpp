@@ -9,10 +9,10 @@ void Map::update() {
             auto &grid = ref.grid;
             if (grid.tower.has_value()) {
                 auto &tower = grid.tower.value();
-                tower->update(ref);
+                tower->on_tick(ref);
             }
             for (auto &enemy : grid.enemies) {
-                enemy.update(ref);
+                enemy.on_tick(ref);
             }
         }
     }
