@@ -7,7 +7,7 @@
 namespace towerdefence {
 namespace core {
 
-void Worm::update(GridRef g) {}
+void Worm::on_tick(GridRef g) {}
 
 void Worm::on_death(GridRef g) {
     for (auto grid : g.with_radix(1, linf_dis)) {

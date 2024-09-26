@@ -4,7 +4,7 @@
 namespace towerdefence {
     namespace core {
 
-        void Dog::update(GridRef g) {}
+        void Dog::on_tick(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

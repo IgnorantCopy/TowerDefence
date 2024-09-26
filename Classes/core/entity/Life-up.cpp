@@ -4,7 +4,7 @@
 namespace towerdefence {
     namespace core {
 
-        void LifeUp::update(GridRef g) {}
+        void LifeUp::on_tick(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

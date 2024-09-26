@@ -4,7 +4,7 @@
 namespace towerdefence {
     namespace core {
 
-        void Warlock::update(GridRef g) {}
+        void Warlock::on_tick(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

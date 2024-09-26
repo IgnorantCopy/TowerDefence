@@ -4,7 +4,7 @@
 namespace towerdefence {
     namespace core {
 
-        void NotAttacked::update(GridRef g) {}
+        void NotAttacked::on_tick(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

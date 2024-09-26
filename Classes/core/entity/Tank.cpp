@@ -4,7 +4,7 @@
 namespace towerdefence {
     namespace core {
 
-        void Tank::update(GridRef g) {}
+        void Tank::on_tick(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

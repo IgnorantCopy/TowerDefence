@@ -4,7 +4,7 @@
 namespace towerdefence {
     namespace core {
 
-        void Crab::update(GridRef g) {}
+        void Crab::on_tick(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

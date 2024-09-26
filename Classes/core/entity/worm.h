@@ -14,7 +14,7 @@ struct Worm final : Enemy {
         };
     }
 
-    void update(GridRef g) override;
+    void on_tick(GridRef g) override;
     
     void on_death(GridRef g) override;
 };
