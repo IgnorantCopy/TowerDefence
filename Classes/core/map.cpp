@@ -3,8 +3,8 @@
 namespace towerdefence {
 namespace core {
 void Map::update() {
-    for (size_t i = 0; i < shape.height; ++i) {
-        for (size_t j = 0; j < shape.width; ++j) {
+    for (size_t i = 0; i < shape.height_; ++i) {
+        for (size_t j = 0; j < shape.width_; ++j) {
             auto ref = get_ref(i, j);
             auto &grid = ref.grid;
             if (grid.tower.has_value()) {

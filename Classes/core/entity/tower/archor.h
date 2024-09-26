@@ -9,9 +9,7 @@ namespace towerdefence {
         struct archor final : Tower {
 
             TowerInfo info() const override {
-                return {
-                        .attack = 2400, .cost = 18, .deploy_interval = 0, .attack_interval = 10, .attack_type = AttackType::Physics
-                };
+                return { 2400, 18, 0, 10, AttackType::Physics };
             }
 
             void on_tick(GridRef g) override;

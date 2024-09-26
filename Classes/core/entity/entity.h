@@ -46,14 +46,20 @@ struct Entity {
 };
 
 struct Defence {
-    int32_t physics = 0;
-    int32_t magic = 0;
+    int32_t physics_ = 0;
+    int32_t magic_ = 0;
+
+    constexpr Defence(int32_t physics, int32_t magic)
+        : physics_(physics), magic_(magic) {}
 };
 
 struct EnemyInfo {
-    int32_t health = 0;
-    Defence defence;
-    int32_t speed = 0;
+    int32_t health_ = 0;
+    Defence defence_;
+    int32_t speed_ = 0;
+
+    constexpr EnemyInfo(int32_t health, Defence defence, int32_t speed)
+        : health_(health), defence_(defence), speed_(speed) {}
 };
 
 struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
@@ -63,11 +69,16 @@ struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
 enum class AttackType { Physics, Magic, Real };
 
 struct TowerInfo {
-    int32_t attack = 0;
-    int32_t cost = 0;
-    int32_t deploy_interval = 0;
-    int32_t attack_interval = 0; // actual_attack_attack_speed
-    AttackType attack_type;
+    int32_t attack_ = 0;
+    int32_t cost_ = 0;
+    int32_t deploy_interval_ = 0;
+    int32_t attack_interval_ = 0; // actual_attack_attack_speed
+    AttackType attack_type_;
+
+    constexpr TowerInfo(int32_t attack, int32_t cost, int32_t deploy_interval,
+                        int32_t attack_interval, AttackType attack_type)
+        : attack_(attack), cost_(cost), deploy_interval_(deploy_interval),
+          attack_interval_(attack_interval), attack_type_(attack_type) {}
 };
 
 struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
