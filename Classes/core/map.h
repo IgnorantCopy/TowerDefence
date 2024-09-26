@@ -1,8 +1,6 @@
 #ifndef TOWERDEFENCE_CORE_MAP
 #define TOWERDEFENCE_CORE_MAP
 
-#include "./entity/entity.h"
-
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
@@ -11,6 +9,9 @@
 #include <optional>
 #include <utility>
 #include <vector>
+
+#include "./entity/entity.h"
+#include "./id.h"
 
 namespace towerdefence {
 namespace core {
@@ -21,6 +22,12 @@ struct Grid {
     template <std::invocable<std::unique_ptr<Tower> &> F> void with_tower(F f) {
         if (tower.has_value()) {
             f(tower.value());
+        }
+    }
+
+    void with_enemy(std::function<void(Enemy &)> f) {
+        for (auto &enemy: enemies) {
+            f(enemy);
         }
     }
 };
@@ -39,6 +46,8 @@ struct GridRef;
 struct Map {
     std::vector<Grid> grids;
     Shape shape;
+
+    id::IdGenerator id_gen;
 
     explicit Map(std::vector<Grid> &&grids_, size_t width_, size_t height_)
         : grids(std::move(grids_)), shape{.width = width_, .height = height_} {
