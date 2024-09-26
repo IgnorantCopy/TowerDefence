@@ -25,7 +25,7 @@ struct Grid {
         }
     }
 
-    template <std::invocable<Enemy &> F> void with_enemy(F f) {
+    void with_enemy(std::function<void(Enemy &)> f) {
         for (auto &enemy: enemies) {
             f(enemy);
         }
