@@ -14,8 +14,12 @@ struct AttackMixin {
 };
 
 struct Buff {
+    // actual_attack_speed = base_attack_speed + attack_speed
     int32_t attack_speed = 0;
+    // actual_speed = base_speed * (1 + speed)
     double speed = 0;
+    // actual_attack = base_attack * (1 + attack)
+    double attack = 0;
 };
 
 struct IdMixin {
@@ -47,7 +51,7 @@ struct EnemyInfo {
     int32_t speed = 0;
 };
 
-struct Enemy : Entity, AttackMixin, BuffMixin {
+struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
     virtual EnemyInfo info() const = 0;
 };
 
