@@ -4,7 +4,13 @@
 namespace towerdefence {
     namespace core {
 
-        void Boss2::on_tick(GridRef g) {}
+        void Boss2::on_tick(GridRef g) {
+            for (auto &grid : g.map.grids) {
+                grid.with_tower([this](std::unique_ptr<Tower> &tower) {
+                    tower->add_buff(this->id, {.attack_speed = -50, .silent = true});
+                });
+            }
+        }
 
     } // namespace core
 } // namespace towerdefence
