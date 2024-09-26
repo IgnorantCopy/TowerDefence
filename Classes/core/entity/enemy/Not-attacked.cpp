@@ -7,7 +7,10 @@ namespace core {
 void NotAttacked::on_tick(GridRef g) {}
 
 void NotAttacked::on_hit(GridRef g) {
-    this->add_buff(this->id, Buff::invincible(true) & Buff::not_hit(false));
+    if (this->not_hit_) {
+        this->add_buff(this->id, Buff::invincible(true));
+        this->not_hit_ = false;
+    }
 }
 
 } // namespace core

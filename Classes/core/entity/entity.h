@@ -28,26 +28,24 @@ struct Buff {
     // actual_attack = base_attack * (1 + attack)
     double attack_ = 0;
     bool invincible_ = false;
-    bool not_hit_ = true;
     bool silent_ = false;
 
     BUFF_CONSTUCTOR(int32_t, attack_speed)
     BUFF_CONSTUCTOR(double, speed)
     BUFF_CONSTUCTOR(double, attack)
     BUFF_CONSTUCTOR(bool, invincible)
-    BUFF_CONSTUCTOR(bool, not_hit)
     BUFF_CONSTUCTOR(bool, silent)
 
     constexpr Buff() = default;
     constexpr Buff(int32_t attack_speed, double speed, double attack,
-                   bool invincible, bool not_hit, bool silent)
+                   bool invincible, bool silent)
         : attack_speed_(attack_speed), speed_(speed), attack_(attack),
-          invincible_(invincible), not_hit_(not_hit), silent_(silent) {}
+          invincible_(invincible), silent_(silent) {}
 
     Buff operator&(const Buff &rhs) const {
         return Buff(attack_speed_ + rhs.attack_speed_, speed_ + rhs.speed_,
                     attack_ + rhs.attack_, invincible_ || rhs.invincible_,
-                    not_hit_ && rhs.not_hit_, silent_ || rhs.silent_);
+                    silent_ || rhs.silent_);
     }
 };
 
