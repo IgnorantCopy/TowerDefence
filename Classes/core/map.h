@@ -98,13 +98,13 @@ struct GridRef {
 
     // Returns points whose distance between self <= radix
     std::vector<GridRef>
-    with_radix(size_t radix,
+    with_radius(size_t radius,
                std::function<size_t(size_t, size_t, size_t, size_t)> dis) {
         std::vector<GridRef> res;
         // todo: optimize to O(radix) algorithm
         for (size_t i = 0; i < map.shape.height_; ++i) {
             for (size_t j = 0; j < map.shape.width_; ++j) {
-                if (dis(row, column, i, j) <= radix) {
+                if (dis(row, column, i, j) <= radius) {
                     res.emplace_back(map, i, j);
                 }
             }

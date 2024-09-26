@@ -5,7 +5,7 @@ namespace towerdefence {
 namespace core {
 
 void AttackDown::on_tick(GridRef g) {
-    for (auto grid : g.with_radix(2, l1_dis)) {
+    for (auto grid : g.with_radius(2, l1_dis)) {
         grid.grid.with_tower([this](std::unique_ptr<Tower> &tower) {
             tower->add_buff(this->id, Buff::attack(-0.5));
         });
