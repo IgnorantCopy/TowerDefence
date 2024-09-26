@@ -20,6 +20,9 @@ struct Buff {
     double speed = 0;
     // actual_attack = base_attack * (1 + attack)
     double attack = 0;
+    bool invincible = false;
+    bool not_hit = true;
+    bool silent = false;
 };
 
 struct IdMixin {
@@ -37,6 +40,8 @@ struct Entity {
     virtual void on_tick(GridRef g) = 0;
     // called when the entity dies
     virtual void on_death(GridRef g);
+    // called when entity is hit
+    virtual void on_hit(GridRef g);
     virtual ~Entity() = 0;
 };
 

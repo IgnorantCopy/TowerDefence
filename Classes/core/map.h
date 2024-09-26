@@ -24,6 +24,12 @@ struct Grid {
             f(tower.value());
         }
     }
+
+    void with_enemy(std::function<void(Enemy &)> f) {
+        for (auto &enemy: enemies) {
+            f(enemy);
+        }
+    }
 };
 
 struct Shape {
