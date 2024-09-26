@@ -31,7 +31,7 @@ project(${APP_NAME})
 
 if(XCODE)
     if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
-        SET (CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 8.0)
+        SET(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 8.0)
     endif()
 endif()
 
@@ -129,69 +129,70 @@ set(GAME_HEADER)
 
 set(GAME_RES_FOLDER
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
-    )
+)
 if(APPLE OR WINDOWS)
     cocos_mark_multi_resources(common_res_files RES_TO "Resources" FOLDERS ${GAME_RES_FOLDER})
 endif()
 
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
-     Classes/AppDelegate.cpp
-     Classes/HelloWorldScene.cpp
-     )
+    Classes/AppDelegate.cpp
+    Classes/HelloWorldScene.cpp
+)
 list(APPEND GAME_HEADER
-     Classes/AppDelegate.h
-     Classes/HelloWorldScene.h
-     )
+    Classes/AppDelegate.h
+    Classes/HelloWorldScene.h
+)
 
 if(ANDROID)
     # change APP_NAME to the share library name for Android, it's value depend on AndroidManifest.xml
     set(APP_NAME MyGame)
     list(APPEND GAME_SOURCE
-         proj.android/app/jni/hellocpp/main.cpp
-         )
+        proj.android/app/jni/hellocpp/main.cpp
+    )
 elseif(LINUX)
     list(APPEND GAME_SOURCE
-         proj.linux/main.cpp
-         )
+        proj.linux/main.cpp
+    )
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fuse-ld=gold")
 elseif(WINDOWS)
     list(APPEND GAME_HEADER
-         proj.win32/main.h
-         proj.win32/resource.h
-         )
+        proj.win32/main.h
+        proj.win32/resource.h
+    )
     list(APPEND GAME_SOURCE
-         proj.win32/main.cpp
-         proj.win32/game.rc
-         ${common_res_files}
-         )
+        proj.win32/main.cpp
+        proj.win32/game.rc
+        ${common_res_files}
+    )
 elseif(APPLE)
     if(IOS)
         list(APPEND GAME_HEADER
-             proj.ios_mac/ios/AppController.h
-             proj.ios_mac/ios/RootViewController.h
-             )
+            proj.ios_mac/ios/AppController.h
+            proj.ios_mac/ios/RootViewController.h
+        )
         set(APP_UI_RES
             proj.ios_mac/ios/LaunchScreen.storyboard
             proj.ios_mac/ios/LaunchScreenBackground.png
             proj.ios_mac/ios/Images.xcassets
-            )
+        )
         list(APPEND GAME_SOURCE
-             proj.ios_mac/ios/main.m
-             proj.ios_mac/ios/AppController.mm
-             proj.ios_mac/ios/RootViewController.mm
-             proj.ios_mac/ios/Prefix.pch
-             ${APP_UI_RES}
-             )
+            proj.ios_mac/ios/main.m
+            proj.ios_mac/ios/AppController.mm
+            proj.ios_mac/ios/RootViewController.mm
+            proj.ios_mac/ios/Prefix.pch
+            ${APP_UI_RES}
+        )
     elseif(MACOSX)
         set(APP_UI_RES
             proj.ios_mac/mac/Icon.icns
             proj.ios_mac/mac/Info.plist
-            )
+        )
         list(APPEND GAME_SOURCE
-             proj.ios_mac/mac/main.cpp
-             proj.ios_mac/mac/Prefix.pch
-             ${APP_UI_RES}
-             )
+            proj.ios_mac/mac/main.cpp
+            proj.ios_mac/mac/Prefix.pch
+            ${APP_UI_RES}
+        )
     endif()
     list(APPEND GAME_SOURCE ${common_res_files})
 endif()
@@ -200,11 +201,11 @@ endif()
 set(all_code_files
     ${GAME_HEADER}
     ${GAME_SOURCE}
-        Classes/SelectLevelScene.h
-        Classes/SelectLevelScene.cpp
-        Classes/Level1Scene.h
-        Classes/Level1Scene.cpp
-        Classes/Level1Scene.cpp
+    Classes/SelectLevelScene.h
+    Classes/SelectLevelScene.cpp
+    Classes/Level1Scene.h
+    Classes/Level1Scene.cpp
+    Classes/Level1Scene.cpp
 )
 if(NOT ANDROID)
     add_executable(${APP_NAME} ${all_code_files})
@@ -217,8 +218,8 @@ endif()
 set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD 17)
 target_link_libraries(${APP_NAME} cocos2d core)
 target_include_directories(${APP_NAME}
-        PRIVATE Classes
-        PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/
+    PRIVATE Classes
+    PRIVATE ${COCOS2DX_ROOT_PATH}/cocos/audio/include/
 )
 
 # mark app resources

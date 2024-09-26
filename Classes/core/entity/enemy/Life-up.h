@@ -9,9 +9,7 @@ namespace towerdefence {
         struct LifeUp final : Enemy {
 
             EnemyInfo info() const override {
-                return {
-                        .health = 6000, .defence = {.physics = 130, .magic = 30}, .speed = 8,
-                };
+                return { 6000, { 130, 30 }, 8 };
             }
 
             void on_tick(GridRef g) override;

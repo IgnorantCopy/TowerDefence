@@ -33,11 +33,14 @@ struct Grid {
 };
 
 struct Shape {
-    size_t width;
-    size_t height;
+    size_t width_;
+    size_t height_;
+
+    explicit Shape(size_t width, size_t height)
+        : width_(width), height_(height) {}
 
     size_t get_index(size_t row, size_t column) const {
-        return row * width + column;
+        return row * width_ + column;
     }
 };
 
@@ -49,14 +52,14 @@ struct Map {
 
     id::IdGenerator id_gen;
 
-    explicit Map(std::vector<Grid> &&grids_, size_t width_, size_t height_)
-        : grids(std::move(grids_)), shape{.width = width_, .height = height_} {
-        assert(width_ * height_ == grids_.size());
+    explicit Map(std::vector<Grid> &&grids_, size_t width, size_t height)
+        : grids(std::move(grids_)), shape{width, height} {
+        assert(width * height == grids_.size());
     }
 
     explicit Map(size_t width_, size_t height_,
                  std::function<Grid(size_t, size_t)> f)
-        : shape{.width = width_, .height = height_} {
+        : shape{width_, height_} {
         grids.reserve(width_ * height_);
         for (size_t i = 0; i < height_; ++i) {
             for (size_t j = 0; j < width_; ++j) {
@@ -99,8 +102,8 @@ struct GridRef {
                std::function<size_t(size_t, size_t, size_t, size_t)> dis) {
         std::vector<GridRef> res;
         // todo: optimize to O(radix) algorithm
-        for (size_t i = 0; i < map.shape.height; ++i) {
-            for (size_t j = 0; j < map.shape.width; ++j) {
+        for (size_t i = 0; i < map.shape.height_; ++i) {
+            for (size_t j = 0; j < map.shape.width_; ++j) {
                 if (dis(row, column, i, j) <= radix) {
                     res.emplace_back(map, i, j);
                 }

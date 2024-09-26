@@ -9,14 +9,13 @@ namespace towerdefence {
         struct NotAttacked final : Enemy {
 
             EnemyInfo info() const override {
-                return {
-                        .health = 16000, .defence = {.physics = 500, .magic = 20}, .speed = 8,
-                };
+                return { 16000, { 500, 20 }, 8 };
             }
 
             void on_tick(GridRef g) override;
-
+            
             void on_hit(GridRef g) override;
+
         };
     } // namespace core
 } // namespace towerdefence
