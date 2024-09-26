@@ -2,15 +2,15 @@
 #include "../../map.h"
 
 namespace towerdefence {
-    namespace core {
+namespace core {
 
-        void Boss1::on_tick(GridRef g) {
-            for (auto &grid : g.map.grids) {
-                grid.with_tower([this](std::unique_ptr<Tower> &tower) {
-                    tower->add_buff(this->id, {.attack_speed = -30, .silent = true});
-                });
-            }
-        }
+void Boss1::on_tick(GridRef g) {
+    for (auto &grid : g.map.grids) {
+        grid.with_tower([this](std::unique_ptr<Tower> &tower) {
+            tower->add_buff(this->id, Buff::attack_speed(-30) & Buff::silent(true));
+        });
+    }
+}
 
-    } // namespace core
+} // namespace core
 } // namespace towerdefence

@@ -10,9 +10,9 @@ namespace core {
 void Worm::on_tick(GridRef g) {}
 
 void Worm::on_death(GridRef g) {
-    for (auto grid : g.with_radix(1, linf_dis)) {
+    for (auto grid : g.with_radius(1, linf_dis)) {
         grid.grid.with_tower([this](std::unique_ptr<Tower> &tower) {
-            tower->add_buff(this->id, {.attack_speed = -50});
+            tower->add_buff(this->id, Buff::attack_speed(-50));
         });
     }
 }

@@ -16,6 +16,7 @@
           curl
           sqlite
           xorg.libXxf86vm
+          just
         ];
       };
     };

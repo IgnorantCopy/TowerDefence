@@ -9,9 +9,7 @@ namespace towerdefence {
         struct Dog final : Enemy {
 
             EnemyInfo info() const override {
-                return {
-                        .health = 900, .defence = {.physics = 0, .magic = 0}, .speed = 19,
-                };
+                return { 900, { 0, 0 }, 19 };
             }
 
             void on_tick(GridRef g) override;

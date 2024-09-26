@@ -9,9 +9,7 @@ namespace towerdefence {
         struct magicianBase final : Tower {
 
             TowerInfo info() const override {
-                return {
-                        .attack = 450, .cost = 8, .deploy_interval = 0, .attack_interval = 18, .attack_type = AttackType::Magic
-                };
+                return { 450, 8, 0, 18, AttackType::Magic };
             }
 
             void on_tick(GridRef g) override;
