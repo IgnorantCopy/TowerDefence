@@ -15,6 +15,8 @@ namespace towerdefence {
             }
 
             void on_tick(GridRef g) override;
+
+            void on_hit(GridRef g) override;
         };
     } // namespace core
 } // namespace towerdefence

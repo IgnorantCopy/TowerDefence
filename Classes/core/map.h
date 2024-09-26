@@ -24,6 +24,12 @@ struct Grid {
             f(tower.value());
         }
     }
+
+    template <std::invocable<Enemy &> F> void with_enemy(F f) {
+        for (auto &enemy: enemies) {
+            f(enemy);
+        }
+    }
 };
 
 struct Shape {
