@@ -66,10 +66,12 @@ struct Map {
 
 static size_t absdiff(size_t x, size_t y) { return (x > y) ? x - y : y - x; }
 
+// ||x1 - x2|| + ||y1 - y2||
 static size_t l1_dis(size_t x1, size_t y1, size_t x2, size_t y2) {
     return absdiff(x1, x2) + absdiff(y1, y2);
 }
 
+// max(||x1 - x2||, ||y1 - y2||)
 static size_t linf_dis(size_t x1, size_t y1, size_t x2, size_t y2) {
     return std::max(absdiff(x1, x2), absdiff(y1, y2));
 }
