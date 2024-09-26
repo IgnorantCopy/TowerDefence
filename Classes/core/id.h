@@ -1,3 +1,6 @@
+#ifndef TOWERDEFENCE_CORE_ID
+#define TOWERDEFENCE_CORE_ID
+
 #include <cstdint>
 namespace towerdefence::core::id {
 
@@ -13,3 +16,5 @@ struct IdGenerator {
 };
 
 } // namespace towerdefence::core::id
+
+#endif
