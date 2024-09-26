@@ -19,7 +19,7 @@ struct Grid {
     std::vector<Enemy> enemies;
     std::optional<std::unique_ptr<Tower>> tower;
 
-    template <std::invocable<std::unique_ptr<Tower> &> F> void with_tower(F f) {
+    void with_tower(std::function<void(std::unique_ptr<Tower> &)> f) {
         if (tower.has_value()) {
             f(tower.value());
         }
@@ -88,8 +88,9 @@ struct GridRef {
           column(column_) {}
 
     // Returns points whose distance between self <= radix
-    template <std::invocable<size_t, size_t, size_t, size_t> D>
-    std::vector<GridRef> with_radix(size_t radix, D dis) {
+    std::vector<GridRef>
+    with_radix(size_t radix,
+               std::function<size_t(size_t, size_t, size_t, size_t)> dis) {
         std::vector<GridRef> res;
         // todo: optimize to O(radix) algorithm
         for (size_t i = 0; i < map.shape.height; ++i) {
