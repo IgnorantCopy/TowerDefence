@@ -2,7 +2,7 @@
 #define TOWERDEFENCE_CORE_ENTITY_ENTITY
 
 #include <cstdint>
-#include <vector>
+#include <unordered_map>
 
 namespace towerdefence {
 namespace core {
@@ -14,14 +14,22 @@ struct AttackMixin {
 };
 
 struct Buff {
+    // actual_attack_speed = base_attack_speed + attack_speed
     int32_t attack_speed = 0;
+    // actual_speed = base_speed * (1 + speed)
     double speed = 0;
+    // actual_attack = base_attack * (1 + attack)
+    double attack = 0;
+};
+
+struct IdMixin {
+    uint32_t id;
 };
 
 struct BuffMixin {
-    std::vector<Buff> buffs;
+    std::unordered_map<uint32_t, Buff> buffs;
 
-    void add_buff(Buff b) { buffs.push_back(b); }
+    void add_buff(uint32_t id, Buff b) { buffs.insert({id, b}); }
 };
 
 struct Entity {
@@ -43,7 +51,7 @@ struct EnemyInfo {
     int32_t speed = 0;
 };
 
-struct Enemy : Entity, AttackMixin, BuffMixin {
+struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
     virtual EnemyInfo info() const = 0;
 };
 
@@ -57,7 +65,7 @@ struct TowerInfo {
     AttackType attack_type;
 };
 
-struct Tower : Entity, AttackMixin, BuffMixin {
+struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
     virtual TowerInfo info() const = 0;
 
     void increase_attack(int32_t atk) { realized_attack += atk; }
