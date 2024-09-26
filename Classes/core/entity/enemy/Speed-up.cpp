@@ -7,7 +7,7 @@ namespace towerdefence {
         void SpeedUp::on_tick(GridRef g) {
             for (auto grid : g.with_radix(1, linf_dis)) {
                 grid.grid.with_enemy([this](Enemy &enemy) {
-                    enemy.add_buff(this->id, {.speed = 0.5});
+                    enemy.add_buff(this->id, Buff::speed(0.5));
                 });
             }
         }
