@@ -48,6 +48,8 @@ add_library(core
     Classes/core/map.h
     Classes/core/entity/entity.h
     Classes/core/entity/entity.cpp
+    Classes/core/timer.h
+    Classes/core/id.h
     Classes/core/entity/enemy/Attack-down.cpp
     Classes/core/entity/enemy/Attack-down.h
     Classes/core/entity/enemy/Boss-1.cpp
