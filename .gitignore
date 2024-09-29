@@ -34,6 +34,7 @@
 # Customize
 cmake-build-debug
 build
+build-doc
 *.mp4
 
 .cache
