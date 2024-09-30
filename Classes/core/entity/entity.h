@@ -1,7 +1,9 @@
 #ifndef TOWERDEFENCE_CORE_ENTITY_ENTITY
 #define TOWERDEFENCE_CORE_ENTITY_ENTITY
 
+#include <cstddef>
 #include <cstdint>
+#include <functional>
 #include <unordered_map>
 
 namespace towerdefence {
@@ -36,6 +38,10 @@ struct Buff {
     BUFF_CONSTUCTOR(bool, invincible)
     BUFF_CONSTUCTOR(bool, silent)
 
+    static constexpr uint32_t DEFAULT = 0;
+    static constexpr uint32_t INVINCIBLE = 1;
+    static constexpr uint32_t DECREASE_SPEED = 2;
+
     constexpr Buff() = default;
     constexpr Buff(int32_t attack_speed, double speed, double attack,
                    bool invincible, bool silent)
@@ -49,14 +55,32 @@ struct Buff {
     }
 };
 
+// Uniquely indentify a buff.
+struct BuffIdentifier {
+    struct hasher {
+        std::size_t operator()(const BuffIdentifier &s) const noexcept {
+            return std::hash<uint64_t>{}(s.id_);
+        }
+    };
+
+    uint64_t id_;
+
+    // entity_id uniquely identifies an entity
+    // buff_id uniquely identifies a buff the entity may give
+    constexpr BuffIdentifier(uint32_t entity_id, uint32_t buff_id)
+        : id_((uint64_t(entity_id) << 32) | uint64_t(buff_id)) {}
+
+    bool operator==(const BuffIdentifier &rhs) const { return id_ == rhs.id_; }
+};
+
 struct IdMixin {
     uint32_t id;
 };
 
 struct BuffMixin {
-    std::unordered_map<uint32_t, Buff> buffs;
+    std::unordered_map<BuffIdentifier, Buff, BuffIdentifier::hasher> buffs;
 
-    void add_buff(uint32_t id, Buff b) { buffs.insert({id, b}); }
+    void add_buff(BuffIdentifier id, Buff b) { buffs.insert({id, b}); }
 };
 
 struct Entity {

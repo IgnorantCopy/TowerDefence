@@ -2,15 +2,15 @@
 #include "../../map.h"
 
 namespace towerdefence {
-    namespace core {
+namespace core {
 
-        void SpeedUp::on_tick(GridRef g) {
-            for (auto grid : g.with_radius(1, linf_dis)) {
-                grid.grid.with_enemy([this](Enemy &enemy) {
-                    enemy.add_buff(this->id, Buff::speed(0.5));
-                });
-            }
-        }
+void SpeedUp::on_tick(GridRef g) {
+    for (auto grid : g.with_radius(1, linf_dis)) {
+        grid.grid.with_enemy([this](Enemy &enemy) {
+            enemy.add_buff({this->id, Buff::DEFAULT}, Buff::speed(0.5));
+        });
+    }
+}
 
-    } // namespace core
+} // namespace core
 } // namespace towerdefence
