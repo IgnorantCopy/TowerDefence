@@ -125,9 +125,9 @@ bool HelloWorld::init()
         labelTitle->runAction(seq);
     }
 
-    auto background = Sprite::create("images/menu_background_copy.png", Rect(0, 0, 2500, 1500));
+    auto background = Sprite::create("images/menu_background.png", Rect(0, 0, 2500, 1500));
     if (background == nullptr) {
-        problemLoading("'images/menu_background_copy.png'");
+        problemLoading("'images/menu_background.png'");
     } else {
         background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
         this->addChild(background, 0);
