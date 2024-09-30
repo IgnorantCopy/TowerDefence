@@ -1,5 +1,5 @@
-#ifndef TOWERDEFENCE_CORE_ID
-#define TOWERDEFENCE_CORE_ID
+#ifndef TOWERDEFENCE_CORE_TIMER
+#define TOWERDEFENCE_CORE_TIMER
 
 #include <cstdint>
 #include <variant>
