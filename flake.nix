@@ -2,23 +2,23 @@
   inputs = { nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable"; };
 
   outputs = { self, nixpkgs, ... }@inputs:
-    let pkgs = nixpkgs.legacyPackages."x86_64-linux";
+    let
+      pkgs = nixpkgs.legacyPackages."x86_64-linux";
+      build-deps = with pkgs; [ cmake ];
+      deps = with pkgs; [
+        sqlite
+        fontconfig
+        gtk3
+        expat
+        glew
+        curl
+        sqlite
+        xorg.libXxf86vm
+      ];
+      dev-deps = with pkgs; [ clang-tools just ];
     in {
-      devShells.x86_64-linux.default = pkgs.mkShell {
-        packages = with pkgs; [
-          cmake
-          clang-tools
-          sqlite
-          fontconfig
-          gtk3
-          expat
-          glew
-          curl
-          sqlite
-          xorg.libXxf86vm
-          just
-        ];
-      };
+      devShells.x86_64-linux.default =
+        pkgs.mkShell { packages = build-deps ++ dev-deps ++ deps; };
 
       packages.x86_64-linux = {
         doc = let
@@ -54,6 +54,23 @@
           '' + pkgs.lib.concatMapStrings (d: ''
             cp ${d}.pdf $out/
           '') docs;
+        };
+
+        tower-defence = pkgs.stdenv.mkDerivation rec {
+          name = "tower-defence";
+          src = ./.;
+          buildInputs = deps;
+          nativeBuildInputs = build-deps
+            ++ (with pkgs; [ pkg-config python3 patchelf ]);
+          enableParallelBuilding = true;
+          doCheck = false;
+          installPhase = ''
+            cp -r bin/TowerDefence/ $out/
+            cp ../cocos2d/external/linux-specific/fmod/prebuilt/64-bit/libfmod.so -r $out/libfmod.so.6
+            patchelf --add-rpath $out $out/TowerDefence
+          '';
+          cmakeFlags =
+            [ "-DCMAKE_SKIP_BUILD_RPATH=ON" "-DCMAKE_SKIP_INSTALL_RPATH=OFF" ];
         };
       };
     };
