@@ -3,19 +3,21 @@
 
 #include "../entity.h"
 
-namespace towerdefence {
-    namespace core {
+namespace towerdefence::core {
 
-        struct AttackDown final : Enemy {
+struct Map;
 
-            EnemyInfo info() const override {
-                return { 20000, { 700, 50 }, 8 };
-            }
+struct AttackDown final : Enemy {
+    timer::Timer release_skill_;
 
-            void on_tick(GridRef g) override;
-        };
-    } // namespace core
-} // namespace towerdefence
+    AttackDown(Map &);
+    AttackDown() = delete;
 
+    EnemyInfo info() const override { return {20000, {700, 50}, 8}; }
 
-#endif //TOWERDEFENCE_ATTACK_DOWN_H
+    void on_tick(GridRef g) override;
+    void on_death(GridRef g) override;
+};
+} // namespace towerdefence::core
+
+#endif // TOWERDEFENCE_ATTACK_DOWN_H
