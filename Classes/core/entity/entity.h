@@ -4,6 +4,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <memory>
 #include <numeric>
 #include <optional>
 #include <unordered_map>
@@ -163,6 +164,26 @@ struct TowerInfo {
 struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
     virtual TowerInfo info() const = 0;
 };
+
+struct Map;
+
+struct EnemyFactoryBase {
+    virtual std::unique_ptr<Enemy> construct(Map &) = 0;
+};
+
+template <class T> struct EnemyFactory final : EnemyFactoryBase {
+    std::unique_ptr<Enemy> construct(Map &) override;
+};
+
+template <class T> std::unique_ptr<Enemy> EnemyFactory<T>::construct(Map &m) {
+    if constexpr (std::is_constructible_v<T, Map &>) {
+        return std::make_unique<T>(T(m));
+    } else if constexpr (std::is_default_constructible_v<T>) {
+        return std::make_unique<T>(T());
+    } else {
+        static_assert(false, "Unsupported type");
+    }
+}
 
 } // namespace core
 } // namespace towerdefence
