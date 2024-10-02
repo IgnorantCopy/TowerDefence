@@ -80,6 +80,8 @@ struct BuffIdentifier {
         : id_((uint64_t(entity_id.v) << 32) | uint64_t(buff_id)) {}
 
     bool operator==(const BuffIdentifier &rhs) const { return id_ == rhs.id_; }
+
+    bool is_from(id::Id id) const { return id_ >> 32 == id.v; }
 };
 
 struct IdMixin {
@@ -95,6 +97,14 @@ struct BuffMixin {
     void add_buff(BuffIdentifier id, Buff b) { buffs.insert({id, {b, {}}}); }
     void add_buff_in(BuffIdentifier id, Buff b, timer::Timer t) {
         buffs.insert({id, {b, t}});
+    }
+
+    void remove_buff_from(id::Id id) {
+        for (auto it = buffs.cbegin(); it != buffs.cend(); ++it) {
+            if (it->first.is_from(id)) {
+                buffs.erase(it);
+            }
+        }
     }
 
     Buff get_all_buff() const {
@@ -144,7 +154,7 @@ struct EnemyInfo {
 };
 
 struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
-    Enemy(id::Id id): IdMixin {id} {}
+    Enemy(id::Id id) : IdMixin{id} {}
 
     virtual EnemyInfo info() const = 0;
 };
