@@ -123,6 +123,7 @@ struct Map {
         return id;
     }
 
+    // throws std::out_of_range if id does not exist
     void remove_enemy(id::Id id) {
         auto [row, column] = enemy_refs_.at(id);
         auto &grid = grids.at(shape.index_of(row, column));
@@ -131,6 +132,7 @@ struct Map {
         enemy_refs_.erase(id);
     }
 
+    // throws std::out_of_range if id does not exist
     Enemy &get_enemy_by_id(id::Id id) {
         auto [row, column] = enemy_refs_.at(id);
         auto &grid = grids.at(shape.index_of(row, column));
@@ -140,6 +142,7 @@ struct Map {
             .value();
     }
 
+    // throws std::out_of_range if id does not exist
     Tower &get_tower_by_id(id::Id id) {
         auto [row, column] = tower_refs_.at(id);
         auto &grid = grids.at(shape.index_of(row, column));
