@@ -15,7 +15,9 @@ namespace core {
 struct GridRef;
 
 struct AttackMixin {
-    int32_t realized_attack = 0;
+    int32_t realized_attack_ = 0;
+
+    void increase_attack(int32_t atk) { realized_attack_ += atk; }
 };
 
 #define BUFF_CONSTUCTOR(type, name)                                            \
@@ -157,8 +159,6 @@ struct TowerInfo {
 
 struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
     virtual TowerInfo info() const = 0;
-
-    void increase_attack(int32_t atk) { realized_attack += atk; }
 };
 
 } // namespace core
