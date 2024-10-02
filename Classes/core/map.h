@@ -12,6 +12,7 @@
 
 #include "./entity/entity.h"
 #include "./id.h"
+#include "timer.h"
 
 namespace towerdefence {
 namespace core {
@@ -26,7 +27,7 @@ struct Grid {
     }
 
     void with_enemy(std::function<void(Enemy &)> f) {
-        for (auto &enemy: enemies) {
+        for (auto &enemy : enemies) {
             f(enemy);
         }
     }
@@ -47,6 +48,10 @@ struct Shape {
 struct GridRef;
 
 struct Map {
+  private:
+    timer::Clock clock_;
+
+  public:
     std::vector<Grid> grids;
     Shape shape;
 
@@ -69,6 +74,8 @@ struct Map {
     }
 
     GridRef get_ref(size_t row, size_t column);
+
+    const timer::Clock &clock() const { return clock_; }
 
     void update();
 };
@@ -99,7 +106,7 @@ struct GridRef {
     // Returns points whose distance between self <= radix
     std::vector<GridRef>
     with_radius(size_t radius,
-               std::function<size_t(size_t, size_t, size_t, size_t)> dis) {
+                std::function<size_t(size_t, size_t, size_t, size_t)> dis) {
         std::vector<GridRef> res;
         // todo: optimize to O(radix) algorithm
         for (size_t i = 0; i < map.shape.height_; ++i) {
@@ -112,6 +119,9 @@ struct GridRef {
 
         return res;
     }
+
+    const timer::Clock &clock() const { return map.clock(); }
+    Grid &current() { return grid; }
 };
 
 } // namespace core

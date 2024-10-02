@@ -3,6 +3,7 @@
 namespace towerdefence {
 namespace core {
 void Map::update() {
+    clock_.on_tick();
     for (size_t i = 0; i < shape.height_; ++i) {
         for (size_t j = 0; j < shape.width_; ++j) {
             auto ref = get_ref(i, j);

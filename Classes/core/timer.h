@@ -55,8 +55,16 @@ struct Clock {
         return Timer::duration(duration, elapased_);
     }
 
+    Timer with_duration_sec(uint32_t secs) const {
+        return this->with_duration(secs * 30);
+    }
+
     // return a clock that can be continously notified after `p`
     Timer with_period(uint32_t p) const { return Timer::period(p, elapased_); }
+
+    Timer with_period_sec(uint32_t secs) const {
+        return this->with_period(secs * 30);
+    }
 };
 
 } // namespace towerdefence::core::timer
