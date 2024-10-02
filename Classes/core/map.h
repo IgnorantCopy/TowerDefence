@@ -7,6 +7,8 @@
 #include <functional>
 #include <memory>
 #include <optional>
+#include <tuple>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -31,6 +33,39 @@ struct Grid {
             f(*enemy);
         }
     }
+
+    template <class T>
+    std::optional<T> with_enemy_id(id::Id id, std::function<T(Enemy &)> f) {
+        if (auto it = std::find_if(enemies.begin(), enemies.end(),
+                                   [id](auto en) { return en->id == id; });
+            it != enemies.end()) {
+            return f(**it);
+        }
+
+        return {};
+    }
+
+    bool with_enemy_id(id::Id id, std::function<void(Enemy &)> f) {
+        return with_enemy_id<std::tuple<>>(id,
+                                           [f](auto &enemy) {
+                                               f(enemy);
+                                               return std::tuple{};
+                                           })
+            .has_value();
+    }
+
+    // Removes enemy whose id == `id`
+    // Returns true if such enemy exists, otherwise, false s returned.
+    bool remove_enemy(id::Id id) {
+        if (auto it = std::find_if(enemies.cbegin(), enemies.cend(),
+                                   [id](auto en) { return en->id == id; });
+            it != enemies.cend()) {
+            enemies.erase(it);
+            return true;
+        }
+
+        return false;
+    }
 };
 
 struct Shape {
@@ -51,6 +86,9 @@ struct Map {
   private:
     timer::Clock clock_;
     id::IdGenerator id_gen;
+    // INVARIANCE: `id` in `enemy_refs_` <=> `grid` at `enemy_refs_[id]` has an
+    // entity of `id`
+    std::unordered_map<id::Id, std::pair<size_t, size_t>> enemy_refs_;
 
   public:
     std::vector<Grid> grids;
@@ -73,6 +111,33 @@ struct Map {
     }
 
     GridRef get_ref(size_t row, size_t column);
+
+    id::Id place_enemy_at(size_t row, size_t column, EnemyFactoryBase &enemy) {
+        auto &grid = grids.at(shape.index_of(row, column));
+        auto id = assign_id();
+        grid.enemies.push_back(enemy.construct(id, clock()));
+
+        enemy_refs_.insert({id, {row, column}});
+
+        return id;
+    }
+
+    void remove_enemy(id::Id id) {
+        auto [row, column] = enemy_refs_.at(id);
+        auto &grid = grids.at(shape.index_of(row, column));
+        auto res = grid.remove_enemy(id);
+        assert(res);
+        enemy_refs_.erase(id);
+    }
+
+    Enemy &get_enemy_by_id(id::Id id) {
+        auto [row, column] = enemy_refs_.at(id);
+        auto &grid = grids.at(shape.index_of(row, column));
+        return grid
+            .with_enemy_id<std::reference_wrapper<Enemy>>(
+                id, [](Enemy &enemy) { return std::reference_wrapper{enemy}; })
+            .value();
+    }
 
     id::Id assign_id() { return id_gen.gen(); }
 
