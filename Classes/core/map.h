@@ -50,12 +50,11 @@ struct GridRef;
 struct Map {
   private:
     timer::Clock clock_;
+    id::IdGenerator id_gen;
 
   public:
     std::vector<Grid> grids;
     Shape shape;
-
-    id::IdGenerator id_gen;
 
     explicit Map(std::vector<Grid> &&grids_, size_t width, size_t height)
         : grids(std::move(grids_)), shape{width, height} {
@@ -74,6 +73,8 @@ struct Map {
     }
 
     GridRef get_ref(size_t row, size_t column);
+
+    id::Id assign_id() { return id_gen.gen(); }
 
     const timer::Clock &clock() const { return clock_; }
 

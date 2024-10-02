@@ -10,6 +10,7 @@
 #include <unordered_map>
 #include <utility>
 
+#include "../id.h"
 #include "../timer.h"
 
 namespace towerdefence {
@@ -75,14 +76,14 @@ struct BuffIdentifier {
 
     // entity_id uniquely identifies an entity
     // buff_id uniquely identifies a buff the entity may give
-    constexpr BuffIdentifier(uint32_t entity_id, uint32_t buff_id)
-        : id_((uint64_t(entity_id) << 32) | uint64_t(buff_id)) {}
+    constexpr BuffIdentifier(id::Id entity_id, uint32_t buff_id)
+        : id_((uint64_t(entity_id.v) << 32) | uint64_t(buff_id)) {}
 
     bool operator==(const BuffIdentifier &rhs) const { return id_ == rhs.id_; }
 };
 
 struct IdMixin {
-    uint32_t id;
+    id::Id id;
 };
 
 struct BuffMixin {
@@ -122,7 +123,7 @@ struct Entity {
     // called when entity is hit
     virtual void on_hit(GridRef g);
 
-    virtual ~Entity() {};
+    virtual ~Entity(){};
 };
 
 struct Defence {
@@ -143,6 +144,8 @@ struct EnemyInfo {
 };
 
 struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
+    Enemy(id::Id id): IdMixin {id} {}
+
     virtual EnemyInfo info() const = 0;
 };
 
@@ -168,18 +171,22 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
 struct Map;
 
 struct EnemyFactoryBase {
-    virtual std::unique_ptr<Enemy> construct(Map &) = 0;
+    virtual std::unique_ptr<Enemy> construct(id::Id id,
+                                             const timer::Clock &clk) = 0;
 };
 
 template <class T> struct EnemyFactory final : EnemyFactoryBase {
-    std::unique_ptr<Enemy> construct(Map &) override;
+    std::unique_ptr<Enemy> construct(id::Id id,
+                                     const timer::Clock &clk) override;
 };
 
-template <class T> std::unique_ptr<Enemy> EnemyFactory<T>::construct(Map &m) {
-    if constexpr (std::is_constructible_v<T, Map &>) {
-        return std::make_unique<T>(T(m));
-    } else if constexpr (std::is_default_constructible_v<T>) {
-        return std::make_unique<T>(T());
+template <class T>
+std::unique_ptr<Enemy> EnemyFactory<T>::construct(id::Id id,
+                                                  const timer::Clock &clk) {
+    if constexpr (std::is_constructible_v<T, id::Id, const timer::Clock &>) {
+        return std::make_unique<T>(id, clk);
+    } else if constexpr (std::is_constructible_v<T, id::Id>) {
+        return std::make_unique<T>(id);
     } else {
         static_assert(false, "Unsupported type");
     }

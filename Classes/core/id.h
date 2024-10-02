@@ -4,14 +4,18 @@
 #include <cstdint>
 namespace towerdefence::core::id {
 
+struct Id {
+    uint32_t v;
+};
+
 struct IdGenerator {
     uint32_t cur = 0;
 
     constexpr explicit IdGenerator() = default;
 
-    uint32_t gen() {
+    Id gen() {
         cur += 1;
-        return cur;
+        return {cur};
     }
 };
 
