@@ -17,7 +17,7 @@
 namespace towerdefence {
 namespace core {
 struct Grid {
-    std::vector<Enemy> enemies;
+    std::vector<std::unique_ptr<Enemy>> enemies;
     std::optional<std::unique_ptr<Tower>> tower;
 
     void with_tower(std::function<void(std::unique_ptr<Tower> &)> f) {
@@ -28,7 +28,7 @@ struct Grid {
 
     void with_enemy(std::function<void(Enemy &)> f) {
         for (auto &enemy : enemies) {
-            f(enemy);
+            f(*enemy);
         }
     }
 };
