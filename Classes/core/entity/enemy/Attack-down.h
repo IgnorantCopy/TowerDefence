@@ -10,7 +10,7 @@ struct Map;
 struct AttackDown final : Enemy {
     timer::Timer release_skill_;
 
-    AttackDown(Map &);
+    AttackDown(id::Id id, const timer::Clock & clk);
     AttackDown() = delete;
 
     EnemyInfo info() const override { return {20000, {700, 50}, 8}; }

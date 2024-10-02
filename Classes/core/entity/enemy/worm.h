@@ -7,13 +7,12 @@ namespace towerdefence {
 namespace core {
 
 struct Worm final : Enemy {
+    Worm(id::Id id) : Enemy(id) {}
 
-    EnemyInfo info() const override {
-        return { 1000, { 0, 0 }, 10 };
-    }
+    EnemyInfo info() const override { return {1000, {0, 0}, 10}; }
 
     void on_tick(GridRef g) override;
-    
+
     void on_death(GridRef g) override;
 };
 } // namespace core
