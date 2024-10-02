@@ -89,6 +89,7 @@ struct Map {
     // INVARIANCE: `id` in `enemy_refs_` <=> `grid` at `enemy_refs_[id]` has an
     // entity of `id`
     std::unordered_map<id::Id, std::pair<size_t, size_t>> enemy_refs_;
+    std::unordered_map<id::Id, std::pair<size_t, size_t>> tower_refs_;
 
   public:
     std::vector<Grid> grids;
@@ -137,6 +138,15 @@ struct Map {
             .with_enemy_id<std::reference_wrapper<Enemy>>(
                 id, [](Enemy &enemy) { return std::reference_wrapper{enemy}; })
             .value();
+    }
+
+    Tower &get_tower_by_id(id::Id id) {
+        auto [row, column] = tower_refs_.at(id);
+        auto &grid = grids.at(shape.index_of(row, column));
+
+        assert(grid.tower.value()->id == id);
+
+        return **grid.tower;
     }
 
     id::Id assign_id() { return id_gen.gen(); }
