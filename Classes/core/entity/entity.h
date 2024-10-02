@@ -121,7 +121,7 @@ struct Entity {
     // called when entity is hit
     virtual void on_hit(GridRef g);
 
-    virtual ~Entity() = 0;
+    virtual ~Entity() {};
 };
 
 struct Defence {
