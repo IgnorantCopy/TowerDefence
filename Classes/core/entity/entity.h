@@ -4,8 +4,10 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <numeric>
 #include <optional>
 #include <unordered_map>
+#include <utility>
 
 #include "../timer.h"
 
@@ -37,8 +39,6 @@ struct Buff {
     bool invincible_ = false;
     bool silent_ = false;
 
-    std::optional<timer::Timer> timer_;
-
     BUFF_CONSTUCTOR(int32_t, attack_speed)
     BUFF_CONSTUCTOR(double, speed)
     BUFF_CONSTUCTOR(double, attack)
@@ -59,16 +59,6 @@ struct Buff {
         return Buff(attack_speed_ + rhs.attack_speed_, speed_ + rhs.speed_,
                     attack_ + rhs.attack_, invincible_ || rhs.invincible_,
                     silent_ || rhs.silent_);
-    }
-
-    bool should_expire(const timer::Clock &clock) const {
-        return timer_.has_value() && clock.is_triggered(*timer_);
-    }
-
-    constexpr Buff with_timer(timer::Timer timer) const {
-        Buff b = *this;
-        b.timer_ = {timer};
-        return b;
     }
 };
 
@@ -95,15 +85,28 @@ struct IdMixin {
 };
 
 struct BuffMixin {
-    std::unordered_map<BuffIdentifier, Buff, BuffIdentifier::hasher> buffs;
+    std::unordered_map<BuffIdentifier,
+                       std::pair<Buff, std::optional<timer::Timer>>,
+                       BuffIdentifier::hasher>
+        buffs;
 
-    void add_buff(BuffIdentifier id, Buff b) { buffs.insert({id, b}); }
+    void add_buff(BuffIdentifier id, Buff b) { buffs.insert({id, {b, {}}}); }
     void add_buff_in(BuffIdentifier id, Buff b, timer::Timer t) {
-        buffs.insert({id, b.with_timer(t)});
+        buffs.insert({id, {b, t}});
     }
+
+    Buff get_all_buff() const {
+        return std::accumulate(
+            buffs.cbegin(), buffs.cend(), Buff{},
+            [](const Buff acc, const decltype(buffs)::value_type val) {
+                return acc & val.second.first;
+            });
+    }
+
     void update_buff(const timer::Clock &clk) {
         for (auto it = buffs.cbegin(); it != buffs.cend(); ++it) {
-            if (it->second.should_expire(clk)) {
+            if (const auto timer = it->second.second;
+                timer.has_value() && clk.is_triggered(*timer)) {
                 buffs.erase(it);
             }
         }
