@@ -40,7 +40,7 @@ struct Shape {
     explicit Shape(size_t width, size_t height)
         : width_(width), height_(height) {}
 
-    size_t get_index(size_t row, size_t column) const {
+    size_t index_of(size_t row, size_t column) const {
         return row * width_ + column;
     }
 };
@@ -101,7 +101,7 @@ struct GridRef {
 
     // SAFETY: (row_, column_) must be a valid index
     explicit GridRef(Map &m, size_t row_, size_t column_)
-        : map(m), grid(m.grids[m.shape.get_index(row_, column_)]), row(row_),
+        : map(m), grid(m.grids[m.shape.index_of(row_, column_)]), row(row_),
           column(column_) {}
 
     // Returns points whose distance between self <= radix
