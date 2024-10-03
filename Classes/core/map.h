@@ -37,7 +37,7 @@ struct Grid {
     template <class T>
     std::optional<T> with_enemy_id(id::Id id, std::function<T(Enemy &)> f) {
         if (auto it = std::find_if(enemies.begin(), enemies.end(),
-                                   [id](auto en) { return en->id == id; });
+                                   [id](auto &en) { return en->id == id; });
             it != enemies.end()) {
             return f(**it);
         }
@@ -58,7 +58,7 @@ struct Grid {
     // Returns true if such enemy exists, otherwise, false s returned.
     bool remove_enemy(id::Id id) {
         if (auto it = std::find_if(enemies.cbegin(), enemies.cend(),
-                                   [id](auto en) { return en->id == id; });
+                                   [id](auto &en) { return en->id == id; });
             it != enemies.cend()) {
             enemies.erase(it);
             return true;

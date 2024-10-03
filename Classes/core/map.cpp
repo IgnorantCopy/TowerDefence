@@ -13,7 +13,7 @@ void Map::update() {
                 tower->on_tick(ref);
             }
             for (auto &enemy : grid.enemies) {
-                enemy.on_tick(ref);
+                enemy->on_tick(ref);
             }
         }
     }
