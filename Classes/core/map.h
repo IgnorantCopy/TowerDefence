@@ -113,7 +113,7 @@ struct Map {
 
     GridRef get_ref(size_t row, size_t column);
 
-    id::Id place_enemy_at(size_t row, size_t column, EnemyFactoryBase &enemy) {
+    id::Id spawn_enemy_at(size_t row, size_t column, EnemyFactoryBase &enemy) {
         auto &grid = grids.at(shape.index_of(row, column));
         auto id = assign_id();
         grid.enemies.push_back(enemy.construct(id, clock()));
