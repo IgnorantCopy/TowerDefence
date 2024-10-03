@@ -56,15 +56,17 @@ struct Grid {
 
     // Removes enemy whose id == `id`
     // Returns true if such enemy exists, otherwise, false s returned.
-    bool remove_enemy(id::Id id) {
-        if (auto it = std::find_if(enemies.cbegin(), enemies.cend(),
+    std::optional<std::unique_ptr<Enemy>> remove_enemy(id::Id id) {
+        if (auto it = std::find_if(enemies.begin(), enemies.end(),
                                    [id](auto &en) { return en->id == id; });
             it != enemies.cend()) {
+            auto ret = std::unique_ptr<Enemy>{};
+            it->swap(ret);
             enemies.erase(it);
-            return true;
+            return ret;
         }
 
-        return false;
+        return {};
     }
 };
 
@@ -140,6 +142,16 @@ struct Map {
             .with_enemy_id<std::reference_wrapper<Enemy>>(
                 id, [](Enemy &enemy) { return std::reference_wrapper{enemy}; })
             .value();
+    }
+
+    void move_enemy_to(id::Id id, size_t row, size_t col) {
+        auto [r, c] = enemy_refs_.at(id);
+        auto &grid = grids.at(shape.index_of(r, c));
+
+        auto enemy = grid.remove_enemy(id).value();
+        auto &new_grid = grids.at(shape.index_of(row, col));
+        new_grid.enemies.push_back(std::move(enemy));
+        enemy_refs_[id] = {row, col};
     }
 
     // throws std::out_of_range if id does not exist
