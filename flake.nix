@@ -4,7 +4,7 @@
   outputs = { self, nixpkgs, ... }@inputs:
     let
       pkgs = nixpkgs.legacyPackages."x86_64-linux";
-      build-deps = with pkgs; [ cmake ];
+      build-deps = with pkgs; [ cmake pkg-config python3 ];
       deps = with pkgs; [
         sqlite
         fontconfig
@@ -14,6 +14,8 @@
         curl
         sqlite
         xorg.libXxf86vm
+        pcre2
+        mount
       ];
       dev-deps = with pkgs; [ clang-tools just ];
     in {
@@ -60,8 +62,7 @@
           name = "tower-defence";
           src = ./.;
           buildInputs = deps;
-          nativeBuildInputs = build-deps
-            ++ (with pkgs; [ pkg-config python3 patchelf ]);
+          nativeBuildInputs = build-deps ++ (with pkgs; [ patchelf ]);
           enableParallelBuilding = true;
           doCheck = false;
           installPhase = ''
