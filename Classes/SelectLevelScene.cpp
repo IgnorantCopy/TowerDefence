@@ -1,9 +1,5 @@
 #include "SelectLevelScene.h"
-#include "HelloWorldScene.h"
 #include "Level1Scene.h"
-#include "Gif/GIFMovie.h"
-#include "Gif/CacheGif.h"
-#include "Gif/InstantGif.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;
@@ -67,12 +63,11 @@ bool SelectLevelScene::init()
             "images/locked.png",
             "images/locked.png",
             [this](Ref *ref){
-                Director::getInstance()->replaceScene(Level1Scene::createScene());
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level1Scene::createScene()));
             }
     );
     level1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800,
                                origin.y + visibleSize.height / 2));
-    // TODO: the animation of the Level1 button
 
     auto level2=MenuItemImage::create(
             "images/locked.png",
