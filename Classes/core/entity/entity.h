@@ -157,6 +157,8 @@ struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
     Enemy(id::Id id) : IdMixin{id} {}
 
     virtual EnemyInfo info() const = 0;
+
+    void on_tick(GridRef g) override;
 };
 
 enum class AttackType { Physics, Magic, Real };
