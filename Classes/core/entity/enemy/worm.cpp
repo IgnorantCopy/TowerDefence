@@ -7,13 +7,16 @@
 namespace towerdefence {
 namespace core {
 
-void Worm::on_tick(GridRef g) {}
+void Worm::on_tick(GridRef g) { this->update_buff(g.clock()); }
 
 void Worm::on_death(GridRef g) {
     for (auto grid : g.with_radius(1, linf_dis)) {
-        grid.grid.with_tower([this](std::unique_ptr<Tower> &tower) {
-            tower->add_buff(this->id, Buff::attack_speed(-50));
-        });
+        grid.current().with_tower(
+            [this, &clk = g.clock()](std::unique_ptr<Tower> &tower) {
+                tower->add_buff_in({this->id, Buff::DECREASE_SPEED},
+                                   Buff::attack_speed(-50),
+                                   clk.with_duration_sec(10));
+            });
     }
 }
 
