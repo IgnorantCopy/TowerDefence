@@ -26,11 +26,11 @@ struct Timer {
     std::variant<Period, Duration> clk;
 
     constexpr static Timer period(uint32_t period, uint32_t start) {
-        return {Period{.period = period, .start = start}};
+        return {Period{period, start}};
     }
 
     constexpr static Timer duration(uint32_t duration, uint32_t start) {
-        return {Duration{.duration = duration, .start = start}};
+        return {Duration{duration, start}};
     }
 };
 
