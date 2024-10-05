@@ -42,9 +42,9 @@ bool Level1Scene::init()
         closeItem->setPosition(Vec2(x,y));
     }
 
-    auto background = Sprite::create("images/select_background.jpg",Rect(0,0,2500,1500));
+    auto background = Sprite::create("images/level1_background.png",Rect(0,0,2500,1500));
     if(background == nullptr) {
-        problemLoading("'images/select_background.jpg'");
+        problemLoading("'images/level1_background.png'");
     } else {
         background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
         this->addChild(background, 0);
