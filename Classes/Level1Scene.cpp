@@ -1,8 +1,4 @@
 #include "Level1Scene.h"
-#include "SelectLevelScene.h"
-#include "Gif/GIFMovie.h"
-#include "Gif/CacheGif.h"
-#include "Gif/InstantGif.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;
