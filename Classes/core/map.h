@@ -80,6 +80,10 @@ struct Shape {
     size_t index_of(size_t row, size_t column) const {
         return row * width_ + column;
     }
+
+    std::pair<size_t, size_t> pos_of(size_t idx) const {
+        return {idx / width_, idx % width_};
+    }
 };
 
 struct GridRef;
@@ -94,6 +98,28 @@ struct Map {
     std::unordered_map<id::Id, std::pair<size_t, size_t>> tower_refs_;
 
   public:
+    struct iterator {
+        using base_iter = std::vector<Grid>::iterator;
+
+        base_iter base;
+        base_iter cur;
+        Map &m;
+
+        GridRef operator*();
+        iterator operator++() {
+            ++cur;
+            return *this;
+        }
+
+        bool operator==(const iterator &rhs) const noexcept {
+            return cur == rhs.cur;
+        }
+
+        bool operator!=(const iterator &rhs) const noexcept {
+            return cur != rhs.cur;
+        }
+    };
+
     std::vector<Grid> grids;
     Shape shape;
 
@@ -169,6 +195,10 @@ struct Map {
     const timer::Clock &clock() const { return clock_; }
 
     void update();
+
+    iterator begin() { return iterator{grids.begin(), grids.begin(), *this}; }
+
+    iterator end() { return iterator{grids.begin(), grids.end(), *this}; }
 };
 
 static size_t absdiff(size_t x, size_t y) { return (x > y) ? x - y : y - x; }
@@ -191,8 +221,10 @@ struct GridRef {
 
     // SAFETY: (row_, column_) must be a valid index
     explicit GridRef(Map &m, size_t row_, size_t column_)
-        : map(m), grid(m.grids[m.shape.index_of(row_, column_)]), row(row_),
-          column(column_) {}
+        : GridRef(m, m.grids[m.shape.index_of(row_, column_)], row_, column_) {}
+
+    explicit GridRef(Map &m, Grid &g, size_t row_, size_t column_)
+        : map(m), grid(g), row(row_), column(column_) {}
 
     // Returns points whose distance between self <= radix
     std::vector<GridRef>
