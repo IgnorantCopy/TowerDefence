@@ -50,14 +50,42 @@ bool Level1Scene::init()
     if(frameBase == nullptr) {
         problemLoading("'images/frame_base.png'");
     } else {
-        frameBase->setPosition(Vec2(origin.x, origin.y));
+        frameBase->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 1500 - visibleSize.height));
         this->addChild(frameBase, 1);
+    }
+    
+    float gap = 300;
+    auto archerBaseSelector = Sprite::create("images/towers/archer_base.png");
+    if(archerBaseSelector == nullptr) {
+        problemLoading("'images/towers/archer_base.png'");
+    } else {
+        archerBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 - 2 * gap,
+                                                    origin.y + 1680 - visibleSize.height));
+        this->addChild(archerBaseSelector, 2);
+    }
+    
+    auto magicianBaseSelector = Sprite::create("images/towers/magician_base.png");
+    if(magicianBaseSelector == nullptr) {
+        problemLoading("'images/towers/magician_base.png'");
+    } else {
+        magicianBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                                                    origin.y + 1680 - visibleSize.height));
+        this->addChild(magicianBaseSelector, 2);
+    }
+    
+    auto helperBaseSelector = Sprite::create("images/towers/helper_base.png");
+    if(helperBaseSelector == nullptr) {
+        problemLoading("'images/towers/helper_base.png'");
+    } else {
+        helperBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
+                                                    origin.y + 1680 - visibleSize.height));
+        this->addChild(helperBaseSelector, 2);
     }
 
     //create map
     float delta = 140;
-    float x = origin.x + 70 + delta;
-    float y = origin.y + visibleSize.height - 70 - delta;
+    float x = origin.x + 350 + delta;
+    float y = origin.y + visibleSize.height - delta;
     float SIZE = 140.0;
     ui::Button* grid[7][12]={};
     std::string type[7][12]={};

@@ -80,12 +80,12 @@ add_library(core
     Classes/core/entity/tower/aggressive_magician.h
     Classes/core/entity/tower/aggressive_magician_plus.cpp
     Classes/core/entity/tower/aggressive_magician_plus.h
-    Classes/core/entity/tower/archor.cpp
-    Classes/core/entity/tower/archor.h
-    Classes/core/entity/tower/archor_base.cpp
-    Classes/core/entity/tower/archor_base.h
-    Classes/core/entity/tower/archor_plus.cpp
-    Classes/core/entity/tower/archor_plus.h
+        Classes/core/entity/tower/archer.cpp
+        Classes/core/entity/tower/archer.h
+        Classes/core/entity/tower/archer_base.cpp
+        Classes/core/entity/tower/archer_base.h
+        Classes/core/entity/tower/archer_plus.cpp
+        Classes/core/entity/tower/archer_plus.h
     Classes/core/entity/tower/bomber.cpp
     Classes/core/entity/tower/bomber.h
     Classes/core/entity/tower/bomber_plus.cpp
