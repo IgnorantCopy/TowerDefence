@@ -45,6 +45,14 @@ bool Level1Scene::init()
         background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
         this->addChild(background, 0);
     }
+    
+    auto frameBase = Sprite::create("images/frame_base.png");
+    if(frameBase == nullptr) {
+        problemLoading("'images/frame_base.png'");
+    } else {
+        frameBase->setPosition(Vec2(origin.x, origin.y));
+        this->addChild(frameBase, 1);
+    }
 
     //create map
     float delta = 140;
