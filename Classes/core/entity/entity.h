@@ -55,6 +55,8 @@ struct Buff {
     Defence defence_correction_ = { 0, 0 };
     bool invincible_ = false;
     bool silent_ = false;
+    // actual_inspiration_strike = base_attack * (1 + attack) * inspiration_strike (only triggered once)
+    double inspiration_strike_ = 0;
 
     BUFF_CONSTUCTOR(int32_t, attack_speed)
     BUFF_CONSTUCTOR(double, speed)
@@ -63,6 +65,7 @@ struct Buff {
     BUFF_CONSTUCTOR(Defence, defence_correction)
     BUFF_CONSTUCTOR(bool, invincible)
     BUFF_CONSTUCTOR(bool, silent)
+    BUFF_CONSTUCTOR(double, inspiration_strike)
 
     static constexpr uint32_t DEFAULT = 0;
     static constexpr uint32_t INVINCIBLE = 1;
@@ -70,15 +73,17 @@ struct Buff {
 
     constexpr Buff() = default;
     constexpr Buff(int32_t attack_speed, double speed, double attack, double real_attack,
-                   Defence defence_correction, bool invincible, bool silent)
+                   Defence defence_correction, bool invincible, bool silent, double inspiration_strike)
         : attack_speed_(attack_speed), speed_(speed), attack_(attack), real_attack_(real_attack),
-          defence_correction_(defence_correction), invincible_(invincible), silent_(silent) {}
+          defence_correction_(defence_correction), invincible_(invincible), silent_(silent),
+          inspiration_strike_(inspiration_strike) {}
 
     Buff operator&(const Buff &rhs) const {
         return Buff(attack_speed_ + rhs.attack_speed_, speed_ + rhs.speed_,
                     attack_ + rhs.attack_, real_attack_ + rhs.real_attack_,
                     defence_correction_ + rhs.defence_correction_,
-                    invincible_ || rhs.invincible_, silent_ || rhs.silent_);
+                    invincible_ || rhs.invincible_, silent_ || rhs.silent_,
+                    inspiration_strike_ + rhs.inspiration_strike_);
     }
 };
 
@@ -150,6 +155,8 @@ struct Entity {
     virtual void on_death(GridRef g);
     // called when entity is hit
     virtual void on_hit(GridRef g);
+    // called when entity attack
+    virtual void on_attack(GridRef g);
 
     virtual ~Entity(){};
 };
