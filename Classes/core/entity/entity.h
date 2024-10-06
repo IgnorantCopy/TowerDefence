@@ -18,6 +18,18 @@ namespace core {
 
 struct GridRef;
 
+struct Defence {
+    int32_t physics_ = 0;
+    int32_t magic_ = 0;
+
+    constexpr Defence(int32_t physics, int32_t magic)
+            : physics_(physics), magic_(magic) {}
+
+    Defence operator+(const Defence &rhs) const{
+        return Defence(physics_ + rhs.physics_, magic_ + rhs.magic_);
+    }
+};
+
 struct AttackMixin {
     int32_t realized_attack_ = 0;
 
@@ -39,6 +51,8 @@ struct Buff {
     // actual_attack = base_attack * (1 + attack)
     double attack_ = 0;
     double real_attack_ = 0;
+    // actual_defence = base_defence + defence_correction_
+    Defence defence_correction_ = { 0, 0 };
     bool invincible_ = false;
     bool silent_ = false;
 
@@ -46,6 +60,7 @@ struct Buff {
     BUFF_CONSTUCTOR(double, speed)
     BUFF_CONSTUCTOR(double, attack)
     BUFF_CONSTUCTOR(double, real_attack)
+    BUFF_CONSTUCTOR(Defence, defence_correction)
     BUFF_CONSTUCTOR(bool, invincible)
     BUFF_CONSTUCTOR(bool, silent)
 
@@ -55,14 +70,15 @@ struct Buff {
 
     constexpr Buff() = default;
     constexpr Buff(int32_t attack_speed, double speed, double attack, double real_attack,
-                   bool invincible, bool silent)
+                   Defence defence_correction, bool invincible, bool silent)
         : attack_speed_(attack_speed), speed_(speed), attack_(attack), real_attack_(real_attack),
-          invincible_(invincible), silent_(silent) {}
+          defence_correction_(defence_correction), invincible_(invincible), silent_(silent) {}
 
     Buff operator&(const Buff &rhs) const {
         return Buff(attack_speed_ + rhs.attack_speed_, speed_ + rhs.speed_,
-                    attack_ + rhs.attack_, real_attack_ + rhs.real_attack_, invincible_ || rhs.invincible_,
-                    silent_ || rhs.silent_);
+                    attack_ + rhs.attack_, real_attack_ + rhs.real_attack_,
+                    defence_correction_ + rhs.defence_correction_,
+                    invincible_ || rhs.invincible_, silent_ || rhs.silent_);
     }
 };
 
@@ -136,14 +152,6 @@ struct Entity {
     virtual void on_hit(GridRef g);
 
     virtual ~Entity(){};
-};
-
-struct Defence {
-    int32_t physics_ = 0;
-    int32_t magic_ = 0;
-
-    constexpr Defence(int32_t physics, int32_t magic)
-        : physics_(physics), magic_(magic) {}
 };
 
 struct EnemyInfo {
