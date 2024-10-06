@@ -55,7 +55,7 @@ struct Buff {
     Defence defence_correction_ = { 0, 0 };
     bool invincible_ = false;
     bool silent_ = false;
-    // actual_inspiration_strike = base_attack * (1 + attack) * inspiration_strike (only triggered once)
+    // actual_inspiration_strike = base_attack * (1 + attack) * (1 + inspiration_strike) (only triggered once)
     double inspiration_strike_ = 0;
 
     BUFF_CONSTUCTOR(int32_t, attack_speed)
