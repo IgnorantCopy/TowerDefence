@@ -11,4 +11,7 @@ void Enemy::on_tick(GridRef g) {
     this->update_buff(g.clock());
 }
 
+void Tower::on_tick(GridRef g) {
+    this->update_buff(g.clock());
+}
 } // namespace towerdefence::core

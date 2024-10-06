@@ -18,6 +18,18 @@ namespace core {
 
 struct GridRef;
 
+struct Defence {
+    int32_t physics_ = 0;
+    int32_t magic_ = 0;
+
+    constexpr Defence(int32_t physics, int32_t magic)
+            : physics_(physics), magic_(magic) {}
+
+    Defence operator+(const Defence &rhs) const{
+        return Defence(physics_ + rhs.physics_, magic_ + rhs.magic_);
+    }
+};
+
 struct AttackMixin {
     int32_t realized_attack_ = 0;
 
@@ -38,29 +50,40 @@ struct Buff {
     double speed_ = 0;
     // actual_attack = base_attack * (1 + attack)
     double attack_ = 0;
+    double real_attack_ = 0;
+    // actual_defence = base_defence + defence_correction_
+    Defence defence_correction_ = { 0, 0 };
     bool invincible_ = false;
     bool silent_ = false;
+    // actual_inspiration_strike = base_attack * (1 + attack) * (1 + inspiration_strike) (only triggered once)
+    double inspiration_strike_ = 0;
 
     BUFF_CONSTUCTOR(int32_t, attack_speed)
     BUFF_CONSTUCTOR(double, speed)
     BUFF_CONSTUCTOR(double, attack)
+    BUFF_CONSTUCTOR(double, real_attack)
+    BUFF_CONSTUCTOR(Defence, defence_correction)
     BUFF_CONSTUCTOR(bool, invincible)
     BUFF_CONSTUCTOR(bool, silent)
+    BUFF_CONSTUCTOR(double, inspiration_strike)
 
     static constexpr uint32_t DEFAULT = 0;
     static constexpr uint32_t INVINCIBLE = 1;
     static constexpr uint32_t DECREASE_SPEED = 2;
 
     constexpr Buff() = default;
-    constexpr Buff(int32_t attack_speed, double speed, double attack,
-                   bool invincible, bool silent)
-        : attack_speed_(attack_speed), speed_(speed), attack_(attack),
-          invincible_(invincible), silent_(silent) {}
+    constexpr Buff(int32_t attack_speed, double speed, double attack, double real_attack,
+                   Defence defence_correction, bool invincible, bool silent, double inspiration_strike)
+        : attack_speed_(attack_speed), speed_(speed), attack_(attack), real_attack_(real_attack),
+          defence_correction_(defence_correction), invincible_(invincible), silent_(silent),
+          inspiration_strike_(inspiration_strike) {}
 
     Buff operator&(const Buff &rhs) const {
         return Buff(attack_speed_ + rhs.attack_speed_, speed_ + rhs.speed_,
-                    attack_ + rhs.attack_, invincible_ || rhs.invincible_,
-                    silent_ || rhs.silent_);
+                    attack_ + rhs.attack_, real_attack_ + rhs.real_attack_,
+                    defence_correction_ + rhs.defence_correction_,
+                    invincible_ || rhs.invincible_, silent_ || rhs.silent_,
+                    inspiration_strike_ + rhs.inspiration_strike_);
     }
 };
 
@@ -132,16 +155,10 @@ struct Entity {
     virtual void on_death(GridRef g);
     // called when entity is hit
     virtual void on_hit(GridRef g);
+    // called when entity attack
+    virtual void on_attack(GridRef g);
 
     virtual ~Entity(){};
-};
-
-struct Defence {
-    int32_t physics_ = 0;
-    int32_t magic_ = 0;
-
-    constexpr Defence(int32_t physics, int32_t magic)
-        : physics_(physics), magic_(magic) {}
 };
 
 struct EnemyInfo {
@@ -177,7 +194,11 @@ struct TowerInfo {
 };
 
 struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
+    Tower(id::Id id) : IdMixin{id} {}
+
     virtual TowerInfo info() const = 0;
+
+    void on_tick(GridRef g) override;
 };
 
 struct Map;
