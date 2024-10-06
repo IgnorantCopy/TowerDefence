@@ -109,7 +109,15 @@ bool Level1Scene::init()
     type[0][5]=type[0][6]=type[1][0]=type[1][8]=type[1][9]=type[1][10]=type[1][11]=type[5][0]=type[5][7]=type[5][11]=type[6][6]="none";
     type[1][1]=type[1][2]=type[1][3]=type[1][5]=type[1][6]=type[1][7]=type[3][2]=type[4][6]=type[4][7]=type[5][1]=type[5][2]=
     type[5][3]=type[5][4]=type[5][6]=type[5][8]=type[5][9]=type[5][10]="block_tower";
-
+    
+    auto blockBackground = Sprite::create("images/block_background.png", Rect(0, 0, 1680, 980));
+    if(blockBackground == nullptr) {
+        problemLoading("'images/block_background.png'");
+    } else {
+        blockBackground->setPosition(Vec2(x + 5.5f * delta, y - 3 * delta));
+        this->addChild(blockBackground, 1);
+    }
+    
     for(size_t i = 0; i < 7; i++) {
         for (size_t j = 0; j < 12; j++) {
             if(type[i][j] == "block_out") {
@@ -124,7 +132,7 @@ bool Level1Scene::init()
                 grid[i][j] = ui::Button::create("images/block_low.png", "images/block_low.png");
             }
             grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
-            this->addChild(grid[i][j], 1);
+            this->addChild(grid[i][j], 2);
         }
     }
 
