@@ -4,7 +4,7 @@
 namespace towerdefence {
     namespace core {
 
-        void archorPlus::on_tick(GridRef g) {}
+        void archerPlus::on_tick(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

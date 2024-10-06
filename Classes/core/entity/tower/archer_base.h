@@ -9,12 +9,12 @@ namespace towerdefence::core {
 
     struct Map;
 
-    struct archorBase final : Tower {
+    struct archerBase final : Tower {
         timer::Timer release_skill_;
         std::unordered_set<id::Id> has_buff_;
 
-        archorBase(id::Id id, const timer::Clock & clk);
-        archorBase() = delete;
+        archerBase(id::Id id, const timer::Clock & clk);
+        archerBase() = delete;
 
         TowerInfo info() const override { return { 500, 7, 10, 15, AttackType::Physics }; }
 

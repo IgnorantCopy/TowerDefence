@@ -6,7 +6,7 @@
 namespace towerdefence {
     namespace core {
 
-        struct highspeedArchorPlus final : Tower {
+        struct highspeedArcherPlus final : Tower {
 
             TowerInfo info() const override {
                 return { 1300, 15, 0, 10, AttackType::Physics };
