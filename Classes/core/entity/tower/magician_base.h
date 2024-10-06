@@ -16,7 +16,7 @@ namespace towerdefence::core {
         magicianBase(id::Id id, const timer::Clock & clk);
         magicianBase() = delete;
 
-        TowerInfo info() const override { return { 400, 9, 0, 15, AttackType::Magic }; }
+        TowerInfo info() const override { return { 400, 9, 15, 18, AttackType::Magic }; }
 
         void on_tick(GridRef g) override;
     };

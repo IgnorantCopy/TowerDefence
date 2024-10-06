@@ -16,7 +16,7 @@ namespace towerdefence::core {
         archerPlus(id::Id id, const timer::Clock & clk);
         archerPlus() = delete;
 
-        TowerInfo info() const override { return { 2800, 24, 0, 10, AttackType::Physics };}
+        TowerInfo info() const override { return { 2800, 24, 0, 25, AttackType::Physics };}
 
         void on_tick(GridRef g) override;
     };
