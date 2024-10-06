@@ -177,7 +177,11 @@ struct TowerInfo {
 };
 
 struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
+    Tower(id::Id id) : IdMixin{id} {}
+
     virtual TowerInfo info() const = 0;
+
+    void on_tick(GridRef g) override;
 };
 
 struct Map;
