@@ -4,10 +4,10 @@
 namespace towerdefence {
     namespace core {
 
-        coreMagician::coreMagician(id::Id id, const timer::Clock &clk)
+        CoreMagician::CoreMagician(id::Id id, const timer::Clock &clk)
                 : Tower(id), release_skill_(clk.with_period_sec(8)) {}
 
-        void coreMagician::on_tick(GridRef g) {
+        void CoreMagician::on_tick(GridRef g) {
             this->update_buff(g.clock());
 
             if (g.clock().is_triggered(release_skill_)) {

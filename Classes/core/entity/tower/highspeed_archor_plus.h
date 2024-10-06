@@ -6,15 +6,12 @@
 #include <unordered_set>
 
 namespace towerdefence::core {
-
-    struct Map;
-
-    struct highspeedArcherPlus final : Tower {
+    struct HighspeedArcherPlus final : Tower {
         timer::Timer release_skill_;
         std::unordered_set<id::Id> has_buff_;
 
-        highspeedArcherPlus(id::Id id, const timer::Clock & clk);
-        highspeedArcherPlus() = delete;
+        HighspeedArcherPlus(id::Id id, const timer::Clock & clk);
+        HighspeedArcherPlus() = delete;
 
         TowerInfo info() const override { return { 1300, 15, 0, 10, AttackType::Physics }; }
 

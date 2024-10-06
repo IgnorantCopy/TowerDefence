@@ -3,8 +3,5 @@
 
 namespace towerdefence {
     namespace core {
-
-        void decelerateMagicianPlus::on_tick(GridRef g) {}
-
     } // namespace core
 } // namespace towerdefence
