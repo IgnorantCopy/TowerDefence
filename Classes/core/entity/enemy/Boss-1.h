@@ -14,7 +14,6 @@ namespace towerdefence::core {
         std::unordered_set<id::Id> has_buff_;
 
         Boss1(id::Id id, const timer::Clock & clk);
-        Boss1() = delete;
 
         EnemyInfo info() const override {
             return { 50000, { 800, 30 }, 5 };
