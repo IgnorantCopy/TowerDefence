@@ -1,6 +1,7 @@
 #include "SelectLevelScene.h"
 #include "Level1Scene.h"
 #include "ui/CocosGUI.h"
+#include "HelloWorldScene.h"
 
 USING_NS_CC;
 
@@ -53,7 +54,7 @@ bool SelectLevelScene::init()
     auto backItem=MenuItemLabel::create(
             Back,
             [this](Ref *ref){
-                Director::getInstance()->popSceneWithTransition<TransitionCrossFade>(0.4f);
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, HelloWorld::createScene()));
             }
     );
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
