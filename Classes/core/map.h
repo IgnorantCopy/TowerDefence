@@ -19,14 +19,14 @@
 namespace towerdefence {
 namespace core {
 struct Grid {
-    enum grid_type { block_path, block_in, block_out, block_transport, block_tower, none };
-    grid_type type;
+    enum Type { BlockPath, BlockIn, BlockOut, BlockTransport, BlockTower, None };
+    Type type;
     std::vector<std::unique_ptr<Enemy>> enemies;
     std::optional<std::unique_ptr<Tower>> tower;
 
-    explicit Grid() : type(none) {}
+    explicit Grid() : type(None) {}
 
-    explicit Grid(grid_type type) : type(type) {}
+    explicit Grid(Type type) : type(type) {}
 
     void with_tower(std::function<void(std::unique_ptr<Tower> &)> f) {
         if (tower.has_value()) {
