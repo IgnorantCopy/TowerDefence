@@ -111,11 +111,12 @@ bool Level1Scene::init()
     type[5][3]=type[5][4]=type[5][6]=type[5][8]=type[5][9]=type[5][10]=Grid::grid_type::block_tower;
     std::vector<std::string> grid_image = { "images/block_low.png", "images/in.png", "images/out.png", "images/block_transport.png", "images/block_high.png" };
 
-    towerdefence::core::Map map(7,12,[&](size_t x, size_t y) -> Grid{ return Grid(type[x][y]); });
-    for(size_t i = 0; i < 7; i++) {
-        for (size_t j = 0; j < 12; j++) {
+    towerdefence::core::Map map(12,7,[&](size_t x, size_t y) -> Grid{ return Grid(type[x][y]); });
+    for(size_t i = 0; i < map.shape.height_; i++) {
+        for (size_t j = 0; j < map.shape.width_; j++) {
             if(type[i][j] != Grid::grid_type::none) {
-                grid[i][j] = ui::Button::create(grid_image[type[i][j]], grid_image[type[i][j]]);
+                Grid::grid_type type_ = map.grids[map.shape.index_of(i,j)].type;
+                grid[i][j] = ui::Button::create(grid_image[type_], grid_image[type_]);
                 grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
                 this->addChild(grid[i][j], 1);
             }
