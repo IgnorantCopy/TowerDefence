@@ -4,7 +4,7 @@
 namespace towerdefence {
     namespace core {
 
-        void coreMagicianPlus::on_tick(GridRef g) {}
+        void CoreMagicianPlus::on_tick(GridRef g) {}
 
     } // namespace core
 } // namespace towerdefence

@@ -6,17 +6,14 @@
 #include <unordered_set>
 
 namespace towerdefence::core {
-
-    struct Map;
-
-    struct archerBase final : Tower {
+    struct ArcherBase final : Tower {
         timer::Timer release_skill_;
         std::unordered_set<id::Id> has_buff_;
 
-        archerBase(id::Id id, const timer::Clock & clk);
-        archerBase() = delete;
+        ArcherBase(id::Id id, const timer::Clock & clk);
+        ArcherBase() = delete;
 
-        TowerInfo info() const override { return { 500, 7, 10, 15, AttackType::Physics }; }
+        TowerInfo info() const override { return { 500, 7, 10, 15, 2, AttackType::Physics }; }
 
         void on_tick(GridRef g) override;
     };

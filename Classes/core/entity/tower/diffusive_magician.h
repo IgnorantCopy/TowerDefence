@@ -6,17 +6,14 @@
 #include <unordered_set>
 
 namespace towerdefence::core {
-
-    struct Map;
-
-    struct diffusiveMagician final : Tower {
+    struct DiffusiveMagician final : Tower {
         timer::Timer release_skill_;
         std::unordered_set<id::Id> has_buff_;
 
-        diffusiveMagician(id::Id id, const timer::Clock & clk);
-        diffusiveMagician() = delete;
+        DiffusiveMagician(id::Id id, const timer::Clock & clk);
+        DiffusiveMagician() = delete;
 
-        TowerInfo info() const override { return { 1500, 15, 0, 25, AttackType::Magic }; }
+        TowerInfo info() const override { return { 1500, 15, 0, 25, 4, AttackType::Magic }; }
 
         void on_tick(GridRef g) override;
     };
