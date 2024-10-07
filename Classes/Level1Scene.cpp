@@ -85,17 +85,6 @@ bool Level1Scene::init()
         this->addChild(helperBaseSelector, 2);
     }
 
-    // the back button to go back to the SelectLevel scene
-    auto Back=Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
-    auto backItem=MenuItemLabel::create(
-            Back,
-            [this](Ref *ref){
-                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
-            }
-    );
-    backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
-                               origin.y + visibleSize.height - 50));
-
     //create map
     float delta = 140;
     float x = origin.x + 350 + delta;
@@ -123,8 +112,19 @@ bool Level1Scene::init()
         }
     }
 
+    // the back button to go back to the SelectLevel scene
+    auto Back=Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
+    auto backItem=MenuItemLabel::create(
+            Back,
+            [this](Ref *ref){
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+            }
+    );
+    backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
+                               origin.y + visibleSize.height - 50));
+
     Vector<MenuItem*> MenuItems;
-    MenuItems.pushBack(backItem);
+    //MenuItems.pushBack(backItem);
     auto menu = Menu::createWithArray(MenuItems);
     this->addChild(menu, MenuItems.size());
     menu->setPosition(Vec2::ZERO);
