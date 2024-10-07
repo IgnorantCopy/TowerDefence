@@ -58,6 +58,8 @@ struct Buff {
     double real_attack_ = 0;
     // actual_defence = base_defence + defence_correction_
     Defence defence_correction_{0, 0};
+    // actual_attack_radius = base_attack_radius + attack_radius
+    size_t attack_radius_ = 0;
     bool invincible_ = false;
     bool silent_ = false;
     // actual_inspiration_strike = base_attack * (1 + attack) *
@@ -69,6 +71,7 @@ struct Buff {
     BUFF_CONSTUCTOR(double, attack)
     BUFF_CONSTUCTOR(double, real_attack)
     BUFF_CONSTUCTOR(Defence, defence_correction)
+    BUFF_CONSTUCTOR(size_t, attack_radius)
     BUFF_CONSTUCTOR(bool, invincible)
     BUFF_CONSTUCTOR(bool, silent)
     BUFF_CONSTUCTOR(double, inspiration_strike)
@@ -82,18 +85,19 @@ struct Buff {
     constexpr Buff() = default;
     constexpr Buff(int32_t attack_speed, double speed, double attack,
                    double real_attack, Defence defence_correction,
-                   bool invincible, bool silent, double inspiration_strike)
+                   size_t attack_radius, bool invincible,
+                   bool silent, double inspiration_strike)
         : attack_speed_(attack_speed), speed_(speed), attack_(attack),
           real_attack_(real_attack), defence_correction_(defence_correction),
-          invincible_(invincible), silent_(silent),
+          attack_radius_(attack_radius), invincible_(invincible), silent_(silent),
           inspiration_strike_(inspiration_strike) {}
 
     Buff operator&(const Buff &rhs) const {
         return Buff(attack_speed_ + rhs.attack_speed_, speed_ + rhs.speed_,
                     attack_ + rhs.attack_, real_attack_ + rhs.real_attack_,
                     defence_correction_ + rhs.defence_correction_,
-                    invincible_ || rhs.invincible_, silent_ || rhs.silent_,
-                    inspiration_strike_ + rhs.inspiration_strike_);
+                    attack_radius_ + rhs.attack_radius_,invincible_ || rhs.invincible_,
+                    silent_ || rhs.silent_,inspiration_strike_ + rhs.inspiration_strike_);
     }
 };
 
