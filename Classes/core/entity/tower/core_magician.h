@@ -6,19 +6,10 @@
 #include <unordered_set>
 
 namespace towerdefence::core {
+    struct CoreMagician final : Tower {
 
-    struct Map;
-
-    struct coreMagician final : Tower {
-        timer::Timer release_skill_;
-        std::unordered_set<id::Id> has_buff_;
-
-        coreMagician(id::Id id, const timer::Clock & clk);
-        coreMagician() = delete;
-
-        TowerInfo info() const override { return { 700, 12, 0, 16, AttackType::Magic }; }
-
-        void on_tick(GridRef g) override;
+        TowerInfo info() const override { return { 700, 12, 0, 16, 2, AttackType::Magic }; }
+        
     };
 } // namespace towerdefence::core
 

@@ -6,13 +6,11 @@
 namespace towerdefence {
     namespace core {
 
-        struct bomber final : Tower {
+        struct Bomber final : Tower {
 
             TowerInfo info() const override {
-                return { 1600, 16, 0, 20, AttackType::Physics };
+                return { 1600, 16, 0, 20, 4, AttackType::Physics };
             }
-
-            void on_tick(GridRef g) override;
         };
     } // namespace core
 } // namespace towerdefence

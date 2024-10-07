@@ -1,10 +1,10 @@
-#ifndef TOWERDEFENCE_LEVEL1SCENE_H
-#define TOWERDEFENCE_LEVEL1SCENE_H
+#ifndef TOWERDEFENCE_LEVEL3SCENE_H
+#define TOWERDEFENCE_LEVEL3SCENE_H
 
 #include "cocos2d.h"
 #include "core/map.h"
 
-class Level1Scene : public cocos2d::Scene
+class Level3Scene : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene* createScene();
@@ -15,7 +15,7 @@ public:
     void menuCloseCallback(cocos2d::Ref* pSender);
 
     // implement the "static create()" method manually
-    CREATE_FUNC(Level1Scene);
+    CREATE_FUNC(Level3Scene);
 };
 
-#endif //TOWERDEFENCE_LEVEL1SCENE_H
+#endif //TOWERDEFENCE_LEVEL3SCENE_H

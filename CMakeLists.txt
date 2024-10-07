@@ -56,23 +56,17 @@ add_library(core
     Classes/core/entity/enemy/Boss-1.h
     Classes/core/entity/enemy/Boss-2.cpp
     Classes/core/entity/enemy/Boss-2.h
-    Classes/core/entity/enemy/Crab.cpp
     Classes/core/entity/enemy/Crab.h
-    Classes/core/entity/enemy/Destroyer.cpp
     Classes/core/entity/enemy/Destroyer.h
     Classes/core/entity/enemy/Life-up.cpp
     Classes/core/entity/enemy/Life-up.h
     Classes/core/entity/enemy/Not-attacked.cpp
     Classes/core/entity/enemy/Not-attacked.h
-    Classes/core/entity/enemy/Soldier.cpp
     Classes/core/entity/enemy/Soldier.h
     Classes/core/entity/enemy/Speed-up.cpp
     Classes/core/entity/enemy/Speed-up.h
-    Classes/core/entity/enemy/Tank.cpp
     Classes/core/entity/enemy/Tank.h
-    Classes/core/entity/enemy/Warlock.cpp
     Classes/core/entity/enemy/Warlock.h
-    Classes/core/entity/enemy/dog.cpp
     Classes/core/entity/enemy/dog.h
     Classes/core/entity/enemy/worm.cpp
     Classes/core/entity/enemy/worm.h
@@ -136,12 +130,20 @@ endif()
 
 # add cross-platforms source files and header files 
 list(APPEND GAME_SOURCE
-    Classes/AppDelegate.cpp
-    Classes/HelloWorldScene.cpp
+        Classes/AppDelegate.cpp
+        Classes/HelloWorldScene.cpp
+        Classes/SelectLevelScene.cpp
+        Classes/Level1Scene.cpp
+        Classes/Level2Scene.cpp
+        Classes/Level3Scene.cpp
 )
 list(APPEND GAME_HEADER
-    Classes/AppDelegate.h
-    Classes/HelloWorldScene.h
+        Classes/AppDelegate.h
+        Classes/HelloWorldScene.h
+        Classes/SelectLevelScene.h
+        Classes/Level1Scene.h
+        Classes/Level2Scene.h
+        Classes/Level3Scene.h
 )
 
 if(ANDROID)
@@ -201,11 +203,6 @@ endif()
 set(all_code_files
     ${GAME_HEADER}
     ${GAME_SOURCE}
-    Classes/SelectLevelScene.h
-    Classes/SelectLevelScene.cpp
-    Classes/Level1Scene.h
-    Classes/Level1Scene.cpp
-    Classes/Level1Scene.cpp
 )
 if(NOT ANDROID)
     add_executable(${APP_NAME} ${all_code_files})
