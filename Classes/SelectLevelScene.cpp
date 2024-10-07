@@ -1,5 +1,6 @@
 #include "SelectLevelScene.h"
 #include "Level1Scene.h"
+#include "Level2Scene.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;
@@ -13,7 +14,7 @@ Scene* SelectLevelScene::createScene()
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
+    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in SelectLevelScene.cpp\n");
 }
 
 bool SelectLevelScene::init()
@@ -73,8 +74,7 @@ bool SelectLevelScene::init()
             "images/locked.png",
             "images/locked.png",
             [this](Ref *ref){
-                // TODO: fill the below code with the class level2
-                //Director::getInstance()->replaceScene(*****::createScene());
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level2Scene::createScene()));
             }
     );
     level2->setPosition(Vec2(origin.x + visibleSize.width / 2,
