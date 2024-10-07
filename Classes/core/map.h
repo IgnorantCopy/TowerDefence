@@ -19,7 +19,14 @@
 namespace towerdefence {
 namespace core {
 struct Grid {
-    enum Type { BlockPath, BlockIn, BlockOut, BlockTransport, BlockTower, None };
+    enum Type {
+        BlockPath,
+        BlockIn,
+        BlockOut,
+        BlockTransport,
+        BlockTower,
+        None
+    };
     Type type;
     std::vector<std::unique_ptr<Enemy>> enemies;
     std::optional<std::unique_ptr<Tower>> tower;
@@ -247,6 +254,16 @@ struct GridRef {
         }
 
         return res;
+    }
+
+    // if timer is triggered, call f(tower) for all towers on the map
+    void for_each_tower_on_tigger(timer::Timer timer,
+                                  std::function<void(Tower &)> f) {
+        if (clock().is_triggered(timer)) {
+            for (auto &grid : map.grids) {
+                grid.with_tower([f](auto &t) { f(*t); });
+            }
+        }
     }
 
     const timer::Clock &clock() const { return map.clock(); }
