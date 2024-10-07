@@ -4,10 +4,10 @@
 namespace towerdefence {
     namespace core {
 
-        diffusiveMagician::diffusiveMagician(id::Id id, const timer::Clock &clk)
+        DiffusiveMagician::DiffusiveMagician(id::Id id, const timer::Clock &clk)
                 : Tower(id), release_skill_(clk.with_period_sec(20)) {}
 
-        void diffusiveMagician::on_tick(GridRef g) {
+        void DiffusiveMagician::on_tick(GridRef g) {
             this->update_buff(g.clock());
 
             if (g.clock().is_triggered(release_skill_)) {

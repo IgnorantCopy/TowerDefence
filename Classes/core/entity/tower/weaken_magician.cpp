@@ -3,8 +3,5 @@
 
 namespace towerdefence {
     namespace core {
-
-        void weakenMagician::on_tick(GridRef g) {}
-
     } // namespace core
 } // namespace towerdefence

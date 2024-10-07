@@ -56,23 +56,17 @@ add_library(core
     Classes/core/entity/enemy/Boss-1.h
     Classes/core/entity/enemy/Boss-2.cpp
     Classes/core/entity/enemy/Boss-2.h
-    Classes/core/entity/enemy/Crab.cpp
     Classes/core/entity/enemy/Crab.h
-    Classes/core/entity/enemy/Destroyer.cpp
     Classes/core/entity/enemy/Destroyer.h
     Classes/core/entity/enemy/Life-up.cpp
     Classes/core/entity/enemy/Life-up.h
     Classes/core/entity/enemy/Not-attacked.cpp
     Classes/core/entity/enemy/Not-attacked.h
-    Classes/core/entity/enemy/Soldier.cpp
     Classes/core/entity/enemy/Soldier.h
     Classes/core/entity/enemy/Speed-up.cpp
     Classes/core/entity/enemy/Speed-up.h
-    Classes/core/entity/enemy/Tank.cpp
     Classes/core/entity/enemy/Tank.h
-    Classes/core/entity/enemy/Warlock.cpp
     Classes/core/entity/enemy/Warlock.h
-    Classes/core/entity/enemy/dog.cpp
     Classes/core/entity/enemy/dog.h
     Classes/core/entity/enemy/worm.cpp
     Classes/core/entity/enemy/worm.h

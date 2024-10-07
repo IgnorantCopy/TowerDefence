@@ -4,10 +4,10 @@
 namespace towerdefence {
     namespace core {
 
-        helperBase::helperBase(id::Id id, const timer::Clock &clk)
+        HelperBase::HelperBase(id::Id id, const timer::Clock &clk)
                 : Tower(id), release_skill_(clk.with_period_sec(30)) {}
 
-        void helperBase::on_tick(GridRef g) {
+        void HelperBase::on_tick(GridRef g) {
             this->update_buff(g.clock());
 
             if (g.clock().is_triggered(release_skill_)) {

@@ -6,9 +6,6 @@
 #include <unordered_set>
 
 namespace towerdefence::core {
-
-    struct Map;
-
     struct Boss2 final : Enemy {
         timer::Timer release_skill_;
         std::unordered_set<id::Id> has_buff_;
