@@ -11,8 +11,6 @@ namespace towerdefence {
             EnemyInfo info() const override {
                 return { 900, { 0, 0 }, 19 };
             }
-
-            void on_tick(GridRef g) override;
         };
     } // namespace core
 } // namespace towerdefence

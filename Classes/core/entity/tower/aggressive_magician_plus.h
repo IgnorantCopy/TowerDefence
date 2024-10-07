@@ -6,13 +6,11 @@
 namespace towerdefence {
     namespace core {
 
-        struct aggressiveMagicianPlus final : Tower {
+        struct AggressiveMagicianPlus final : Tower {
 
             TowerInfo info() const override {
                 return { 650, 14, 0, 16, AttackType::Magic };
             }
-
-            void on_tick(GridRef g) override;
         };
     } // namespace core
 } // namespace towerdefence

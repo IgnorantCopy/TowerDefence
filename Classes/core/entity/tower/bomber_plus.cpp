@@ -4,7 +4,5 @@
 namespace towerdefence {
     namespace core {
 
-        void bomberPlus::on_tick(GridRef g) {}
-
     } // namespace core
 } // namespace towerdefence
