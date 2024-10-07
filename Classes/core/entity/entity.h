@@ -206,14 +206,13 @@ struct TowerInfo {
     int32_t cost_ = 0;
     int32_t deploy_interval_ = 0;
     int32_t attack_interval_ = 0; // actual_attack_attack_speed
-    // todo: modify construtor and add this field in all tower types
     size_t attack_radius_ = 0;
     AttackType attack_type_;
 
     constexpr TowerInfo(int32_t attack, int32_t cost, int32_t deploy_interval,
-                        int32_t attack_interval, AttackType attack_type)
+                        int32_t attack_interval, int32_t attack_radius, AttackType attack_type)
         : attack_(attack), cost_(cost), deploy_interval_(deploy_interval),
-          attack_interval_(attack_interval), attack_type_(attack_type) {}
+          attack_interval_(attack_interval), attack_radius_(attack_radius), attack_type_(attack_type) {}
 };
 
 struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {

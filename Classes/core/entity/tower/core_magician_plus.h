@@ -9,7 +9,7 @@ namespace towerdefence {
         struct CoreMagicianPlus final : Tower {
 
             TowerInfo info() const override {
-                return { 1100, 16, 0, 16, AttackType::Magic };
+                return { 1100, 16, 0, 16, 2, AttackType::Magic };
             }
 
             void on_tick(GridRef g) override;

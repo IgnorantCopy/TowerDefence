@@ -13,7 +13,7 @@ namespace towerdefence::core {
         HelperBase(id::Id id, const timer::Clock & clk);
         HelperBase() = delete;
 
-        TowerInfo info() const override { return { 250, 5, 25, 18, AttackType::Magic }; }
+        TowerInfo info() const override { return { 250, 5, 25, 18, 2, AttackType::Magic }; }
 
         void on_tick(GridRef g) override;
     };

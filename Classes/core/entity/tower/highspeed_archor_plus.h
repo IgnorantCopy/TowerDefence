@@ -13,7 +13,7 @@ namespace towerdefence::core {
         HighspeedArcherPlus(id::Id id, const timer::Clock & clk);
         HighspeedArcherPlus() = delete;
 
-        TowerInfo info() const override { return { 1300, 15, 0, 10, AttackType::Physics }; }
+        TowerInfo info() const override { return { 1300, 15, 0, 10, 2, AttackType::Physics }; }
 
         void on_tick(GridRef g) override;
     };
