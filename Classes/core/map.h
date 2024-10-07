@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <memory>
 #include <optional>
@@ -81,6 +82,16 @@ struct Grid {
 
         return {};
     }
+
+    std::optional<std::unique_ptr<Tower>> remove_tower() {
+        if (tower) {
+            std::optional<std::unique_ptr<Tower>> ret = std::nullopt;
+            tower.swap(ret);
+            return ret;
+        } else {
+            return std::nullopt;
+        }
+    }
 };
 
 struct Shape {
@@ -109,6 +120,8 @@ struct Map {
     // entity of `id`
     std::unordered_map<id::Id, std::pair<size_t, size_t>> enemy_refs_;
     std::unordered_map<id::Id, std::pair<size_t, size_t>> tower_refs_;
+
+    uint32_t cost_ = 0;
 
   public:
     struct iterator {
@@ -203,6 +216,22 @@ struct Map {
         return **grid.tower;
     }
 
+    std::unique_ptr<Tower> remove_tower(id::Id id) {
+        auto [row, column] = tower_refs_.at(id);
+        auto &grid = grids.at(shape.index_of(row, column));
+
+        assert(grid.tower.value()->id == id);
+        auto tower = grid.remove_tower();
+        tower_refs_.erase(id);
+
+        return std::move(tower.value());
+    }
+
+    void withdraw_tower(id::Id id) {
+        auto tower = remove_tower(id);
+        cost_ += tower->info().cost_ / 2;
+    }
+
     id::Id assign_id() { return id_gen.gen(); }
 
     const timer::Clock &clock() const { return clock_; }
@@ -254,6 +283,21 @@ struct GridRef {
         }
 
         return res;
+    }
+
+    std::optional<std::unique_ptr<Tower>> &get_nearest_tower() {
+        size_t r = 0, c = 0;
+        for (size_t i = 0; i < map.shape.height_; ++i) {
+            for (size_t j = 0; j < map.shape.width_; ++j) {
+                if (l1_dis(row, column, i, j) < l1_dis(row, column, r, c) &&
+                    map.grids[map.shape.index_of(r, c)].tower.has_value()) {
+                    r = i;
+                    c = j;
+                }
+            }
+        }
+
+        return map.grids[map.shape.index_of(r, c)].tower;
     }
 
     // if timer is triggered, call f(tower) for all towers on the map
