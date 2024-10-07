@@ -3,8 +3,8 @@
 #include "SelectLevelScene.h"
 
 USING_NS_CC;
-using towerdefence::core::Grid;
-using towerdefence::core::Map;
+//using towerdefence::core::Grid;
+//using towerdefence::core::Map;
 
 Scene* Level1Scene::createScene()
 {
@@ -102,24 +102,29 @@ bool Level1Scene::init()
     float y = origin.y + visibleSize.height - delta;
     float SIZE = 140.0;
     ui::Button* grid[7][12]={};
-    Grid::Type type[7][12]={Grid::Type::BlockPath};
-    type[0][0]=type[0][11]=type[2][11]=type[3][11]=type[4][11]=type[6][0]=Grid::Type::BlockOut;
-    type[2][0]=type[3][0]=type[4][0]=type[6][11]=Grid::Type::BlockIn;
-    type[0][7]=type[6][7]=Grid::Type::BlockTransport;
-    type[0][5]=type[0][6]=type[1][0]=type[1][8]=type[1][9]=type[1][10]=type[1][11]=type[5][0]=type[5][7]=type[5][11]=type[6][6]=Grid::Type::None;
+    std::string type[7][12]={};
+    type[0][0]=type[0][11]=type[2][11]=type[3][11]=type[4][11]=type[6][0]="block_out";
+    type[2][0]=type[3][0]=type[4][0]=type[6][11]="block_in";
+    type[0][7]=type[6][7]="block_transport";
+    type[0][5]=type[0][6]=type[1][0]=type[1][8]=type[1][9]=type[1][10]=type[1][11]=type[5][0]=type[5][7]=type[5][11]=type[6][6]="none";
     type[1][1]=type[1][2]=type[1][3]=type[1][5]=type[1][6]=type[1][7]=type[3][2]=type[4][6]=type[4][7]=type[5][1]=type[5][2]=
-    type[5][3]=type[5][4]=type[5][6]=type[5][8]=type[5][9]=type[5][10]=Grid::Type::BlockTower;
-    std::vector<std::string> grid_image = { "images/block_low.png", "images/in.png", "images/out.png", "images/block_transport.png", "images/block_high.png" };
+    type[5][3]=type[5][4]=type[5][6]=type[5][8]=type[5][9]=type[5][10]="block_tower";
 
-    towerdefence::core::Map map(12,7,[&](size_t x, size_t y) -> Grid{ return Grid(type[x][y]); });
-    for(size_t i = 0; i < map.shape.height_; i++) {
-        for (size_t j = 0; j < map.shape.width_; j++) {
-            if(type[i][j] != Grid::Type::None) {
-                Grid::Type type_ = map.grids[map.shape.index_of(i,j)].type;
-                grid[i][j] = ui::Button::create(grid_image[type_], grid_image[type_]);
-                grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
-                this->addChild(grid[i][j], 1);
+    for(size_t i = 0; i < 7; i++) {
+        for (size_t j = 0; j < 12; j++) {
+            if(type[i][j] == "block_out") {
+                grid[i][j] = ui::Button::create("images/out.png", "images/out.png");
+            } else if(type[i][j] == "block_in") {
+                grid[i][j] = ui::Button::create("images/in.png", "images/in.png");
+            } else if(type[i][j] == "block_transport") {
+                grid[i][j] = ui::Button::create("images/block_transport.png", "images/block_transport.png");
+            } else if(type[i][j] == "block_tower") {
+                grid[i][j] = ui::Button::create("images/block_high.png", "images/block_high.png");
+            } else {
+                grid[i][j] = ui::Button::create("images/block_low.png", "images/block_low.png");
             }
+            grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
+            this->addChild(grid[i][j], 1);
         }
     }
 
