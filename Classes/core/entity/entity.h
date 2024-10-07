@@ -60,8 +60,6 @@ struct Buff {
     Defence defence_correction_{0, 0};
     // actual_attack_radius = base_attack_radius + attack_radius
     int32_t attack_radius_ = 0;
-    // actual_attack_number = 1 + multi_attack
-    int32_t multi_attack_ = 0;
     bool invincible_ = false;
     bool silent_ = false;
 
@@ -71,7 +69,6 @@ struct Buff {
     BUFF_CONSTUCTOR(double, real_attack)
     BUFF_CONSTUCTOR(Defence, defence_correction)
     BUFF_CONSTUCTOR(int32_t, attack_radius)
-    BUFF_CONSTUCTOR(int32_t, multi_attack)
     BUFF_CONSTUCTOR(bool, invincible)
     BUFF_CONSTUCTOR(bool, silent)
 
@@ -84,18 +81,18 @@ struct Buff {
     constexpr Buff() = default;
     constexpr Buff(int32_t attack_speed, double speed, double attack,
                    double real_attack, Defence defence_correction,
-                   int32_t attack_radius, int32_t multi_attack,
+                   int32_t attack_radius,
                    bool invincible, bool silent)
         : attack_speed_(attack_speed), speed_(speed), attack_(attack),
           real_attack_(real_attack), defence_correction_(defence_correction),
-          attack_radius_(attack_radius), multi_attack_(multi_attack),
+          attack_radius_(attack_radius),
           invincible_(invincible), silent_(silent) {}
 
     Buff operator&(const Buff &rhs) const {
         return Buff(attack_speed_ + rhs.attack_speed_, speed_ + rhs.speed_,
                     attack_ + rhs.attack_, real_attack_ + rhs.real_attack_,
                     defence_correction_ + rhs.defence_correction_,
-                    attack_radius_ + rhs.attack_radius_, multi_attack_ + rhs.multi_attack_,
+                    attack_radius_ + rhs.attack_radius_,
                     invincible_ || rhs.invincible_, silent_ || rhs.silent_);
     }
 };
