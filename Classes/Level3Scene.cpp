@@ -1,4 +1,4 @@
-#include "Level1Scene.h"
+#include "Level3Scene.h"
 #include "ui/CocosGUI.h"
 #include "SelectLevelScene.h"
 
@@ -6,19 +6,19 @@ USING_NS_CC;
 using towerdefence::core::Grid;
 using towerdefence::core::Map;
 
-Scene* Level1Scene::createScene()
+Scene* Level3Scene::createScene()
 {
-    return Level1Scene::create();
+    return Level3Scene::create();
 }
 
 // Print useful error message instead of segfaulting when files are not there.
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in Level1Scene.cpp\n");
+    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in Level3Scene.cpp\n");
 }
 
-bool Level1Scene::init()
+bool Level3Scene::init()
 {
     if ( !Scene::init() ){
         return false;
@@ -27,14 +27,14 @@ bool Level1Scene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    auto background = Sprite::create("images/level1_background.png",Rect(0,0,2500,1500));
+    auto background = Sprite::create("images/level3_background.png",Rect(0,0,2500,1500));
     if(background == nullptr) {
-        problemLoading("'images/level1_background.png'");
+        problemLoading("'images/level3_background.png'");
     } else {
         background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
         this->addChild(background, 0);
     }
-    
+
     auto frameBase = Sprite::create("images/frame_base.png");
     if(frameBase == nullptr) {
         problemLoading("'images/frame_base.png'");
@@ -42,32 +42,32 @@ bool Level1Scene::init()
         frameBase->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 1500 - visibleSize.height));
         this->addChild(frameBase, 1);
     }
-    
+
     float gap = 300;
     auto archerBaseSelector = Sprite::create("images/towers/archer_base.png");
     if(archerBaseSelector == nullptr) {
         problemLoading("'images/towers/archer_base.png'");
     } else {
         archerBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 - 2 * gap,
-                                                    origin.y + 1680 - visibleSize.height));
+                                             origin.y + 1680 - visibleSize.height));
         this->addChild(archerBaseSelector, 2);
     }
-    
+
     auto magicianBaseSelector = Sprite::create("images/towers/magician_base.png");
     if(magicianBaseSelector == nullptr) {
         problemLoading("'images/towers/magician_base.png'");
     } else {
         magicianBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                                                    origin.y + 1680 - visibleSize.height));
+                                               origin.y + 1680 - visibleSize.height));
         this->addChild(magicianBaseSelector, 2);
     }
-    
+
     auto helperBaseSelector = Sprite::create("images/towers/helper_base.png");
     if(helperBaseSelector == nullptr) {
         problemLoading("'images/towers/helper_base.png'");
     } else {
         helperBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
-                                                    origin.y + 1680 - visibleSize.height));
+                                             origin.y + 1680 - visibleSize.height));
         this->addChild(helperBaseSelector, 2);
     }
 
@@ -89,19 +89,21 @@ bool Level1Scene::init()
     float SIZE = 140.0;
     ui::Button* grid[7][12]={};
     Grid::Type type[7][12]={ Grid::Type::BlockPath };
-    type[0][0]=type[0][11]=type[2][11]=type[3][11]=type[4][11]=type[6][0]=Grid::Type::BlockOut;
-    type[2][0]=type[3][0]=type[4][0]=type[6][11]=Grid::Type::BlockIn;
-    type[0][7]=type[6][7]=Grid::Type::BlockTransport;
-    type[0][5]=type[0][6]=type[1][0]=type[1][8]=type[1][9]=type[1][10]=
-    type[1][11]=type[5][0]=type[5][7]=type[5][11]=type[6][6]=Grid::Type::None;
-    type[1][1]=type[1][2]=type[1][3]=type[1][5]=type[1][6]=type[1][7]=type[3][2]=type[4][6]=type[4][7]=type[5][1]=type[5][2]=
-    type[5][3]=type[5][4]=type[5][6]=type[5][8]=type[5][9]=type[5][10]=Grid::Type::BlockTower;
+    type[0][0]=type[0][5]=type[0][6]=type[1][11]=type[2][0]=Grid::Type::BlockOut;
+    type[3][11]=type[4][11]=type[6][0]=Grid::Type::BlockIn;
+    type[0][4]=type[3][1]=type[6][7]=type[6][11]=Grid::Type::BlockTransport;
+    type[0][8]=type[0][7]=type[0][9]=type[0][10]=type[0][11]=type[1][0]=
+    type[1][1]=type[1][2]=type[3][0]=type[4][0]=type[5][0]=type[5][4]=type[5][5]=
+    type[5][6]=type[5][10]=type[5][11]=type[6][3]=type[6][4]=type[6][5]=type[6][6]=Grid::Type::None;
+    type[2][7]=type[1][3]=type[1][4]=type[2][8]=type[2][9]=type[2][10]=type[2][11]=type[4][1]=
+    type[4][3]=type[4][4]=type[5][1]=type[5][3]=type[5][7]=type[5][8]=type[5][9]=Grid::Type::BlockTower;
     std::vector<std::string> images = { "images/block_low.png", "images/in.png", "images/out.png", "images/block_transport.png", "images/block_high.png" };
 
     for(size_t i = 0; i < 7; i++) {
         for (size_t j = 0; j < 12; j++) {
             if(type[i][j] != Grid::Type::None) {
-                grid[i][j] = ui::Button::create(images[type[i][j]], images[type[i][j]]);
+                if( (i==0 && j==4) || (i==6 && j==11) ) grid[i][j] = ui::Button::create("images/block_transport_R.png", "images/block_transport_R.png");
+                else grid[i][j] = ui::Button::create(images[type[i][j]], images[type[i][j]]);
                 grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
                 this->addChild(grid[i][j], 1);
             }
@@ -117,7 +119,7 @@ bool Level1Scene::init()
     return true;
 }
 
-void Level1Scene::menuCloseCallback(cocos2d::Ref *pSender)
+void Level3Scene::menuCloseCallback(cocos2d::Ref *pSender)
 {
     //Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();

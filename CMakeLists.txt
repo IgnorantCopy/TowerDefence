@@ -135,6 +135,7 @@ list(APPEND GAME_SOURCE
         Classes/SelectLevelScene.cpp
         Classes/Level1Scene.cpp
         Classes/Level2Scene.cpp
+        Classes/Level3Scene.cpp
 )
 list(APPEND GAME_HEADER
         Classes/AppDelegate.h
@@ -142,6 +143,7 @@ list(APPEND GAME_HEADER
         Classes/SelectLevelScene.h
         Classes/Level1Scene.h
         Classes/Level2Scene.h
+        Classes/Level3Scene.h
 )
 
 if(ANDROID)

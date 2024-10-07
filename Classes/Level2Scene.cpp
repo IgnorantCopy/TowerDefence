@@ -27,20 +27,6 @@ bool Level2Scene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    auto closeItem = MenuItemImage::create(
-            "CloseNormal.png",
-            "CloseSelected.png",
-            CC_CALLBACK_1(Level2Scene::menuCloseCallback, this));
-    if (closeItem == nullptr ||
-        closeItem->getContentSize().width <= 0 ||
-        closeItem->getContentSize().height <= 0) {
-        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-    } else {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
-        float y = origin.y + closeItem->getContentSize().height/2;
-        closeItem->setPosition(Vec2(x,y));
-    }
-
     auto background = Sprite::create("images/level2_background.png",Rect(0,0,2500,1500));
     if(background == nullptr) {
         problemLoading("'images/level2_background.png'");
@@ -115,7 +101,7 @@ bool Level2Scene::init()
     for(size_t i = 0; i < 7; i++) {
         for (size_t j = 0; j < 12; j++) {
             if(type[i][j] != Grid::Type::None) {
-                if( i==0 && j==0 ) grid[i][j] = ui::Button::create("images/block_transport_copy.png", "images/block_transport_copy.png");
+                if( i==0 && j==0 ) grid[i][j] = ui::Button::create("images/block_transport_D.png", "images/block_transport_D.png");
                 else grid[i][j] = ui::Button::create(images[type[i][j]], images[type[i][j]]);
                 grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
                 this->addChild(grid[i][j], 1);
