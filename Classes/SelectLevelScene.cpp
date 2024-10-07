@@ -1,6 +1,7 @@
 #include "SelectLevelScene.h"
 #include "Level1Scene.h"
 #include "Level2Scene.h"
+#include "Level3Scene.h"
 #include "ui/CocosGUI.h"
 
 USING_NS_CC;
@@ -84,8 +85,7 @@ bool SelectLevelScene::init()
             "images/locked.png",
             "images/locked.png",
             [this](Ref *ref){
-                // TODO: fill the below code with the class level3
-                //Director::getInstance()->replaceScene(*****::createScene());
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level3Scene::createScene()));
             }
     );
     level3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800,
