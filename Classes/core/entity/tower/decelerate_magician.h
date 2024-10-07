@@ -13,7 +13,7 @@ namespace towerdefence::core {
         DecelerateMagician(id::Id id, const timer::Clock & clk);
         DecelerateMagician() = delete;
 
-        TowerInfo info() const override { return { 600, 16, 0, 19, 2, AttackType::Magic } }
+        TowerInfo info() const override { return { 600, 16, 0, 19, 2, AttackType::Magic }; }
 
         void on_tick(GridRef g) override;
     };
