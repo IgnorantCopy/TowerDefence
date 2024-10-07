@@ -75,7 +75,9 @@ struct Buff {
 
     static constexpr uint32_t DEFAULT = 0;
     static constexpr uint32_t INVINCIBLE = 1;
-    static constexpr uint32_t DECREASE_SPEED = 2;
+    static constexpr uint32_t DECREASE_SPEED = 1 << 1;
+    static constexpr uint32_t DECREASE_ATTACK_SPEED = 1 << 2;
+    static constexpr uint32_t SILENT = 1 << 3;
 
     constexpr Buff() = default;
     constexpr Buff(int32_t attack_speed, double speed, double attack,
@@ -164,7 +166,7 @@ struct Entity {
     // called when entity is hit
     virtual void on_hit(GridRef g);
 
-    virtual ~Entity(){};
+    virtual ~Entity() {};
 };
 
 struct EnemyInfo {
