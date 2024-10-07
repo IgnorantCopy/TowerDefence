@@ -23,10 +23,15 @@ struct Defence {
     int32_t magic_ = 0;
 
     constexpr Defence(int32_t physics, int32_t magic)
-            : physics_(physics), magic_(magic) {}
+        : physics_(physics), magic_(magic) {}
 
-    Defence operator+(const Defence &rhs) const{
+    Defence operator+(const Defence &rhs) const {
         return Defence(physics_ + rhs.physics_, magic_ + rhs.magic_);
+    }
+
+    Defence &operator+=(const Defence &rhs) {
+        *this = *this + rhs;
+        return *this;
     }
 };
 
@@ -52,10 +57,11 @@ struct Buff {
     double attack_ = 0;
     double real_attack_ = 0;
     // actual_defence = base_defence + defence_correction_
-    Defence defence_correction_ = { 0, 0 };
+    Defence defence_correction_{0, 0};
     bool invincible_ = false;
     bool silent_ = false;
-    // actual_inspiration_strike = base_attack * (1 + attack) * (1 + inspiration_strike) (only triggered once)
+    // actual_inspiration_strike = base_attack * (1 + attack) *
+    // (1 + inspiration_strike) (only triggered once)
     double inspiration_strike_ = 0;
 
     BUFF_CONSTUCTOR(int32_t, attack_speed)
@@ -72,10 +78,12 @@ struct Buff {
     static constexpr uint32_t DECREASE_SPEED = 2;
 
     constexpr Buff() = default;
-    constexpr Buff(int32_t attack_speed, double speed, double attack, double real_attack,
-                   Defence defence_correction, bool invincible, bool silent, double inspiration_strike)
-        : attack_speed_(attack_speed), speed_(speed), attack_(attack), real_attack_(real_attack),
-          defence_correction_(defence_correction), invincible_(invincible), silent_(silent),
+    constexpr Buff(int32_t attack_speed, double speed, double attack,
+                   double real_attack, Defence defence_correction,
+                   bool invincible, bool silent, double inspiration_strike)
+        : attack_speed_(attack_speed), speed_(speed), attack_(attack),
+          real_attack_(real_attack), defence_correction_(defence_correction),
+          invincible_(invincible), silent_(silent),
           inspiration_strike_(inspiration_strike) {}
 
     Buff operator&(const Buff &rhs) const {
@@ -172,6 +180,19 @@ struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
     Enemy(id::Id id) : IdMixin{id} {}
 
     virtual EnemyInfo info() const = 0;
+
+    // Calculates current defence and speed that takes buffs into account
+    // and current health_ = info().health_ - realized_attack
+    virtual EnemyInfo status() const {
+        auto base = info();
+        auto buffs = get_all_buff();
+
+        base.health_ -= realized_attack_;
+        base.defence_ += buffs.defence_correction_;
+        base.speed_ = base.speed_ * (1 + buffs.speed_);
+
+        return base;
+    }
 
     void on_tick(GridRef g) override;
 };
