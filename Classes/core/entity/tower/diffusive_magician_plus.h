@@ -9,7 +9,7 @@ namespace towerdefence {
         struct DiffusiveMagicianPlus final : Tower {
 
             TowerInfo info() const override {
-                return { 2000, 21, 0, 20, AttackType::Magic };
+                return { 2000, 21, 0, 20, 4, AttackType::Magic };
             }
        };
     } // namespace core

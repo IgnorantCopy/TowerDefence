@@ -9,7 +9,7 @@ namespace towerdefence {
         struct Bomber final : Tower {
 
             TowerInfo info() const override {
-                return { 1600, 16, 0, 20, AttackType::Physics };
+                return { 1600, 16, 0, 20, 4, AttackType::Physics };
             }
         };
     } // namespace core

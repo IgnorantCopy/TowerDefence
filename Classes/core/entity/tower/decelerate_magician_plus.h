@@ -9,7 +9,7 @@ namespace towerdefence {
         struct DecelerateMagicianPlus final : Tower {
 
             TowerInfo info() const override {
-                return { 600, 16, 0, 19, AttackType::Magic };
+                return { 600, 16, 0, 19, 2, AttackType::Magic };
             }
         };
     } // namespace core

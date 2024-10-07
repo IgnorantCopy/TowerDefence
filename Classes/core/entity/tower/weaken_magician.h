@@ -9,7 +9,7 @@ namespace towerdefence {
         struct WeakenMagician final : Tower {
 
             TowerInfo info() const override {
-                return { 500, 13, 0, 16, AttackType::Magic };
+                return { 500, 13, 0, 16, 3, AttackType::Magic };
             }
         };
     } // namespace core
