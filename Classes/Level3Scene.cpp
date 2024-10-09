@@ -105,9 +105,17 @@ bool Level3Scene::init()
                 if( (i==0 && j==4) || (i==6 && j==11) ) grid[i][j] = ui::Button::create("images/block_transport_R.png", "images/block_transport_R.png");
                 else grid[i][j] = ui::Button::create(images[type[i][j]], images[type[i][j]]);
                 grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
-                this->addChild(grid[i][j], 1);
+                this->addChild(grid[i][j], 2);
             }
         }
+    }
+    
+    auto blockBackground = Sprite::create("images/block_background.png", Rect(0, 0, 1680, 980));
+    if(blockBackground == nullptr) {
+        problemLoading("'images/block_background.png'");
+    } else {
+        blockBackground->setPosition(Vec2(x + 5.5f * delta, y - 3 * delta));
+        this->addChild(blockBackground, 1);
     }
 
     Vector<MenuItem*> MenuItems;
@@ -115,6 +123,11 @@ bool Level3Scene::init()
     auto menu = Menu::createWithArray(MenuItems);
     this->addChild(menu, MenuItems.size());
     menu->setPosition(Vec2::ZERO);
+    
+    // add a mouse click event listener
+    auto mouseListener = EventListenerMouse::create();
+    mouseListener->onMouseDown = CC_CALLBACK_1(Level3Scene::onMouseDown, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
     return true;
 }
@@ -129,4 +142,18 @@ void Level3Scene::menuCloseCallback(cocos2d::Ref *pSender)
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
+}
+
+void Level3Scene::onMouseDown(cocos2d::Event *event) {
+    EventMouse const* e = (EventMouse*)event;
+    float x = e->getCursorX();
+    float y = e->getCursorY();
+    
+    auto particle = ParticleSystemQuad::create("particles/mouse.plist");
+    if (particle == nullptr) {
+        problemLoading("'particles/mouse.plist'");
+    } else {
+        particle->setPosition(Vec2(x, y));
+        this->addChild(particle, 3);
+    }
 }
