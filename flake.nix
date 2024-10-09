@@ -17,7 +17,7 @@
         pcre2
         mount
       ];
-      dev-deps = with pkgs; [ clang-tools just ];
+      dev-deps = with pkgs; [ clang-tools just gcc14 ];
     in {
       devShells.x86_64-linux.default =
         pkgs.mkShell { packages = build-deps ++ dev-deps ++ deps; };

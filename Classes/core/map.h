@@ -289,9 +289,9 @@ struct GridRef {
 
     std::optional<std::unique_ptr<Tower>> &get_nearest_tower() {
         size_t r = 0, c = 0;
-        for (auto [i, j] : std::ranges::views::cartesian_product(
-                 std::ranges::views::iota(size_t(0), map.shape.height_),
-                 std::ranges::views::iota(size_t(0), map.shape.width_))) {
+        for (auto [i, j] : std::views::cartesian_product(
+                 std::views::iota(size_t(0), map.shape.height_),
+                 std::views::iota(size_t(0), map.shape.width_))) {
             if (l1_dis(row, column, i, j) < l1_dis(row, column, r, c) &&
                     map.grids[map.shape.index_of(r, c)].tower.has_value()) {
                     r = i;
