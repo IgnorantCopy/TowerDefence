@@ -9,6 +9,7 @@
 #include <optional>
 #include <unordered_map>
 #include <utility>
+#include <cassert>
 
 #include "../id.h"
 #include "../timer.h"
@@ -38,7 +39,7 @@ struct Defence {
 struct AttackMixin {
     int32_t realized_attack_ = 0;
 
-    void increase_attack(int32_t atk) { realized_attack_ += atk; }
+
 };
 
 #define BUFF_CONSTUCTOR(type, name)                                            \
@@ -169,6 +170,8 @@ struct Entity {
     virtual ~Entity() {};
 };
 
+enum class AttackType { Physics, Magic, Real };
+
 struct EnemyInfo {
     int32_t health_ = 0;
     Defence defence_;
@@ -182,6 +185,10 @@ struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
     Enemy(id::Id id) : IdMixin{id} {}
 
     virtual EnemyInfo info() const = 0;
+
+    void increase_attack(int32_t atk,AttackType attack_type);
+
+    size_t get_distance() const {return 0;}//todo
 
     // Calculates current defence and speed that takes buffs into account
     // and current health_ = info().health_ - realized_attack
@@ -199,18 +206,17 @@ struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
     void on_tick(GridRef g) override;
 };
 
-enum class AttackType { Physics, Magic, Real };
 
 struct TowerInfo {
     int32_t attack_ = 0;
     int32_t cost_ = 0;
     int32_t deploy_interval_ = 0;
-    int32_t attack_interval_ = 0; // actual_attack_attack_speed
+    double attack_interval_ = 0; // actual_attack_attack_speed
     size_t attack_radius_ = 0;
     AttackType attack_type_;
 
     constexpr TowerInfo(int32_t attack, int32_t cost, int32_t deploy_interval,
-                        int32_t attack_interval, int32_t attack_radius, AttackType attack_type)
+                        double attack_interval, int32_t attack_radius, AttackType attack_type)
         : attack_(attack), cost_(cost), deploy_interval_(deploy_interval),
           attack_interval_(attack_interval), attack_radius_(attack_radius), attack_type_(attack_type) {}
 };
@@ -219,6 +225,17 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
     Tower(id::Id id) : IdMixin{id} {}
 
     virtual TowerInfo info() const = 0;
+
+    virtual TowerInfo status() const {
+        auto base = info();
+        auto buffs = get_all_buff();
+
+        base.attack_+=buffs.attack_;
+        base.attack_interval_=base.attack_interval_/(double (100+buffs.attack_speed_)/100);
+        base.attack_radius_+=buffs.attack_radius_;
+
+        return base;
+    }
 
     void on_tick(GridRef g) override;
 };

@@ -7,7 +7,7 @@ namespace towerdefence {
                 : Tower(id), release_skill_(clk.with_period_sec(20)) {}
 
         void Archer::on_tick(GridRef g) {
-            this->update_buff(g.clock());
+            Tower::on_tick(g);
 
             if (g.clock().is_triggered(release_skill_)) {
                 this->add_buff_in({this->id, Buff::DEFAULT},
