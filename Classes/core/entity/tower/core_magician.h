@@ -10,6 +10,7 @@ namespace towerdefence::core {
 
         TowerInfo info() const override { return { 700, 12, 0, 16, 2, AttackType::Magic }; }
 
+        void on_tick(GridRef g) override;
     };
 } // namespace towerdefence::core
 

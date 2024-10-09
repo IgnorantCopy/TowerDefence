@@ -3,5 +3,8 @@
 
 namespace towerdefence {
     namespace core {
+        void HighspeedArcherPlus::on_tick(GridRef g) {
+            Tower::on_tick(g);
+        }
     } // namespace core
 } // namespace towerdefence
