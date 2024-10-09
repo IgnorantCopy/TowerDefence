@@ -20,14 +20,14 @@ void Boss1::on_tick(GridRef g) {
         };
     };
 
-    g.for_each_tower_on_tigger(
-        release_skill_.dec_atk_spd,
-        add_buff_with_dur({this->id, Buff::DECREASE_ATTACK_SPEED},
-                          Buff::attack_speed(-30), 10));
+    g.for_each_tower_on_trigger(
+            release_skill_.dec_atk_spd,
+            add_buff_with_dur({this->id, Buff::DECREASE_ATTACK_SPEED},
+                              Buff::attack_speed(-30), 10));
 
-    g.for_each_tower_on_tigger(
-        release_skill_.silent,
-        add_buff_with_dur({this->id, Buff::SILENT}, Buff::silent(true), 15));
+    g.for_each_tower_on_trigger(
+            release_skill_.silent,
+            add_buff_with_dur({this->id, Buff::SILENT}, Buff::silent(true), 15));
 
     if (g.clock().is_triggered(release_skill_.withdraw)) {
         if (auto &tower = g.get_nearest_tower(); tower.has_value()) {

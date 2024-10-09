@@ -301,8 +301,8 @@ struct GridRef {
     }
 
     // if timer is triggered, call f(tower) for all towers on the map
-    void for_each_tower_on_tigger(timer::Timer timer,
-                                  std::function<void(Tower &)> f) {
+    void for_each_tower_on_trigger(timer::Timer timer,
+                                   std::function<void(Tower &)> f) {
         if (clock().is_triggered(timer)) {
             for (auto &grid : map.grids) {
                 grid.with_tower([f](auto &t) { f(*t); });

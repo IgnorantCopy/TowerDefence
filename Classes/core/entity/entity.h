@@ -42,7 +42,7 @@ struct AttackMixin {
 
 };
 
-#define BUFF_CONSTUCTOR(type, name)                                            \
+#define BUFF_CONSTRUCTOR(type, name)                                            \
     static constexpr Buff name(type name) {                                    \
         Buff b;                                                                \
         b.name##_ = name;                                                      \
@@ -64,14 +64,14 @@ struct Buff {
     bool invincible_ = false;
     bool silent_ = false;
 
-    BUFF_CONSTUCTOR(int32_t, attack_speed)
-    BUFF_CONSTUCTOR(double, speed)
-    BUFF_CONSTUCTOR(double, attack)
-    BUFF_CONSTUCTOR(double, real_attack)
-    BUFF_CONSTUCTOR(Defence, defence_correction)
-    BUFF_CONSTUCTOR(int32_t, attack_radius)
-    BUFF_CONSTUCTOR(bool, invincible)
-    BUFF_CONSTUCTOR(bool, silent)
+    BUFF_CONSTRUCTOR(int32_t, attack_speed)
+    BUFF_CONSTRUCTOR(double, speed)
+    BUFF_CONSTRUCTOR(double, attack)
+    BUFF_CONSTRUCTOR(double, real_attack)
+    BUFF_CONSTRUCTOR(Defence, defence_correction)
+    BUFF_CONSTRUCTOR(int32_t, attack_radius)
+    BUFF_CONSTRUCTOR(bool, invincible)
+    BUFF_CONSTRUCTOR(bool, silent)
 
     static constexpr uint32_t DEFAULT = 0;
     static constexpr uint32_t INVINCIBLE = 1;
