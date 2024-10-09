@@ -113,9 +113,9 @@ add_library(core
     Classes/core/entity/tower/weaken_magician_plus.cpp
     Classes/core/entity/tower/weaken_magician_plus.h)
 
-set_property(TARGET core PROPERTY CXX_STANDARD 23)
+set(TOWERDEFENCE_CXX_STANDARD 23)
 
-set(CXX_STANDARD 23)
+set_property(TARGET core PROPERTY CXX_STANDARD ${TOWERDEFENCE_CXX_STANDARD})
 
 # record sources, headers, resources...
 set(GAME_SOURCE)
@@ -214,7 +214,7 @@ else()
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 endif()
 
-set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD 17)
+set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD ${TOWERDEFENCE_CXX_STANDARD})
 target_link_libraries(${APP_NAME} cocos2d core)
 target_include_directories(${APP_NAME}
     PRIVATE Classes

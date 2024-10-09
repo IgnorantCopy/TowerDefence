@@ -58,7 +58,7 @@
           '') docs;
         };
 
-        tower-defence = pkgs.stdenv.mkDerivation rec {
+        tower-defence = pkgs.gcc14Stdenv.mkDerivation rec {
           name = "tower-defence";
           src = ./.;
           buildInputs = deps;
