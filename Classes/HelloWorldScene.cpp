@@ -87,7 +87,7 @@ bool HelloWorld::init()
     auto labelManual = Label::createWithTTF("Manual", "fonts/Bender/BENDER.OTF", 100);
     auto manualItem = MenuItemLabel::create(
             labelManual,
-            [this, origin, visibleSize](Ref *ref){
+            [this](Ref *ref){
                 log("Manual clicked");
             }
     );

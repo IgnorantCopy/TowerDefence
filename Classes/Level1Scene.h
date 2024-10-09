@@ -8,6 +8,7 @@ class Level1Scene : public cocos2d::Scene
 {
     bool isSelecting = false;
     cocos2d::Sprite *selectedTower = nullptr;
+    cocos2d::Label *moneyLabel = nullptr;
 public:
     static cocos2d::Scene* createScene();
 

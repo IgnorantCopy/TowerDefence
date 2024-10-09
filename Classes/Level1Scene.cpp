@@ -126,7 +126,38 @@ bool Level1Scene::init()
         blockBackground->setPosition(Vec2(x + 5.5f * delta, y - 3 * delta));
         this->addChild(blockBackground, 1);
     }
-
+    
+    auto money = Sprite::create("images/gold.png");
+    if(money == nullptr) {
+        problemLoading("'images/gold.png'");
+    } else {
+        money->setPosition(Vec2(origin.x + 70, origin.y + visibleSize.height - 70));
+        this->addChild(money, 1);
+    }
+    this->moneyLabel = Label::createWithTTF("0", "fonts/Bender/BENDER.OTF", 75);
+    this->moneyLabel->setPosition(Vec2(origin.x + 150, origin.y + visibleSize.height - 70));
+    this->addChild(this->moneyLabel, 1);
+    
+    auto enemyExample = Sprite::create("images/enemies/dog/move/dog_move00.png");
+    if (enemyExample == nullptr) {
+        problemLoading("'images/enemies/dog/move/dog_move00.png'");
+    } else {
+        enemyExample->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+        enemyExample->setScale(0.25f);
+        this->addChild(enemyExample, 5);
+        Vector<SpriteFrame*> frames;
+        int num = 15;
+        frames.reserve(num);
+        for (int i = 0; i < num; i++) {
+            std::string path = "images/enemies/dog/move/dog_move";
+            path += (i < 10 ? "0" : "") + std::to_string(i) + ".png";
+            frames.pushBack(SpriteFrame::create(path, Rect(0, 0, 900, 900)));
+        }
+        Animation* animation = Animation::createWithSpriteFrames(frames, 0.05f);
+        Animate* animate = Animate::create(animation);
+        enemyExample->runAction(RepeatForever::create(animate));
+    }
+    
     Vector<MenuItem*> MenuItems;
     MenuItems.pushBack(backItem);
     MenuItems.pushBack(archerBaseSelector);
