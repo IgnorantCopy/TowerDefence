@@ -142,7 +142,7 @@ bool Level1Scene::init()
     if (enemyExample == nullptr) {
         problemLoading("'images/enemies/dog/move/dog_move00.png'");
     } else {
-        enemyExample->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+        enemyExample->setPosition(Vec2(origin.x, origin.y + visibleSize.height / 2));
         enemyExample->setScale(0.25f);
         this->addChild(enemyExample, 5);
         Vector<SpriteFrame*> frames;
@@ -155,7 +155,10 @@ bool Level1Scene::init()
         }
         Animation* animation = Animation::createWithSpriteFrames(frames, 0.05f);
         Animate* animate = Animate::create(animation);
-        enemyExample->runAction(RepeatForever::create(animate));
+        
+        auto moveBy = MoveBy::create(0.75f, Vec2(140, 0));
+        auto spawn = Spawn::create(moveBy, animate, nullptr);
+        enemyExample->runAction(RepeatForever::create(spawn));
     }
     
     Vector<MenuItem*> MenuItems;
