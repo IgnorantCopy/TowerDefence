@@ -8,10 +8,12 @@
 #include <functional>
 #include <memory>
 #include <optional>
+#include <ranges>
 #include <tuple>
 #include <unordered_map>
 #include <utility>
 #include <vector>
+
 
 #include "./entity/entity.h"
 #include "./id.h"
@@ -287,14 +289,14 @@ struct GridRef {
 
     std::optional<std::unique_ptr<Tower>> &get_nearest_tower() {
         size_t r = 0, c = 0;
-        for (size_t i = 0; i < map.shape.height_; ++i) {
-            for (size_t j = 0; j < map.shape.width_; ++j) {
-                if (l1_dis(row, column, i, j) < l1_dis(row, column, r, c) &&
+        for (auto [i, j] : std::ranges::views::cartesian_product(
+                 std::ranges::views::iota(size_t(0), map.shape.height_),
+                 std::ranges::views::iota(size_t(0), map.shape.width_))) {
+            if (l1_dis(row, column, i, j) < l1_dis(row, column, r, c) &&
                     map.grids[map.shape.index_of(r, c)].tower.has_value()) {
                     r = i;
                     c = j;
                 }
-            }
         }
 
         return map.grids[map.shape.index_of(r, c)].tower;
