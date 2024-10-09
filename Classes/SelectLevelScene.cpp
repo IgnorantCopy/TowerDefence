@@ -1,6 +1,9 @@
 #include "SelectLevelScene.h"
 #include "Level1Scene.h"
+#include "Level2Scene.h"
+#include "Level3Scene.h"
 #include "ui/CocosGUI.h"
+#include "HelloWorldScene.h"
 
 USING_NS_CC;
 
@@ -13,7 +16,7 @@ Scene* SelectLevelScene::createScene()
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
+    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in SelectLevelScene.cpp\n");
 }
 
 bool SelectLevelScene::init()
@@ -53,7 +56,7 @@ bool SelectLevelScene::init()
     auto backItem=MenuItemLabel::create(
             Back,
             [this](Ref *ref){
-                Director::getInstance()->popSceneWithTransition<TransitionCrossFade>(0.4f);
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, HelloWorld::createScene()));
             }
     );
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
@@ -73,8 +76,7 @@ bool SelectLevelScene::init()
             "images/locked.png",
             "images/locked.png",
             [this](Ref *ref){
-                // TODO: fill the below code with the class level2
-                //Director::getInstance()->replaceScene(*****::createScene());
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level2Scene::createScene()));
             }
     );
     level2->setPosition(Vec2(origin.x + visibleSize.width / 2,
@@ -84,8 +86,7 @@ bool SelectLevelScene::init()
             "images/locked.png",
             "images/locked.png",
             [this](Ref *ref){
-                // TODO: fill the below code with the class level3
-                //Director::getInstance()->replaceScene(*****::createScene());
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level3Scene::createScene()));
             }
     );
     level3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800,
@@ -100,6 +101,11 @@ bool SelectLevelScene::init()
     auto menu = Menu::createWithArray(MenuItems);
     this->addChild(menu, MenuItems.size());
     menu->setPosition(Vec2::ZERO);
+    
+    // add a mouse click event listener
+    auto mouseListener = EventListenerMouse::create();
+    mouseListener->onMouseDown = CC_CALLBACK_1(SelectLevelScene::onMouseDown, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
     return true;
 }
@@ -114,4 +120,18 @@ void SelectLevelScene::menuCloseCallback(cocos2d::Ref *pSender)
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
+}
+
+void SelectLevelScene::onMouseDown(cocos2d::Event *event) {
+    EventMouse const* e = (EventMouse*)event;
+    float x = e->getCursorX();
+    float y = e->getCursorY();
+    
+    auto particle = ParticleSystemQuad::create("particles/mouse.plist");
+    if (particle == nullptr) {
+        problemLoading("'particles/mouse.plist'");
+    } else {
+        particle->setPosition(Vec2(x, y));
+        this->addChild(particle, 5);
+    }
 }
