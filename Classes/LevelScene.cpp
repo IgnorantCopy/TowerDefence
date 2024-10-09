@@ -3,15 +3,6 @@
 
 USING_NS_CC;
 
-Scene* LevelScene::createScene()
-{
-    return LevelScene::create();
-}
-
-bool LevelScene::init() {
-    return Scene::init();
-}
-
 void LevelScene::menuCloseCallback(cocos2d::Ref *pSender)
 {
     //Close the cocos2d-x game scene and quit the application
