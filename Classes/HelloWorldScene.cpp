@@ -87,8 +87,8 @@ bool HelloWorld::init()
     auto labelManual = Label::createWithTTF("Manual", "fonts/Bender/BENDER.OTF", 100);
     auto manualItem = MenuItemLabel::create(
             labelManual,
-            [this](Ref *ref){
-                log("create ManualScene");//TODO: create a manualScene
+            [this, origin, visibleSize](Ref *ref){
+                log("Manual clicked");
             }
     );
     manualItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
@@ -168,6 +168,12 @@ bool HelloWorld::init()
     if (firstTouch) {
         firstTouch = false;
     }
+    
+    // add a mouse click event listener
+    auto mouseListener = EventListenerMouse::create();
+    mouseListener->onMouseDown = CC_CALLBACK_1(HelloWorld::onMouseDown, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+    
     return true;
 }
 
@@ -182,4 +188,18 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
+}
+
+void HelloWorld::onMouseDown(cocos2d::Event *event) {
+    EventMouse const* e = (EventMouse*)event;
+    float x = e->getCursorX();
+    float y = e->getCursorY();
+    
+    auto particle = ParticleSystemQuad::create("particles/mouse.plist");
+    if (particle == nullptr) {
+        problemLoading("'particles/mouse.plist'");
+    } else {
+        particle->setPosition(Vec2(x, y));
+        this->addChild(particle, 3);
+    }
 }

@@ -16,6 +16,9 @@ public:
 
     // implement the "static create()" method manually
     CREATE_FUNC(Level3Scene);
+    
+    void onMouseDown(cocos2d::Event *event);
+    
 };
 
 #endif //TOWERDEFENCE_LEVEL3SCENE_H

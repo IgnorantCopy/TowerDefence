@@ -101,6 +101,11 @@ bool SelectLevelScene::init()
     auto menu = Menu::createWithArray(MenuItems);
     this->addChild(menu, MenuItems.size());
     menu->setPosition(Vec2::ZERO);
+    
+    // add a mouse click event listener
+    auto mouseListener = EventListenerMouse::create();
+    mouseListener->onMouseDown = CC_CALLBACK_1(SelectLevelScene::onMouseDown, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
     return true;
 }
@@ -115,4 +120,18 @@ void SelectLevelScene::menuCloseCallback(cocos2d::Ref *pSender)
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
+}
+
+void SelectLevelScene::onMouseDown(cocos2d::Event *event) {
+    EventMouse const* e = (EventMouse*)event;
+    float x = e->getCursorX();
+    float y = e->getCursorY();
+    
+    auto particle = ParticleSystemQuad::create("particles/mouse.plist");
+    if (particle == nullptr) {
+        problemLoading("'particles/mouse.plist'");
+    } else {
+        particle->setPosition(Vec2(x, y));
+        this->addChild(particle, 5);
+    }
 }
