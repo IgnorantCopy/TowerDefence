@@ -113,9 +113,9 @@ add_library(core
     Classes/core/entity/tower/weaken_magician_plus.cpp
     Classes/core/entity/tower/weaken_magician_plus.h)
 
-set_property(TARGET core PROPERTY CXX_STANDARD 17)
+set_property(TARGET core PROPERTY CXX_STANDARD 23)
 
-set(CXX_STANDARD 17)
+set(CXX_STANDARD 23)
 
 # record sources, headers, resources...
 set(GAME_SOURCE)
