@@ -84,9 +84,9 @@ bool Level3Scene::init()
     float x = origin.x + 350 + delta;
     float y = origin.y + visibleSize.height - delta;
     createMap(3);
-    for(size_t i = 0; i < height; i++) {
-        for (size_t j = 0; j < width; j++) {
-            Grid::Type type_ = map->grids[map->shape.index_of(i, j)].type;
+    for(int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+            Grid::Type type_ = getType(i, j);
             if(type_ != Grid::Type::None) {
                 grid[i][j] = ui::Button::create(images[type_], images[type_]);
                 grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
@@ -103,7 +103,8 @@ bool Level3Scene::init()
         this->addChild(blockBackground, 1);
     }
 
-    Vector<MenuItem*> MenuItems;
+    // the menu
+    cocos2d::Vector<cocos2d::MenuItem*> MenuItems;
     MenuItems.pushBack(backItem);
     auto menu = Menu::createWithArray(MenuItems);
     this->addChild(menu, MenuItems.size());

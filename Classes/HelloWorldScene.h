@@ -29,6 +29,9 @@
 
 class HelloWorld : public cocos2d::Scene
 {
+private:
+    // Menu
+    cocos2d::Menu *menu = nullptr;
 public:
     static cocos2d::Scene* createScene();
 

@@ -53,3 +53,13 @@ void LevelScene::createMap(int level)
             break;
     }
 }
+
+Grid::Type LevelScene::getType(size_t x, size_t y)
+{
+    return map->grids[map->shape.index_of(x,y)].type;
+}
+
+LevelScene::~LevelScene()
+{
+    delete map; map=nullptr;
+}

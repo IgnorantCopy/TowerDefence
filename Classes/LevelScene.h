@@ -29,12 +29,17 @@ protected:
     // select tower
     bool isSelecting = false;
     cocos2d::Sprite *selectedTower = nullptr;
+
 public:
     // a selector callback
     void menuCloseCallback(cocos2d::Ref *pSender);
 
     // create the map
     void createMap(int level);
+    // get the type of the grid at (x,y)
+    Grid::Type getType(size_t x, size_t y);
+
+    ~LevelScene() override;
 };
 
 #endif //TOWERDEFENCE_LEVELSCENE_H
