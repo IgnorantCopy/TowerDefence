@@ -87,7 +87,7 @@ bool HelloWorld::init()
     auto labelManual = Label::createWithTTF("Manual", "fonts/Bender/BENDER.OTF", 100);
     auto manualItem = MenuItemLabel::create(
             labelManual,
-            [this, origin, visibleSize](Ref *ref){
+            [this](Ref *ref){
                 log("Manual clicked");
             }
     );
@@ -155,15 +155,16 @@ bool HelloWorld::init()
     
     // animation for menu
     if (firstTouch) {
-        menu->setOpacity(0);
-        auto delay1 = DelayTime::create(3.8f);
-        auto scaleDown = ScaleBy::create(0.1f, 0.1f);
-        auto fadeIn = FadeIn::create(0.1f);
+        menu->setVisible(false);
+        menu->setScale(0.1f);
+        auto delay = DelayTime::create(4.8f);
         auto scaleUp = ScaleBy::create(0.5f, 10.0f);
         auto scaleEase = EaseBackOut::create(scaleUp->clone());
-        auto delay2 = DelayTime::create(0.8f);
-        auto seq = Sequence::create(delay1, scaleDown, fadeIn, delay2, scaleEase, NULL);
+        auto seq = Sequence::create(delay, scaleEase, NULL);
         menu->runAction(seq);
+        scheduleOnce([this, menu, scaleEase](float dt) {
+            menu->setVisible(true);
+        }, 4.8f, "animateMenu");
     }
     if (firstTouch) {
         firstTouch = false;

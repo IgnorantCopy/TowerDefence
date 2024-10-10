@@ -42,14 +42,14 @@ bool Level1Scene::init()
     
     float gap = 300;
     this->selectedTower = Sprite::create("images/towers/archer_base_onblock.png");
-    this->selectedTower->setOpacity(0);
+    this->selectedTower->setVisible(false);
     this->selectedTower->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
     this->addChild(this->selectedTower, 5);
     auto archerBaseSelector = MenuItemImage::create(
             "images/towers/archer_base.png",
             "images/towers/archer_base.png",
             [this](Ref *ref) {
-                this->isSelecting = true;
+                this->isSelecting = 1;
                 this->selectedTower->setTexture("images/towers/archer_base_onblock.png");
             }
     );
@@ -60,7 +60,7 @@ bool Level1Scene::init()
             "images/towers/magician_base.png",
             "images/towers/magician_base.png",
             [this](Ref *ref) {
-                this->isSelecting = true;
+                this->isSelecting = 2;
                 this->selectedTower->setTexture("images/towers/magician_base_onblock.png");
             }
     );
@@ -71,12 +71,51 @@ bool Level1Scene::init()
             "images/towers/helper_base.png",
             "images/towers/helper_base.png",
             [this](Ref *ref) {
-                this->isSelecting = true;
+                this->isSelecting = 3;
                 this->selectedTower->setTexture("images/towers/helper_base_onblock.png");
             }
     );
     helperBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
                                          origin.y + 1680 - visibleSize.height));
+    
+    // tower info
+    this->deleteItem = MenuItemImage::create(
+            "images/delete.png",
+            "images/delete.png",
+            [this](Ref *ref) {
+                scheduleOnce([this](float dt) {
+                    this->deleteTower();
+                }, 0.2f, "deleteTower");
+            }
+    );
+    this->deleteItem->setVisible(false);
+    this->upgradeItem = MenuItemImage::create(
+            "images/upgrade.png",
+            "images/upgrade.png",
+            [this](Ref *ref) {
+                // TODO: upgrade the tower
+                log("upgrade");
+            }
+    );
+    this->upgradeItem->setVisible(false);
+    this->towerInfoItem = MenuItemImage::create(
+            "images/info.png",
+            "images/info.png",
+            [this](Ref *ref) {
+                // TODO: show the tower info
+                log("info");
+            }
+    );
+    this->towerInfoItem->setVisible(false);
+    this->skillItem = MenuItemImage::create(
+            "images/towers/skill_icon/archer_base.png",
+            "images/towers/skill_icon/archer_base.png",
+            [this](Ref *ref) {
+                // TODO: execute the skill
+                log("skill");
+            }
+    );
+    this->skillItem->setVisible(false);
     
     // the back button to go back to the SelectLevel scene
     auto Back=Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
@@ -112,14 +151,52 @@ bool Level1Scene::init()
         blockBackground->setPosition(Vec2(x + 5.5f * delta, y - 3 * delta));
         this->addChild(blockBackground, 1);
     }
-
+    
+    auto money = Sprite::create("images/gold.png");
+    if(money == nullptr) {
+        problemLoading("'images/gold.png'");
+    } else {
+        money->setPosition(Vec2(origin.x + 70, origin.y + visibleSize.height - 70));
+        this->addChild(money, 1);
+    }
+    this->moneyLabel = Label::createWithTTF("0", "fonts/Bender/BENDER.OTF", 75);
+    this->moneyLabel->setPosition(Vec2(origin.x + 150, origin.y + visibleSize.height - 70));
+    this->addChild(this->moneyLabel, 1);
+    
+    auto enemyExample = Sprite::create("images/enemies/dog/move/dog_move00.png");
+    if (enemyExample == nullptr) {
+        problemLoading("'images/enemies/dog/move/dog_move00.png'");
+    } else {
+        enemyExample->setPosition(Vec2(origin.x, origin.y + visibleSize.height / 2));
+        enemyExample->setScale(0.25f);
+        this->addChild(enemyExample, 5);
+        Vector<SpriteFrame*> frames;
+        int num = 15;
+        frames.reserve(num);
+        for (int i = 0; i < num; i++) {
+            std::string path = "images/enemies/dog/move/dog_move";
+            path += (i < 10 ? "0" : "") + std::to_string(i) + ".png";
+            frames.pushBack(SpriteFrame::create(path, Rect(0, 0, 900, 900)));
+        }
+        Animation* animation = Animation::createWithSpriteFrames(frames, 0.05f);
+        Animate* animate = Animate::create(animation);
+        
+        auto moveBy = MoveBy::create(0.8f, Vec2(140, 0));
+        auto spawn = Spawn::create(moveBy, animate, nullptr);
+        enemyExample->runAction(RepeatForever::create(spawn));
+    }
+    
     Vector<MenuItem*> MenuItems;
     MenuItems.pushBack(backItem);
     MenuItems.pushBack(archerBaseSelector);
     MenuItems.pushBack(magicianBaseSelector);
     MenuItems.pushBack(helperBaseSelector);
+    MenuItems.pushBack(this->deleteItem);
+    MenuItems.pushBack(this->upgradeItem);
+    MenuItems.pushBack(this->towerInfoItem);
+    MenuItems.pushBack(this->skillItem);
     auto menu = Menu::createWithArray(MenuItems);
-    this->addChild(menu, MenuItems.size());
+    this->addChild(menu, 4);
     menu->setPosition(Vec2::ZERO);
     
     // add a mouse click event listener
@@ -130,49 +207,4 @@ bool Level1Scene::init()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
     return true;
-}
-
-void Level1Scene::onMouseDown(cocos2d::Event *event) {
-    EventMouse const* e = (EventMouse*)event;
-    float x = e->getCursorX();
-    float y = e->getCursorY();
-    
-    auto particle = ParticleSystemQuad::create("particles/mouse.plist");
-    if (particle == nullptr) {
-        problemLoading("'particles/mouse.plist'");
-    } else {
-        particle->setPosition(Vec2(x, y));
-        this->addChild(particle, 5);
-    }
-}
-
-void Level1Scene::onMouseUp(cocos2d::Event *event) {
-    EventMouse const* e = (EventMouse*)event;
-    if (this->isSelecting && this->selectedTower && e->getMouseButton() == EventMouse::MouseButton::BUTTON_RIGHT) {
-        this->selectedTower->setOpacity(0);
-        this->isSelecting = false;
-    }
-}
-
-void Level1Scene::onMouseMove(cocos2d::Event *event) {
-    EventMouse const* e = (EventMouse*)event;
-    float x = e->getCursorX();
-    float y = e->getCursorY();
-    
-    if (this->isSelecting && this->selectedTower) {
-        auto visibleSize = Director::getInstance()->getVisibleSize();
-        Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        float delta = 140;
-        float typeX = origin.x + 350 + delta;
-        float typeY = origin.y + visibleSize.height - delta;
-        this->selectedTower->setOpacity(255);
-        if (x >= typeX - 0.5f * delta && x <= typeX + 11.5f * delta &&
-            y >= typeY - 6.5f * delta && y <= typeY + 0.5f * delta) {
-            int indexX = (int)((x - typeX + 0.5f * delta) / delta);
-            int indexY = (int)((typeY - y + 0.5f * delta) / delta);
-            this->selectedTower->setPosition(Vec2(typeX + indexX * delta, typeY - indexY * delta));
-        } else {
-            this->selectedTower->setPosition(Vec2(x, y));
-        }
-    }
 }
