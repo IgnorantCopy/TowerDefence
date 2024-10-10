@@ -7,9 +7,17 @@
 
 namespace towerdefence::core {
     struct HighspeedArcherPlus final : Tower {
+        timer::Timer release_skill_;
+        std::unordered_set<id::Id> has_buff_;
+
+        HighspeedArcherPlus(id::Id id, const timer::Clock & clk);
+        HighspeedArcherPlus() = delete;
 
         TowerInfo info() const override { return { 1300, 15, 0, 10, 2, AttackType::Physics }; }
 
+        bool skill = false;
+
+        void on_tick(GridRef g) override;
     };
 } // namespace towerdefence::core
 
