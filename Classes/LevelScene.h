@@ -30,7 +30,6 @@ protected:
     bool isSelecting = false;
     cocos2d::Sprite *selectedTower = nullptr;
 public:
-
     // a selector callback
     void menuCloseCallback(cocos2d::Ref *pSender);
 
