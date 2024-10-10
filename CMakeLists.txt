@@ -133,6 +133,7 @@ list(APPEND GAME_SOURCE
         Classes/AppDelegate.cpp
         Classes/HelloWorldScene.cpp
         Classes/SelectLevelScene.cpp
+        Classes/LevelScene.cpp
         Classes/Level1Scene.cpp
         Classes/Level2Scene.cpp
         Classes/Level3Scene.cpp
@@ -141,6 +142,7 @@ list(APPEND GAME_HEADER
         Classes/AppDelegate.h
         Classes/HelloWorldScene.h
         Classes/SelectLevelScene.h
+        Classes/LevelScene.h
         Classes/Level1Scene.h
         Classes/Level2Scene.h
         Classes/Level3Scene.h
