@@ -19,6 +19,7 @@ Sprite* LevelScene::getTower(Id id) {
             return pair.second;
         }
     }
+    return nullptr;
 }
 
 Sprite* LevelScene::getEnemy(Id id) {
@@ -27,6 +28,7 @@ Sprite* LevelScene::getEnemy(Id id) {
             return pair.second;
         }
     }
+    return nullptr;
 }
 
 void LevelScene::cancelSelect() {
@@ -280,7 +282,6 @@ void LevelScene::onMouseMove(cocos2d::Event *event) {
     if (this->isSelecting && this->selectedTower) {
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        float SIZE = 140;
         float typeX = origin.x + 350 + SIZE;
         float typeY = origin.y + visibleSize.height - SIZE;
         this->selectedTower->setVisible(true);
