@@ -179,6 +179,10 @@ struct RouteMixin {
 };
 
 enum class AttackType { Physics, Magic, Real };
+enum class TowerType { ArcherBase, HighspeedArcher, HighspeedArcherPlus, Bomber, BomberPlus, Archer, ArcherPlus,
+        MagicianBase, CoreMagician, CoreMagicianPlus, DiffusiveMagician, DiffusiveMagicianPlus, SpecialMagician,
+    SpecialMagicianPlus, HelperBase, DecelerateMagician, DecelerateMagicianPlus, WeakenMagician, WeakenMagicianPlus,
+    AggressiveMagician, AggressiveMagicianPlus};
 
 struct EnemyInfo {
     int32_t health_ = 0;
@@ -248,6 +252,8 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
 
         return base;
     }
+
+    TowerType type;
 
     void on_tick(GridRef g) override;
 };
