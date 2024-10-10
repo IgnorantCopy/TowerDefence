@@ -122,7 +122,7 @@ struct Map {
     std::unordered_map<id::Id, std::pair<size_t, size_t>> enemy_refs_;
     std::unordered_map<id::Id, std::pair<size_t, size_t>> tower_refs_;
 
-    uint32_t cost_ = 0;
+    uint32_t cost_ = 10;
 
   public:
     struct iterator {
