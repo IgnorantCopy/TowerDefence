@@ -96,7 +96,7 @@ bool Level1Scene::init()
     createMap(1);
     for(size_t i = 0; i < height; i++) {
         for (size_t j = 0; j < width; j++) {
-            Grid::Type type_ = map->grids[map->shape.index_of(i, j)].type;
+            Grid::Type type_ = getGrid(i, j).type;
             if(type_ != Grid::Type::None) {
                 grid[i][j] = ui::Button::create(images[type_], images[type_]);
                 grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
