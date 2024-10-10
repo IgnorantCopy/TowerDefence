@@ -32,14 +32,14 @@ std::vector<GridRef>::iterator get_enemy_grid(Tower &tower,
             auto a1 = std::min_element(
                 a.grid.enemies.begin(), a.grid.enemies.end(),
                 [](std::unique_ptr<Enemy> &x, std::unique_ptr<Enemy> &y) {
-                    return x->get_distance() < y->get_distance();
+                    return x->remaining_distance() < y->remaining_distance();
                 });
             auto b1 = std::min_element(
                 b.grid.enemies.begin(), b.grid.enemies.end(),
                 [](std::unique_ptr<Enemy> &x, std::unique_ptr<Enemy> &y) {
-                    return x->get_distance() < y->get_distance();
+                    return x->remaining_distance() < y->remaining_distance();
                 });
-            return (*a1)->get_distance() < (*b1)->get_distance();
+            return (*a1)->remaining_distance() < (*b1)->remaining_distance();
         });
 }
 
@@ -51,7 +51,7 @@ void single_attack(Tower &tower, GridRef enemy_grid) {
     auto target_enemy = std::min_element(
         enemy_grid.grid.enemies.begin(), enemy_grid.grid.enemies.end(),
         [](std::unique_ptr<Enemy> &x, std::unique_ptr<Enemy> &y) {
-            return x->get_distance() < y->get_distance();
+            return x->remaining_distance() < y->remaining_distance();
         });
     (*target_enemy)
         ->increase_attack(tower.status().attack_, tower.status().attack_type_);

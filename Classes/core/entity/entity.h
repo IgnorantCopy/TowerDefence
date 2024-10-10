@@ -12,6 +12,7 @@
 
 #include "../id.h"
 #include "../timer.h"
+#include "route.h"
 
 namespace towerdefence {
 namespace core {
@@ -170,6 +171,13 @@ struct Entity {
     virtual ~Entity() {};
 };
 
+struct RouteMixin {
+    route::Route route_;
+
+    route::Route &route() { return this->route_; }
+    const route::Route &route() const { return this->route_; }
+};
+
 enum class AttackType { Physics, Magic, Real };
 
 struct EnemyInfo {
@@ -181,14 +189,16 @@ struct EnemyInfo {
         : health_(health), defence_(defence), speed_(speed) {}
 };
 
-struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
-    Enemy(id::Id id) : IdMixin{id} {}
+struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin, RouteMixin {
+    Enemy(id::Id id, route::Route route) : IdMixin{id}, RouteMixin{route} {}
 
     virtual EnemyInfo info() const = 0;
 
     void increase_attack(int32_t atk, AttackType attack_type);
 
-    size_t get_distance() const { return 0; } // todo
+    size_t remaining_distance() const {
+        return this->route_.remaining_distance();
+    }
 
     // Calculates current defence and speed that takes buffs into account
     // and current health_ = info().health_ - realized_attack
@@ -254,6 +264,8 @@ struct EnemyFactoryBase {
 };
 
 template <class T> struct EnemyFactory final : EnemyFactoryBase {
+    route::Route route;
+
     std::unique_ptr<Enemy> construct(id::Id id,
                                      const timer::Clock &clk) override;
 };
@@ -261,10 +273,11 @@ template <class T> struct EnemyFactory final : EnemyFactoryBase {
 template <class T>
 std::unique_ptr<Enemy> EnemyFactory<T>::construct(id::Id id,
                                                   const timer::Clock &clk) {
-    if constexpr (std::is_constructible_v<T, id::Id, const timer::Clock &>) {
-        return std::make_unique<T>(id, clk);
-    } else if constexpr (std::is_constructible_v<T, id::Id>) {
-        return std::make_unique<T>(id);
+    if constexpr (std::is_constructible_v<T, id::Id, route::Route,
+                                          const timer::Clock &>) {
+        return std::make_unique<T>(id, route, clk);
+    } else if constexpr (std::is_constructible_v<T, id::Id, route::Route>) {
+        return std::make_unique<T>(id, route);
     } else {
         static_assert(false, "Unsupported type");
     }
