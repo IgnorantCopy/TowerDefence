@@ -45,6 +45,7 @@ using namespace towerdefence::core;
 using towerdefence::core::id::Id;
 
 class LevelScene : public cocos2d::Scene {
+
 protected:
     // the map of each level
     Map *map = nullptr;
@@ -58,14 +59,35 @@ protected:
     // the button of each grid
     cocos2d::ui::Button* grid[7][12]={ nullptr };
 
-    // the tower on the map
-    std::vector<std::pair<Id,cocos2d::Sprite*>> towers;
-    // the enemy on the map
-    std::vector<std::pair<Id,cocos2d::Sprite*>> enemies;
+    // enemies
+    std::vector<std::pair<Id, cocos2d::Sprite*>> enemies;
+    // towers
+    std::vector<std::pair<Id, cocos2d::Sprite*>> towers;
 
     // select tower
-    bool isSelecting = false;
+    int isSelecting = 0;
     cocos2d::Sprite *selectedTower = nullptr;
+    cocos2d::Label *moneyLabel = nullptr;
+
+    // tower info
+    Id selectedTowerId;
+    bool isShowingTowerInfo = false;
+    cocos2d::MenuItemImage *deleteItem = nullptr;
+    cocos2d::MenuItemImage *upgradeItem = nullptr;
+    cocos2d::MenuItemImage *towerInfoItem = nullptr;
+    cocos2d::MenuItemImage *skillItem = nullptr;
+
+    cocos2d::Sprite* getTower(Id id);
+    cocos2d::Sprite* getEnemy(Id id);
+    void deleteTower();
+    void upgradeTower();
+    void showTowerInfo();
+    void executeSkill();
+
+    void cancelSelect();
+    void putTower(float x, float y);
+    void showTowerInfo(float x, float y);
+    void hideTowerInfo(float x, float y);
 
 public:
     // a selector callback
@@ -73,12 +95,12 @@ public:
 
     // create the map
     void createMap(int level);
-    // get the grid at (x,y)
-    Grid& getGrid(size_t x, size_t y);
-    // find the tower by id
-    cocos2d::Sprite* findTower(Id id);
-    // find the enemy by id
-    cocos2d::Sprite* findEnemy(Id id);
+
+    void onMouseDown(cocos2d::Event *event);
+
+    void onMouseUp(cocos2d::Event *event);
+
+    void onMouseMove(cocos2d::Event *event);
 
     ~LevelScene() override;
 };
