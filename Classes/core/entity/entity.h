@@ -301,6 +301,18 @@ template <class T> struct TowerFactory : TowerFactoryBase {
     TowerInfo info() const override;
 };
 
+template <class T>
+std::unique_ptr<Tower> TowerFactory<T>::construct(id::Id id,
+                                                  const timer::Clock &clk) {
+    if constexpr (std::is_constructible_v<T, id::Id, const timer::Clock &>) {
+        return std::make_unique<T>(id, clk);
+    } else if constexpr (std::is_constructible_v<T, id::Id>) {
+        return std::make_unique<T>(id);
+    } else {
+        static_assert(false, "Unsupported type");
+    }
+}
+
 template <class T> TowerInfo TowerFactory<T>::info() const { return T::INFO; }
 
 } // namespace core
