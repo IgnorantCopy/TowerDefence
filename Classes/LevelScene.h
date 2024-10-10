@@ -34,11 +34,19 @@ protected:
     cocos2d::Label *moneyLabel = nullptr;
     
     // tower info
+    Id selectedTowerId;
     bool isShowingTowerInfo = false;
     cocos2d::MenuItemImage *deleteItem = nullptr;
     cocos2d::MenuItemImage *upgradeItem = nullptr;
     cocos2d::MenuItemImage *towerInfoItem = nullptr;
     cocos2d::MenuItemImage *skillItem = nullptr;
+    
+    cocos2d::Sprite* getTower(Id id);
+    cocos2d::Sprite* getEnemy(Id id);
+    void deleteTower();
+    void upgradeTower();
+    void showTowerInfo();
+    void executeSkill();
     
     void cancelSelect();
     void putTower(float x, float y);

@@ -83,8 +83,9 @@ bool Level1Scene::init()
             "images/delete.png",
             "images/delete.png",
             [this](Ref *ref) {
-                // TODO: delete the tower
-                log("delete");
+                scheduleOnce([this](float dt) {
+                    this->deleteTower();
+                }, 0.2f, "deleteTower");
             }
     );
     this->deleteItem->setVisible(false);
