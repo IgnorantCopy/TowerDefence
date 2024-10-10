@@ -240,6 +240,9 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
     void on_tick(GridRef g) override;
 };
 
+auto get_enemy_grid(Tower&,std::vector<GridRef>&) -> std::vector<GridRef>::iterator ;
+void single_attack(Tower&, GridRef);
+
 struct Map;
 
 struct EnemyFactoryBase {
