@@ -120,7 +120,7 @@ void LevelScene::onMouseDown(cocos2d::Event *event) {
                     auto newTowerSprite = Sprite::create(path);
                     newTowerSprite->setPosition(Vec2(typeX + indexX * delta, typeY - indexY * delta));
                     this->addChild(newTowerSprite, 3);
-//                    this->towers[newId] = newTowerSprite;
+                    this->towers.push_back(std::make_pair(newId, newTowerSprite));
                 }
                 this->cancelSelect();
             }

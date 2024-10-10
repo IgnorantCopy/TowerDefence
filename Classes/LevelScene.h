@@ -25,9 +25,9 @@ protected:
     cocos2d::ui::Button* grid[7][12]={ nullptr };
     
     // enemies
-    std::map<Id, cocos2d::Sprite*> enemies;
+    std::vector<std::pair<Id, cocos2d::Sprite*>> enemies;
     // towers
-    std::map<Id, cocos2d::Sprite*> towers;
+    std::vector<std::pair<Id, cocos2d::Sprite*>> towers;
 
     // select tower
     int isSelecting = 0;
