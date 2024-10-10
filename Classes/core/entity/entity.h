@@ -9,7 +9,6 @@
 #include <optional>
 #include <unordered_map>
 #include <utility>
-#include <cassert>
 
 #include "../id.h"
 #include "../timer.h"
@@ -38,11 +37,9 @@ struct Defence {
 
 struct AttackMixin {
     int32_t realized_attack_ = 0;
-
-
 };
 
-#define BUFF_CONSTRUCTOR(type, name)                                            \
+#define BUFF_CONSTRUCTOR(type, name)                                           \
     static constexpr Buff name(type name) {                                    \
         Buff b;                                                                \
         b.name##_ = name;                                                      \
@@ -84,19 +81,20 @@ struct Buff {
     constexpr Buff() = default;
     constexpr Buff(int32_t attack_speed, double speed, double attack,
                    double real_attack, Defence defence_correction,
-                   int32_t attack_radius,
-                   bool invincible, bool silent, bool attack_stop)
+                   int32_t attack_radius, bool invincible, bool silent,
+                   bool attack_stop)
         : attack_speed_(attack_speed), speed_(speed), attack_(attack),
           real_attack_(real_attack), defence_correction_(defence_correction),
-          attack_radius_(attack_radius),
-          invincible_(invincible), silent_(silent), attack_stop_(attack_stop) {}
+          attack_radius_(attack_radius), invincible_(invincible),
+          silent_(silent), attack_stop_(attack_stop) {}
 
     Buff operator&(const Buff &rhs) const {
         return Buff(attack_speed_ + rhs.attack_speed_, speed_ + rhs.speed_,
                     attack_ + rhs.attack_, real_attack_ + rhs.real_attack_,
                     defence_correction_ + rhs.defence_correction_,
-                    attack_radius_ + rhs.attack_radius_, invincible_ || rhs.invincible_,
-                    silent_ || rhs.silent_, attack_stop_ || rhs.attack_stop_);
+                    attack_radius_ + rhs.attack_radius_,
+                    invincible_ || rhs.invincible_, silent_ || rhs.silent_,
+                    attack_stop_ || rhs.attack_stop_);
     }
 };
 
@@ -188,9 +186,9 @@ struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
 
     virtual EnemyInfo info() const = 0;
 
-    void increase_attack(int32_t atk,AttackType attack_type);
+    void increase_attack(int32_t atk, AttackType attack_type);
 
-    size_t get_distance() const {return 0;}//todo
+    size_t get_distance() const { return 0; } // todo
 
     // Calculates current defence and speed that takes buffs into account
     // and current health_ = info().health_ - realized_attack
@@ -208,7 +206,6 @@ struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
     void on_tick(GridRef g) override;
 };
 
-
 struct TowerInfo {
     int32_t attack_ = 0;
     int32_t cost_ = 0;
@@ -218,9 +215,11 @@ struct TowerInfo {
     AttackType attack_type_;
 
     constexpr TowerInfo(int32_t attack, int32_t cost, int32_t deploy_interval,
-                        double attack_interval, int32_t attack_radius, AttackType attack_type)
+                        double attack_interval, int32_t attack_radius,
+                        AttackType attack_type)
         : attack_(attack), cost_(cost), deploy_interval_(deploy_interval),
-          attack_interval_(attack_interval), attack_radius_(attack_radius), attack_type_(attack_type) {}
+          attack_interval_(attack_interval), attack_radius_(attack_radius),
+          attack_type_(attack_type) {}
 };
 
 struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
@@ -232,9 +231,10 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
         auto base = info();
         auto buffs = get_all_buff();
 
-        base.attack_+=buffs.attack_;
-        base.attack_interval_=base.attack_interval_/(double (100+buffs.attack_speed_)/100);
-        base.attack_radius_+=buffs.attack_radius_;
+        base.attack_ += buffs.attack_;
+        base.attack_interval_ =
+            base.attack_interval_ / (double(100 + buffs.attack_speed_) / 100);
+        base.attack_radius_ += buffs.attack_radius_;
 
         return base;
     }
@@ -242,8 +242,9 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
     void on_tick(GridRef g) override;
 };
 
-auto get_enemy_grid(Tower&,std::vector<GridRef>&) -> std::vector<GridRef>::iterator ;
-void single_attack(Tower&, GridRef);
+auto get_enemy_grid(Tower &,
+                    std::vector<GridRef> &) -> std::vector<GridRef>::iterator;
+void single_attack(Tower &, GridRef);
 
 struct Map;
 
