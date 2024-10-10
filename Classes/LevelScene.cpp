@@ -17,8 +17,154 @@ static void problemLoading(const char* filename) {
 }
 
 void LevelScene::cancelSelect() {
-    this->selectedTower->setOpacity(0);
+    this->selectedTower->setVisible(false);
     this->isSelecting = 0;
+}
+
+void LevelScene::putTower(float x, float y) {
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    float typeX = origin.x + 350 + SIZE;
+    float typeY = origin.y + visibleSize.height - SIZE;
+    if (x >= typeX - 0.5f * SIZE && x <= typeX + 11.5f * SIZE &&
+        y >= typeY - 6.5f * SIZE && y <= typeY + 0.5f * SIZE) {
+        int indexX = (int) ((x - typeX + 0.5f * SIZE) / SIZE);
+        int indexY = (int) ((typeY - y + 0.5f * SIZE) / SIZE);
+        if (this->type[indexY][indexX] == Grid::Type::BlockTower) {
+            if (!this->map->get_ref(indexY, indexX).grid.tower.has_value()) {
+                std::string path = "images/towers/";
+                Tower *newTower;
+                Id newId = this->map->assign_id();
+                switch (this->isSelecting) {
+                    case 1:
+                        path += "archer_base_onblock.png";
+                        newTower = new ArcherBase(newId, this->map->get_ref(indexY, indexX).clock());
+                        break;
+                    case 2:
+                        path += "magician_base_onblock.png";
+                        newTower = new MagicianBase(newId, this->map->get_ref(indexY, indexX).clock());
+                        break;
+                    case 3:
+                        path += "helper_base_onblock.png";
+                        newTower = new HelperBase(newId, this->map->get_ref(indexY, indexX).clock());
+                        break;
+                    default:
+                        break;
+                }
+                this->map->get_ref(indexY, indexX).grid.tower.emplace(newTower);
+                auto newTowerSprite = Sprite::create(path);
+                newTowerSprite->setPosition(Vec2(typeX + indexX * SIZE, typeY - indexY * SIZE));
+                this->addChild(newTowerSprite, 3);
+                this->towers.push_back(std::make_pair(newId, newTowerSprite));
+            }
+            scheduleOnce([this](float dt) {
+                this->cancelSelect();
+            }, 0.1f, "cancelSelect");
+        }
+    }
+}
+
+void LevelScene::showTowerInfo(float x, float y) {
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    float typeX = origin.x + 350 + SIZE;
+    float typeY = origin.y + visibleSize.height - SIZE;
+    if (x >= typeX - 0.5f * SIZE && x <= typeX + 11.5f * SIZE &&
+        y >= typeY - 6.5f * SIZE && y <= typeY + 0.5f * SIZE) {
+        int indexX = (int) ((x - typeX + 0.5f * SIZE) / SIZE);
+        int indexY = (int) ((typeY - y + 0.5f * SIZE) / SIZE);
+        if (this->type[indexY][indexX] == Grid::Type::BlockTower &&
+            this->map->get_ref(indexY, indexX).grid.tower.has_value()) {
+            Id towerId = this->map->get_ref(indexY, indexX).grid.tower.value()->id;
+            Sprite* towerSprite = nullptr;
+            for (auto& pair : this->towers) {
+                if (pair.first == towerId) {
+                    towerSprite = pair.second;
+                    break;
+                }
+            }
+            if (towerSprite) {
+                float towerX = towerSprite->getPositionX();
+                float towerY = towerSprite->getPositionY();
+                
+                this->towerInfoItem->setPosition(Vec2(towerX, towerY));
+                this->towerInfoItem->setScale(0.1f);
+                this->towerInfoItem->setVisible(true);
+                
+                this->deleteItem->setPosition(Vec2(towerX, towerY));
+                this->deleteItem->setScale(0.1f);
+                this->deleteItem->setVisible(true);
+                
+                this->upgradeItem->setPosition(Vec2(towerX, towerY));
+                this->upgradeItem->setScale(0.1f);
+                this->upgradeItem->setVisible(true);
+                
+                this->skillItem->setPosition(Vec2(towerX, towerY));
+                this->skillItem->setScale(0.1f);
+                this->skillItem->setVisible(true);
+                
+                auto scale = ScaleBy::create(0.2f, 10);
+                auto move1 = MoveBy::create(0.2f, Vec2(50,  90));
+                auto move2 = MoveBy::create(0.2f, Vec2(-50,  90));
+                auto move3 = MoveBy::create(0.2f, Vec2(50,  -90));
+                auto move4 = MoveBy::create(0.2f, Vec2(-50,  -90));
+                
+                auto towerInfoSpawn = Spawn::create(scale, move3, nullptr);
+                auto deleteSpawn = Spawn::create(scale->clone(), move2, nullptr);
+                auto upgradeSpawn = Spawn::create(scale->clone(), move4, nullptr);
+                auto skillSpawn = Spawn::create(scale->clone(), move1, nullptr);
+                
+                this->towerInfoItem->runAction(towerInfoSpawn);
+                this->deleteItem->runAction(deleteSpawn);
+                this->upgradeItem->runAction(upgradeSpawn);
+                this->skillItem->runAction(skillSpawn);
+                this->isShowingTowerInfo = true;
+                scheduleOnce([this](float dt) {
+                    this->isShowingTowerInfo = false;
+                }, 0.2f, "preventHighSpeed");
+            }
+        }
+    }
+}
+
+void LevelScene::hideTowerInfo(float x, float y) {
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    float typeX = origin.x + 350 + SIZE;
+    float typeY = origin.y + visibleSize.height - SIZE;
+    
+    if (x >= typeX - 0.5f * SIZE && x <= typeX + 11.5f * SIZE &&
+        y >= typeY - 6.5f * SIZE && y <= typeY + 0.5f * SIZE) {
+        int indexX = (int) ((x - typeX + 0.5f * SIZE) / SIZE);
+        int indexY = (int) ((typeY - y + 0.5f * SIZE) / SIZE);
+        if (this->type[indexY][indexX] == Grid::Type::BlockTower &&
+            this->map->get_ref(indexY, indexX).grid.tower.has_value()) {
+            return;
+        }
+    }
+    
+    auto scale = ScaleBy::create(0.2f, 0.1f);
+    auto move1 = MoveBy::create(0.2f, Vec2(-50, -90));
+    auto move2 = MoveBy::create(0.2f, Vec2(50, -90));
+    auto move3 = MoveBy::create(0.2f, Vec2(-50, 90));
+    auto move4 = MoveBy::create(0.2f, Vec2(50, 90));
+    
+    auto towerInfoSpawn = Spawn::create(scale, move3, nullptr);
+    auto deleteSpawn = Spawn::create(scale->clone(), move2, nullptr);
+    auto upgradeSpawn = Spawn::create(scale->clone(), move4, nullptr);
+    auto skillSpawn = Spawn::create(scale->clone(), move1, nullptr);
+    
+    this->towerInfoItem->runAction(towerInfoSpawn);
+    this->deleteItem->runAction(deleteSpawn);
+    this->upgradeItem->runAction(upgradeSpawn);
+    this->skillItem->runAction(skillSpawn);
+    this->isShowingTowerInfo = false;
+    scheduleOnce([this](float dt) {
+        this->towerInfoItem->setVisible(false);
+        this->deleteItem->setVisible(false);
+        this->upgradeItem->setVisible(false);
+        this->skillItem->setVisible(false);
+    }, 0.2f, "hideTowerInfo");
 }
 
 void LevelScene::menuCloseCallback(cocos2d::Ref *pSender)
@@ -84,47 +230,12 @@ void LevelScene::onMouseDown(cocos2d::Event *event) {
         particle->setPosition(Vec2(x, y));
         this->addChild(particle, 5);
     }
-    
+    this->hideTowerInfo(x, y);
     if (this->isSelecting && this->selectedTower) {
-        auto visibleSize = Director::getInstance()->getVisibleSize();
-        Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        float delta = 140;
-        float typeX = origin.x + 350 + delta;
-        float typeY = origin.y + visibleSize.height - delta;
-        if (x >= typeX - 0.5f * delta && x <= typeX + 11.5f * delta &&
-            y >= typeY - 6.5f * delta && y <= typeY + 0.5f * delta) {
-            int indexX = (int) ((x - typeX + 0.5f * delta) / delta);
-            int indexY = (int) ((typeY - y + 0.5f * delta) / delta);
-            if (this->type[indexY][indexX] == Grid::Type::BlockTower) {
-                if (!this->map->get_ref(indexY, indexX).grid.tower.has_value()) {
-                    std::string path = "images/towers/";
-                    Tower *newTower;
-                    Id newId = this->map->assign_id();
-                    switch (this->isSelecting) {
-                        case 1:
-                            path += "archer_base_onblock.png";
-                            newTower = new ArcherBase(newId, this->map->get_ref(indexY, indexX).clock());
-                            break;
-                        case 2:
-                            path += "magician_base_onblock.png";
-                            newTower = new MagicianBase(newId, this->map->get_ref(indexY, indexX).clock());
-                            break;
-                        case 3:
-                            path += "helper_base_onblock.png";
-                            newTower = new HelperBase(newId, this->map->get_ref(indexY, indexX).clock());
-                            break;
-                        default:
-                            break;
-                    }
-                    this->map->get_ref(indexY, indexX).grid.tower.emplace(newTower);
-                    auto newTowerSprite = Sprite::create(path);
-                    newTowerSprite->setPosition(Vec2(typeX + indexX * delta, typeY - indexY * delta));
-                    this->addChild(newTowerSprite, 3);
-                    this->towers.push_back(std::make_pair(newId, newTowerSprite));
-                }
-                this->cancelSelect();
-            }
-        }
+        this->putTower(x, y);
+    }
+    if (!this->isSelecting && !this->isShowingTowerInfo) {
+        this->showTowerInfo(x, y);
     }
 }
 
@@ -143,16 +254,16 @@ void LevelScene::onMouseMove(cocos2d::Event *event) {
     if (this->isSelecting && this->selectedTower) {
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        float delta = 140;
-        float typeX = origin.x + 350 + delta;
-        float typeY = origin.y + visibleSize.height - delta;
-        this->selectedTower->setOpacity(255);
-        if (x >= typeX - 0.5f * delta && x <= typeX + 11.5f * delta &&
-            y >= typeY - 6.5f * delta && y <= typeY + 0.5f * delta) {
-            int indexX = (int)((x - typeX + 0.5f * delta) / delta);
-            int indexY = (int)((typeY - y + 0.5f * delta) / delta);
+        float SIZE = 140;
+        float typeX = origin.x + 350 + SIZE;
+        float typeY = origin.y + visibleSize.height - SIZE;
+        this->selectedTower->setVisible(true);
+        if (x >= typeX - 0.5f * SIZE && x <= typeX + 11.5f * SIZE &&
+            y >= typeY - 6.5f * SIZE && y <= typeY + 0.5f * SIZE) {
+            int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+            int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
             if (this->type[indexY][indexX] == Grid::Type::BlockTower) {
-                this->selectedTower->setPosition(Vec2(typeX + indexX * delta, typeY - indexY * delta));
+                this->selectedTower->setPosition(Vec2(typeX + indexX * SIZE, typeY - indexY * SIZE));
             } else {
                 this->selectedTower->setPosition(Vec2(x, y));
             }

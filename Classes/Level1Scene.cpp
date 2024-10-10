@@ -42,7 +42,7 @@ bool Level1Scene::init()
     
     float gap = 300;
     this->selectedTower = Sprite::create("images/towers/archer_base_onblock.png");
-    this->selectedTower->setOpacity(0);
+    this->selectedTower->setVisible(false);
     this->selectedTower->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
     this->addChild(this->selectedTower, 5);
     auto archerBaseSelector = MenuItemImage::create(
@@ -77,6 +77,44 @@ bool Level1Scene::init()
     );
     helperBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
                                          origin.y + 1680 - visibleSize.height));
+    
+    // tower info
+    this->deleteItem = MenuItemImage::create(
+            "images/delete.png",
+            "images/delete.png",
+            [this](Ref *ref) {
+                // TODO: delete the tower
+                log("delete");
+            }
+    );
+    this->deleteItem->setVisible(false);
+    this->upgradeItem = MenuItemImage::create(
+            "images/upgrade.png",
+            "images/upgrade.png",
+            [this](Ref *ref) {
+                // TODO: upgrade the tower
+                log("upgrade");
+            }
+    );
+    this->upgradeItem->setVisible(false);
+    this->towerInfoItem = MenuItemImage::create(
+            "images/info.png",
+            "images/info.png",
+            [this](Ref *ref) {
+                // TODO: show the tower info
+                log("info");
+            }
+    );
+    this->towerInfoItem->setVisible(false);
+    this->skillItem = MenuItemImage::create(
+            "images/towers/skill_icon/archer_base.png",
+            "images/towers/skill_icon/archer_base.png",
+            [this](Ref *ref) {
+                // TODO: execute the skill
+                log("skill");
+            }
+    );
+    this->skillItem->setVisible(false);
     
     // the back button to go back to the SelectLevel scene
     auto Back=Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
@@ -152,8 +190,12 @@ bool Level1Scene::init()
     MenuItems.pushBack(archerBaseSelector);
     MenuItems.pushBack(magicianBaseSelector);
     MenuItems.pushBack(helperBaseSelector);
+    MenuItems.pushBack(this->deleteItem);
+    MenuItems.pushBack(this->upgradeItem);
+    MenuItems.pushBack(this->towerInfoItem);
+    MenuItems.pushBack(this->skillItem);
     auto menu = Menu::createWithArray(MenuItems);
-    this->addChild(menu, MenuItems.size());
+    this->addChild(menu, 4);
     menu->setPosition(Vec2::ZERO);
     
     // add a mouse click event listener

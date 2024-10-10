@@ -9,8 +9,7 @@ using towerdefence::core::Map;
 using namespace towerdefence::core::id;
 
 class LevelScene : public cocos2d::Scene {
-private:
-    void cancelSelect();
+
 protected:
     // the map of each level
     Map *map = nullptr;
@@ -33,6 +32,19 @@ protected:
     int isSelecting = 0;
     cocos2d::Sprite *selectedTower = nullptr;
     cocos2d::Label *moneyLabel = nullptr;
+    
+    // tower info
+    bool isShowingTowerInfo = false;
+    cocos2d::MenuItemImage *deleteItem = nullptr;
+    cocos2d::MenuItemImage *upgradeItem = nullptr;
+    cocos2d::MenuItemImage *towerInfoItem = nullptr;
+    cocos2d::MenuItemImage *skillItem = nullptr;
+    
+    void cancelSelect();
+    void putTower(float x, float y);
+    void showTowerInfo(float x, float y);
+    void hideTowerInfo(float x, float y);
+    
 public:
     // a selector callback
     void menuCloseCallback(cocos2d::Ref *pSender);
