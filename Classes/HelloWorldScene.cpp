@@ -149,14 +149,13 @@ bool HelloWorld::init()
     MenuItems.pushBack(playItem);
     MenuItems.pushBack(quitItem);
     MenuItems.pushBack(manualItem);
-    menu = Menu::createWithArray(MenuItems);
+    auto menu = Menu::createWithArray(MenuItems);
     this->addChild(menu, 2);
     menu->setPosition(Vec2::ZERO);
     
     // animation for menu
     if (firstTouch) {
         menu->setOpacity(0);
-        menu->setEnabled(false);
         auto delay1 = DelayTime::create(3.8f);
         auto scaleDown = ScaleBy::create(0.1f, 0.1f);
         auto fadeIn = FadeIn::create(0.1f);
@@ -165,7 +164,6 @@ bool HelloWorld::init()
         auto delay2 = DelayTime::create(0.8f);
         auto seq = Sequence::create(delay1, scaleDown, fadeIn, delay2, scaleEase, NULL);
         menu->runAction(seq);
-        scheduleOnce([this](float dt) { menu->setEnabled(true); }, 5.0f, "enableMenu");
     }
     if (firstTouch) {
         firstTouch = false;

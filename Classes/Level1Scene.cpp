@@ -1,7 +1,10 @@
 #include "Level1Scene.h"
+#include "ui/CocosGUI.h"
 #include "SelectLevelScene.h"
 
 USING_NS_CC;
+using towerdefence::core::Grid;
+using towerdefence::core::Map;
 
 Scene* Level1Scene::createScene()
 {
@@ -77,7 +80,7 @@ bool Level1Scene::init()
     );
     helperBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
                                          origin.y + 1680 - visibleSize.height));
-    
+
     // the back button to go back to the SelectLevel scene
     auto Back=Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
     auto backItem=MenuItemLabel::create(
@@ -93,18 +96,29 @@ bool Level1Scene::init()
     float delta = 140;
     float x = origin.x + 350 + delta;
     float y = origin.y + visibleSize.height - delta;
-    createMap(1);
-    for(int i = 0; i < height; i++) {
-        for (int j = 0; j < width; j++) {
-            Grid::Type type_ = getGrid(i, j).type;
-            if(type_ != Grid::Type::None) {
-                grid[i][j] = ui::Button::create(images[type_], images[type_]);
+    float SIZE = 140.0;
+    ui::Button* grid[7][12]={};
+    Grid::Type type[7][12]={ Grid::Type::BlockPath };
+    type[0][0]=type[0][11]=type[2][11]=type[3][11]=type[4][11]=type[6][0]=Grid::Type::BlockOut;
+    type[2][0]=type[3][0]=type[4][0]=type[6][11]=Grid::Type::BlockIn;
+    type[0][7]=type[6][7]=Grid::Type::BlockTransport;
+    type[0][5]=type[0][6]=type[1][0]=type[1][8]=type[1][9]=type[1][10]=
+    type[1][11]=type[5][0]=type[5][7]=type[5][11]=type[6][6]=Grid::Type::None;
+    type[1][1]=type[1][2]=type[1][3]=type[1][5]=type[1][6]=type[1][7]=type[3][2]=type[4][6]=type[4][7]=type[5][1]=type[5][2]=
+    type[5][3]=type[5][4]=type[5][6]=type[5][8]=type[5][9]=type[5][10]=Grid::Type::BlockTower;
+    std::vector<std::string> images = { "images/block_low.png", "images/in.png", "images/out.png",
+                                        "images/block_transport.png", "images/block_high.png" };
+
+    for(size_t i = 0; i < 7; i++) {
+        for (size_t j = 0; j < 12; j++) {
+            if(type[i][j] != Grid::Type::None) {
+                grid[i][j] = ui::Button::create(images[type[i][j]], images[type[i][j]]);
                 grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
                 this->addChild(grid[i][j], 2);
             }
         }
     }
-    
+
     auto blockBackground = Sprite::create("images/block_background.png", Rect(0, 0, 1680, 980));
     if(blockBackground == nullptr) {
         problemLoading("'images/block_background.png'");
@@ -113,8 +127,7 @@ bool Level1Scene::init()
         this->addChild(blockBackground, 1);
     }
 
-    // the menu
-    cocos2d::Vector<cocos2d::MenuItem*> MenuItems;
+    Vector<MenuItem*> MenuItems;
     MenuItems.pushBack(backItem);
     MenuItems.pushBack(archerBaseSelector);
     MenuItems.pushBack(magicianBaseSelector);
@@ -122,7 +135,7 @@ bool Level1Scene::init()
     auto menu = Menu::createWithArray(MenuItems);
     this->addChild(menu, MenuItems.size());
     menu->setPosition(Vec2::ZERO);
-    
+
     // add a mouse click event listener
     auto mouseListener = EventListenerMouse::create();
     mouseListener->onMouseDown = CC_CALLBACK_1(Level1Scene::onMouseDown, this);
@@ -133,11 +146,23 @@ bool Level1Scene::init()
     return true;
 }
 
+void Level1Scene::menuCloseCallback(cocos2d::Ref *pSender)
+{
+    //Close the cocos2d-x game scene and quit the application
+    Director::getInstance()->end();
+
+    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
+
+    //EventCustom customEndEvent("game_scene_close_event");
+    //_eventDispatcher->dispatchEvent(&customEndEvent);
+
+}
+
 void Level1Scene::onMouseDown(cocos2d::Event *event) {
     EventMouse const* e = (EventMouse*)event;
     float x = e->getCursorX();
     float y = e->getCursorY();
-    
+
     auto particle = ParticleSystemQuad::create("particles/mouse.plist");
     if (particle == nullptr) {
         problemLoading("'particles/mouse.plist'");
@@ -159,7 +184,7 @@ void Level1Scene::onMouseMove(cocos2d::Event *event) {
     EventMouse const* e = (EventMouse*)event;
     float x = e->getCursorX();
     float y = e->getCursorY();
-    
+
     if (this->isSelecting && this->selectedTower) {
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
@@ -171,7 +196,13 @@ void Level1Scene::onMouseMove(cocos2d::Event *event) {
             y >= typeY - 6.5f * delta && y <= typeY + 0.5f * delta) {
             int indexX = (int)((x - typeX + 0.5f * delta) / delta);
             int indexY = (int)((typeY - y + 0.5f * delta) / delta);
-            this->selectedTower->setPosition(Vec2(typeX + indexX * delta, typeY - indexY * delta));
+            Grid 
+            if (getGrid(indexX, indexY).type == Grid::Type::BlockTower && get) {
+                this->selectedTower->setPosition(Vec2(x, y));
+            } else {
+                this->selectedTower->setPosition(Vec2(typeX + indexX * delta, typeY - indexY * delta));
+                if (getGrid(indexX, indexY)))
+            }
         } else {
             this->selectedTower->setPosition(Vec2(x, y));
         }

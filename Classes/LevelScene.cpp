@@ -59,6 +59,26 @@ Grid& LevelScene::getGrid(size_t x, size_t y)
     return map->grids[map->shape.index_of(x,y)];
 }
 
+cocos2d::Sprite* LevelScene::findTower(Id id)
+{
+    for (auto& tower : towers)
+    {
+        if (tower.first == id)
+            return tower.second;
+    }
+    return nullptr;
+}
+
+cocos2d::Sprite* LevelScene::findEnemy(Id id)
+{
+    for (auto& enemy : enemies)
+    {
+        if (enemy.first == id)
+            return enemy.second;
+    }
+    return nullptr;
+}
+
 LevelScene::~LevelScene()
 {
     delete map; map=nullptr;
