@@ -42,11 +42,14 @@ std::vector<GridRef>::iterator get_enemy_grid(Tower& tower,std::vector<GridRef>&
 }
 
 void single_attack(Tower& tower, GridRef enemy_grid){
+    auto buffs=tower.get_all_buff();
+    if(buffs.attack_stop_){
+        return;
+    }
     auto target_enemy=std::min_element(enemy_grid.grid.enemies.begin(),enemy_grid.grid.enemies.end(),[](std::unique_ptr<Enemy>& x, std::unique_ptr<Enemy>& y){
         return x->get_distance() < y->get_distance();
     });
     (*target_enemy)->increase_attack(tower.status().attack_,tower.status().attack_type_);
-    auto buffs=tower.get_all_buff();
     if(buffs.real_attack_>0){
         (*target_enemy)->increase_attack(tower.status().attack_*buffs.real_attack_,AttackType::Real);
     }
