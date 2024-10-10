@@ -207,10 +207,21 @@ struct Map {
         enemy_refs_[id] = {row, col};
     }
 
-    id::Id spawn_tower_at(size_t row, size_t column, TowerFactoryBase &tower) {
+    std::optional<id::Id> spawn_tower_at(size_t row, size_t column, TowerFactoryBase &tower) {
         auto &grid = grids.at(shape.index_of(row, column));
+
+        if (grid.tower.has_value()) {
+            return {};
+        }
+
+        auto info = tower.info();
+        if (info.cost_ > this->cost_) {
+            return {};
+        }
+
+        this->cost_ -= info.cost_;
+
         auto id = assign_id();
-        assert(!grid.tower.has_value());
         grid.tower = tower.construct(id, clock());
 
         tower_refs_.insert({id, {row, column}});
@@ -326,7 +337,7 @@ struct GridRef {
         return this->map.spawn_enemy_at(this->row, this->column, enemy);
     }
 
-    id::Id spawn_tower(TowerFactoryBase &tower) {
+    std::optional<id::Id> spawn_tower(TowerFactoryBase &tower) {
         return this->map.spawn_tower_at(this->row, this->column, tower);
     }
 
