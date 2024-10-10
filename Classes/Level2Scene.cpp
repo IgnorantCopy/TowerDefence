@@ -112,6 +112,8 @@ bool Level2Scene::init()
     // add a mouse click event listener
     auto mouseListener = EventListenerMouse::create();
     mouseListener->onMouseDown = CC_CALLBACK_1(Level2Scene::onMouseDown, this);
+    mouseListener->onMouseMove = CC_CALLBACK_1(Level2Scene::onMouseMove, this);
+    mouseListener->onMouseUp = CC_CALLBACK_1(Level2Scene::onMouseUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
     
     return true;
