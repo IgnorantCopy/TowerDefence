@@ -4,6 +4,7 @@ build
 build-doc
 *.mp4
 
+.vs
 .cache
 .devenv
 .direnv
