@@ -322,6 +322,14 @@ struct GridRef {
         }
     }
 
+    id::Id spawn_enemy(EnemyFactoryBase &enemy) {
+        return this->map.spawn_enemy_at(this->row, this->column, enemy);
+    }
+
+    id::Id spawn_tower(TowerFactoryBase &tower) {
+        return this->map.spawn_tower_at(this->row, this->column, tower);
+    }
+
     const timer::Clock &clock() const { return map.clock(); }
     Grid &current() { return grid; }
 };
