@@ -9,6 +9,7 @@
 #include <optional>
 #include <unordered_map>
 #include <utility>
+#include <cassert>
 
 #include "../id.h"
 #include "../timer.h"
@@ -38,10 +39,10 @@ struct Defence {
 struct AttackMixin {
     int32_t realized_attack_ = 0;
 
-    void increase_attack(int32_t atk) { realized_attack_ += atk; }
+
 };
 
-#define BUFF_CONSTUCTOR(type, name)                                            \
+#define BUFF_CONSTRUCTOR(type, name)                                            \
     static constexpr Buff name(type name) {                                    \
         Buff b;                                                                \
         b.name##_ = name;                                                      \
@@ -62,15 +63,17 @@ struct Buff {
     int32_t attack_radius_ = 0;
     bool invincible_ = false;
     bool silent_ = false;
+    bool attack_stop_ = false;
 
-    BUFF_CONSTUCTOR(int32_t, attack_speed)
-    BUFF_CONSTUCTOR(double, speed)
-    BUFF_CONSTUCTOR(double, attack)
-    BUFF_CONSTUCTOR(double, real_attack)
-    BUFF_CONSTUCTOR(Defence, defence_correction)
-    BUFF_CONSTUCTOR(int32_t, attack_radius)
-    BUFF_CONSTUCTOR(bool, invincible)
-    BUFF_CONSTUCTOR(bool, silent)
+    BUFF_CONSTRUCTOR(int32_t, attack_speed)
+    BUFF_CONSTRUCTOR(double, speed)
+    BUFF_CONSTRUCTOR(double, attack)
+    BUFF_CONSTRUCTOR(double, real_attack)
+    BUFF_CONSTRUCTOR(Defence, defence_correction)
+    BUFF_CONSTRUCTOR(int32_t, attack_radius)
+    BUFF_CONSTRUCTOR(bool, invincible)
+    BUFF_CONSTRUCTOR(bool, silent)
+    BUFF_CONSTRUCTOR(bool, attack_stop)
 
     static constexpr uint32_t DEFAULT = 0;
     static constexpr uint32_t INVINCIBLE = 1;
@@ -82,18 +85,18 @@ struct Buff {
     constexpr Buff(int32_t attack_speed, double speed, double attack,
                    double real_attack, Defence defence_correction,
                    int32_t attack_radius,
-                   bool invincible, bool silent)
+                   bool invincible, bool silent, bool attack_stop)
         : attack_speed_(attack_speed), speed_(speed), attack_(attack),
           real_attack_(real_attack), defence_correction_(defence_correction),
           attack_radius_(attack_radius),
-          invincible_(invincible), silent_(silent) {}
+          invincible_(invincible), silent_(silent), attack_stop_(attack_stop) {}
 
     Buff operator&(const Buff &rhs) const {
         return Buff(attack_speed_ + rhs.attack_speed_, speed_ + rhs.speed_,
                     attack_ + rhs.attack_, real_attack_ + rhs.real_attack_,
                     defence_correction_ + rhs.defence_correction_,
-                    attack_radius_ + rhs.attack_radius_,
-                    invincible_ || rhs.invincible_, silent_ || rhs.silent_);
+                    attack_radius_ + rhs.attack_radius_, invincible_ || rhs.invincible_,
+                    silent_ || rhs.silent_, attack_stop_ || rhs.attack_stop_);
     }
 };
 
@@ -169,6 +172,8 @@ struct Entity {
     virtual ~Entity() {};
 };
 
+enum class AttackType { Physics, Magic, Real };
+
 struct EnemyInfo {
     int32_t health_ = 0;
     Defence defence_;
@@ -182,6 +187,10 @@ struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
     Enemy(id::Id id) : IdMixin{id} {}
 
     virtual EnemyInfo info() const = 0;
+
+    void increase_attack(int32_t atk,AttackType attack_type);
+
+    size_t get_distance() const {return 0;}//todo
 
     // Calculates current defence and speed that takes buffs into account
     // and current health_ = info().health_ - realized_attack
@@ -199,18 +208,17 @@ struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin {
     void on_tick(GridRef g) override;
 };
 
-enum class AttackType { Physics, Magic, Real };
 
 struct TowerInfo {
     int32_t attack_ = 0;
     int32_t cost_ = 0;
     int32_t deploy_interval_ = 0;
-    int32_t attack_interval_ = 0; // actual_attack_attack_speed
+    double attack_interval_ = 0; // actual_attack_attack_speed
     size_t attack_radius_ = 0;
     AttackType attack_type_;
 
     constexpr TowerInfo(int32_t attack, int32_t cost, int32_t deploy_interval,
-                        int32_t attack_interval, int32_t attack_radius, AttackType attack_type)
+                        double attack_interval, int32_t attack_radius, AttackType attack_type)
         : attack_(attack), cost_(cost), deploy_interval_(deploy_interval),
           attack_interval_(attack_interval), attack_radius_(attack_radius), attack_type_(attack_type) {}
 };
@@ -220,8 +228,22 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
 
     virtual TowerInfo info() const = 0;
 
+    virtual TowerInfo status() const {
+        auto base = info();
+        auto buffs = get_all_buff();
+
+        base.attack_+=buffs.attack_;
+        base.attack_interval_=base.attack_interval_/(double (100+buffs.attack_speed_)/100);
+        base.attack_radius_+=buffs.attack_radius_;
+
+        return base;
+    }
+
     void on_tick(GridRef g) override;
 };
+
+auto get_enemy_grid(Tower&,std::vector<GridRef>&) -> std::vector<GridRef>::iterator ;
+void single_attack(Tower&, GridRef);
 
 struct Map;
 

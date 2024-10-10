@@ -1,10 +1,7 @@
 #include "Level2Scene.h"
-#include "ui/CocosGUI.h"
 #include "SelectLevelScene.h"
 
 USING_NS_CC;
-using towerdefence::core::Grid;
-using towerdefence::core::Map;
 
 Scene* Level2Scene::createScene()
 {
@@ -86,23 +83,12 @@ bool Level2Scene::init()
     float delta = 140;
     float x = origin.x + 350 + delta;
     float y = origin.y + visibleSize.height - delta;
-    float SIZE = 140.0;
-    ui::Button* grid[7][12]={};
-    Grid::Type type[7][12]={ Grid::Type::BlockPath };
-    type[2][11]=type[0][11]=type[3][11]=type[4][11]=type[6][11]=Grid::Type::BlockOut;
-    type[2][1]=type[3][1]=type[6][1]=Grid::Type::BlockIn;
-    type[0][0]=type[0][8]=type[6][8]=Grid::Type::BlockTransport;
-    type[0][1]=type[0][7]=type[1][1]=type[1][8]=type[1][9]=type[1][10]=
-    type[1][11]=type[5][1]=type[5][8]=type[5][11]=type[5][9]=type[5][10]=Grid::Type::None;
-    type[0][2]=type[0][3]=type[0][4]=type[0][5]=type[0][6]=type[1][2]=type[1][6]=type[1][7]=
-    type[3][4]=type[3][6]=type[4][2]=type[4][1]=type[6][3]=type[6][4]=type[6][5]=type[6][6]=type[6][7]=Grid::Type::BlockTower;
-    std::vector<std::string> images = { "images/block_low.png", "images/in.png", "images/out.png", "images/block_transport.png", "images/block_high.png" };
-
-    for(size_t i = 0; i < 7; i++) {
-        for (size_t j = 0; j < 12; j++) {
-            if(type[i][j] != Grid::Type::None) {
-                if( i==0 && j==0 ) grid[i][j] = ui::Button::create("images/block_transport_D.png", "images/block_transport_D.png");
-                else grid[i][j] = ui::Button::create(images[type[i][j]], images[type[i][j]]);
+    createMap(2);
+    for(size_t i = 0; i < height; i++) {
+        for (size_t j = 0; j < width; j++) {
+            Grid::Type type_ = map->grids[map->shape.index_of(i, j)].type;
+            if(type_ != Grid::Type::None) {
+                grid[i][j] = ui::Button::create(images[type_], images[type_]);
                 grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
                 this->addChild(grid[i][j], 2);
             }
@@ -129,18 +115,6 @@ bool Level2Scene::init()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
     
     return true;
-}
-
-void Level2Scene::menuCloseCallback(cocos2d::Ref *pSender)
-{
-    //Close the cocos2d-x game scene and quit the application
-    Director::getInstance()->end();
-
-    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
-
-    //EventCustom customEndEvent("game_scene_close_event");
-    //_eventDispatcher->dispatchEvent(&customEndEvent);
-
 }
 
 void Level2Scene::onMouseDown(cocos2d::Event *event) {
