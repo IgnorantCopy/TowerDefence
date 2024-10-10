@@ -207,6 +207,17 @@ struct Map {
         enemy_refs_[id] = {row, col};
     }
 
+    id::Id spawn_tower_at(size_t row, size_t column, TowerFactoryBase &tower) {
+        auto &grid = grids.at(shape.index_of(row, column));
+        auto id = assign_id();
+        assert(!grid.tower.has_value());
+        grid.tower = tower.construct(id, clock());
+
+        tower_refs_.insert({id, {row, column}});
+
+        return id;
+    }
+
     // throws std::out_of_range if id does not exist
     Tower &get_tower_by_id(id::Id id) {
         auto [row, column] = tower_refs_.at(id);
