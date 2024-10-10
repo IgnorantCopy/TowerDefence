@@ -8,6 +8,11 @@ static void problemLoading(const char* filename) {
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in Level1Scene.cpp\n");
 }
 
+Grid& LevelScene::getGrid(size_t x, size_t y)
+{
+    return this->map->grids[map->shape.index_of(x, y)];
+}
+
 Sprite* LevelScene::getTower(Id id) {
     for (auto& pair : this->towers) {
         if (pair.first == id) {

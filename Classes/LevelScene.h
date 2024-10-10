@@ -77,6 +77,7 @@ protected:
     cocos2d::MenuItemImage *towerInfoItem = nullptr;
     cocos2d::MenuItemImage *skillItem = nullptr;
 
+    Grid& getGrid(size_t x, size_t y);
     cocos2d::Sprite* getTower(Id id);
     cocos2d::Sprite* getEnemy(Id id);
     void deleteTower();
