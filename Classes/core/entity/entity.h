@@ -269,6 +269,20 @@ std::unique_ptr<Enemy> EnemyFactory<T>::construct(id::Id id,
     }
 }
 
+struct TowerFactoryBase {
+    virtual std::unique_ptr<Tower> construct(id::Id id,
+                                             const timer::Clock &clk) = 0;
+    virtual TowerInfo info() const = 0;
+};
+
+template <class T> struct TowerFactory : TowerFactoryBase {
+    std::unique_ptr<Tower> construct(id::Id id,
+                                     const timer::Clock &clk) override;
+    TowerInfo info() const override;
+};
+
+template <class T> TowerInfo TowerFactory<T>::info() const { return T::INFO; }
+
 } // namespace core
 } // namespace towerdefence
 
