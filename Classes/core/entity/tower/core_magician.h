@@ -13,7 +13,8 @@ namespace towerdefence::core {
         CoreMagician(id::Id id, const timer::Clock & clk);
         CoreMagician() = delete;
 
-        TowerInfo info() const override { return { 700, 12, 0, 16, 2, AttackType::Magic }; }
+        static constexpr TowerInfo INFO { 700, 12, 0, 16, 2, AttackType::Magic };
+        TowerInfo info() const override { return INFO; }
 
         bool skill = false;
 
