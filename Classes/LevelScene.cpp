@@ -54,9 +54,9 @@ void LevelScene::createMap(int level)
     }
 }
 
-Grid::Type LevelScene::getType(size_t x, size_t y)
+Grid& LevelScene::getGrid(size_t x, size_t y)
 {
-    return map->grids[map->shape.index_of(x,y)].type;
+    return map->grids[map->shape.index_of(x,y)];
 }
 
 LevelScene::~LevelScene()

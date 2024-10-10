@@ -83,7 +83,6 @@ bool Level1Scene::init()
     auto backItem=MenuItemLabel::create(
             Back,
             [this](Ref *ref){
-                delete map; map=nullptr;
                 Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
             }
     );
@@ -97,7 +96,7 @@ bool Level1Scene::init()
     createMap(1);
     for(int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
-            Grid::Type type_ = getType(i, j);
+            Grid::Type type_ = getGrid(i, j).type;
             if(type_ != Grid::Type::None) {
                 grid[i][j] = ui::Button::create(images[type_], images[type_]);
                 grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));

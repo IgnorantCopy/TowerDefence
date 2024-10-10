@@ -3,9 +3,11 @@
 
 #include "cocos2d.h"
 #include "core/map.h"
+#include "core/id.h"
 #include "ui/CocosGUI.h"
 using towerdefence::core::Grid;
 using towerdefence::core::Map;
+using towerdefence::core::id::Id;
 
 class LevelScene : public cocos2d::Scene {
 protected:
@@ -22,9 +24,9 @@ protected:
     cocos2d::ui::Button* grid[7][12]={ nullptr };
 
     // the tower on the map
-    std::vector<cocos2d::Sprite> tower;
+    std::map<Id,cocos2d::Sprite*> tower;
     // the enemy on the map
-    std::vector<cocos2d::Sprite> enemy;
+    std::map<Id,cocos2d::Sprite*> enemy;
 
     // select tower
     bool isSelecting = false;
@@ -36,8 +38,8 @@ public:
 
     // create the map
     void createMap(int level);
-    // get the type of the grid at (x,y)
-    Grid::Type getType(size_t x, size_t y);
+    // get the grid at (x,y)
+    Grid& getGrid(size_t x, size_t y);
 
     ~LevelScene() override;
 };
