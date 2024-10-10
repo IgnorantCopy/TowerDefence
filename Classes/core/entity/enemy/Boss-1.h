@@ -3,6 +3,7 @@
 
 #include "../../id.h"
 #include "../entity.h"
+#include "../route.h"
 #include <unordered_set>
 
 namespace towerdefence::core {
@@ -14,7 +15,7 @@ namespace towerdefence::core {
         } release_skill_;
         std::unordered_set<id::Id> has_buff_;
 
-        Boss1(id::Id id, const timer::Clock & clk);
+        Boss1(id::Id id, route::Route route, const timer::Clock & clk);
 
         EnemyInfo info() const override {
             return { 50000, { 800, 30 }, 5 };
