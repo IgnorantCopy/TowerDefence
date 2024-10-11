@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <deque>
 #include <functional>
+#include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <variant>
@@ -28,7 +29,9 @@ struct Timer {
         uint32_t start = 0;
     };
 
-    std::variant<Period, Duration> clk;
+    struct Never : std::monostate {};
+
+    std::variant<Period, Duration, Never> clk;
 
     struct hasher {
         size_t operator()(const Timer &t) const noexcept {
@@ -40,6 +43,9 @@ struct Timer {
                            [](const Duration &p) {
                                return std::hash<uint64_t>{}(
                                    uint64_t(p.duration) << 32 | p.start);
+                           },
+                           [](const Never &n) {
+                               return std::hash<std::monostate>{}(n);
                            }},
                 t.clk);
         }
@@ -51,6 +57,20 @@ struct Timer {
 
     constexpr static Timer duration(uint32_t duration, uint32_t start) {
         return {Duration{duration, start}};
+    }
+
+    constexpr static Timer never() { return {.clk = Never{}}; }
+
+    template <class T, class F>
+        requires std::is_invocable_r_v<T, F, Period &>
+    T visit_period(F f, T val = {}) {
+        return std::visit(overloaded{f, [val](auto &&) { return val; }}, clk);
+    }
+
+    template <class F>
+        requires std::is_invocable_v<F, Period &>
+    void visit_period(F f) {
+        return std::visit(overloaded{f, [](auto &&) {}}, clk);
     }
 
     bool operator==(const Timer &rhs) const noexcept {
@@ -73,6 +93,12 @@ struct Timer {
                                                  },
                                                  [](auto &&) { return false; }},
                                       rhs.clk);
+                },
+                [&](const Never &) {
+                    return std::visit(
+                        overloaded{[&](const Never &d2) { return true; },
+                                   [](auto &&) { return false; }},
+                        rhs.clk);
                 }},
             rhs.clk);
     }
@@ -90,7 +116,8 @@ struct Clock {
                        },
                        [this](const Timer::Duration &d) {
                            return d.duration == elapased_ - d.start;
-                       }},
+                       },
+                       [](const Timer::Never &) { return false; }},
             clk.clk);
     }
 
@@ -109,6 +136,8 @@ struct Clock {
     Timer with_period_sec(uint32_t secs) const {
         return this->with_period(secs * 30);
     }
+
+    Timer never() const { return Timer::never(); }
 };
 
 template <class... Args> struct CallbackTimer {
@@ -125,7 +154,7 @@ template <class... Args> struct CallbackTimer {
         cbs[t].push_back(callback);
     }
 
-    void on_tick(const Clock &clk, Args &&...parmas) {
+    void on_tick(const Clock &clk, Args... parmas) {
         for (auto &[timer, cbs] : this->cbs) {
             if (clk.is_triggered(timer)) {
                 for (auto it = cbs.begin(); it != cbs.end(); ++it) {

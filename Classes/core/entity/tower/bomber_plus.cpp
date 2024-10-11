@@ -2,40 +2,57 @@
 #include "../../map.h"
 
 namespace towerdefence {
-    namespace core {
-        BomberPlus::BomberPlus(id::Id id, const timer::Clock &clk)
-                : Tower(id), release_skill_(clk.with_period_sec(20)) {}
+namespace core {
+BomberPlus::BomberPlus(id::Id id, const timer::Clock &clk)
+    : Tower(id), release_skill_(clk.with_period_sec(20)),
+      attack_(clk.with_period_sec(INFO.attack_interval_)) {}
 
-        void BomberPlus::on_tick(GridRef g) {
-            Tower::on_tick(g);
-            size_t sputter_radius = 1;
-            auto grids = g.with_radius(this->status().attack_radius_, linf_dis);
-            auto enemy_grid = get_enemy_grid(*this,grids);
-            if(enemy_grid!=grids.end()){
-                if(skill){
-                    sputter_radius = 2;
-                    this->add_buff({this->id, Buff::DEFAULT},
-                                   Buff::attack(1.00));
-                    for (auto ref : enemy_grid->with_radius(sputter_radius, l1_dis)) {
-                        ref.grid.with_enemy([this](Enemy &enemy) {
-                            enemy.increase_attack(this->status().attack_,this->status().attack_type_);
-                        });
-                    }
-                    sputter_radius = 1;
-                    this->remove_buff_from(this->id);
-                    skill = false;
-                }else{
-                    for (auto ref : enemy_grid->with_radius(sputter_radius, l1_dis)) {
-                        ref.grid.with_enemy([this](Enemy &enemy) {
-                            enemy.increase_attack(this->status().attack_,this->status().attack_type_);
-                        });
-                    }
-                }
-            }
+void BomberPlus::on_tick(GridRef g) {
+    Tower::on_tick(g);
+    auto status = this->status();
+    // update interval
+    this->attack_.visit_period([status](timer::Timer::Period &p) {
+        p.period = status.attack_interval_;
+    });
+    this->timeouts_.on_tick(g.clock(), *this, g);
 
-            if (g.clock().is_triggered(release_skill_)) {
-                skill = true;
-            }
+    auto &clk = g.clock();
+
+    // do normal attack
+    if (clk.is_triggered(this->attack_)) {
+        auto grids = g.with_radius(status.attack_radius_, linf_dis);
+
+        if (auto it = get_enemy_grid(*this, grids); it != grids.end()) {
+            auto enemy_grid = *it;
+            enemy_grid.attack_enemies_in_radius(status.with_attack_radius(1),
+                                                linf_dis);
         }
-    } // namespace core
+    }
+
+    // release skill
+    if (clk.is_triggered(release_skill_)) {
+        this->attack_ = clk.never(); // stop attacking
+        // after 3s
+        this->timeouts_.add_callback(
+            clk.with_duration_sec(3), [](BomberPlus &self, GridRef g) {
+                auto &clk = g.clock();
+                auto status = self.status();
+
+                // do 200% damage
+                g.attack_enemies_in_radius(
+                    status.with_attack(status.attack_ * 2), linf_dis);
+
+                // increase attack speed in next 30s
+                self.add_buff_in({self.id, Buff::DEFAULT},
+                                 Buff::attack_speed(30),
+                                 clk.with_duration_sec(5));
+
+                // restore normal attack
+                self.attack_ = clk.with_period_sec(status.attack_interval_);
+
+                return false;
+            });
+    }
+}
+} // namespace core
 } // namespace towerdefence
