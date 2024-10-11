@@ -53,18 +53,14 @@ void single_attack(Tower &tower, GridRef enemy_grid) {
     if (buffs.attack_stop_) {
         return;
     }
-    auto target_enemy = std::min_element(
-        enemy_grid.grid.enemies.begin(), enemy_grid.grid.enemies.end(),
-        [](std::unique_ptr<Enemy> &x, std::unique_ptr<Enemy> &y) {
-            return x->remaining_distance() < y->remaining_distance();
-        });
-    (*target_enemy)
-        ->increase_attack(tower.status().attack_, tower.status().attack_type_);
-    if (buffs.real_attack_ > 0) {
-        (*target_enemy)
-            ->increase_attack(tower.status().attack_ * buffs.real_attack_,
-                              AttackType::Real);
-    }
+    enemy_grid.with_nearest_enemy([&tower, buffs](Enemy &target_enemy) {
+        target_enemy.increase_attack(tower.status().attack_,
+                                     tower.status().attack_type_);
+        if (buffs.real_attack_ > 0) {
+            target_enemy.increase_attack(
+                tower.status().attack_ * buffs.real_attack_, AttackType::Real);
+        }
+    });
 }
 
 } // namespace towerdefence::core
