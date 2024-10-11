@@ -179,10 +179,29 @@ struct RouteMixin {
 };
 
 enum class AttackType { Physics, Magic, Real };
-enum class TowerType { ArcherBase, HighspeedArcher, HighspeedArcherPlus, Bomber, BomberPlus, Archer, ArcherPlus,
-        MagicianBase, CoreMagician, CoreMagicianPlus, DiffusiveMagician, DiffusiveMagicianPlus, SpecialMagician,
-    SpecialMagicianPlus, HelperBase, DecelerateMagician, DecelerateMagicianPlus, WeakenMagician, WeakenMagicianPlus,
-    AggressiveMagician, AggressiveMagicianPlus};
+enum class TowerType {
+    ArcherBase,
+    HighspeedArcher,
+    HighspeedArcherPlus,
+    Bomber,
+    BomberPlus,
+    Archer,
+    ArcherPlus,
+    MagicianBase,
+    CoreMagician,
+    CoreMagicianPlus,
+    DiffusiveMagician,
+    DiffusiveMagicianPlus,
+    SpecialMagician,
+    SpecialMagicianPlus,
+    HelperBase,
+    DecelerateMagician,
+    DecelerateMagicianPlus,
+    WeakenMagician,
+    WeakenMagicianPlus,
+    AggressiveMagician,
+    AggressiveMagicianPlus
+};
 
 struct EnemyInfo {
     int32_t health_ = 0;
@@ -288,6 +307,32 @@ std::unique_ptr<Enemy> EnemyFactory<T>::construct(id::Id id,
         static_assert(false, "Unsupported type");
     }
 }
+
+struct TowerFactoryBase {
+    virtual std::unique_ptr<Tower> construct(id::Id id,
+                                             const timer::Clock &clk) = 0;
+    virtual TowerInfo info() const = 0;
+};
+
+template <class T> struct TowerFactory : TowerFactoryBase {
+    std::unique_ptr<Tower> construct(id::Id id,
+                                     const timer::Clock &clk) override;
+    TowerInfo info() const override;
+};
+
+template <class T>
+std::unique_ptr<Tower> TowerFactory<T>::construct(id::Id id,
+                                                  const timer::Clock &clk) {
+    if constexpr (std::is_constructible_v<T, id::Id, const timer::Clock &>) {
+        return std::make_unique<T>(id, clk);
+    } else if constexpr (std::is_constructible_v<T, id::Id>) {
+        return std::make_unique<T>(id);
+    } else {
+        static_assert(false, "Unsupported type");
+    }
+}
+
+template <class T> TowerInfo TowerFactory<T>::info() const { return T::INFO; }
 
 } // namespace core
 } // namespace towerdefence
