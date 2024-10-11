@@ -12,7 +12,6 @@ namespace towerdefence {
             auto status = this->status();
             auto &clk = g.clock();
             if (clk.is_triggered(this->attack_)){
-                this->attack_ = clk.never();
                 for (auto grid : g.with_radius(status.attack_radius_, linf_dis)) {
                     grid.current().with_tower(
                             [this, &clk](std::unique_ptr<Tower> &tower) {
@@ -22,7 +21,6 @@ namespace towerdefence {
                 }
             }
             if (clk.is_triggered(release_skill_)) {
-                this->release_skill_ = clk.never(); // stop release_skill
                 for (auto grid : g.with_radius(status.attack_radius_, linf_dis)) {
                     grid.current().with_tower(
                             [this, &clk](std::unique_ptr<Tower> &tower) {
