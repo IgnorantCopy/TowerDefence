@@ -8,6 +8,9 @@
 namespace towerdefence::core {
     struct CoreMagicianPlus final : Tower {
         timer::Timer release_skill_;
+        timer::Timer attack_;
+        timer::CallbackTimer<CoreMagicianPlus &, GridRef> timeouts_;
+
         std::unordered_set<id::Id> has_buff_;
 
         CoreMagicianPlus(id::Id id, const timer::Clock & clk);
