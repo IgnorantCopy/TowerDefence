@@ -207,7 +207,8 @@ struct Map {
         enemy_refs_[id] = {row, col};
     }
 
-    std::optional<id::Id> spawn_tower_at(size_t row, size_t column, TowerFactoryBase &tower) {
+    std::optional<id::Id> spawn_tower_at(size_t row, size_t column,
+                                         TowerFactoryBase &tower) {
         auto &grid = grids.at(shape.index_of(row, column));
 
         if (grid.tower.has_value()) {
