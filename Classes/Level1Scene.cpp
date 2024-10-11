@@ -45,77 +45,146 @@ bool Level1Scene::init()
     this->selectedTower->setVisible(false);
     this->selectedTower->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
     this->addChild(this->selectedTower, 5);
-    auto archerBaseSelector = MenuItemImage::create(
+    this->archerBaseSelector = ui::Button::create(
             "images/towers/archer_base.png",
             "images/towers/archer_base.png",
-            [this](Ref *ref) {
+            "images/towers/archer_base_inactive.png"
+    );
+    this->archerBaseSelector->addTouchEventListener([this](Ref *ref, ui::Widget::TouchEventType type) {
+        switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
                 this->isSelecting = 1;
                 this->selectedTower->setTexture("images/towers/archer_base_onblock.png");
-            }
-    );
-    archerBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 - 2 * gap,
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                break;
+            default:
+                break;
+        }
+    });
+    this->archerBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 - 2 * gap,
                                          origin.y + 1680 - visibleSize.height));
+    this->addChild(this->archerBaseSelector, 4);
     
-    auto magicianBaseSelector = MenuItemImage::create(
+    this->magicianBaseSelector = ui::Button::create(
             "images/towers/magician_base.png",
             "images/towers/magician_base.png",
-            [this](Ref *ref) {
+            "images/towers/magician_base_inactive.png"
+    );
+    this->magicianBaseSelector->addTouchEventListener([this](Ref *ref, ui::Widget::TouchEventType type) {
+        switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
                 this->isSelecting = 2;
                 this->selectedTower->setTexture("images/towers/magician_base_onblock.png");
-            }
-    );
-    magicianBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                break;
+            default:
+                break;
+        }
+    });
+    this->magicianBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2,
                                            origin.y + 1680 - visibleSize.height));
+    this->addChild(this->magicianBaseSelector, 4);
     
-    auto helperBaseSelector = MenuItemImage::create(
+    this->helperBaseSelector = ui::Button::create(
             "images/towers/helper_base.png",
             "images/towers/helper_base.png",
-            [this](Ref *ref) {
+            "images/towers/helper_base_inactive.png"
+    );
+    this->helperBaseSelector->addTouchEventListener([this](Ref *ref, ui::Widget::TouchEventType type) {
+        switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
                 this->isSelecting = 3;
                 this->selectedTower->setTexture("images/towers/helper_base_onblock.png");
-            }
-    );
-    helperBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                break;
+            default:
+                break;
+        }
+    });
+    this->helperBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
                                          origin.y + 1680 - visibleSize.height));
+    this->addChild(this->helperBaseSelector, 4);
     
     // tower info
-    this->deleteItem = MenuItemImage::create(
+    this->deleteButton = ui::Button::create(
             "images/delete.png",
             "images/delete.png",
-            [this](Ref *ref) {
-                scheduleOnce([this](float dt) {
-                    this->deleteTower();
-                }, 0.2f, "deleteTower");
-            }
+            "images/delete.png"
     );
-    this->deleteItem->setVisible(false);
-    this->upgradeItem = MenuItemImage::create(
+    this->deleteButton->setVisible(false);
+    this->deleteButton->setSwallowTouches(true);
+    this->deleteButton->addTouchEventListener([this](Ref *ref, ui::Widget::TouchEventType type) {
+        switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                this->deleteTower();
+                break;
+            default:
+                break;
+        }
+    });
+    this->upgradeButton = ui::Button::create(
             "images/upgrade.png",
             "images/upgrade.png",
-            [this](Ref *ref) {
-                // TODO: upgrade the tower
-                log("upgrade");
-            }
+            "images/upgrade.png"
     );
-    this->upgradeItem->setVisible(false);
-    this->towerInfoItem = MenuItemImage::create(
+    this->upgradeButton->setVisible(false);
+    this->upgradeButton->setSwallowTouches(true);
+    this->upgradeButton->addTouchEventListener([this](Ref *ref, ui::Widget::TouchEventType type) {
+        switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                this->upgradeTower();
+                break;
+            default:
+                break;
+        }
+    });
+    this->towerInfoButton = ui::Button::create(
             "images/info.png",
             "images/info.png",
-            [this](Ref *ref) {
-                // TODO: show the tower info
-                log("info");
-            }
+            "images/info.png"
     );
-    this->towerInfoItem->setVisible(false);
-    this->skillItem = MenuItemImage::create(
+    this->towerInfoButton->setVisible(false);
+    this->towerInfoButton->setSwallowTouches(true);
+    this->towerInfoButton->addTouchEventListener([this](Ref *ref, ui::Widget::TouchEventType type) {
+        switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                this->showTowerInfo();
+                break;
+            default:
+                break;
+        }
+    });
+    this->skillButton = ui::Button::create(
             "images/towers/skill_icon/archer_base.png",
             "images/towers/skill_icon/archer_base.png",
-            [this](Ref *ref) {
-                // TODO: execute the skill
-                log("skill");
-            }
+            "images/towers/skill_icon/archer_base_inactive.png"
     );
-    this->skillItem->setVisible(false);
+    this->skillButton->setVisible(false);
+    this->skillButton->setSwallowTouches(true);
+    this->skillButton->addTouchEventListener([this](Ref *ref, ui::Widget::TouchEventType type) {
+        switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                this->executeSkill();
+                break;
+            default:
+                break;
+        }
+    });
+    this->addChild(this->deleteButton, 4);
+    this->addChild(this->upgradeButton, 4);
+    this->addChild(this->towerInfoButton, 4);
+    this->addChild(this->skillButton, 4);
     
     // the back button to go back to the SelectLevel scene
     auto Back=Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
@@ -188,15 +257,8 @@ bool Level1Scene::init()
     
     Vector<MenuItem*> MenuItems;
     MenuItems.pushBack(backItem);
-    MenuItems.pushBack(archerBaseSelector);
-    MenuItems.pushBack(magicianBaseSelector);
-    MenuItems.pushBack(helperBaseSelector);
-    MenuItems.pushBack(this->deleteItem);
-    MenuItems.pushBack(this->upgradeItem);
-    MenuItems.pushBack(this->towerInfoItem);
-    MenuItems.pushBack(this->skillItem);
     auto menu = Menu::createWithArray(MenuItems);
-    this->addChild(menu, 4);
+    this->addChild(menu, MenuItems.size());
     menu->setPosition(Vec2::ZERO);
     
     // add a mouse click event listener

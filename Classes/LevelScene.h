@@ -30,16 +30,19 @@ protected:
 
     // select tower
     int isSelecting = 0;
+    cocos2d::ui::Button *archerBaseSelector = nullptr;
+    cocos2d::ui::Button *magicianBaseSelector = nullptr;
+    cocos2d::ui::Button *helperBaseSelector = nullptr;
     cocos2d::Sprite *selectedTower = nullptr;
     cocos2d::Label *moneyLabel = nullptr;
     
     // tower info
     Id selectedTowerId;
     bool isShowingTowerInfo = false;
-    cocos2d::MenuItemImage *deleteItem = nullptr;
-    cocos2d::MenuItemImage *upgradeItem = nullptr;
-    cocos2d::MenuItemImage *towerInfoItem = nullptr;
-    cocos2d::MenuItemImage *skillItem = nullptr;
+    cocos2d::ui::Button *deleteButton = nullptr;
+    cocos2d::ui::Button *upgradeButton = nullptr;
+    cocos2d::ui::Button *towerInfoButton = nullptr;
+    cocos2d::ui::Button *skillButton = nullptr;
     
     cocos2d::Sprite* getTower(Id id);
     cocos2d::Sprite* getEnemy(Id id);

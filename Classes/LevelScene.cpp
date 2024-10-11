@@ -10,6 +10,7 @@ using towerdefence::core::Tower;
 using towerdefence::core::ArcherBase;
 using towerdefence::core::MagicianBase;
 using towerdefence::core::HelperBase;
+using towerdefence::core::TowerType;
 
 static void problemLoading(const char* filename) {
     printf("Error while loading: %s\n", filename);
@@ -98,21 +99,95 @@ void LevelScene::showTowerInfo(float x, float y) {
                 float towerX = towerSprite->getPositionX();
                 float towerY = towerSprite->getPositionY();
                 
-                this->towerInfoItem->setPosition(Vec2(towerX, towerY));
-                this->towerInfoItem->setScale(0.1f);
-                this->towerInfoItem->setVisible(true);
+                this->towerInfoButton->setPosition(Vec2(towerX, towerY));
+                this->towerInfoButton->setScale(0.1f);
+                this->towerInfoButton->setVisible(true);
                 
-                this->deleteItem->setPosition(Vec2(towerX, towerY));
-                this->deleteItem->setScale(0.1f);
-                this->deleteItem->setVisible(true);
+                this->deleteButton->setPosition(Vec2(towerX, towerY));
+                this->deleteButton->setScale(0.1f);
+                this->deleteButton->setVisible(true);
                 
-                this->upgradeItem->setPosition(Vec2(towerX, towerY));
-                this->upgradeItem->setScale(0.1f);
-                this->upgradeItem->setVisible(true);
+                this->upgradeButton->setPosition(Vec2(towerX, towerY));
+                this->upgradeButton->setScale(0.1f);
+                this->upgradeButton->setVisible(true);
                 
-                this->skillItem->setPosition(Vec2(towerX, towerY));
-                this->skillItem->setScale(0.1f);
-                this->skillItem->setVisible(true);
+                TowerType towerType = this->map->get_ref(indexY, indexX).grid.tower.value()->type;
+                std::string skillIconPath;
+                switch (towerType) {
+                    case TowerType::ArcherBase:
+                        skillIconPath = "images/towers/skill_icon/archer_base";
+                        break;
+                    case TowerType::MagicianBase:
+                        skillIconPath = "images/towers/skill_icon/magician_base";
+                        break;
+                    case TowerType::HelperBase:
+                        skillIconPath = "images/towers/skill_icon/helper_base";
+                        break;
+                    case TowerType::Archer:
+                        skillIconPath = "images/towers/skill_icon/archer";
+                        break;
+                    case TowerType::ArcherPlus:
+                        skillIconPath = "images/towers/skill_icon/archer_pro";
+                        break;
+                    case TowerType::Bomber:
+                        skillIconPath = "images/towers/skill_icon/bomber";
+                        break;
+                    case TowerType::BomberPlus:
+                        skillIconPath = "images/towers/skill_icon/bomber_pro";
+                        break;
+                    case TowerType::CoreMagician:
+                        skillIconPath = "images/towers/skill_icon/core_magician";
+                        break;
+                    case TowerType::CoreMagicianPlus:
+                        skillIconPath = "images/towers/skill_icon/core_magician_pro";
+                        break;
+                    case TowerType::DecelerateMagician:
+                        skillIconPath = "images/towers/skill_icon/decelerate_magician";
+                        break;
+                    case TowerType::DecelerateMagicianPlus:
+                        skillIconPath = "images/towers/skill_icon/decelerate_magician_pro";
+                        break;
+                    case TowerType::DiffusiveMagician:
+                        skillIconPath = "images/towers/skill_icon/diffusive_magician";
+                        break;
+                    case TowerType::DiffusiveMagicianPlus:
+                        skillIconPath = "images/towers/skill_icon/diffusive_magician_pro";
+                        break;
+                    case TowerType::HighspeedArcher:
+                        skillIconPath = "images/towers/skill_icon/highspeed_archer";
+                        break;
+                    case TowerType::HighspeedArcherPlus:
+                        skillIconPath = "images/towers/skill_icon/highspeed_archer_pro";
+                        break;
+                    case TowerType::SpecialMagician:
+                        skillIconPath = "images/towers/skill_icon/special_magician";
+                        break;
+                    case TowerType::SpecialMagicianPlus:
+                        skillIconPath = "images/towers/skill_icon/special_magician_pro";
+                        break;
+                    case TowerType::WeakenMagician:
+                        skillIconPath = "images/towers/skill_icon/weaken_magician";
+                        break;
+                    case TowerType::WeakenMagicianPlus:
+                        skillIconPath = "images/towers/skill_icon/weaken_magician_pro";
+                        break;
+                    case TowerType::AggressiveMagician:
+                        skillIconPath = "images/towers/skill_icon/aggressive_magician";
+                        break;
+                    case TowerType::AggressiveMagicianPlus:
+                        skillIconPath = "images/towers/skill_icon/aggressive_magician_pro";
+                        break;
+                    default:
+                        break;
+                }
+                this->skillButton->loadTextures(
+                        skillIconPath + ".png",
+                        skillIconPath + ".png",
+                        skillIconPath + "_inactive.png"
+                );
+                this->skillButton->setPosition(Vec2(towerX, towerY));
+                this->skillButton->setScale(0.1f);
+                this->skillButton->setVisible(true);
                 
                 auto scale = ScaleBy::create(0.2f, 10);
                 auto move1 = MoveBy::create(0.2f, Vec2(50,  90));
@@ -125,10 +200,10 @@ void LevelScene::showTowerInfo(float x, float y) {
                 auto upgradeSpawn = Spawn::create(scale->clone(), move4, nullptr);
                 auto skillSpawn = Spawn::create(scale->clone(), move1, nullptr);
                 
-                this->towerInfoItem->runAction(towerInfoSpawn);
-                this->deleteItem->runAction(deleteSpawn);
-                this->upgradeItem->runAction(upgradeSpawn);
-                this->skillItem->runAction(skillSpawn);
+                this->towerInfoButton->runAction(towerInfoSpawn);
+                this->deleteButton->runAction(deleteSpawn);
+                this->upgradeButton->runAction(upgradeSpawn);
+                this->skillButton->runAction(skillSpawn);
                 this->isShowingTowerInfo = true;
                 scheduleOnce([this](float dt) {
                     this->isShowingTowerInfo = false;
@@ -165,16 +240,17 @@ void LevelScene::hideTowerInfo(float x, float y) {
     auto upgradeSpawn = Spawn::create(scale->clone(), move4, nullptr);
     auto skillSpawn = Spawn::create(scale->clone(), move1, nullptr);
     
-    this->towerInfoItem->runAction(towerInfoSpawn);
-    this->deleteItem->runAction(deleteSpawn);
-    this->upgradeItem->runAction(upgradeSpawn);
-    this->skillItem->runAction(skillSpawn);
-    this->isShowingTowerInfo = false;
+    this->towerInfoButton->runAction(towerInfoSpawn);
+    this->deleteButton->runAction(deleteSpawn);
+    this->upgradeButton->runAction(upgradeSpawn);
+    this->skillButton->runAction(skillSpawn);
+    this->isShowingTowerInfo = true;
     scheduleOnce([this](float dt) {
-        this->towerInfoItem->setVisible(false);
-        this->deleteItem->setVisible(false);
-        this->upgradeItem->setVisible(false);
-        this->skillItem->setVisible(false);
+        this->towerInfoButton->setVisible(false);
+        this->deleteButton->setVisible(false);
+        this->upgradeButton->setVisible(false);
+        this->skillButton->setVisible(false);
+        this->isShowingTowerInfo = false;
     }, 0.2f, "hideTowerInfo");
 }
 
@@ -195,6 +271,10 @@ void LevelScene::deleteTower() {
 void LevelScene::upgradeTower() {
     Sprite* towerSprite = this->getTower(this->selectedTowerId);
 }
+
+void LevelScene::showTowerInfo() {}
+
+void LevelScene::executeSkill() {}
 
 void LevelScene::menuCloseCallback(cocos2d::Ref *pSender)
 {
