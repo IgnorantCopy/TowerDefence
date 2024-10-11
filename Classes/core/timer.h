@@ -6,6 +6,7 @@
 #include <deque>
 #include <functional>
 #include <unordered_map>
+#include <utility>
 #include <variant>
 
 namespace towerdefence::core::timer {
@@ -86,8 +87,11 @@ struct Clock {
     }
 };
 
+template<class... Args>
 struct CallbackTimer {
-    std::unordered_map<Timer, std::deque<std::function<bool()>>, Timer::hasher>
+    using Callback = std::function<bool(Args...)>;
+
+    std::unordered_map<Timer, std::deque<Callback>, Timer::hasher>
         cbs;
 
     // add a callback called when t tiggers.
@@ -95,15 +99,15 @@ struct CallbackTimer {
     //
     // SAFETY: caller must ensure that all captured variables of callback's
     // lifetime NOT SHORTER than the object.
-    void add_callback(Timer t, std::function<bool()> callback) {
+    void add_callback(Timer t, Callback callback) {
         cbs[t].push_back(callback);
     }
 
-    void on_tick(const Clock &clk) {
+    void on_tick(const Clock &clk, Args&&... parmas) {
         for (auto &[timer, cbs] : this->cbs) {
             if (clk.is_triggered(timer)) {
                 for (auto it = cbs.begin(); it != cbs.end(); ++it) {
-                    auto ret = (*it)();
+                    auto ret = (*it)(std::forward<Args>(parmas)...);
                     if (!ret) {
                         cbs.erase(it);
                     }

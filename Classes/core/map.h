@@ -122,7 +122,7 @@ struct Map {
     std::unordered_map<id::Id, std::pair<size_t, size_t>> enemy_refs_;
     std::unordered_map<id::Id, std::pair<size_t, size_t>> tower_refs_;
 
-    timer::CallbackTimer timeouts_;
+    timer::CallbackTimer<Map&> timeouts_;
 
     uint32_t cost_ = 0;
 
@@ -252,7 +252,7 @@ struct Map {
     // lifetime NOT SHORTER than the object.
     //
     // Particularly, do not capture members in `Tower`s or `Enemy`s.
-    void set_timeout(timer::Timer t, std::function<bool()> callback) {
+    void set_timeout(timer::Timer t, std::function<bool(Map&)> callback) {
         this->timeouts_.add_callback(t, callback);
     }
 };
@@ -334,7 +334,7 @@ struct GridRef {
     // lifetime NOT SHORTER than the object.
     //
     // Particularly, do not capture members in `Tower`s or `Enemy`s.
-    void set_timeout(timer::Timer t, std::function<bool()> callback) {
+    void set_timeout(timer::Timer t, std::function<bool(Map&)> callback) {
         this->map.set_timeout(t, callback);
     }
 };
