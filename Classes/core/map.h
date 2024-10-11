@@ -325,7 +325,7 @@ struct GridRef {
     }
 
     // attack all enemies in grids found by (status.attack_radius_, dis)
-    void attack_all_enemies_in_radius(TowerInfo status, DisFn dis) {
+    void attack_enemies_in_radius(TowerInfo status, DisFn dis) {
         for (auto ref : this->with_radius(status.attack_radius_, dis)) {
             ref.grid.with_enemy([&](Enemy &e) {
                 e.increase_attack(status.attack_, status.attack_type_);
