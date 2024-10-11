@@ -122,7 +122,9 @@ struct Map {
     std::unordered_map<id::Id, std::pair<size_t, size_t>> enemy_refs_;
     std::unordered_map<id::Id, std::pair<size_t, size_t>> tower_refs_;
 
-    uint32_t cost_ = 0;
+    timer::CallbackTimer<Map&> timeouts_;
+
+    uint32_t cost_ = 10;
 
   public:
     struct iterator {
@@ -207,6 +209,29 @@ struct Map {
         enemy_refs_[id] = {row, col};
     }
 
+    std::optional<id::Id> spawn_tower_at(size_t row, size_t column,
+                                         TowerFactoryBase &tower) {
+        auto &grid = grids.at(shape.index_of(row, column));
+
+        if (grid.tower.has_value()) {
+            return {};
+        }
+
+        auto info = tower.info();
+        if (info.cost_ > this->cost_) {
+            return {};
+        }
+
+        this->cost_ -= info.cost_;
+
+        auto id = assign_id();
+        grid.tower = tower.construct(id, clock());
+
+        tower_refs_.insert({id, {row, column}});
+
+        return id;
+    }
+
     // throws std::out_of_range if id does not exist
     Tower &get_tower_by_id(id::Id id) {
         auto [row, column] = tower_refs_.at(id);
@@ -242,6 +267,17 @@ struct Map {
     iterator begin() { return iterator{grids.begin(), grids.begin(), *this}; }
 
     iterator end() { return iterator{grids.begin(), grids.end(), *this}; }
+
+    // add a callback called when t tiggers.
+    // if callback returns false, it will be removed.
+    //
+    // SAFETY: caller must ensure that all captured variables of callback's
+    // lifetime NOT SHORTER than the object.
+    //
+    // Particularly, do not capture members in `Tower`s or `Enemy`s.
+    void set_timeout(timer::Timer t, std::function<bool(Map&)> callback) {
+        this->timeouts_.add_callback(t, callback);
+    }
 };
 
 static size_t absdiff(size_t x, size_t y) { return (x > y) ? x - y : y - x; }
@@ -311,8 +347,27 @@ struct GridRef {
         }
     }
 
+    id::Id spawn_enemy(EnemyFactoryBase &enemy) {
+        return this->map.spawn_enemy_at(this->row, this->column, enemy);
+    }
+
+    std::optional<id::Id> spawn_tower(TowerFactoryBase &tower) {
+        return this->map.spawn_tower_at(this->row, this->column, tower);
+    }
+
     const timer::Clock &clock() const { return map.clock(); }
     Grid &current() { return grid; }
+
+    // add a callback called when t tiggers.
+    // if callback returns false, it will be removed.
+    //
+    // SAFETY: caller must ensure that all captured variables of callback's
+    // lifetime NOT SHORTER than the object.
+    //
+    // Particularly, do not capture members in `Tower`s or `Enemy`s.
+    void set_timeout(timer::Timer t, std::function<bool(Map&)> callback) {
+        this->map.set_timeout(t, callback);
+    }
 };
 
 } // namespace core
