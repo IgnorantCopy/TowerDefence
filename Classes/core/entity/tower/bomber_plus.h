@@ -6,12 +6,12 @@
 #include <unordered_set>
 
 namespace towerdefence::core {
-    struct Bomber final : Tower {
+    struct BomberPlus final : Tower {
         timer::Timer release_skill_;
         std::unordered_set<id::Id> has_buff_;
 
-        Bomber(id::Id id, const timer::Clock & clk);
-        Bomber() = delete;
+        BomberPlus(id::Id id, const timer::Clock & clk);
+        BomberPlus() = delete;
 
         static constexpr TowerInfo INFO { 2000, 20, 0, 20, 4, AttackType::Physics };
         TowerInfo info() const override { return INFO; }
