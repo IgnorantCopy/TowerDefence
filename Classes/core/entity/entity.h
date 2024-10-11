@@ -276,6 +276,8 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin, NormalAttackMixin {
         this->reset_attack_timer(clk);
     }
 
+    Tower(Tower &&) = delete;
+
     virtual TowerInfo info() const = 0;
 
     virtual TowerInfo status() const {
@@ -299,8 +301,23 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin, NormalAttackMixin {
     }
 };
 
+template <class Self, class G = GridRef, class... Args>
+struct TimeOutMixin {
+    timer::CallbackTimer<Self &, G, Args...> timeouts_;
+
+    void stop_timer_for(timer::Timer &timer, uint32_t d,
+                        const timer::Clock &clk) {
+        timer = clk.never();
+        this->timeouts_.add_callback(clk.with_duration_sec(d),
+                                     [&](Self &self, G g, Args...) {
+                                         self.reset_attack_timer(g.clock());
+                                         return false;
+                                     });
+    }
+};
+
 // used in CallbackTimer
-bool restore_normal_attack(Tower & self, GridRef g);
+bool restore_normal_attack(Tower &self, GridRef g);
 
 [[deprecated("use grid_of_nearest_enemy instead")]] auto
 get_enemy_grid(Tower &,

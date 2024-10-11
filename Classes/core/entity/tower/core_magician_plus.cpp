@@ -39,13 +39,7 @@ void CoreMagicianPlus::on_tick(GridRef g) {
             });
         }
 
-        this->attack_ = clk.never();
-        this->timeouts_.add_callback(
-            clk.with_duration_sec(35), [](CoreMagicianPlus &self, GridRef g) {
-                self.attack_ =
-                    g.clock().with_period(self.status().attack_interval_);
-                return false;
-            });
+        this->stop_timer_for(this->attack_, 35, clk);
     }
 }
 
