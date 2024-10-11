@@ -13,7 +13,8 @@ namespace towerdefence::core {
         Bomber(id::Id id, const timer::Clock & clk);
         Bomber() = delete;
 
-        TowerInfo info() const override { return { 1600, 16, 0, 20, 4, AttackType::Physics }; }
+        static constexpr TowerInfo INFO { 1600, 16, 0, 20, 4, AttackType::Physics };
+        TowerInfo info() const override { return INFO; }
 
         bool skill = false;
 

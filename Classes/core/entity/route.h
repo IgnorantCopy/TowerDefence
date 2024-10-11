@@ -20,7 +20,7 @@ struct Route {
     // and y(column) axis.
     //
     // If no further routes, `std::out_of_range` is thrown.
-    // 
+    //
     // # Example
     //
     // Route route = /* init */;

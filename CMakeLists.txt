@@ -98,10 +98,10 @@ add_library(core
     Classes/core/entity/tower/diffusive_magician_plus.h
     Classes/core/entity/tower/helper_base.cpp
     Classes/core/entity/tower/helper_base.h
-    Classes/core/entity/tower/highspeed_archor.cpp
-    Classes/core/entity/tower/highspeed_archor.h
-    Classes/core/entity/tower/highspeed_archor_plus.cpp
-    Classes/core/entity/tower/highspeed_archor_plus.h
+        Classes/core/entity/tower/highspeed_archer.cpp
+        Classes/core/entity/tower/highspeed_archer.h
+        Classes/core/entity/tower/highspeed_archer_plus.cpp
+        Classes/core/entity/tower/highspeed_archer_plus.h
     Classes/core/entity/tower/magician_base.cpp
     Classes/core/entity/tower/magician_base.h
     Classes/core/entity/tower/special_magician.cpp

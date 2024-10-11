@@ -13,7 +13,8 @@ namespace towerdefence::core {
         ArcherBase(id::Id id, const timer::Clock & clk);
         ArcherBase() = delete;
 
-        TowerInfo info() const override { return { 500, 7, 10, 15, 2, AttackType::Physics }; }
+        static constexpr TowerInfo INFO { 500, 7, 10, 15, 2, AttackType::Physics };
+        TowerInfo info() const override { return INFO; }
 
         void on_tick(GridRef g) override;
     };
