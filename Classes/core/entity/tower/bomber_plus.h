@@ -3,6 +3,7 @@
 
 #include "../../id.h"
 #include "../entity.h"
+#include <unordered_set>
 
 namespace towerdefence::core {
 struct BomberPlus final : Tower {
