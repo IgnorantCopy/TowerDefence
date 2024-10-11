@@ -27,6 +27,11 @@ void Tower::on_tick(GridRef g) { this->update_buff(g.clock()); }
 
 std::vector<GridRef>::iterator get_enemy_grid(Tower &tower,
                                               std::vector<GridRef> &grids) {
+    return grid_of_nearest_enemy(grids);
+}
+
+auto grid_of_nearest_enemy(std::vector<GridRef> &grids)
+    -> std::vector<GridRef>::iterator {
     return std::min_element(
         grids.begin(), grids.end(), [](const GridRef &a, const GridRef &b) {
             auto a1 = std::min_element(
