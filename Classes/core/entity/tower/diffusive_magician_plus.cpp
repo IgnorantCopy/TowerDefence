@@ -29,13 +29,7 @@ void DiffusiveMagicianPlus::on_tick(GridRef g) {
                     return true;
                 });
             timeouts_.add_callback(clk.with_duration_sec(20),
-                                   [](DiffusiveMagicianPlus &self, GridRef g) {
-                                       auto status = self.status();
-                                       self.attack_ = g.clock().with_period(
-                                           status.attack_interval_);
-
-                                       return false;
-                                   });
+                                   restore_normal_attack);
         }
     }
 }

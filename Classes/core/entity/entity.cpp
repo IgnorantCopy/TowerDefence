@@ -36,6 +36,12 @@ std::vector<GridRef>::iterator get_enemy_grid(Tower &tower,
     return grid_of_nearest_enemy(grids);
 }
 
+bool restore_normal_attack(Tower &self, GridRef g) {
+    self.reset_attack_timer(g.clock());
+
+    return false;
+}
+
 auto grid_of_nearest_enemy(std::vector<GridRef> &grids)
     -> std::vector<GridRef>::iterator {
     return std::min_element(

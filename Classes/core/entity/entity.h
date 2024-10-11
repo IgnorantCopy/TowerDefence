@@ -299,6 +299,9 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin, NormalAttackMixin {
     }
 };
 
+// used in CallbackTimer
+bool restore_normal_attack(Tower & self, GridRef g);
+
 [[deprecated("use grid_of_nearest_enemy instead")]] auto
 get_enemy_grid(Tower &,
                std::vector<GridRef> &) -> std::vector<GridRef>::iterator;
