@@ -8,9 +8,8 @@ namespace towerdefence {
 
         struct DiffusiveMagicianPlus final : Tower {
 
-            TowerInfo info() const override {
-                return { 2000, 21, 0, 20, 4, AttackType::Magic };
-            }
+            static constexpr TowerInfo INFO { 2000, 21, 0, 20, 4, AttackType::Magic };
+            TowerInfo info() const override { return INFO; }
 
             void on_tick(GridRef g) override;
        };
