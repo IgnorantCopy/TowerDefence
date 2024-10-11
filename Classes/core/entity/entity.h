@@ -253,6 +253,18 @@ struct TowerInfo {
         : attack_(attack), cost_(cost), deploy_interval_(deploy_interval),
           attack_interval_(attack_interval), attack_radius_(attack_radius),
           attack_type_(attack_type) {}
+    
+    TowerInfo with_attack_radius(size_t r) const noexcept {
+        auto copied = *this;
+        copied.attack_radius_ = r;
+        return copied;
+    }
+
+    TowerInfo with_attack(int32_t a) const noexcept {
+        auto copied = *this;
+        copied.attack_ = a;
+        return copied;
+    }
 };
 
 struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
