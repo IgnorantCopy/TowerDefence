@@ -1,21 +1,23 @@
 #ifndef TOWERDEFENCE_BOMBER_PLUS_H
 #define TOWERDEFENCE_BOMBER_PLUS_H
 
+#include "../../id.h"
 #include "../entity.h"
 
-namespace towerdefence {
-    namespace core {
+namespace towerdefence::core {
+struct BomberPlus final : Tower {
+    timer::Timer release_skill_; // timer to release skill
+    timer::Timer attack_;        // timer to do normal attack
 
-        struct BomberPlus final : Tower {
+    // store functions that will be executed after certain time
+    timer::CallbackTimer<BomberPlus &, GridRef> timeouts_;
 
-            static constexpr TowerInfo INFO { 2000, 20, 0, 20, 4, AttackType::Physics };
-            TowerInfo info() const override { return INFO; }
+    BomberPlus(id::Id id, const timer::Clock &clk);
 
-            void on_tick(GridRef g) override;
-        };
-    } // namespace core
-} // namespace towerdefence
+    static constexpr TowerInfo INFO{2000, 20, 0, 20, 4, AttackType::Physics};
+    TowerInfo info() const override { return INFO; }
+    void on_tick(GridRef g) override;
+};
+} // namespace towerdefence::core
 
-
-
-#endif //TOWERDEFENCE_BOMBER_PLUS_H
+#endif
