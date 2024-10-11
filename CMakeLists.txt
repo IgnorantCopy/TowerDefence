@@ -214,6 +214,11 @@ else()
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
 endif()
 
+if (TOWERDEFENCE_SANITIZER)
+    add_compile_options(-fsanitize=address,undefined)
+    add_link_options(-fsanitize=address,undefined)
+endif()
+
 set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD ${TOWERDEFENCE_CXX_STANDARD})
 target_link_libraries(${APP_NAME} cocos2d core)
 target_include_directories(${APP_NAME}
