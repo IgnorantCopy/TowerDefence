@@ -23,7 +23,13 @@ void Enemy::increase_attack(int32_t atk, AttackType attack_type) {
 
 void Enemy::on_tick(GridRef g) { this->update_buff(g.clock()); }
 
-void Tower::on_tick(GridRef g) { this->update_buff(g.clock()); }
+void Tower::on_tick(GridRef g) {
+    this->update_buff(g.clock());
+    this->attack_.visit_period(
+        [status = this->status()](timer::Timer::Period &p) {
+            p.period = status.attack_interval_;
+        });
+}
 
 std::vector<GridRef>::iterator get_enemy_grid(Tower &tower,
                                               std::vector<GridRef> &grids) {
