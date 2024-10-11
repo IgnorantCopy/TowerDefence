@@ -293,7 +293,7 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
 get_enemy_grid(Tower &,
                std::vector<GridRef> &) -> std::vector<GridRef>::iterator;
 
-auto grid_of_nearest_enemy(const std::vector<GridRef> &grids) -> std::vector<GridRef>::iterator;
+auto grid_of_nearest_enemy(std::vector<GridRef> &grids) -> std::vector<GridRef>::iterator;
 
 void single_attack(Tower &, GridRef);
 
