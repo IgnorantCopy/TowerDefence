@@ -15,7 +15,7 @@ namespace towerdefence {
                 this->attack_ = clk.never();
                 for (auto grid : g.with_radius(status.attack_radius_, linf_dis)) {
                     grid.current().with_tower(
-                            [this, &clk = g.clock()](std::unique_ptr<Tower> &tower) {
+                            [this, &clk](std::unique_ptr<Tower> &tower) {
                                 tower->add_buff({this->id, Buff::DEFAULT},
                                                 Buff::attack(0.20));
                             });
