@@ -87,7 +87,8 @@ struct Clock {
 };
 
 struct CallbackTimer {
-    std::unordered_map<Timer, std::deque<std::function<bool()>>> cbs;
+    std::unordered_map<Timer, std::deque<std::function<bool()>>, Timer::hasher>
+        cbs;
 
     // add a callback called when t tiggers.
     // if callback returns false, it will be removed.
