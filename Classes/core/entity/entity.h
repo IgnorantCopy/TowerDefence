@@ -40,6 +40,10 @@ struct AttackMixin {
     int32_t realized_attack_ = 0;
 };
 
+struct NormalAttackMixin {
+    timer::Timer attack_ = timer::Timer::never();
+};
+
 #define BUFF_CONSTRUCTOR(type, name)                                           \
     static constexpr Buff name(type name) {                                    \
         Buff b;                                                                \
@@ -267,8 +271,10 @@ struct TowerInfo {
     }
 };
 
-struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
-    Tower(id::Id id) : IdMixin{id} {}
+struct Tower : Entity, AttackMixin, BuffMixin, IdMixin, NormalAttackMixin {
+    Tower(id::Id id, const timer::Clock &clk) : IdMixin{id} {
+        this->reset_attack_timer(clk);
+    }
 
     virtual TowerInfo info() const = 0;
 
@@ -287,13 +293,18 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
     TowerType type;
 
     void on_tick(GridRef g) override;
+
+    void reset_attack_timer(const timer::Clock &clk) {
+        this->attack_ = clk.with_period_sec(this->status().attack_interval_);
+    }
 };
 
 [[deprecated("use grid_of_nearest_enemy instead")]] auto
 get_enemy_grid(Tower &,
                std::vector<GridRef> &) -> std::vector<GridRef>::iterator;
 
-auto grid_of_nearest_enemy(std::vector<GridRef> &grids) -> std::vector<GridRef>::iterator;
+auto grid_of_nearest_enemy(std::vector<GridRef> &grids)
+    -> std::vector<GridRef>::iterator;
 
 void single_attack(Tower &, GridRef);
 

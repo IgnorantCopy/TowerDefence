@@ -4,8 +4,7 @@
 namespace towerdefence {
 namespace core {
 CoreMagicianPlus::CoreMagicianPlus(id::Id id, const timer::Clock &clk)
-    : Tower(id), release_skill_(clk.with_period_sec(35)),
-      attack_(clk.with_period_sec(INFO.attack_interval_)) {}
+    : Tower(id, clk), release_skill_(clk.with_period_sec(35)) {}
 
 void CoreMagicianPlus::on_tick(GridRef g) {
     Tower::on_tick(g);

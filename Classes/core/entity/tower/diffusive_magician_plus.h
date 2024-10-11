@@ -7,11 +7,10 @@ namespace towerdefence {
 namespace core {
 
 struct DiffusiveMagicianPlus final : Tower {
-    timer::Timer attack_;
-    timer::CallbackTimer<DiffusiveMagicianPlus&, GridRef> timeouts_;
+    timer::CallbackTimer<DiffusiveMagicianPlus &, GridRef> timeouts_;
 
     DiffusiveMagicianPlus(id::Id id, const timer::Clock &clk)
-        : Tower{id}, attack_{clk.with_period_sec(INFO.attack_interval_)} {}
+        : Tower{id, clk} {}
 
     static constexpr TowerInfo INFO{2000, 21, 0, 20, 4, AttackType::Magic};
     TowerInfo info() const override { return INFO; }

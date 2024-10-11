@@ -4,8 +4,7 @@
 namespace towerdefence {
 namespace core {
 BomberPlus::BomberPlus(id::Id id, const timer::Clock &clk)
-    : Tower(id), release_skill_(clk.with_period_sec(20)),
-      attack_(clk.with_period_sec(INFO.attack_interval_)) {}
+    : Tower(id, clk), release_skill_(clk.with_period_sec(20)) {}
 
 void BomberPlus::on_tick(GridRef g) {
     Tower::on_tick(g);

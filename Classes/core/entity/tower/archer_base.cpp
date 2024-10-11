@@ -5,7 +5,7 @@ namespace towerdefence {
     namespace core {
 
         ArcherBase::ArcherBase(id::Id id, const timer::Clock &clk)
-                : Tower(id), release_skill_(clk.with_period_sec(20)) {}
+                : Tower(id, clk), release_skill_(clk.with_period_sec(20)) {}
 
         void ArcherBase::on_tick(GridRef g) {
             Tower::on_tick(g);
