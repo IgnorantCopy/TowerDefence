@@ -2,13 +2,48 @@
 #define TOWERDEFENCE_LEVELSCENE_H
 
 #include "cocos2d.h"
-#include "core/map.h"
 #include "ui/CocosGUI.h"
+#include "core/map.h"
 #include "core/timer.h"
-using towerdefence::core::Grid;
-using towerdefence::core::Map;
-using namespace towerdefence::core::id;
-using namespace towerdefence::core::timer;
+#include "core/id.h"
+#include "core/entity/entity.h"
+#include "core/entity/tower/aggressive_magician.h"
+#include "core/entity/tower/aggressive_magician_plus.h"
+#include "core/entity/tower/archer.h"
+#include "core/entity/tower/archer_base.h"
+#include "core/entity/tower/archer_plus.h"
+#include "core/entity/tower/bomber.h"
+#include "core/entity/tower/bomber_plus.h"
+#include "core/entity/tower/core_magician.h"
+#include "core/entity/tower/core_magician_plus.h"
+#include "core/entity/tower/decelerate_magician.h"
+#include "core/entity/tower/decelerate_magician_plus.h"
+#include "core/entity/tower/diffusive_magician.h"
+#include "core/entity/tower/diffusive_magician_plus.h"
+#include "core/entity/tower/helper_base.h"
+#include "core/entity/tower/highspeed_archer.h"
+#include "core/entity/tower/highspeed_archer_plus.h"
+#include "core/entity/tower/magician_base.h"
+#include "core/entity/tower/special_magician.h"
+#include "core/entity/tower/special_magician_plus.h"
+#include "core/entity/tower/weaken_magician.h"
+#include "core/entity/tower/weaken_magician_plus.h"
+#include "core/entity/enemy/Attack-down.h"
+#include "core/entity/enemy/Boss-1.h"
+#include "core/entity/enemy/Boss-2.h"
+#include "core/entity/enemy/Crab.h"
+#include "core/entity/enemy/Destroyer.h"
+#include "core/entity/enemy/dog.h"
+#include "core/entity/enemy/Life-up.h"
+#include "core/entity/enemy/Not-attacked.h"
+#include "core/entity/enemy/Soldier.h"
+#include "core/entity/enemy/Speed-up.h"
+#include "core/entity/enemy/Tank.h"
+#include "core/entity/enemy/Warlock.h"
+#include "core/entity/enemy/worm.h"
+
+using namespace towerdefence::core;
+using towerdefence::core::id::Id;
 
 class LevelScene : public cocos2d::Scene {
 

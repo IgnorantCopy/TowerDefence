@@ -1,18 +1,8 @@
 #include "LevelScene.h"
-#include "core/entity/entity.h"
-#include "core/entity/tower/archer_base.h"
-#include "core/entity/tower/helper_base.h"
-#include "core/entity/tower/magician_base.h"
-#include "ui/CocosGUI.h"
 #include <memory>
 #include <utility>
 
 USING_NS_CC;
-using towerdefence::core::ArcherBase;
-using towerdefence::core::HelperBase;
-using towerdefence::core::MagicianBase;
-using towerdefence::core::TowerFactory;
-using towerdefence::core::TowerFactoryBase;
 
 static void problemLoading(const char *filename) {
     printf("Error while loading: %s\n", filename);
