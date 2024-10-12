@@ -4,9 +4,11 @@
 #include "cocos2d.h"
 #include "core/map.h"
 #include "ui/CocosGUI.h"
+#include "core/timer.h"
 using towerdefence::core::Grid;
 using towerdefence::core::Map;
 using namespace towerdefence::core::id;
+using namespace towerdefence::core::timer;
 
 class LevelScene : public cocos2d::Scene {
 
@@ -27,6 +29,9 @@ protected:
     std::vector<std::pair<Id, cocos2d::Sprite*>> enemies;
     // towers
     std::vector<std::pair<Id, cocos2d::Sprite*>> towers;
+
+    // update the ui
+    void update();
 
     // select tower
     int isSelecting = 0;

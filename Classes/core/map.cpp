@@ -12,6 +12,9 @@ GridRef Map::iterator::operator*() {
 }
 
 void Map::update() {
+    if(clock_.is_triggered(cost_timer_)){
+        cost_++;
+    }
     clock_.on_tick();
     this->timeouts_.on_tick(this->clock(), *this);
     for (auto ref : *this) {
