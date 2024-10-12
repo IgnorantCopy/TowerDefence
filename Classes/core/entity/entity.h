@@ -21,9 +21,9 @@ struct GridRef;
 
 struct Defence {
     int32_t physics_ = 0;
-    double magic_ = 0;
+    int32_t magic_ = 0;
 
-    constexpr Defence(int32_t physics, double magic)
+    constexpr Defence(int32_t physics, int32_t magic)
         : physics_(physics), magic_(magic) {}
 
     Defence operator+(const Defence &rhs) const {
