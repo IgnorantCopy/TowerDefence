@@ -14,7 +14,7 @@ struct BomberPlus final : Tower {
 
     BomberPlus(id::Id id, const timer::Clock &clk);
 
-    static constexpr TowerInfo INFO{2000, 20, 0, 20, 4, AttackType::Physics};
+    static constexpr TowerInfo INFO{2000, 20, 0, 20, 4, AttackType::Physics, TowerType::BomberPlus};
     TowerInfo info() const override { return INFO; }
     void on_tick(GridRef g) override;
 };

@@ -6,7 +6,7 @@
 #include <unordered_set>
 
 namespace towerdefence::core {
-    struct CoreMagicianPlus final : Tower, TimeOutMixin<CoreMagicianPlus> {
+    struct CoreMagicianPlus final : Tower {
         timer::Timer release_skill_;
 
         std::unordered_set<id::Id> has_buff_;
@@ -14,7 +14,7 @@ namespace towerdefence::core {
         CoreMagicianPlus(id::Id id, const timer::Clock & clk);
         CoreMagicianPlus() = delete;
 
-        static constexpr TowerInfo INFO { 1100, 16, 0, 16, 2, AttackType::Magic };
+        static constexpr TowerInfo INFO { 1100, 16, 0, 16, 2, AttackType::Magic, TowerType::CoreMagicianPlus};
         TowerInfo info() const override { return INFO; }
 
         void on_tick(GridRef g) override;

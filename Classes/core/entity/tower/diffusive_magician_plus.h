@@ -12,7 +12,7 @@ struct DiffusiveMagicianPlus final : Tower {
     DiffusiveMagicianPlus(id::Id id, const timer::Clock &clk)
         : Tower{id, clk} {}
 
-    static constexpr TowerInfo INFO{2000, 21, 0, 20, 4, AttackType::Magic};
+    static constexpr TowerInfo INFO{2000, 21, 0, 20, 4, AttackType::Magic, TowerType::DiffusiveMagicianPlus};
     TowerInfo info() const override { return INFO; }
 
     void on_tick(GridRef g) override;
