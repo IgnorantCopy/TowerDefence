@@ -77,7 +77,13 @@ bool Level1Scene::init()
     );
     helperBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
                                          origin.y + 1680 - visibleSize.height));
-    
+
+
+
+//    schedule([this](float dt) {
+//        this->update();
+//    }, 0.1f, "update");
+
     // tower info
     this->deleteItem = MenuItemImage::create(
             "images/delete.png",
@@ -159,8 +165,8 @@ bool Level1Scene::init()
         money->setPosition(Vec2(origin.x + 70, origin.y + visibleSize.height - 70));
         this->addChild(money, 1);
     }
-    this->moneyLabel = Label::createWithTTF("0", "fonts/Bender/BENDER.OTF", 75);
-    this->moneyLabel->setPosition(Vec2(origin.x + 150, origin.y + visibleSize.height - 70));
+    moneyLabel = cocos2d::Label::createWithTTF(std::to_string(map->getcost_()), "fonts/Bender/BENDER.OTF", 75);
+    this->moneyLabel->setPosition(cocos2d::Vec2(origin.x + 150 + 15 * log10(map->getcost_()), origin.y + visibleSize.height - 70));
     this->addChild(this->moneyLabel, 1);
     
     auto enemyExample = Sprite::create("images/enemies/dog/move/dog_move00.png");
@@ -205,6 +211,12 @@ bool Level1Scene::init()
     mouseListener->onMouseMove = CC_CALLBACK_1(Level1Scene::onMouseMove, this);
     mouseListener->onMouseUp = CC_CALLBACK_1(Level1Scene::onMouseUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+
+    // update the map
+    schedule([this](float dt){
+        map->update();
+        this->update();
+    }, 1.0/30, "update");
 
     return true;
 }

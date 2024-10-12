@@ -1,18 +1,8 @@
 #include "LevelScene.h"
-#include "core/entity/entity.h"
-#include "core/entity/tower/archer_base.h"
-#include "core/entity/tower/helper_base.h"
-#include "core/entity/tower/magician_base.h"
-#include "ui/CocosGUI.h"
 #include <memory>
 #include <utility>
 
 USING_NS_CC;
-using towerdefence::core::ArcherBase;
-using towerdefence::core::HelperBase;
-using towerdefence::core::MagicianBase;
-using towerdefence::core::TowerFactory;
-using towerdefence::core::TowerFactoryBase;
 
 static void problemLoading(const char *filename) {
     printf("Error while loading: %s\n", filename);
@@ -316,7 +306,6 @@ void LevelScene::onMouseMove(cocos2d::Event *event) {
     if (this->isSelecting && this->selectedTower) {
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        float SIZE = 140;
         float typeX = origin.x + 350 + SIZE;
         float typeY = origin.y + visibleSize.height - SIZE;
         this->selectedTower->setVisible(true);
@@ -334,4 +323,16 @@ void LevelScene::onMouseMove(cocos2d::Event *event) {
             this->selectedTower->setPosition(Vec2(x, y));
         }
     }
+}
+
+void LevelScene::update()
+{
+    // update money label
+    auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
+    cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
+    
+    this->removeChild(moneyLabel);
+    moneyLabel = cocos2d::Label::createWithTTF(std::to_string(map->getcost_()), "fonts/Bender/BENDER.OTF", 75);
+    this->moneyLabel->setPosition(cocos2d::Vec2(origin.x + 150 + 15 * log10(map->getcost_()), origin.y + visibleSize.height - 70));
+    this->addChild(this->moneyLabel, 1);
 }

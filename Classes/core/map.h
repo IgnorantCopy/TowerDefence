@@ -135,6 +135,7 @@ using CallbackContainer =
 struct Map {
   private:
     timer::Clock clock_;
+    timer::Timer cost_timer_;
     id::IdGenerator id_gen;
     // INVARIANCE: `id` in `enemy_refs_` <=> `grid` at `enemy_refs_[id]` has an
     // entity of `id`
@@ -184,6 +185,7 @@ struct Map {
     explicit Map(size_t width_, size_t height_,
                  std::function<Grid(size_t, size_t)> f)
         : shape{width_, height_} {
+        cost_timer_ = clock_.with_period_sec(1);
         grids.reserve(width_ * height_);
         for (size_t i = 0; i < height_; ++i) {
             for (size_t j = 0; j < width_; ++j) {
@@ -327,6 +329,8 @@ struct Map {
     void set_timeout(timer::Timer t, std::function<bool(Map&)> callback) {
         this->timeouts_.add_callback(t, callback);
     }
+
+    uint32_t getcost_() const { return cost_; }
 };
 
 static size_t absdiff(size_t x, size_t y) { return (x > y) ? x - y : y - x; }
