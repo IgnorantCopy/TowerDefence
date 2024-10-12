@@ -135,6 +135,7 @@ using CallbackContainer =
 struct Map {
   private:
     timer::Clock clock_;
+    timer::Timer cost_timer_;
     id::IdGenerator id_gen;
     // INVARIANCE: `id` in `enemy_refs_` <=> `grid` at `enemy_refs_[id]` has an
     // entity of `id`
@@ -174,7 +175,7 @@ struct Map {
 
     std::vector<Grid> grids;
     Shape shape;
-    uint32_t cost_ = 1000;
+    uint32_t cost_ = 10;
 
     explicit Map(std::vector<Grid> &&grids_, size_t width, size_t height)
         : grids(std::move(grids_)), shape{width, height} {
@@ -184,6 +185,7 @@ struct Map {
     explicit Map(size_t width_, size_t height_,
                  std::function<Grid(size_t, size_t)> f)
         : shape{width_, height_} {
+        cost_timer_ = clock_.with_period_sec(1);
         grids.reserve(width_ * height_);
         for (size_t i = 0; i < height_; ++i) {
             for (size_t j = 0; j < width_; ++j) {
@@ -327,6 +329,8 @@ struct Map {
     void set_timeout(timer::Timer t, std::function<bool(Map&)> callback) {
         this->timeouts_.add_callback(t, callback);
     }
+
+    uint32_t getcost_() const { return cost_; }
 };
 
 static size_t absdiff(size_t x, size_t y) { return (x > y) ? x - y : y - x; }
@@ -374,10 +378,10 @@ struct GridRef {
     }
 
     // attack all enemies in grids found by (status.attack_radius_, dis)
-    void attack_enemies_in_radius(TowerInfo status, DisFn dis, double magnification = 1.0) {
+    void attack_enemies_in_radius(TowerInfo status, DisFn dis) {
         for (auto ref : this->with_radius(status.attack_radius_, dis)) {
             ref.grid.with_enemy([&](Enemy &e) {
-                e.increase_attack(status.attack_ * magnification, status.attack_type_);
+                e.increase_attack(status.attack_, status.attack_type_);
             });
         }
     }

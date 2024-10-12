@@ -2,11 +2,18 @@
 #define TOWERDEFENCE_LEVELSCENE_H
 
 #include "cocos2d.h"
-#include "core/map.h"
 #include "ui/CocosGUI.h"
 #include "animation/TowerAnimation.h"
+#include "core/map.h"
+#include "core/timer.h"
+#include "core/id.h"
+#include "core/entity/entity.h"
 using towerdefence::core::Grid;
 using towerdefence::core::Map;
+using towerdefence::core::id::Id;
+
+
+using namespace towerdefence::core;
 using towerdefence::core::id::Id;
 
 class Bullet;
@@ -28,6 +35,9 @@ protected:
     std::vector<std::pair<Id, cocos2d::Sprite*>> enemies;
     // towers
     std::vector<std::pair<Id, cocos2d::Sprite*>> towers;
+
+    // update the ui
+    void update();
 
     // select tower
     int isSelecting = 0;
