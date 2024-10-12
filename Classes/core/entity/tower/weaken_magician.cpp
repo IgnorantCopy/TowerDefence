@@ -7,7 +7,6 @@ namespace towerdefence {
                 : Tower(id, clk), release_skill_(clk.with_period_sec(20)) {}
         void WeakenMagician::on_tick(GridRef g) {
             Tower::on_tick(g);
-            this->timeouts_.on_tick(g.clock(), *this, g);
 
             auto &clk = g.clock();
 

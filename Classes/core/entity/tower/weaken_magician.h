@@ -9,9 +9,6 @@ namespace towerdefence {
         struct WeakenMagician final : Tower {
             timer::Timer release_skill_; // timer to release skill
 
-            // store functions that will be executed after certain time
-            timer::CallbackTimer<WeakenMagician &, GridRef> timeouts_;
-
             WeakenMagician(id::Id id, const timer::Clock &clk);
 
             static constexpr TowerInfo INFO { 500, 13, 0, 16, 3, AttackType::Magic, TowerType::WeakenMagician};
