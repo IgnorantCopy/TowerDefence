@@ -31,7 +31,7 @@ void SpecialMagician::on_tick(GridRef g) {
     }
 
     if (clk.is_triggered(this->update_silence_count) && !this->is_attacking) {
-        this->silence_count = std::min(this->silence_count + 1, 3zu);
+        this->silence_count = std::min(this->silence_count + 1, size_t(3));
     }
 
     if (clk.is_triggered(this->update_silence_count)) {
