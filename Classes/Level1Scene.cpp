@@ -203,12 +203,9 @@ bool Level1Scene::init()
     
     // the back button to go back to the SelectLevel scene
     auto Back=Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
-    auto backItem=MenuItemLabel::create(
-            Back,
-            [this](Ref *ref){
-                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
-            }
-    );
+    auto backItem=MenuItemLabel::create(Back, [this](Ref *ref){
+        Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+    });
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
                                origin.y + visibleSize.height - 50));
 
@@ -311,7 +308,7 @@ bool Level1Scene::init()
         int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
         int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
         std::string path;
-        switch (this->map->get_ref(indexY, indexX).grid.tower.value()->type) {
+        switch (this->map->get_ref(indexY, indexX).grid.tower.value()->status().tower_type_) {
             case TowerType::ArcherBase:
                 path = "images/towers/archer.png";
                 newTower = new towerdefence::core::TowerFactory<Archer>{};
@@ -352,7 +349,7 @@ bool Level1Scene::init()
         int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
         int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
         std::string path;
-        switch (this->map->get_ref(indexY, indexX).grid.tower.value()->type) {
+        switch (this->map->get_ref(indexY, indexX).grid.tower.value()->status().tower_type_) {
             case TowerType::ArcherBase:
                 path = "images/towers/highspeed_archer.png";
                 newTower = new towerdefence::core::TowerFactory<HighspeedArcher>{};
@@ -393,7 +390,7 @@ bool Level1Scene::init()
         int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
         int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
         std::string path;
-        switch (this->map->get_ref(indexY, indexX).grid.tower.value()->type) {
+        switch (this->map->get_ref(indexY, indexX).grid.tower.value()->status().tower_type_) {
             case TowerType::ArcherBase:
                 path = "images/towers/bomber.png";
                 newTower = new towerdefence::core::TowerFactory<Bomber>{};

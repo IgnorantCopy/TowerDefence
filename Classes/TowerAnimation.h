@@ -29,7 +29,7 @@ public:
         float enemyX = enemySprite->getPositionX();
         float enemyY = enemySprite->getPositionY();
         Sprite *bulletSprite;
-        switch (tower->type) {
+        switch (tower->status().tower_type_) {
             case TowerType::ArcherBase:
                 bulletSprite = Sprite::create("images/bullet/arrows/arrow_basic.png");
                 break;

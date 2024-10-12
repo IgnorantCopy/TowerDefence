@@ -154,7 +154,7 @@ void LevelScene::showTowerInfo(float x, float y) {
                 this->upgradeButton->setScale(0.1f);
                 this->upgradeButton->setVisible(true);
                 
-                TowerType towerType = this->map->get_ref(indexY, indexX).grid.tower.value()->type;
+                TowerType towerType = this->map->get_ref(indexY, indexX).grid.tower.value()->status().tower_type_;
                 std::string skillIconPath;
                 switch (towerType) {
                     case TowerType::ArcherBase:
@@ -452,7 +452,7 @@ void LevelScene::upgradeTower() {
     int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
     std::string path;
     towerdefence::core::TowerFactoryBase *newTower;
-    switch (this->map->get_ref(indexY, indexX).grid.tower.value()->type) {
+    switch (this->map->get_ref(indexY, indexX).grid.tower.value()->status().tower_type_) {
         case TowerType::ArcherBase:
             this->upgradeTower1->setTexture("images/towers/archer.png");
             this->upgradeTower2->setTexture("images/towers/highspeed_archer.png");
