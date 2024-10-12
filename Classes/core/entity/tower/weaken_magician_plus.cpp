@@ -25,7 +25,7 @@ namespace towerdefence {
                 for (auto ref : g.with_radius(status.attack_radius_, linf_dis)) {
                     ref.grid.with_enemy([this, clk](Enemy &enemy) {
                         enemy.add_buff_in({this->id, Buff::DEFAULT},
-                                          Buff::defence_correction({-500,-40}),
+                                          Buff::defence_correction({-1000,-40}),
                                           clk.with_duration_sec(20));
                     });
                 }
