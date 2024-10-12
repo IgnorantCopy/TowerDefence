@@ -4,7 +4,7 @@
 namespace towerdefence {
     namespace core {
         SpecialMagician::SpecialMagician(id::Id id, const timer::Clock &clk)
-                : Tower(id, clk), release_skill_(clk.with_period_sec(20)) {}
+                : Tower(id, clk), release_skill_(clk.with_period_sec(10)) {}
         void SpecialMagician::on_tick(GridRef g) {
             Tower::on_tick(g);
             auto &clk = g.clock();
@@ -19,8 +19,8 @@ namespace towerdefence {
                                    Buff::attack(0.50 * layer));
                     layer = 0;
                     if(skill){
-                        enemy_grid->attack_enemies_in_radius(status.with_attack_radius(1),
-                                                                linf_dis, 1.50);
+                        enemy_grid->attack_enemies_in_radius(status.with_attack_radius(1).with_attack(status.attack_ * 1.5),
+                                                                linf_dis);
                     }else{
                         single_attack(*this,*enemy_grid);
                     }
