@@ -4,7 +4,7 @@
 namespace towerdefence {
     namespace core {
         HighspeedArcherPlus::HighspeedArcherPlus(id::Id id, const timer::Clock &clk)
-                : Tower(id), release_skill_(clk.with_period_sec(5)) {}
+                : Tower(id, clk), release_skill_(clk.with_period_sec(5)) {}
 
         void HighspeedArcherPlus::on_tick(GridRef g) {
             Tower::on_tick(g);

@@ -8,7 +8,6 @@
 namespace towerdefence::core {
 struct BomberPlus final : Tower {
     timer::Timer release_skill_; // timer to release skill
-    timer::Timer attack_;        // timer to do normal attack
 
     // store functions that will be executed after certain time
     timer::CallbackTimer<BomberPlus &, GridRef> timeouts_;
