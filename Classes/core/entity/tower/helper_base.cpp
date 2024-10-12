@@ -5,7 +5,7 @@ namespace towerdefence {
     namespace core {
 
         HelperBase::HelperBase(id::Id id, const timer::Clock &clk)
-                : Tower(id), release_skill_(clk.with_period_sec(30)) {}
+                : Tower(id, clk), release_skill_(clk.with_period_sec(30)) {}
 
         void HelperBase::on_tick(GridRef g) {
             Tower::on_tick(g);
