@@ -3,50 +3,21 @@
 
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
+#include "animation/TowerAnimation.h"
 #include "core/map.h"
 #include "core/timer.h"
 #include "core/id.h"
 #include "core/entity/entity.h"
-#include "core/entity/tower/aggressive_magician.h"
-#include "core/entity/tower/aggressive_magician_plus.h"
-#include "core/entity/tower/archer.h"
-#include "core/entity/tower/archer_base.h"
-#include "core/entity/tower/archer_plus.h"
-#include "core/entity/tower/bomber.h"
-#include "core/entity/tower/bomber_plus.h"
-#include "core/entity/tower/core_magician.h"
-#include "core/entity/tower/core_magician_plus.h"
-#include "core/entity/tower/decelerate_magician.h"
-#include "core/entity/tower/decelerate_magician_plus.h"
-#include "core/entity/tower/diffusive_magician.h"
-#include "core/entity/tower/diffusive_magician_plus.h"
-#include "core/entity/tower/helper_base.h"
-#include "core/entity/tower/highspeed_archer.h"
-#include "core/entity/tower/highspeed_archer_plus.h"
-#include "core/entity/tower/magician_base.h"
-#include "core/entity/tower/special_magician.h"
-#include "core/entity/tower/special_magician_plus.h"
-#include "core/entity/tower/weaken_magician.h"
-#include "core/entity/tower/weaken_magician_plus.h"
-#include "core/entity/enemy/Attack-down.h"
-#include "core/entity/enemy/Boss-1.h"
-#include "core/entity/enemy/Boss-2.h"
-#include "core/entity/enemy/Crab.h"
-#include "core/entity/enemy/Destroyer.h"
-#include "core/entity/enemy/dog.h"
-#include "core/entity/enemy/Life-up.h"
-#include "core/entity/enemy/Not-attacked.h"
-#include "core/entity/enemy/Soldier.h"
-#include "core/entity/enemy/Speed-up.h"
-#include "core/entity/enemy/Tank.h"
-#include "core/entity/enemy/Warlock.h"
-#include "core/entity/enemy/worm.h"
+using towerdefence::core::Grid;
+using towerdefence::core::Map;
+using towerdefence::core::id::Id;
+
 
 using namespace towerdefence::core;
 using towerdefence::core::id::Id;
 
+class Bullet;
 class LevelScene : public cocos2d::Scene {
-
 protected:
     // the map of each level
     Map *map = nullptr;
@@ -70,21 +41,58 @@ protected:
 
     // select tower
     int isSelecting = 0;
+    cocos2d::ui::Button *archerBaseSelector = nullptr;
+    cocos2d::ui::Button *magicianBaseSelector = nullptr;
+    cocos2d::ui::Button *helperBaseSelector = nullptr;
     cocos2d::Sprite *selectedTower = nullptr;
     cocos2d::Label *moneyLabel = nullptr;
     
     // tower info
+    const int archerBaseCost = 7;
+    const int highspeedArcherCost = 10;
+    const int highspeedArcherProCost = 15;
+    const int bomberCost = 16;
+    const int bomberProCost = 20;
+    const int archerCost = 18;
+    const int archerProCost = 24;
+    const int magicianBaseCost = 9;
+    const int coreMagicianCost = 12;
+    const int coreMagicianProCost = 16;
+    const int diffusiveMagicianCost = 15;
+    const int diffusiveMagicianProCost = 21;
+    const int specialMagicianCost = 14;
+    const int specialMagicianProCost = 25;
+    const int helperBaseCost = 5;
+    const int decelerateMagicianCost = 9;
+    const int decelerateMagicianProCost = 16;
+    const int weakenMagicianCost = 13;
+    const int weakenMagicianProCost = 18;
+    const int aggressiveMagicianCost = 8;
+    const int aggressiveMagicianProCost = 14;
     Id selectedTowerId;
     bool isShowingTowerInfo = false;
-    cocos2d::MenuItemImage *deleteItem = nullptr;
-    cocos2d::MenuItemImage *upgradeItem = nullptr;
-    cocos2d::MenuItemImage *towerInfoItem = nullptr;
-    cocos2d::MenuItemImage *skillItem = nullptr;
+    cocos2d::Menu *upgradeMenu = nullptr;
+    cocos2d::ui::Button *deleteButton = nullptr;
+    cocos2d::ui::Button *upgradeButton = nullptr;
+    cocos2d::ui::Button *towerInfoButton = nullptr;
+    cocos2d::ui::Button *skillButton = nullptr;
+    cocos2d::Sprite *upgradeBackground1 = nullptr;
+    cocos2d::Sprite *upgradeBackground2 = nullptr;
+    cocos2d::Sprite *upgradeBackground3 = nullptr;
+    cocos2d::Sprite *upgradeTower1 = nullptr;
+    cocos2d::Sprite *upgradeTower2 = nullptr;
+    cocos2d::Sprite *upgradeTower3 = nullptr;
+    cocos2d::MenuItemLabel *upgradeItem1 = nullptr;
+    cocos2d::MenuItemLabel *upgradeItem2 = nullptr;
+    cocos2d::MenuItemLabel *upgradeItem3 = nullptr;
+    cocos2d::MenuItemLabel *cancelUpgradeItem = nullptr;
     
-    cocos2d::Sprite* getTower(Id id);
-    cocos2d::Sprite* getEnemy(Id id);
-    void deleteTower();
+    void updateSelectorEnabled();
+    
+    void deleteTower(bool isReturn = true);
     void upgradeTower();
+    void showUpgradeMenu();
+    void hideUpgradeMenu();
     void showTowerInfo();
     void executeSkill();
     
@@ -94,6 +102,9 @@ protected:
     void hideTowerInfo(float x, float y);
     
 public:
+    // bullets
+    std::vector<Bullet*> bullets;
+    
     // a selector callback
     void menuCloseCallback(cocos2d::Ref *pSender);
 
@@ -101,10 +112,13 @@ public:
     void createMap(int level);
     
     void onMouseDown(cocos2d::Event *event);
-    
     void onMouseUp(cocos2d::Event *event);
-    
     void onMouseMove(cocos2d::Event *event);
+    
+    cocos2d::Sprite* getTower(Id id);
+    cocos2d::Sprite* getEnemy(Id id);
+    
+    void addBullet(Bullet *bullet);
 };
 
 #endif //TOWERDEFENCE_LEVELSCENE_H

@@ -149,8 +149,7 @@ struct Map {
     } callbacks_;
 
     timer::CallbackTimer<Map&> timeouts_;
-
-    uint32_t cost_ = 10;
+    
   public:
     struct iterator {
         using base_iter = std::vector<Grid>::iterator;
@@ -176,6 +175,7 @@ struct Map {
 
     std::vector<Grid> grids;
     Shape shape;
+    uint32_t cost_ = 10;
 
     explicit Map(std::vector<Grid> &&grids_, size_t width, size_t height)
         : grids(std::move(grids_)), shape{width, height} {
