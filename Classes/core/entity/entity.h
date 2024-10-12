@@ -228,8 +228,10 @@ struct EnemyInfo {
     int32_t speed_ = 0;
     EnemyType enemy_type_;
 
-    constexpr EnemyInfo(int32_t health, Defence defence, int32_t speed, EnemyType enemy_type)
-        : health_(health), defence_(defence), speed_(speed), enemy_type_(enemy_type){}
+    constexpr EnemyInfo(int32_t health, Defence defence, int32_t speed,
+                        EnemyType enemy_type)
+        : health_(health), defence_(defence), speed_(speed),
+          enemy_type_(enemy_type) {}
 };
 
 struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin, RouteMixin {
@@ -273,7 +275,7 @@ struct TowerInfo {
                         AttackType attack_type, TowerType tower_type)
         : attack_(attack), cost_(cost), deploy_interval_(deploy_interval),
           attack_interval_(attack_interval), attack_radius_(attack_radius),
-          attack_type_(attack_type), tower_type_(tower_type){}
+          attack_type_(attack_type), tower_type_(tower_type) {}
 
     TowerInfo with_attack_radius(size_t r) const noexcept {
         auto copied = *this;
@@ -289,9 +291,7 @@ struct TowerInfo {
 };
 
 struct Tower : Entity, AttackMixin, BuffMixin, IdMixin, NormalAttackMixin {
-    Tower(id::Id id, const timer::Clock &clk) : IdMixin{id} {
-        this->reset_attack_timer(clk);
-    }
+    Tower(id::Id id, const timer::Clock &clk) : IdMixin{id} {}
 
     Tower(Tower &&) = delete;
 
@@ -316,8 +316,7 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin, NormalAttackMixin {
     }
 };
 
-template <class Self, class G = GridRef, class... Args>
-struct TimeOutMixin {
+template <class Self, class G = GridRef, class... Args> struct TimeOutMixin {
     timer::CallbackTimer<Self &, G, Args...> timeouts_;
 
     void stop_timer_for(timer::Timer &timer, uint32_t d,
@@ -374,6 +373,8 @@ struct TowerFactoryBase {
     virtual std::unique_ptr<Tower> construct(id::Id id,
                                              const timer::Clock &clk) = 0;
     virtual TowerInfo info() const = 0;
+
+    virtual ~TowerFactoryBase() = default;
 };
 
 template <class T> struct TowerFactory : TowerFactoryBase {
@@ -385,13 +386,18 @@ template <class T> struct TowerFactory : TowerFactoryBase {
 template <class T>
 std::unique_ptr<Tower> TowerFactory<T>::construct(id::Id id,
                                                   const timer::Clock &clk) {
+    std::unique_ptr<Tower> res;
     if constexpr (std::is_constructible_v<T, id::Id, const timer::Clock &>) {
-        return std::make_unique<T>(id, clk);
+        res = std::make_unique<T>(id, clk);
     } else if constexpr (std::is_constructible_v<T, id::Id>) {
-        return std::make_unique<T>(id);
+        res = std::make_unique<T>(id);
     } else {
         static_assert(false, "Unsupported type");
     }
+
+    res->reset_attack_timer(clk);
+
+    return res;
 }
 
 template <class T> TowerInfo TowerFactory<T>::info() const { return T::INFO; }
