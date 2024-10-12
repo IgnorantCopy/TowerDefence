@@ -340,6 +340,7 @@ void LevelScene::update()
     // update money label
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
+    
     this->removeChild(moneyLabel);
     moneyLabel = cocos2d::Label::createWithTTF(std::to_string(map->getcost_()), "fonts/Bender/BENDER.OTF", 75);
     this->moneyLabel->setPosition(cocos2d::Vec2(origin.x + 150 + 15 * log10(map->getcost_()), origin.y + visibleSize.height - 70));
