@@ -206,14 +206,30 @@ enum class TowerType {
     AggressiveMagician,
     AggressiveMagicianPlus
 };
+enum class EnemyType {
+    Worm,
+    Dog,
+    Soldier,
+    Warlock,
+    Destroyer,
+    Tank,
+    Crab,
+    SpeedUp,
+    AttackDown,
+    LifeUp,
+    NotAttacked,
+    Boss1,
+    Boss2
+};
 
 struct EnemyInfo {
     int32_t health_ = 0;
     Defence defence_;
     int32_t speed_ = 0;
+    EnemyType enemy_type_;
 
-    constexpr EnemyInfo(int32_t health, Defence defence, int32_t speed)
-        : health_(health), defence_(defence), speed_(speed) {}
+    constexpr EnemyInfo(int32_t health, Defence defence, int32_t speed, EnemyType enemy_type)
+        : health_(health), defence_(defence), speed_(speed), enemy_type_(enemy_type){}
 };
 
 struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin, RouteMixin {
@@ -250,13 +266,14 @@ struct TowerInfo {
     double attack_interval_ = 0; // actual_attack_attack_speed
     size_t attack_radius_ = 0;
     AttackType attack_type_;
+    TowerType tower_type_;
 
     constexpr TowerInfo(int32_t attack, int32_t cost, int32_t deploy_interval,
                         double attack_interval, int32_t attack_radius,
-                        AttackType attack_type)
+                        AttackType attack_type, TowerType tower_type)
         : attack_(attack), cost_(cost), deploy_interval_(deploy_interval),
           attack_interval_(attack_interval), attack_radius_(attack_radius),
-          attack_type_(attack_type) {}
+          attack_type_(attack_type), tower_type_(tower_type){}
 
     TowerInfo with_attack_radius(size_t r) const noexcept {
         auto copied = *this;
@@ -291,8 +308,6 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin, NormalAttackMixin {
 
         return base;
     }
-
-    TowerType type;
 
     void on_tick(GridRef g) override;
 

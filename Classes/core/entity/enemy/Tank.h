@@ -9,7 +9,7 @@ namespace towerdefence {
         struct Tank final : Enemy {
 
             EnemyInfo info() const override {
-                return { 10000, { 300, 40 }, 5 };
+                return { 10000, { 300, 40 }, 5, EnemyType::Tank};
             }
         };
     } // namespace core

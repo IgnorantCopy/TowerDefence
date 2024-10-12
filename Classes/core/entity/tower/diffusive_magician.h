@@ -13,7 +13,7 @@ namespace towerdefence::core {
         DiffusiveMagician(id::Id id, const timer::Clock & clk);
         DiffusiveMagician() = delete;
 
-        static constexpr TowerInfo INFO { 1500, 15, 0, 25, 4, AttackType::Magic };
+        static constexpr TowerInfo INFO { 1500, 15, 0, 25, 4, AttackType::Magic, TowerType::DiffusiveMagician};
         TowerInfo info() const override { return INFO; }
 
         void on_tick(GridRef g) override;
