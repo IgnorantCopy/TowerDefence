@@ -5,6 +5,7 @@
 #include "core/entity/tower/magician_base.h"
 #include "ui/CocosGUI.h"
 #include <memory>
+#include <utility>
 
 USING_NS_CC;
 using towerdefence::core::ArcherBase;
@@ -67,6 +68,7 @@ void LevelScene::putTower(float x, float y) {
                     newTower = std::make_unique<TowerFactory<HelperBase>>();
                     break;
                 default:
+                    std::unreachable();
                     break;
                 }
                 auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
