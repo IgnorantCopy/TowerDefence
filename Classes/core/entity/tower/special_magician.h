@@ -17,6 +17,9 @@ namespace towerdefence {
             static constexpr TowerInfo INFO { 1400, 14, 0, 30, 2, AttackType::Magic, TowerType::SpecialMagician};
             TowerInfo info() const override { return INFO; }
 
+            int layer = 0;
+            bool skill = false;
+
             void on_tick(GridRef g) override;
         };
     } // namespace core
