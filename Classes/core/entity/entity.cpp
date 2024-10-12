@@ -10,10 +10,10 @@ void Entity::on_hit(GridRef g) {}
 void Enemy::increase_attack(int32_t atk, AttackType attack_type) {
     switch (attack_type) {
     case AttackType::Physics:
-        atk *= status().defence_.physics_;
+        atk = atk>status().defence_.physics_?(atk-status().defence_.physics_):(atk/20);
         break;
     case AttackType::Magic:
-        atk *= status().defence_.magic_;
+        atk = atk * ((100-status().defence_.magic_)/100.0);
         break;
     default:
         break;

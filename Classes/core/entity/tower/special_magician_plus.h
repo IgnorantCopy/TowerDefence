@@ -6,7 +6,7 @@
 namespace towerdefence {
     namespace core {
 
-        struct SpecialMagicianPlus final : Tower {
+        struct SpecialMagicianPlus final : Tower, TimeOutMixin<SpecialMagicianPlus>{
             timer::Timer release_skill_; // timer to release skill
 
             // store functions that will be executed after certain time
@@ -16,6 +16,9 @@ namespace towerdefence {
 
             static constexpr TowerInfo INFO { 1800, 25, 0, 30, 2, AttackType::Magic, TowerType::SpecialMagicianPlus};
             TowerInfo info() const override { return INFO; }
+
+            int layer = 0;
+            bool skill = false;
 
             void on_tick(GridRef g) override;
         };
