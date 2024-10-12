@@ -13,6 +13,8 @@
 #include "core/entity/tower/weaken_magician_plus.h"
 #include "core/entity/tower/aggressive_magician_plus.h"
 #include "ui/CocosGUI.h"
+#include <memory>
+#include <utility>
 
 USING_NS_CC;
 using towerdefence::core::Tower;
@@ -29,6 +31,8 @@ using towerdefence::core::DecelerateMagicianPlus;
 using towerdefence::core::WeakenMagicianPlus;
 using towerdefence::core::AggressiveMagicianPlus;
 using towerdefence::core::TowerType;
+using towerdefence::core::TowerFactory;
+using towerdefence::core::TowerFactoryBase;
 
 static void problemLoading(const char *filename) {
     printf("Error while loading: %s\n", filename);
@@ -36,7 +40,7 @@ static void problemLoading(const char *filename) {
            "in front of filenames in Level1Scene.cpp\n");
 }
 
-Sprite* LevelScene::getTower(Id id) {
+Sprite *LevelScene::getTower(Id id) {
     for (auto &pair : this->towers) {
         if (pair.first == id) {
             return pair.second;
@@ -44,7 +48,7 @@ Sprite* LevelScene::getTower(Id id) {
     }
 }
 
-Sprite* LevelScene::getEnemy(Id id) {
+Sprite *LevelScene::getEnemy(Id id) {
     for (auto &pair : this->enemies) {
         if (pair.first == id) {
             return pair.second;
@@ -92,22 +96,23 @@ void LevelScene::putTower(float x, float y) {
         if (this->type[indexY][indexX] == Grid::Type::BlockTower) {
             if (!this->map->get_ref(indexY, indexX).grid.tower.has_value()) {
                 std::string path = "images/towers/";
-                towerdefence::core::TowerFactoryBase *newTower;
+                std::unique_ptr<TowerFactoryBase> newTower;
                 switch (this->isSelecting) {
-                    case 1:
-                        path += "archer_base_onblock.png";
-                        newTower = new towerdefence::core::TowerFactory<ArcherBase>{};
-                        break;
-                    case 2:
-                        path += "magician_base_onblock.png";
-                        newTower = new towerdefence::core::TowerFactory<MagicianBase>{};
-                        break;
-                    case 3:
-                        path += "helper_base_onblock.png";
-                        newTower = new towerdefence::core::TowerFactory<HelperBase>{};
-                        break;
-                    default:
-                        break;
+                case 1:
+                    path += "archer_base_onblock.png";
+                    newTower = std::make_unique<TowerFactory<ArcherBase>>();
+                    break;
+                case 2:
+                    path += "magician_base_onblock.png";
+                    newTower = std::make_unique<TowerFactory<MagicianBase>>();
+                    break;
+                case 3:
+                    path += "helper_base_onblock.png";
+                    newTower = std::make_unique<TowerFactory<HelperBase>>();
+                    break;
+                default:
+                    std::unreachable();
+                    break;
                 }
                 auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
                 auto newTowerSprite = Sprite::create(path);
@@ -328,6 +333,9 @@ void LevelScene::showTowerInfo(float x, float y) {
                 this->isShowingTowerInfo = true;
                 scheduleOnce([this](float dt) {
                     this->isShowingTowerInfo = false;
+                    scheduleOnce([this](float dt) {
+                        this->isShowingTowerInfo = true;
+                    }, 0.1f, "resetTowerInfo");
                 }, 0.2f, "preventHighSpeed");
             }
         }
@@ -391,7 +399,7 @@ void LevelScene::showUpgradeMenu() {
     this->upgradeMenu->setScale(0.1f);
     this->upgradeMenu->setVisible(true);
     
-    auto scale = ScaleTo::create(0.2f, 1.0f);
+    auto scale = ScaleTo::create(0.5f, 1.0f);
     auto scaleEase = EaseBackOut::create(scale->clone());
     this->upgradeBackground1->runAction(scaleEase);
     this->upgradeBackground2->runAction(scaleEase->clone());
@@ -403,7 +411,7 @@ void LevelScene::showUpgradeMenu() {
 }
 
 void LevelScene::hideUpgradeMenu() {
-    auto scale = ScaleTo::create(0.2f, 0.1f);
+    auto scale = ScaleTo::create(0.5f, 0.1f);
     this->upgradeBackground1->runAction(scale);
     this->upgradeBackground2->runAction(scale->clone());
     this->upgradeBackground3->runAction(scale->clone());
@@ -432,13 +440,13 @@ void LevelScene::deleteTower(bool isReturn) {
     }
     if (towerSprite) {
         towerSprite->removeFromParent();
-    }
-    if (isReturn) {
-        this->map->withdraw_tower(this->selectedTowerId);
-        this->moneyLabel->setString(std::to_string(this->map->cost_));
-        this->updateSelectorEnabled();
-    } else {
-        this->map->remove_tower(this->selectedTowerId);
+        if (isReturn) {
+            this->map->withdraw_tower(this->selectedTowerId);
+            this->moneyLabel->setString(std::to_string(this->map->cost_));
+            this->updateSelectorEnabled();
+        } else {
+            this->map->remove_tower(this->selectedTowerId);
+        }
     }
 }
 
@@ -453,12 +461,15 @@ void LevelScene::upgradeTower() {
     int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
     int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
     std::string path;
-    towerdefence::core::TowerFactoryBase *newTower;
+    std::unique_ptr<TowerFactoryBase> newTower;
     switch (this->map->get_ref(indexY, indexX).grid.tower.value()->status().tower_type_) {
         case TowerType::ArcherBase:
             this->upgradeTower1->setTexture("images/towers/archer.png");
             this->upgradeTower2->setTexture("images/towers/highspeed_archer.png");
             this->upgradeTower3->setTexture("images/towers/bomber.png");
+            this->upgradeTower1->setScale(2.0f);
+            this->upgradeTower2->setScale(2.0f);
+            this->upgradeTower3->setScale(2.0f);
             if (this->map->cost_ < this->archerCost) {
                 this->upgradeItem1->setEnabled(false);
             } else {
@@ -480,6 +491,9 @@ void LevelScene::upgradeTower() {
             this->upgradeTower1->setTexture("images/towers/core_magician.png");
             this->upgradeTower2->setTexture("images/towers/diffusive_magician.png");
             this->upgradeTower3->setTexture("images/towers/special_magician.png");
+            this->upgradeTower1->setScale(2.0f);
+            this->upgradeTower2->setScale(2.0f);
+            this->upgradeTower3->setScale(2.0f);
             if (this->map->cost_ < this->coreMagicianCost) {
                 this->upgradeItem1->setEnabled(false);
             } else {
@@ -501,6 +515,9 @@ void LevelScene::upgradeTower() {
             this->upgradeTower1->setTexture("images/towers/decelerate_magician.png");
             this->upgradeTower2->setTexture("images/towers/weaken_magician.png");
             this->upgradeTower3->setTexture("images/towers/aggressive_magician.png");
+            this->upgradeTower1->setScale(2.0f);
+            this->upgradeTower2->setScale(2.0f);
+            this->upgradeTower3->setScale(2.0f);
             if (this->map->cost_ < this->decelerateMagicianCost) {
                 this->upgradeItem1->setEnabled(false);
             } else {
@@ -520,41 +537,42 @@ void LevelScene::upgradeTower() {
             return;
         case TowerType::Archer:
             path = "images/towers/archer_pro.png";
-            newTower = new towerdefence::core::TowerFactory<ArcherPlus>();
+            newTower = std::make_unique<TowerFactory<ArcherPlus>>();
             break;
         case TowerType::Bomber:
             path = "images/towers/bomber_pro.png";
-            newTower = new towerdefence::core::TowerFactory<BomberPlus>();
+            newTower = std::make_unique<TowerFactory<BomberPlus>>();
             break;
         case TowerType::CoreMagician:
             path = "images/towers/core_magician_pro.png";
-            newTower = new towerdefence::core::TowerFactory<CoreMagicianPlus>();
+            newTower = std::make_unique<TowerFactory<CoreMagicianPlus>>();
             break;
         case TowerType::DecelerateMagician:
             path = "images/towers/decelerate_magician_pro.png";
-            newTower = new towerdefence::core::TowerFactory<DecelerateMagicianPlus>();
+            newTower = std::make_unique<TowerFactory<DecelerateMagicianPlus>>();
             break;
         case TowerType::DiffusiveMagician:
             path = "images/towers/diffusive_magician_pro.png";
-            newTower = new towerdefence::core::TowerFactory<DiffusiveMagicianPlus>();
+            newTower = std::make_unique<TowerFactory<DiffusiveMagicianPlus>>();
             break;
         case TowerType::HighspeedArcher:
             path = "images/towers/highspeed_archer_pro.png";
-            newTower = new towerdefence::core::TowerFactory<HighspeedArcherPlus>();
+            newTower = std::make_unique<TowerFactory<HighspeedArcherPlus>>();
             break;
         case TowerType::SpecialMagician:
             path = "images/towers/special_magician_pro.png";
-            newTower = new towerdefence::core::TowerFactory<SpecialMagicianPlus>();
+            newTower = std::make_unique<TowerFactory<SpecialMagicianPlus>>();
             break;
         case TowerType::WeakenMagician:
             path = "images/towers/weaken_magician_pro.png";
-            newTower = new towerdefence::core::TowerFactory<WeakenMagicianPlus>();
+            newTower = std::make_unique<TowerFactory<WeakenMagicianPlus>>();
             break;
         case TowerType::AggressiveMagician:
             path = "images/towers/aggressive_magician_pro.png";
-            newTower = new towerdefence::core::TowerFactory<AggressiveMagicianPlus>();
+            newTower = std::make_unique<TowerFactory<AggressiveMagicianPlus>>();
             break;
         default:
+            std::unreachable();
             return;
     }
     this->deleteTower(false);
@@ -577,9 +595,12 @@ void LevelScene::menuCloseCallback(cocos2d::Ref *pSender)
     //Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();
 
-    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
+    /*To navigate back to native iOS screen(if present) without quitting the
+     * application  ,do not use Director::getInstance()->end() as given
+     * above,instead trigger a custom event created in RootViewController.mm as
+     * below*/
 
-    //EventCustom customEndEvent("game_scene_close_event");
+    // EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 }
 

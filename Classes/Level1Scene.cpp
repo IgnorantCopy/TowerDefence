@@ -1,5 +1,6 @@
 #include "Level1Scene.h"
 #include "SelectLevelScene.h"
+#include "cocostudio/SimpleAudioEngine.h"
 #include "core/entity/tower/archer.h"
 #include "core/entity/tower/highspeed_archer.h"
 #include "core/entity/tower/bomber.h"
@@ -11,7 +12,6 @@
 #include "core/entity/tower/aggressive_magician.h"
 
 USING_NS_CC;
-using towerdefence::core::TowerType;
 using towerdefence::core::Archer;
 using towerdefence::core::HighspeedArcher;
 using towerdefence::core::Bomber;
@@ -21,6 +21,9 @@ using towerdefence::core::SpecialMagician;
 using towerdefence::core::DecelerateMagician;
 using towerdefence::core::WeakenMagician;
 using towerdefence::core::AggressiveMagician;
+using towerdefence::core::TowerType;
+using towerdefence::core::TowerFactory;
+using towerdefence::core::TowerFactoryBase;
 
 Scene* Level1Scene::createScene()
 {
@@ -42,6 +45,10 @@ bool Level1Scene::init()
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    
+    // add bgm
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
+    player->playBackgroundMusic("audio/level1_bgm.MP3", true);
 
     auto background = Sprite::create("images/level1_background.png",Rect(0,0,2500,1500));
     if(background == nullptr) {
@@ -140,6 +147,7 @@ bool Level1Scene::init()
                 break;
             case ui::Widget::TouchEventType::ENDED:
                 this->deleteTower();
+                this->hideTowerInfo(0, 0);
                 break;
             default:
                 break;
@@ -148,7 +156,7 @@ bool Level1Scene::init()
     this->upgradeButton = ui::Button::create(
             "images/upgrade.png",
             "images/upgrade.png",
-            "images/upgrade.png"
+            "images/upgrade_inactive.png"
     );
     this->upgradeButton->setVisible(false);
     this->upgradeButton->addTouchEventListener([this](Ref *ref, ui::Widget::TouchEventType type) {
@@ -157,6 +165,7 @@ bool Level1Scene::init()
                 break;
             case ui::Widget::TouchEventType::ENDED:
                 this->upgradeTower();
+                this->hideTowerInfo(0, 0);
                 break;
             default:
                 break;
@@ -203,7 +212,9 @@ bool Level1Scene::init()
     
     // the back button to go back to the SelectLevel scene
     auto Back=Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
-    auto backItem=MenuItemLabel::create(Back, [this](Ref *ref){
+    auto backItem=MenuItemLabel::create(Back, [this, player](Ref *ref){
+        player->stopBackgroundMusic();
+        player->playBackgroundMusic("audio/menu_bgm.MP3", true);
         Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
     });
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
@@ -298,7 +309,7 @@ bool Level1Scene::init()
     auto upgradeLabel1 = Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
     this->upgradeItem1 = MenuItemLabel::create(upgradeLabel1, [this](Ref *ref){
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
-        towerdefence::core::TowerFactoryBase *newTower;
+        std::unique_ptr<TowerFactoryBase> newTower;
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         float typeX = origin.x + 350 + SIZE;
@@ -311,17 +322,18 @@ bool Level1Scene::init()
         switch (this->map->get_ref(indexY, indexX).grid.tower.value()->status().tower_type_) {
             case TowerType::ArcherBase:
                 path = "images/towers/archer.png";
-                newTower = new towerdefence::core::TowerFactory<Archer>{};
+                newTower = std::make_unique<TowerFactory<Archer>>();
                 break;
             case TowerType::MagicianBase:
                 path = "images/towers/core_magician.png";
-                newTower = new towerdefence::core::TowerFactory<CoreMagician>{};
+                newTower = std::make_unique<TowerFactory<CoreMagician>>();
                 break;
             case TowerType::HelperBase:
                 path = "images/towers/decelerate_magician.png";
-                newTower = new towerdefence::core::TowerFactory<DecelerateMagician>{};
+                newTower = std::make_unique<TowerFactory<DecelerateMagician>>();
                 break;
             default:
+                std::unreachable();
                 break;
         }
         this->deleteTower(false);
@@ -339,7 +351,7 @@ bool Level1Scene::init()
     auto upgradeLabel2 = Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
     this->upgradeItem2 = MenuItemLabel::create(upgradeLabel2, [this](Ref *ref){
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
-        towerdefence::core::TowerFactoryBase *newTower;
+        std::unique_ptr<TowerFactoryBase> newTower;
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         float typeX = origin.x + 350 + SIZE;
@@ -352,15 +364,15 @@ bool Level1Scene::init()
         switch (this->map->get_ref(indexY, indexX).grid.tower.value()->status().tower_type_) {
             case TowerType::ArcherBase:
                 path = "images/towers/highspeed_archer.png";
-                newTower = new towerdefence::core::TowerFactory<HighspeedArcher>{};
+                newTower = std::make_unique<TowerFactory<HighspeedArcher>>();
                 break;
             case TowerType::MagicianBase:
                 path = "images/towers/diffusive_magician.png";
-                newTower = new towerdefence::core::TowerFactory<DiffusiveMagician>{};
+                newTower = std::make_unique<TowerFactory<DiffusiveMagician>>();
                 break;
             case TowerType::HelperBase:
                 path = "images/towers/weaken_magician.png";
-                newTower = new towerdefence::core::TowerFactory<WeakenMagician>{};
+                newTower = std::make_unique<TowerFactory<WeakenMagician>>();
                 break;
             default:
                 break;
@@ -380,7 +392,7 @@ bool Level1Scene::init()
     auto upgradeLabel3 = Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
     this->upgradeItem3 = MenuItemLabel::create(upgradeLabel3, [this](Ref *ref){
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
-        towerdefence::core::TowerFactoryBase *newTower;
+        std::unique_ptr<TowerFactoryBase> newTower;
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         float typeX = origin.x + 350 + SIZE;
@@ -393,15 +405,15 @@ bool Level1Scene::init()
         switch (this->map->get_ref(indexY, indexX).grid.tower.value()->status().tower_type_) {
             case TowerType::ArcherBase:
                 path = "images/towers/bomber.png";
-                newTower = new towerdefence::core::TowerFactory<Bomber>{};
+                newTower = std::make_unique<TowerFactory<Bomber>>();
                 break;
             case TowerType::MagicianBase:
                 path = "images/towers/special_magician.png";
-                newTower = new towerdefence::core::TowerFactory<SpecialMagician>{};
+                newTower = std::make_unique<TowerFactory<SpecialMagician>>();
                 break;
             case TowerType::HelperBase:
                 path = "images/towers/aggressive_magician.png";
-                newTower = new towerdefence::core::TowerFactory<AggressiveMagician>{};
+                newTower = std::make_unique<TowerFactory<AggressiveMagician>>();
                 break;
             default:
                 break;

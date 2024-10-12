@@ -14,23 +14,28 @@ void DiffusiveMagicianPlus::on_tick(GridRef g) {
         if (auto it = grid_of_nearest_enemy(grids); it != grids.end()) {
             auto ref = *it;
 
-            this->attack_ = clk.never();
-            this->add_buff_in({this->id, Buff::DEFAULT},
-                              Buff::attack_radius(-1),
-                              clk.with_duration_sec(20));
-
-            timeouts_.add_callback(
-                clk.with_before_sec(20),
-                [](DiffusiveMagicianPlus &self, GridRef g) {
-                    auto status = self.status();
-                    g.attack_enemies_in_radius(
-                        status.with_attack(status.attack_ * 1.2), linf_dis);
-
-                    return true;
-                });
-            timeouts_.add_callback(clk.with_duration_sec(20),
-                                   restore_normal_attack);
+            ref.attack_enemies_in_radius(this->status().with_attack_radius(1),
+                                         linf_dis);
         }
+    }
+
+    if (clk.is_triggered(this->release_skill_)) {
+        this->attack_ = clk.never();
+        this->add_buff_in({this->id, Buff::DEFAULT},
+                          Buff::attack_radius(-1) & Buff::attack(2.2),
+                          clk.with_duration_sec(20));
+
+        timeouts_.add_callback(clk.with_before_sec(20),
+                               [](DiffusiveMagicianPlus &self, GridRef g) {
+                                   auto status = self.status();
+                                   g.attack_enemies_in_radius(
+                                       status.with_attack(status.attack_ * 1.2),
+                                       linf_dis);
+
+                                   return true;
+                               });
+        timeouts_.add_callback(clk.with_duration_sec(20),
+                               restore_normal_attack);
     }
 }
 } // namespace core

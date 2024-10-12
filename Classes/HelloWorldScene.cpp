@@ -25,7 +25,7 @@
 #include "HelloWorldScene.h"
 #include "2d/CCLabel.h"
 #include "SelectLevelScene.h"
-
+#include "cocostudio/SimpleAudioEngine.h"
 USING_NS_CC;
 
 bool firstTouch = true;
@@ -53,6 +53,10 @@ bool HelloWorld::init()
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    
+    // add bgm
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
+    player->playEffect("audio/menu_bgm.mp3", true);
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program

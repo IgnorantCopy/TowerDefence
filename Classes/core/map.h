@@ -113,6 +113,25 @@ struct Shape {
 
 struct GridRef;
 
+struct CallbackParmas {};
+
+struct CallbackHandle {
+    id::Id handle;
+
+    struct hasher {
+        size_t operator()(const CallbackHandle &h) const noexcept {
+            return std::hash<id::Id>{}(h.handle);
+        }
+    };
+
+    bool operator==(const CallbackHandle &) const noexcept = default;
+};
+
+template <class... Parma>
+using CallbackContainer =
+    std::unordered_map<CallbackHandle, std::function<void(Parma...)>,
+                       CallbackHandle::hasher>;
+
 struct Map {
   private:
     timer::Clock clock_;
@@ -121,6 +140,12 @@ struct Map {
     // entity of `id`
     std::unordered_map<id::Id, std::pair<size_t, size_t>> enemy_refs_;
     std::unordered_map<id::Id, std::pair<size_t, size_t>> tower_refs_;
+
+    struct {
+        CallbackContainer<const Entity &, CallbackParmas> on_release_skill;
+        CallbackContainer<const Entity &, CallbackParmas> on_entity_death;
+        CallbackContainer<const Enemy &, CallbackParmas> on_enemy_move;
+    } callbacks_;
 
     timer::CallbackTimer<Map&> timeouts_;
     
@@ -149,7 +174,7 @@ struct Map {
 
     std::vector<Grid> grids;
     Shape shape;
-    uint32_t cost_ = 10;
+    uint32_t cost_ = 1000;
 
     explicit Map(std::vector<Grid> &&grids_, size_t width, size_t height)
         : grids(std::move(grids_)), shape{width, height} {
@@ -165,6 +190,31 @@ struct Map {
                 grids.push_back(f(i, j));
             }
         }
+    }
+
+    // register a callback function to be called whenver an entity releases a
+    // skill
+    CallbackHandle
+    on_release_skill(std::function<void(const Entity &, CallbackParmas)> f) {
+        CallbackHandle handle{this->assign_id()};
+        this->callbacks_.on_release_skill.insert({handle, f});
+        return handle;
+    }
+
+    // register a callback function to be called whenver an entity dies
+    CallbackHandle
+    on_entity_death(std::function<void(const Entity &, CallbackParmas)> f) {
+        CallbackHandle handle{this->assign_id()};
+        this->callbacks_.on_entity_death.insert({handle, f});
+        return handle;
+    }
+
+    // register a callback function to be called whenver an entity moves
+    CallbackHandle
+    on_enemy_move(std::function<void(const Enemy &, CallbackParmas)> f) {
+        CallbackHandle handle{this->assign_id()};
+        this->callbacks_.on_enemy_move.insert({handle, f});
+        return handle;
     }
 
     GridRef get_ref(size_t row, size_t column);

@@ -4,6 +4,7 @@
 #include "Level3Scene.h"
 #include "ui/CocosGUI.h"
 #include "HelloWorldScene.h"
+#include "cocostudio/SimpleAudioEngine.h"
 
 USING_NS_CC;
 
@@ -27,6 +28,9 @@ bool SelectLevelScene::init()
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    
+    // add bgm
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
 
     auto closeItem = MenuItemImage::create(
             "CloseNormal.png",
@@ -67,11 +71,12 @@ bool SelectLevelScene::init()
             "images/level1_background_select.png",
             "images/locked.png"
     );
-    level1Button->addTouchEventListener([this](Ref *pSender, ui::Widget::TouchEventType type){
+    level1Button->addTouchEventListener([this, player](Ref *pSender, ui::Widget::TouchEventType type){
         switch (type) {
             case ui::Widget::TouchEventType::BEGAN:
                 break;
             case ui::Widget::TouchEventType::ENDED:
+                player->stopBackgroundMusic();
                 Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level1Scene::createScene()));
                 break;
             default:
@@ -86,11 +91,12 @@ bool SelectLevelScene::init()
             "images/level2_background_select.png",
             "images/locked.png"
     );
-    level2Button->addTouchEventListener([this](Ref *pSender, ui::Widget::TouchEventType type){
+    level2Button->addTouchEventListener([this, player](Ref *pSender, ui::Widget::TouchEventType type){
         switch (type) {
             case ui::Widget::TouchEventType::BEGAN:
                 break;
             case ui::Widget::TouchEventType::ENDED:
+                player->stopBackgroundMusic();
                 Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level2Scene::createScene()));
                 break;
             default:
@@ -105,11 +111,12 @@ bool SelectLevelScene::init()
             "images/level3_background_select.png",
             "images/locked.png"
     );
-    level3Button->addTouchEventListener([this](Ref *pSender, ui::Widget::TouchEventType type){
+    level3Button->addTouchEventListener([this, player](Ref *pSender, ui::Widget::TouchEventType type){
         switch (type) {
             case ui::Widget::TouchEventType::BEGAN:
                 break;
             case ui::Widget::TouchEventType::ENDED:
+                player->stopBackgroundMusic();
                 Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level3Scene::createScene()));
                 break;
             default:
