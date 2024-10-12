@@ -17,8 +17,7 @@ using towerdefence::core::Tower;
 using towerdefence::core::TowerType;
 
 
-namespace towerdefence::animation {
-
+class LevelScene;
 class Bullet {
 protected:
     cocos2d::Sprite *bullet;
@@ -33,6 +32,8 @@ protected:
 public:
     Bullet(LevelScene *levelScene, Tower *tower, Enemy *enemy);
     virtual ~Bullet() = default;
+    
+    cocos2d::Sprite *getBullet() const { return bullet; }
     
     virtual void move();
     void updateAngle();
@@ -50,7 +51,5 @@ public:
     void move() override;
     void explosion();
 };
-
-} // namespace towerdefence::animation
 
 #endif //TOWERDEFENCE_TOWERANIMATION_H

@@ -250,7 +250,7 @@ bool Level1Scene::init()
     } else {
         this->upgradeBackground1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800, origin.y + visibleSize.height / 2));
         this->addChild(this->upgradeBackground1, 5);
-//        this->upgradeBackground1->setVisible(false);
+        this->upgradeBackground1->setVisible(false);
     }
     this->upgradeBackground2 = Sprite::create(
             "images/upgrade_background.png");
@@ -259,7 +259,7 @@ bool Level1Scene::init()
     } else {
         this->upgradeBackground2->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
         this->addChild(this->upgradeBackground2, 5);
-//        this->upgradeBackground2->setVisible(false);
+        this->upgradeBackground2->setVisible(false);
     }
     this->upgradeBackground3 = Sprite::create("images/upgrade_background.png");
     if(this->upgradeBackground3 == nullptr) {
@@ -267,7 +267,7 @@ bool Level1Scene::init()
     } else {
         this->upgradeBackground3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800, origin.y + visibleSize.height / 2));
         this->addChild(this->upgradeBackground3, 5);
-//        this->upgradeBackground3->setVisible(false);
+        this->upgradeBackground3->setVisible(false);
     }
     
     this->upgradeTower1 = Sprite::create("images/towers/archer_base.png");
@@ -276,7 +276,7 @@ bool Level1Scene::init()
     } else {
         this->upgradeTower1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800, origin.y + visibleSize.height / 2 + 150));
         this->addChild(this->upgradeTower1, 6);
-//        this->upgradeTower1->setVisible(false);
+        this->upgradeTower1->setVisible(false);
     }
     this->upgradeTower2 = Sprite::create("images/towers/magician_base.png");
     if(this->upgradeTower2 == nullptr) {
@@ -284,7 +284,7 @@ bool Level1Scene::init()
     } else {
         this->upgradeTower2->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 150));
         this->addChild(this->upgradeTower2, 6);
-//        this->upgradeTower2->setVisible(false);
+        this->upgradeTower2->setVisible(false);
     }
     this->upgradeTower3 = Sprite::create("images/towers/helper_base.png");
     if(this->upgradeTower3 == nullptr) {
@@ -292,7 +292,7 @@ bool Level1Scene::init()
     } else {
         this->upgradeTower3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800, origin.y + visibleSize.height / 2 + 150));
         this->addChild(this->upgradeTower3, 6);
-//        this->upgradeTower3->setVisible(false);
+        this->upgradeTower3->setVisible(false);
     }
     
     auto upgradeLabel1 = Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
@@ -330,12 +330,12 @@ bool Level1Scene::init()
         newTowerSprite->setPosition(Vec2(x, y));
         this->addChild(newTowerSprite, 3);
         this->selectedTowerId = id.value();
-        this->towers.push_back(std::make_pair(id.value(), newTowerSprite));
+        this->towers.emplace_back(id.value(), newTowerSprite);
         this->moneyLabel->setString(std::to_string(this->map->cost_));
         this->updateSelectorEnabled();
         this->hideUpgradeMenu();
     });
-    upgradeItem1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800, origin.y + visibleSize.height / 2 - 50));
+    upgradeItem1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800, origin.y + visibleSize.height / 2 - 150));
     auto upgradeLabel2 = Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
     this->upgradeItem2 = MenuItemLabel::create(upgradeLabel2, [this](Ref *ref){
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
@@ -371,12 +371,12 @@ bool Level1Scene::init()
         newTowerSprite->setPosition(Vec2(x, y));
         this->addChild(newTowerSprite, 3);
         this->selectedTowerId = id.value();
-        this->towers.push_back(std::make_pair(id.value(), newTowerSprite));
+        this->towers.emplace_back(id.value(), newTowerSprite);
         this->moneyLabel->setString(std::to_string(this->map->cost_));
         this->updateSelectorEnabled();
         this->hideUpgradeMenu();
     });
-    upgradeItem2->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 50));
+    upgradeItem2->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 150));
     auto upgradeLabel3 = Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
     this->upgradeItem3 = MenuItemLabel::create(upgradeLabel3, [this](Ref *ref){
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
@@ -412,17 +412,18 @@ bool Level1Scene::init()
         newTowerSprite->setPosition(Vec2(x, y));
         this->addChild(newTowerSprite, 3);
         this->selectedTowerId = id.value();
-        this->towers.push_back(std::make_pair(id.value(), newTowerSprite));
+        this->towers.emplace_back(id.value(), newTowerSprite);
         this->moneyLabel->setString(std::to_string(this->map->cost_));
         this->updateSelectorEnabled();
         this->hideUpgradeMenu();
     });
-    upgradeItem3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800, origin.y + visibleSize.height / 2 - 50));
+    upgradeItem3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800, origin.y + visibleSize.height / 2 - 150));
     auto cancelLabel = Label::createWithTTF("Cancel", "fonts/Bender/BENDER.OTF", 75);
+    cancelLabel->setColor(Color3B(255, 0, 0));
     this->cancelUpgradeItem = MenuItemLabel::create(cancelLabel, [this](Ref *ref){
         this->hideUpgradeMenu();
     });
-    this->cancelUpgradeItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 150));
+    this->cancelUpgradeItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 300));
     
     auto enemyExample = Sprite::create("images/enemies/dog/move/dog_move00.png");
     if (enemyExample == nullptr) {
@@ -460,7 +461,7 @@ bool Level1Scene::init()
     this->upgradeMenu = Menu::createWithArray(upgradeMenuItems);
     this->addChild(this->upgradeMenu, 6);
     this->upgradeMenu->setPosition(Vec2::ZERO);
-//    this->upgradeMenu->setVisible(false);
+    this->upgradeMenu->setVisible(false);
     
     // add a mouse click event listener
     auto mouseListener = EventListenerMouse::create();

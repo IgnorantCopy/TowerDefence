@@ -8,8 +8,8 @@
 using towerdefence::core::Grid;
 using towerdefence::core::Map;
 using towerdefence::core::id::Id;
-using towerdefence::animation::Bullet;
 
+class Bullet;
 class LevelScene : public cocos2d::Scene {
 protected:
     // the map of each level

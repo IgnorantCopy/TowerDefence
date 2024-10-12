@@ -54,7 +54,7 @@ Sprite* LevelScene::getEnemy(Id id) {
 
 void LevelScene::addBullet(Bullet *bullet) {
     this->bullets.push_back(bullet);
-    this->addChild(bullet->bullet, 4);
+    this->addChild(bullet->getBullet(), 4);
 }
 
 void LevelScene::updateSelectorEnabled() {
@@ -94,31 +94,28 @@ void LevelScene::putTower(float x, float y) {
                 std::string path = "images/towers/";
                 towerdefence::core::TowerFactoryBase *newTower;
                 switch (this->isSelecting) {
-                case 1:
-                    path += "archer_base_onblock.png";
-                    newTower =
-                        new towerdefence::core::TowerFactory<ArcherBase>{};
-                    break;
-                case 2:
-                    path += "magician_base_onblock.png";
-                    newTower =
-                        new towerdefence::core::TowerFactory<MagicianBase>{};
-                    break;
-                case 3:
-                    path += "helper_base_onblock.png";
-                    newTower =
-                        new towerdefence::core::TowerFactory<HelperBase>{};
-                    break;
-                default:
-                    break;
+                    case 1:
+                        path += "archer_base_onblock.png";
+                        newTower = new towerdefence::core::TowerFactory<ArcherBase>{};
+                        break;
+                    case 2:
+                        path += "magician_base_onblock.png";
+                        newTower = new towerdefence::core::TowerFactory<MagicianBase>{};
+                        break;
+                    case 3:
+                        path += "helper_base_onblock.png";
+                        newTower = new towerdefence::core::TowerFactory<HelperBase>{};
+                        break;
+                    default:
+                        break;
                 }
                 auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
                 auto newTowerSprite = Sprite::create(path);
                 newTowerSprite->setPosition(Vec2(typeX + indexX * SIZE, typeY - indexY * SIZE));
                 this->addChild(newTowerSprite, 3);
-                this->towers.push_back(std::make_pair(
+                this->towers.emplace_back(
                     id.value(),
-                    newTowerSprite)); // todo: handle spawning failure
+                    newTowerSprite); // todo: handle spawning failure
                 this->moneyLabel->setString(std::to_string(this->map->cost_));
                 this->updateSelectorEnabled();
             }
@@ -566,7 +563,7 @@ void LevelScene::upgradeTower() {
     newTowerSprite->setPosition(Vec2(x, y));
     this->addChild(newTowerSprite, 3);
     this->selectedTowerId = id.value();
-    this->towers.push_back(std::make_pair(id.value(), newTowerSprite));
+    this->towers.emplace_back(id.value(), newTowerSprite);
     this->moneyLabel->setString(std::to_string(this->map->cost_));
     this->updateSelectorEnabled();
 }
