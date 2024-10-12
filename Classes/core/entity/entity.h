@@ -206,14 +206,30 @@ enum class TowerType {
     AggressiveMagician,
     AggressiveMagicianPlus
 };
+enum class EnemyType {
+    Worm,
+    Dog,
+    Soldier,
+    Warlock,
+    Destroyer,
+    Tank,
+    Crab,
+    SpeedUp,
+    AttackDown,
+    LifeUp,
+    NotAttacked,
+    Boss1,
+    Boss2
+};
 
 struct EnemyInfo {
     int32_t health_ = 0;
     Defence defence_;
     int32_t speed_ = 0;
+    EnemyType enemy_type_;
 
-    constexpr EnemyInfo(int32_t health, Defence defence, int32_t speed)
-        : health_(health), defence_(defence), speed_(speed) {}
+    constexpr EnemyInfo(int32_t health, Defence defence, int32_t speed, EnemyType enemy_type)
+        : health_(health), defence_(defence), speed_(speed), enemy_type_(enemy_type){}
 };
 
 struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin, RouteMixin {

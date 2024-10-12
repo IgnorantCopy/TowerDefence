@@ -14,7 +14,7 @@ struct AttackDown final : Enemy {
     AttackDown(id::Id id, route::Route route, const timer::Clock & clk);
     AttackDown() = delete;
 
-    EnemyInfo info() const override { return {20000, {700, 50}, 8}; }
+    EnemyInfo info() const override { return {20000, {700, 50}, 8, EnemyType::AttackDown}; }
 
     void on_tick(GridRef g) override;
     void on_death(GridRef g) override;
