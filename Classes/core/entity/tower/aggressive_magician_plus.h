@@ -15,7 +15,7 @@ namespace towerdefence {
 
             AggressiveMagicianPlus(id::Id id, const timer::Clock &clk);
 
-            static constexpr TowerInfo INFO { 650, 14, 0, 16, 3, AttackType::Magic };
+            static constexpr TowerInfo INFO { 650, 14, 0, 16, 3, AttackType::Magic, TowerType::AggressiveMagicianPlus};
             TowerInfo info() const override { return INFO; }
 
             void on_tick(GridRef g) override;

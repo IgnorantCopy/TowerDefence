@@ -250,13 +250,14 @@ struct TowerInfo {
     double attack_interval_ = 0; // actual_attack_attack_speed
     size_t attack_radius_ = 0;
     AttackType attack_type_;
+    TowerType tower_type_;
 
     constexpr TowerInfo(int32_t attack, int32_t cost, int32_t deploy_interval,
                         double attack_interval, int32_t attack_radius,
-                        AttackType attack_type)
+                        AttackType attack_type, TowerType tower_type)
         : attack_(attack), cost_(cost), deploy_interval_(deploy_interval),
           attack_interval_(attack_interval), attack_radius_(attack_radius),
-          attack_type_(attack_type) {}
+          attack_type_(attack_type), tower_type_(tower_type){}
 
     TowerInfo with_attack_radius(size_t r) const noexcept {
         auto copied = *this;
@@ -291,8 +292,6 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin, NormalAttackMixin {
 
         return base;
     }
-
-    TowerType type;
 
     void on_tick(GridRef g) override;
 
