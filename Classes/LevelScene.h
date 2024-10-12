@@ -4,9 +4,11 @@
 #include "cocos2d.h"
 #include "core/map.h"
 #include "ui/CocosGUI.h"
+#include "animation/TowerAnimation.h"
 using towerdefence::core::Grid;
 using towerdefence::core::Map;
-using namespace towerdefence::core::id;
+using towerdefence::core::id::Id;
+using towerdefence::animation::Bullet;
 
 class LevelScene : public cocos2d::Scene {
 protected:
@@ -90,6 +92,9 @@ protected:
     void hideTowerInfo(float x, float y);
     
 public:
+    // bullets
+    std::vector<Bullet*> bullets;
+    
     // a selector callback
     void menuCloseCallback(cocos2d::Ref *pSender);
 
@@ -102,6 +107,8 @@ public:
     
     cocos2d::Sprite* getTower(Id id);
     cocos2d::Sprite* getEnemy(Id id);
+    
+    void addBullet(Bullet *bullet);
 };
 
 #endif //TOWERDEFENCE_LEVELSCENE_H

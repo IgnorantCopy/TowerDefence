@@ -52,6 +52,11 @@ Sprite* LevelScene::getEnemy(Id id) {
     }
 }
 
+void LevelScene::addBullet(Bullet *bullet) {
+    this->bullets.push_back(bullet);
+    this->addChild(bullet->bullet, 4);
+}
+
 void LevelScene::updateSelectorEnabled() {
     if (this->map->cost_ < this->archerBaseCost) {
         this->archerBaseSelector->setEnabled(false);
