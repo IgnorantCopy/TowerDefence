@@ -48,10 +48,12 @@ namespace towerdefence {
             }
 
             if (clk.is_triggered(this->release_skill_)) {
-                timeouts_.add_callback(clk.with_before(15*30),
-                                       [=](SpecialMagicianPlus &self, GridRef g){
-                                                    self.skill = true;
-                                                    return true;
+                this->skill = true;
+                timeouts_.add_callback(clk.with_duration_sec(15),
+                                       [](SpecialMagicianPlus &self, GridRef){
+                                                    self.skill = false;
+                                                    return false;
+
                                        });
             }
         }
