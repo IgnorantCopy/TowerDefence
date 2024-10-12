@@ -98,10 +98,10 @@ add_library(core
     Classes/core/entity/tower/diffusive_magician_plus.h
     Classes/core/entity/tower/helper_base.cpp
     Classes/core/entity/tower/helper_base.h
-    Classes/core/entity/tower/highspeed_archor.cpp
-    Classes/core/entity/tower/highspeed_archor.h
-    Classes/core/entity/tower/highspeed_archor_plus.cpp
-    Classes/core/entity/tower/highspeed_archor_plus.h
+        Classes/core/entity/tower/highspeed_archer.cpp
+        Classes/core/entity/tower/highspeed_archer.h
+        Classes/core/entity/tower/highspeed_archer_plus.cpp
+        Classes/core/entity/tower/highspeed_archer_plus.h
     Classes/core/entity/tower/magician_base.cpp
     Classes/core/entity/tower/magician_base.h
     Classes/core/entity/tower/special_magician.cpp
@@ -212,6 +212,11 @@ else()
     add_library(${APP_NAME} SHARED ${all_code_files})
     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
+endif()
+
+if (TOWERDEFENCE_SANITIZER)
+    add_compile_options(-fsanitize=address,undefined)
+    add_link_options(-fsanitize=address,undefined)
 endif()
 
 set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD ${TOWERDEFENCE_CXX_STANDARD})

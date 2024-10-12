@@ -1,19 +1,19 @@
-#include "highspeed_archor.h"
+#include "highspeed_archer_plus.h"
 #include "../../map.h"
 
 namespace towerdefence {
     namespace core {
-        HighspeedArcher::HighspeedArcher(id::Id id, const timer::Clock &clk)
-                : Tower(id), release_skill_(clk.with_period_sec(6)) {}
+        HighspeedArcherPlus::HighspeedArcherPlus(id::Id id, const timer::Clock &clk)
+                : Tower(id, clk), release_skill_(clk.with_period_sec(5)) {}
 
-        void HighspeedArcher::on_tick(GridRef g) {
+        void HighspeedArcherPlus::on_tick(GridRef g) {
             Tower::on_tick(g);
             auto grids = g.with_radius(this->status().attack_radius_, linf_dis);
             auto enemy_grid = get_enemy_grid(*this,grids);
             if(enemy_grid!=grids.end()){
                 if(skill){
                     this->add_buff({this->id, Buff::DEFAULT},
-                                   Buff::attack(0.40));
+                                   Buff::attack(0.60));
                     single_attack(*this,*enemy_grid);
                     this->remove_buff_from(this->id);
                     skill = false;

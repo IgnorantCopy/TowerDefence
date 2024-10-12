@@ -10,7 +10,7 @@ namespace towerdefence {
             bool not_hit_ = true;
 
             EnemyInfo info() const override {
-                return { 16000, { 500, 20 }, 8 };
+                return { 16000, { 500, 20 }, 8, EnemyType::NotAttacked};
             }
             
             void on_hit(GridRef g) override;

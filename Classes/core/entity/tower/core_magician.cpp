@@ -4,7 +4,7 @@
 namespace towerdefence {
     namespace core {
         CoreMagician::CoreMagician(id::Id id, const timer::Clock &clk)
-                : Tower(id), release_skill_(clk.with_period_sec(8)) {}
+                : Tower(id, clk), release_skill_(clk.with_period_sec(8)) {}
 
         void CoreMagician::on_tick(GridRef g) {
             Tower::on_tick(g);
