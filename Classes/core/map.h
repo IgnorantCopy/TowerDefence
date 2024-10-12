@@ -122,6 +122,8 @@ struct Map {
     std::unordered_map<id::Id, std::pair<size_t, size_t>> enemy_refs_;
     std::unordered_map<id::Id, std::pair<size_t, size_t>> tower_refs_;
 
+    timer::CallbackTimer<Map&> timeouts_;
+    
   public:
     struct iterator {
         using base_iter = std::vector<Grid>::iterator;
@@ -264,6 +266,17 @@ struct Map {
     iterator begin() { return iterator{grids.begin(), grids.begin(), *this}; }
 
     iterator end() { return iterator{grids.begin(), grids.end(), *this}; }
+
+    // add a callback called when t tiggers.
+    // if callback returns false, it will be removed.
+    //
+    // SAFETY: caller must ensure that all captured variables of callback's
+    // lifetime NOT SHORTER than the object.
+    //
+    // Particularly, do not capture members in `Tower`s or `Enemy`s.
+    void set_timeout(timer::Timer t, std::function<bool(Map&)> callback) {
+        this->timeouts_.add_callback(t, callback);
+    }
 };
 
 static size_t absdiff(size_t x, size_t y) { return (x > y) ? x - y : y - x; }
@@ -278,6 +291,8 @@ static size_t linf_dis(size_t x1, size_t y1, size_t x2, size_t y2) {
     return std::max(absdiff(x1, x2), absdiff(y1, y2));
 }
 
+using DisFn = std::function<size_t(size_t, size_t, size_t, size_t)>;
+
 struct GridRef {
     Map &map;
     Grid &grid;
@@ -291,10 +306,10 @@ struct GridRef {
     explicit GridRef(Map &m, Grid &g, size_t row_, size_t column_)
         : map(m), grid(g), row(row_), column(column_) {}
 
+    GridRef(const GridRef &) = default;
+
     // Returns points whose distance between self <= radix
-    std::vector<GridRef>
-    with_radius(size_t radius,
-                std::function<size_t(size_t, size_t, size_t, size_t)> dis) {
+    std::vector<GridRef> with_radius(size_t radius, DisFn dis) {
         std::vector<GridRef> res;
         // todo: optimize to O(radix) algorithm
         for (size_t i = 0; i < map.shape.height_; ++i) {
@@ -306,6 +321,26 @@ struct GridRef {
         }
 
         return res;
+    }
+
+    // attack all enemies in grids found by (status.attack_radius_, dis)
+    void attack_enemies_in_radius(TowerInfo status, DisFn dis) {
+        for (auto ref : this->with_radius(status.attack_radius_, dis)) {
+            ref.grid.with_enemy([&](Enemy &e) {
+                e.increase_attack(status.attack_, status.attack_type_);
+            });
+        }
+    }
+
+    void with_nearest_enemy(std::function<void(Enemy &)> f) {
+        auto &enemies = this->grid.enemies;
+        auto target_enemy = std::ranges::min_element(
+            enemies.begin(), enemies.end(), {},
+            [](std::unique_ptr<Enemy> &e) { return e->remaining_distance(); });
+        
+        if (target_enemy != enemies.end()) {
+            f(**target_enemy);
+        }
     }
 
     std::optional<std::unique_ptr<Tower>> &get_nearest_tower() {
@@ -343,6 +378,17 @@ struct GridRef {
 
     const timer::Clock &clock() const { return map.clock(); }
     Grid &current() { return grid; }
+
+    // add a callback called when t tiggers.
+    // if callback returns false, it will be removed.
+    //
+    // SAFETY: caller must ensure that all captured variables of callback's
+    // lifetime NOT SHORTER than the object.
+    //
+    // Particularly, do not capture members in `Tower`s or `Enemy`s.
+    void set_timeout(timer::Timer t, std::function<bool(Map&)> callback) {
+        this->map.set_timeout(t, callback);
+    }
 };
 
 } // namespace core

@@ -9,7 +9,6 @@ using towerdefence::core::Map;
 using namespace towerdefence::core::id;
 
 class LevelScene : public cocos2d::Scene {
-
 protected:
     // the map of each level
     Map *map = nullptr;
@@ -78,8 +77,6 @@ protected:
     
     void updateSelectorEnabled();
     
-    cocos2d::Sprite* getTower(Id id);
-    cocos2d::Sprite* getEnemy(Id id);
     void deleteTower(bool isReturn = true);
     void upgradeTower();
     void showUpgradeMenu();
@@ -100,10 +97,11 @@ public:
     void createMap(int level);
     
     void onMouseDown(cocos2d::Event *event);
-    
     void onMouseUp(cocos2d::Event *event);
-    
     void onMouseMove(cocos2d::Event *event);
+    
+    cocos2d::Sprite* getTower(Id id);
+    cocos2d::Sprite* getEnemy(Id id);
 };
 
 #endif //TOWERDEFENCE_LEVELSCENE_H

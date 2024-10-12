@@ -40,6 +40,10 @@ struct AttackMixin {
     int32_t realized_attack_ = 0;
 };
 
+struct NormalAttackMixin {
+    timer::Timer attack_ = timer::Timer::never();
+};
+
 #define BUFF_CONSTRUCTOR(type, name)                                           \
     static constexpr Buff name(type name) {                                    \
         Buff b;                                                                \
@@ -253,10 +257,26 @@ struct TowerInfo {
         : attack_(attack), cost_(cost), deploy_interval_(deploy_interval),
           attack_interval_(attack_interval), attack_radius_(attack_radius),
           attack_type_(attack_type) {}
+
+    TowerInfo with_attack_radius(size_t r) const noexcept {
+        auto copied = *this;
+        copied.attack_radius_ = r;
+        return copied;
+    }
+
+    TowerInfo with_attack(int32_t a) const noexcept {
+        auto copied = *this;
+        copied.attack_ = a;
+        return copied;
+    }
 };
 
-struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
-    Tower(id::Id id) : IdMixin{id} {}
+struct Tower : Entity, AttackMixin, BuffMixin, IdMixin, NormalAttackMixin {
+    Tower(id::Id id, const timer::Clock &clk) : IdMixin{id} {
+        this->reset_attack_timer(clk);
+    }
+
+    Tower(Tower &&) = delete;
 
     virtual TowerInfo info() const = 0;
 
@@ -275,10 +295,37 @@ struct Tower : Entity, AttackMixin, BuffMixin, IdMixin {
     TowerType type;
 
     void on_tick(GridRef g) override;
+
+    void reset_attack_timer(const timer::Clock &clk) {
+        this->attack_ = clk.with_period_sec(this->status().attack_interval_);
+    }
 };
 
-auto get_enemy_grid(Tower &,
-                    std::vector<GridRef> &) -> std::vector<GridRef>::iterator;
+template <class Self, class G = GridRef, class... Args>
+struct TimeOutMixin {
+    timer::CallbackTimer<Self &, G, Args...> timeouts_;
+
+    void stop_timer_for(timer::Timer &timer, uint32_t d,
+                        const timer::Clock &clk) {
+        timer = clk.never();
+        this->timeouts_.add_callback(clk.with_duration_sec(d),
+                                     [&](Self &self, G g, Args...) {
+                                         self.reset_attack_timer(g.clock());
+                                         return false;
+                                     });
+    }
+};
+
+// used in CallbackTimer
+bool restore_normal_attack(Tower &self, GridRef g);
+
+[[deprecated("use grid_of_nearest_enemy instead")]] auto
+get_enemy_grid(Tower &,
+               std::vector<GridRef> &) -> std::vector<GridRef>::iterator;
+
+auto grid_of_nearest_enemy(std::vector<GridRef> &grids)
+    -> std::vector<GridRef>::iterator;
+
 void single_attack(Tower &, GridRef);
 
 struct Map;

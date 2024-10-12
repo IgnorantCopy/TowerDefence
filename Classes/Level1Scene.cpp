@@ -463,7 +463,7 @@ bool Level1Scene::init()
     this->upgradeMenu = Menu::createWithArray(upgradeMenuItems);
     this->addChild(this->upgradeMenu, 6);
     this->upgradeMenu->setPosition(Vec2::ZERO);
-    this->upgradeMenu->setVisible(false);
+//    this->upgradeMenu->setVisible(false);
     
     // add a mouse click event listener
     auto mouseListener = EventListenerMouse::create();

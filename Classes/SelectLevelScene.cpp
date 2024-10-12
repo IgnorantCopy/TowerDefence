@@ -61,43 +61,73 @@ bool SelectLevelScene::init()
     );
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
                                origin.y + visibleSize.height - 50));
-
-    auto level1=MenuItemImage::create(
-            "images/locked.png",
-            "images/locked.png",
-            [this](Ref *ref){
+    
+    auto level1Button = ui::Button::create(
+            "images/level1_background_select.png",
+            "images/level1_background_select.png",
+            "images/locked.png"
+    );
+    level1Button->addTouchEventListener([this](Ref *pSender, ui::Widget::TouchEventType type){
+        switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
                 Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level1Scene::createScene()));
-            }
-    );
-    level1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800,
-                               origin.y + visibleSize.height / 2));
+                break;
+            default:
+                break;
+        }
+    });
+    level1Button->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800,
+                                        origin.y + visibleSize.height / 2));
 
-    auto level2=MenuItemImage::create(
-            "images/locked.png",
-            "images/locked.png",
-            [this](Ref *ref){
+    auto level2Button = ui::Button::create(
+            "images/level2_background_select.png",
+            "images/level2_background_select.png",
+            "images/locked.png"
+    );
+    level2Button->addTouchEventListener([this](Ref *pSender, ui::Widget::TouchEventType type){
+        switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
                 Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level2Scene::createScene()));
-            }
-    );
-    level2->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                             origin.y + visibleSize.height / 2));
+                break;
+            default:
+                break;
+        }
+    });
+    level2Button->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                                        origin.y + visibleSize.height / 2));
 
-    auto level3=MenuItemImage::create(
-            "images/locked.png",
-            "images/locked.png",
-            [this](Ref *ref){
-                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level3Scene::createScene()));
-            }
+    auto level3Button = ui::Button::create(
+            "images/level3_background_select.png",
+            "images/level3_background_select.png",
+            "images/locked.png"
     );
-    level3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800,
-                             origin.y + visibleSize.height / 2));
+    level3Button->addTouchEventListener([this](Ref *pSender, ui::Widget::TouchEventType type){
+        switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level3Scene::createScene()));
+                break;
+            default:
+                break;
+        }
+    });
+    level3Button->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800,
+                                        origin.y + visibleSize.height / 2));
+    
+    level2Button->setEnabled(false);
+    level3Button->setEnabled(false);
+    this->addChild(level1Button, 1);
+    this->addChild(level2Button, 1);
+    this->addChild(level3Button, 1);
 
     // create menu, it's an autorelease object
     Vector<MenuItem*> MenuItems;
     MenuItems.pushBack(backItem);
-    MenuItems.pushBack(level1);
-    MenuItems.pushBack(level2);
-    MenuItems.pushBack(level3);
     auto menu = Menu::createWithArray(MenuItems);
     this->addChild(menu, MenuItems.size());
     menu->setPosition(Vec2::ZERO);
