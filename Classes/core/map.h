@@ -123,6 +123,8 @@ struct CallbackHandle {
             return std::hash<id::Id>{}(h.handle);
         }
     };
+
+    bool operator==(const CallbackHandle &) const noexcept = default;
 };
 
 template <class... Parma>
