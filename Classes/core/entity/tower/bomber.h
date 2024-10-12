@@ -8,9 +8,8 @@ namespace towerdefence {
 
         struct Bomber final : Tower {
 
-            TowerInfo info() const override {
-                return { 1600, 16, 0, 20, 4, AttackType::Physics };
-            }
+            static constexpr TowerInfo INFO { 1600, 16, 0, 20, 4, AttackType::Physics };
+            TowerInfo info() const override { return INFO; }
 
             void on_tick(GridRef g) override;
         };

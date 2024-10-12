@@ -37,17 +37,53 @@ protected:
     cocos2d::Label *moneyLabel = nullptr;
     
     // tower info
+    const int archerBaseCost = 7;
+    const int highspeedArcherCost = 10;
+    const int highspeedArcherProCost = 15;
+    const int bomberCost = 16;
+    const int bomberProCost = 20;
+    const int archerCost = 18;
+    const int archerProCost = 24;
+    const int magicianBaseCost = 9;
+    const int coreMagicianCost = 12;
+    const int coreMagicianProCost = 16;
+    const int diffusiveMagicianCost = 15;
+    const int diffusiveMagicianProCost = 21;
+    const int specialMagicianCost = 14;
+    const int specialMagicianProCost = 25;
+    const int helperBaseCost = 5;
+    const int decelerateMagicianCost = 9;
+    const int decelerateMagicianProCost = 16;
+    const int weakenMagicianCost = 13;
+    const int weakenMagicianProCost = 18;
+    const int aggressiveMagicianCost = 8;
+    const int aggressiveMagicianProCost = 14;
     Id selectedTowerId;
     bool isShowingTowerInfo = false;
+    cocos2d::Menu *upgradeMenu = nullptr;
     cocos2d::ui::Button *deleteButton = nullptr;
     cocos2d::ui::Button *upgradeButton = nullptr;
     cocos2d::ui::Button *towerInfoButton = nullptr;
     cocos2d::ui::Button *skillButton = nullptr;
+    cocos2d::Sprite *upgradeBackground1 = nullptr;
+    cocos2d::Sprite *upgradeBackground2 = nullptr;
+    cocos2d::Sprite *upgradeBackground3 = nullptr;
+    cocos2d::Sprite *upgradeTower1 = nullptr;
+    cocos2d::Sprite *upgradeTower2 = nullptr;
+    cocos2d::Sprite *upgradeTower3 = nullptr;
+    cocos2d::MenuItemLabel *upgradeItem1 = nullptr;
+    cocos2d::MenuItemLabel *upgradeItem2 = nullptr;
+    cocos2d::MenuItemLabel *upgradeItem3 = nullptr;
+    cocos2d::MenuItemLabel *cancelUpgradeItem = nullptr;
+    
+    void updateSelectorEnabled();
     
     cocos2d::Sprite* getTower(Id id);
     cocos2d::Sprite* getEnemy(Id id);
-    void deleteTower();
+    void deleteTower(bool isReturn = true);
     void upgradeTower();
+    void showUpgradeMenu();
+    void hideUpgradeMenu();
     void showTowerInfo();
     void executeSkill();
     

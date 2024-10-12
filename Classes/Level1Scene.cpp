@@ -1,7 +1,26 @@
 #include "Level1Scene.h"
 #include "SelectLevelScene.h"
+#include "core/entity/tower/archer.h"
+#include "core/entity/tower/highspeed_archer.h"
+#include "core/entity/tower/bomber.h"
+#include "core/entity/tower/core_magician.h"
+#include "core/entity/tower/diffusive_magician.h"
+#include "core/entity/tower/special_magician.h"
+#include "core/entity/tower/decelerate_magician.h"
+#include "core/entity/tower/weaken_magician.h"
+#include "core/entity/tower/aggressive_magician.h"
 
 USING_NS_CC;
+using towerdefence::core::TowerType;
+using towerdefence::core::Archer;
+using towerdefence::core::HighspeedArcher;
+using towerdefence::core::Bomber;
+using towerdefence::core::CoreMagician;
+using towerdefence::core::DiffusiveMagician;
+using towerdefence::core::SpecialMagician;
+using towerdefence::core::DecelerateMagician;
+using towerdefence::core::WeakenMagician;
+using towerdefence::core::AggressiveMagician;
 
 Scene* Level1Scene::createScene()
 {
@@ -115,7 +134,6 @@ bool Level1Scene::init()
             "images/delete.png"
     );
     this->deleteButton->setVisible(false);
-    this->deleteButton->setSwallowTouches(true);
     this->deleteButton->addTouchEventListener([this](Ref *ref, ui::Widget::TouchEventType type) {
         switch (type) {
             case ui::Widget::TouchEventType::BEGAN:
@@ -133,7 +151,6 @@ bool Level1Scene::init()
             "images/upgrade.png"
     );
     this->upgradeButton->setVisible(false);
-    this->upgradeButton->setSwallowTouches(true);
     this->upgradeButton->addTouchEventListener([this](Ref *ref, ui::Widget::TouchEventType type) {
         switch (type) {
             case ui::Widget::TouchEventType::BEGAN:
@@ -151,7 +168,6 @@ bool Level1Scene::init()
             "images/info.png"
     );
     this->towerInfoButton->setVisible(false);
-    this->towerInfoButton->setSwallowTouches(true);
     this->towerInfoButton->addTouchEventListener([this](Ref *ref, ui::Widget::TouchEventType type) {
         switch (type) {
             case ui::Widget::TouchEventType::BEGAN:
@@ -169,7 +185,6 @@ bool Level1Scene::init()
             "images/towers/skill_icon/archer_base_inactive.png"
     );
     this->skillButton->setVisible(false);
-    this->skillButton->setSwallowTouches(true);
     this->skillButton->addTouchEventListener([this](Ref *ref, ui::Widget::TouchEventType type) {
         switch (type) {
             case ui::Widget::TouchEventType::BEGAN:
@@ -198,9 +213,8 @@ bool Level1Scene::init()
                                origin.y + visibleSize.height - 50));
 
     //create map
-    float delta = 140;
-    float x = origin.x + 350 + delta;
-    float y = origin.y + visibleSize.height - delta;
+    float x = origin.x + 350 + SIZE;
+    float y = origin.y + visibleSize.height - SIZE;
     createMap(1);
     for(size_t i = 0; i < height; i++) {
         for (size_t j = 0; j < width; j++) {
@@ -217,7 +231,7 @@ bool Level1Scene::init()
     if(blockBackground == nullptr) {
         problemLoading("'images/block_background.png'");
     } else {
-        blockBackground->setPosition(Vec2(x + 5.5f * delta, y - 3 * delta));
+        blockBackground->setPosition(Vec2(x + 5.5f * SIZE, y - 3 * SIZE));
         this->addChild(blockBackground, 1);
     }
     
@@ -228,9 +242,190 @@ bool Level1Scene::init()
         money->setPosition(Vec2(origin.x + 70, origin.y + visibleSize.height - 70));
         this->addChild(money, 1);
     }
-    this->moneyLabel = Label::createWithTTF("0", "fonts/Bender/BENDER.OTF", 75);
+    this->moneyLabel = Label::createWithTTF(std::to_string(this->map->cost_), "fonts/Bender/BENDER.OTF", 75);
     this->moneyLabel->setPosition(Vec2(origin.x + 150, origin.y + visibleSize.height - 70));
     this->addChild(this->moneyLabel, 1);
+    
+    // upgrade menu
+    this->upgradeBackground1 = Sprite::create("images/upgrade_background.png");
+    if(this->upgradeBackground1 == nullptr) {
+        problemLoading("'images/upgrade_background.png'");
+    } else {
+        this->upgradeBackground1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800, origin.y + visibleSize.height / 2));
+        this->addChild(this->upgradeBackground1, 5);
+//        this->upgradeBackground1->setVisible(false);
+    }
+    this->upgradeBackground2 = Sprite::create(
+            "images/upgrade_background.png");
+    if(this->upgradeBackground2 == nullptr) {
+        problemLoading("'images/upgrade_background.png'");
+    } else {
+        this->upgradeBackground2->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+        this->addChild(this->upgradeBackground2, 5);
+//        this->upgradeBackground2->setVisible(false);
+    }
+    this->upgradeBackground3 = Sprite::create("images/upgrade_background.png");
+    if(this->upgradeBackground3 == nullptr) {
+        problemLoading("'images/upgrade_background.png'");
+    } else {
+        this->upgradeBackground3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800, origin.y + visibleSize.height / 2));
+        this->addChild(this->upgradeBackground3, 5);
+//        this->upgradeBackground3->setVisible(false);
+    }
+    
+    this->upgradeTower1 = Sprite::create("images/towers/archer_base.png");
+    if(this->upgradeTower1 == nullptr) {
+        problemLoading("'images/towers/archer.png'");
+    } else {
+        this->upgradeTower1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800, origin.y + visibleSize.height / 2 + 150));
+        this->addChild(this->upgradeTower1, 6);
+//        this->upgradeTower1->setVisible(false);
+    }
+    this->upgradeTower2 = Sprite::create("images/towers/magician_base.png");
+    if(this->upgradeTower2 == nullptr) {
+        problemLoading("'images/towers/bomber.png'");
+    } else {
+        this->upgradeTower2->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 150));
+        this->addChild(this->upgradeTower2, 6);
+//        this->upgradeTower2->setVisible(false);
+    }
+    this->upgradeTower3 = Sprite::create("images/towers/helper_base.png");
+    if(this->upgradeTower3 == nullptr) {
+        problemLoading("'images/towers/highspeed_archer.png'");
+    } else {
+        this->upgradeTower3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800, origin.y + visibleSize.height / 2 + 150));
+        this->addChild(this->upgradeTower3, 6);
+//        this->upgradeTower3->setVisible(false);
+    }
+    
+    auto upgradeLabel1 = Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
+    this->upgradeItem1 = MenuItemLabel::create(upgradeLabel1, [this](Ref *ref){
+        Sprite *towerSprite = this->getTower(this->selectedTowerId);
+        towerdefence::core::TowerFactoryBase *newTower;
+        auto visibleSize = Director::getInstance()->getVisibleSize();
+        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+        float typeX = origin.x + 350 + SIZE;
+        float typeY = origin.y + visibleSize.height - SIZE;
+        float x = towerSprite->getPositionX();
+        float y = towerSprite->getPositionY();
+        int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+        int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
+        std::string path;
+        switch (this->map->get_ref(indexY, indexX).grid.tower.value()->type) {
+            case TowerType::ArcherBase:
+                path = "images/towers/archer.png";
+                newTower = new towerdefence::core::TowerFactory<Archer>{};
+                break;
+            case TowerType::MagicianBase:
+                path = "images/towers/core_magician.png";
+                newTower = new towerdefence::core::TowerFactory<CoreMagician>{};
+                break;
+            case TowerType::HelperBase:
+                path = "images/towers/decelerate_magician.png";
+                newTower = new towerdefence::core::TowerFactory<DecelerateMagician>{};
+                break;
+            default:
+                break;
+        }
+        this->deleteTower(false);
+        auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
+        auto newTowerSprite = Sprite::create(path);
+        newTowerSprite->setPosition(Vec2(x, y));
+        this->addChild(newTowerSprite, 3);
+        this->selectedTowerId = id.value();
+        this->towers.push_back(std::make_pair(id.value(), newTowerSprite));
+        this->moneyLabel->setString(std::to_string(this->map->cost_));
+        this->updateSelectorEnabled();
+        this->hideUpgradeMenu();
+    });
+    upgradeItem1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800, origin.y + visibleSize.height / 2 - 50));
+    auto upgradeLabel2 = Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
+    this->upgradeItem2 = MenuItemLabel::create(upgradeLabel2, [this](Ref *ref){
+        Sprite *towerSprite = this->getTower(this->selectedTowerId);
+        towerdefence::core::TowerFactoryBase *newTower;
+        auto visibleSize = Director::getInstance()->getVisibleSize();
+        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+        float typeX = origin.x + 350 + SIZE;
+        float typeY = origin.y + visibleSize.height - SIZE;
+        float x = towerSprite->getPositionX();
+        float y = towerSprite->getPositionY();
+        int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+        int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
+        std::string path;
+        switch (this->map->get_ref(indexY, indexX).grid.tower.value()->type) {
+            case TowerType::ArcherBase:
+                path = "images/towers/highspeed_archer.png";
+                newTower = new towerdefence::core::TowerFactory<HighspeedArcher>{};
+                break;
+            case TowerType::MagicianBase:
+                path = "images/towers/diffusive_magician.png";
+                newTower = new towerdefence::core::TowerFactory<DiffusiveMagician>{};
+                break;
+            case TowerType::HelperBase:
+                path = "images/towers/weaken_magician.png";
+                newTower = new towerdefence::core::TowerFactory<WeakenMagician>{};
+                break;
+            default:
+                break;
+        }
+        this->deleteTower(false);
+        auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
+        auto newTowerSprite = Sprite::create(path);
+        newTowerSprite->setPosition(Vec2(x, y));
+        this->addChild(newTowerSprite, 3);
+        this->selectedTowerId = id.value();
+        this->towers.push_back(std::make_pair(id.value(), newTowerSprite));
+        this->moneyLabel->setString(std::to_string(this->map->cost_));
+        this->updateSelectorEnabled();
+        this->hideUpgradeMenu();
+    });
+    upgradeItem2->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 50));
+    auto upgradeLabel3 = Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
+    this->upgradeItem3 = MenuItemLabel::create(upgradeLabel3, [this](Ref *ref){
+        Sprite *towerSprite = this->getTower(this->selectedTowerId);
+        towerdefence::core::TowerFactoryBase *newTower;
+        auto visibleSize = Director::getInstance()->getVisibleSize();
+        Vec2 origin = Director::getInstance()->getVisibleOrigin();
+        float typeX = origin.x + 350 + SIZE;
+        float typeY = origin.y + visibleSize.height - SIZE;
+        float x = towerSprite->getPositionX();
+        float y = towerSprite->getPositionY();
+        int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+        int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
+        std::string path;
+        switch (this->map->get_ref(indexY, indexX).grid.tower.value()->type) {
+            case TowerType::ArcherBase:
+                path = "images/towers/bomber.png";
+                newTower = new towerdefence::core::TowerFactory<Bomber>{};
+                break;
+            case TowerType::MagicianBase:
+                path = "images/towers/special_magician.png";
+                newTower = new towerdefence::core::TowerFactory<SpecialMagician>{};
+                break;
+            case TowerType::HelperBase:
+                path = "images/towers/aggressive_magician.png";
+                newTower = new towerdefence::core::TowerFactory<AggressiveMagician>{};
+                break;
+            default:
+                break;
+        }
+        this->deleteTower(false);
+        auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
+        auto newTowerSprite = Sprite::create(path);
+        newTowerSprite->setPosition(Vec2(x, y));
+        this->addChild(newTowerSprite, 3);
+        this->selectedTowerId = id.value();
+        this->towers.push_back(std::make_pair(id.value(), newTowerSprite));
+        this->moneyLabel->setString(std::to_string(this->map->cost_));
+        this->updateSelectorEnabled();
+        this->hideUpgradeMenu();
+    });
+    upgradeItem3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800, origin.y + visibleSize.height / 2 - 50));
+    auto cancelLabel = Label::createWithTTF("Cancel", "fonts/Bender/BENDER.OTF", 75);
+    this->cancelUpgradeItem = MenuItemLabel::create(cancelLabel, [this](Ref *ref){
+        this->hideUpgradeMenu();
+    });
+    this->cancelUpgradeItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 150));
     
     auto enemyExample = Sprite::create("images/enemies/dog/move/dog_move00.png");
     if (enemyExample == nullptr) {
@@ -243,8 +438,7 @@ bool Level1Scene::init()
         int num = 15;
         frames.reserve(num);
         for (int i = 0; i < num; i++) {
-            std::string path = "images/enemies/dog/move/dog_move";
-            path += (i < 10 ? "0" : "") + std::to_string(i) + ".png";
+            std::string path = std::format("images/enemies/dog/move/dog_move{:02d}.png", i);
             frames.pushBack(SpriteFrame::create(path, Rect(0, 0, 900, 900)));
         }
         Animation* animation = Animation::createWithSpriteFrames(frames, 0.05f);
@@ -258,8 +452,18 @@ bool Level1Scene::init()
     Vector<MenuItem*> MenuItems;
     MenuItems.pushBack(backItem);
     auto menu = Menu::createWithArray(MenuItems);
-    this->addChild(menu, MenuItems.size());
+    this->addChild(menu, 2);
     menu->setPosition(Vec2::ZERO);
+    
+    Vector<MenuItem*> upgradeMenuItems;
+    upgradeMenuItems.pushBack(this->upgradeItem1);
+    upgradeMenuItems.pushBack(this->upgradeItem2);
+    upgradeMenuItems.pushBack(this->upgradeItem3);
+    upgradeMenuItems.pushBack(this->cancelUpgradeItem);
+    this->upgradeMenu = Menu::createWithArray(upgradeMenuItems);
+    this->addChild(this->upgradeMenu, 6);
+    this->upgradeMenu->setPosition(Vec2::ZERO);
+    this->upgradeMenu->setVisible(false);
     
     // add a mouse click event listener
     auto mouseListener = EventListenerMouse::create();
