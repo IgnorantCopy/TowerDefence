@@ -74,12 +74,12 @@ add_library(core
     Classes/core/entity/tower/aggressive_magician.h
     Classes/core/entity/tower/aggressive_magician_plus.cpp
     Classes/core/entity/tower/aggressive_magician_plus.h
-        Classes/core/entity/tower/archer.cpp
-        Classes/core/entity/tower/archer.h
-        Classes/core/entity/tower/archer_base.cpp
-        Classes/core/entity/tower/archer_base.h
-        Classes/core/entity/tower/archer_plus.cpp
-        Classes/core/entity/tower/archer_plus.h
+    Classes/core/entity/tower/archer.cpp
+    Classes/core/entity/tower/archer.h
+    Classes/core/entity/tower/archer_base.cpp
+    Classes/core/entity/tower/archer_base.h
+    Classes/core/entity/tower/archer_plus.cpp
+    Classes/core/entity/tower/archer_plus.h
     Classes/core/entity/tower/bomber.cpp
     Classes/core/entity/tower/bomber.h
     Classes/core/entity/tower/bomber_plus.cpp
@@ -132,12 +132,10 @@ endif()
 list(APPEND GAME_SOURCE
     Classes/AppDelegate.cpp
     Classes/HelloWorldScene.cpp
-        Classes/illustration.cpp
 )
 list(APPEND GAME_HEADER
     Classes/AppDelegate.h
     Classes/HelloWorldScene.h
-        Classes/illustration.h
 )
 
 if(ANDROID)
@@ -201,7 +199,50 @@ set(all_code_files
     Classes/SelectLevelScene.cpp
     Classes/Level1Scene.h
     Classes/Level1Scene.cpp
-    Classes/Level1Scene.cpp
+    Classes/manual.h
+    Classes/manual.cpp
+    Classes/archer_base.cpp
+    Classes/archer_base.h
+    Classes/highspeed_archor.cpp
+    Classes/highspeed_archor.h
+    Classes/highspeed_archor_p.cpp
+    Classes/highspeed_archor_p.h
+    Classes/bomber.cpp
+    Classes/bomber.h
+    Classes/bomber_p.cpp
+    Classes/bomber_p.h
+    Classes/archer.cpp
+    Classes/archer.h
+    Classes/archer_p.cpp
+    Classes/archer_p.h
+    Classes/magician_base.cpp
+    Classes/magician_base.h
+    Classes/core_magician.cpp
+    Classes/core_magician.h
+    Classes/core_magician_p.cpp
+    Classes/core_magician_p.h
+    Classes/diffusive_magician.cpp
+    Classes/diffusive_magician.h
+    Classes/special_magician.cpp
+    Classes/special_magician.h
+    Classes/special_magician_p.cpp
+    Classes/special_magician_p.h
+    Classes/helper_base.cpp
+    Classes/helper_base.h
+    Classes/decelerate_magician.cpp
+    Classes/decelerate_magician.h
+    Classes/decelerate_magician_p.cpp
+    Classes/decelerate_magician_p.h
+    Classes/weaken_magician.cpp
+    Classes/weaken_magician.h
+    Classes/weaken_magician_p.cpp
+    Classes/weaken_magician_p.h
+    Classes/aggressive_magician.cpp
+    Classes/aggressive_magician.h
+    Classes/aggressive_magician_p.cpp
+    Classes/aggressive_magician_p.h
+    Classes/diffusive_magician_p.cpp
+    Classes/diffusive_magician_p.h
 )
 if(NOT ANDROID)
     add_executable(${APP_NAME} ${all_code_files})
