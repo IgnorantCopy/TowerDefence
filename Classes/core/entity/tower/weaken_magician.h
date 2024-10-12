@@ -7,6 +7,9 @@ namespace towerdefence {
     namespace core {
 
         struct WeakenMagician final : Tower {
+            timer::Timer release_skill_; // timer to release skill
+
+            WeakenMagician(id::Id id, const timer::Clock &clk);
 
             static constexpr TowerInfo INFO { 500, 13, 0, 16, 3, AttackType::Magic, TowerType::WeakenMagician};
             TowerInfo info() const override { return INFO; }
