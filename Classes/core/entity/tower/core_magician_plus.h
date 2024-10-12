@@ -6,8 +6,9 @@
 #include <unordered_set>
 
 namespace towerdefence::core {
-    struct CoreMagicianPlus final : Tower {
+    struct CoreMagicianPlus final : Tower, TimeOutMixin<CoreMagicianPlus> {
         timer::Timer release_skill_;
+
         std::unordered_set<id::Id> has_buff_;
 
         CoreMagicianPlus(id::Id id, const timer::Clock & clk);

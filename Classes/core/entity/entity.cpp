@@ -23,11 +23,23 @@ void Enemy::increase_attack(int32_t atk, AttackType attack_type) {
 
 void Enemy::on_tick(GridRef g) { this->update_buff(g.clock()); }
 
-void Tower::on_tick(GridRef g) { this->update_buff(g.clock()); }
+void Tower::on_tick(GridRef g) {
+    this->update_buff(g.clock());
+    this->attack_.visit_period(
+        [status = this->status()](timer::Timer::Period &p) {
+            p.period = status.attack_interval_;
+        });
+}
 
 std::vector<GridRef>::iterator get_enemy_grid(Tower &tower,
                                               std::vector<GridRef> &grids) {
     return grid_of_nearest_enemy(grids);
+}
+
+bool restore_normal_attack(Tower &self, GridRef g) {
+    self.reset_attack_timer(g.clock());
+
+    return false;
 }
 
 auto grid_of_nearest_enemy(std::vector<GridRef> &grids)
@@ -53,18 +65,14 @@ void single_attack(Tower &tower, GridRef enemy_grid) {
     if (buffs.attack_stop_) {
         return;
     }
-    auto target_enemy = std::min_element(
-        enemy_grid.grid.enemies.begin(), enemy_grid.grid.enemies.end(),
-        [](std::unique_ptr<Enemy> &x, std::unique_ptr<Enemy> &y) {
-            return x->remaining_distance() < y->remaining_distance();
-        });
-    (*target_enemy)
-        ->increase_attack(tower.status().attack_, tower.status().attack_type_);
-    if (buffs.real_attack_ > 0) {
-        (*target_enemy)
-            ->increase_attack(tower.status().attack_ * buffs.real_attack_,
-                              AttackType::Real);
-    }
+    enemy_grid.with_nearest_enemy([&tower, buffs](Enemy &target_enemy) {
+        target_enemy.increase_attack(tower.status().attack_,
+                                     tower.status().attack_type_);
+        if (buffs.real_attack_ > 0) {
+            target_enemy.increase_attack(
+                tower.status().attack_ * buffs.real_attack_, AttackType::Real);
+        }
+    });
 }
 
 } // namespace towerdefence::core

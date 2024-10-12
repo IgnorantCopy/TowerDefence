@@ -5,8 +5,7 @@
 namespace towerdefence {
     namespace core {
         AggressiveMagician::AggressiveMagician(id::Id id, const timer::Clock &clk)
-                : Tower(id), release_skill_(clk.with_period_sec(70)),
-                  attack_(clk.with_period_sec(INFO.attack_interval_)) {}
+                : Tower(id, clk), release_skill_(clk.with_period_sec(70)) {}
         void AggressiveMagician::on_tick(GridRef g) {
             Tower::on_tick(g);
             auto status = this->status();

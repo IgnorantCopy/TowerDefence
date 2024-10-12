@@ -4,20 +4,15 @@
 namespace towerdefence {
 namespace core {
 BomberPlus::BomberPlus(id::Id id, const timer::Clock &clk)
-    : Tower(id), release_skill_(clk.with_period_sec(20)),
-      attack_(clk.with_period_sec(INFO.attack_interval_)) {}
+    : Tower(id, clk), release_skill_(clk.with_period_sec(20)) {}
 
 void BomberPlus::on_tick(GridRef g) {
     Tower::on_tick(g);
-    auto status = this->status();
-    // update interval
-    this->attack_.visit_period([status](timer::Timer::Period &p) {
-        p.period = status.attack_interval_;
-    });
     this->timeouts_.on_tick(g.clock(), *this, g);
 
     auto &clk = g.clock();
 
+    auto status = this->status();
     // do normal attack
     if (clk.is_triggered(this->attack_)) {
         auto grids = g.with_radius(status.attack_radius_, linf_dis);

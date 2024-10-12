@@ -333,6 +333,17 @@ struct GridRef {
         }
     }
 
+    void with_nearest_enemy(std::function<void(Enemy &)> f) {
+        auto &enemies = this->grid.enemies;
+        auto target_enemy = std::ranges::min_element(
+            enemies.begin(), enemies.end(), {},
+            [](std::unique_ptr<Enemy> &e) { return e->remaining_distance(); });
+        
+        if (target_enemy != enemies.end()) {
+            f(**target_enemy);
+        }
+    }
+
     std::optional<std::unique_ptr<Tower>> &get_nearest_tower() {
         size_t r = 0, c = 0;
         for (auto [i, j] : std::views::cartesian_product(
