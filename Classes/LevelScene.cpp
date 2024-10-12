@@ -4,11 +4,15 @@
 #include "core/entity/tower/helper_base.h"
 #include "core/entity/tower/magician_base.h"
 #include "ui/CocosGUI.h"
+#include <memory>
+#include <utility>
 
 USING_NS_CC;
 using towerdefence::core::ArcherBase;
 using towerdefence::core::HelperBase;
 using towerdefence::core::MagicianBase;
+using towerdefence::core::TowerFactory;
+using towerdefence::core::TowerFactoryBase;
 
 static void problemLoading(const char *filename) {
     printf("Error while loading: %s\n", filename);
@@ -49,24 +53,22 @@ void LevelScene::putTower(float x, float y) {
         if (this->type[indexY][indexX] == Grid::Type::BlockTower) {
             if (!this->map->get_ref(indexY, indexX).grid.tower.has_value()) {
                 std::string path = "images/towers/";
-                towerdefence::core::TowerFactoryBase *newTower;
+                std::unique_ptr<TowerFactoryBase> newTower;
                 switch (this->isSelecting) {
                 case 1:
                     path += "archer_base_onblock.png";
-                    newTower =
-                        new towerdefence::core::TowerFactory<ArcherBase>{};
+                    newTower = std::make_unique<TowerFactory<ArcherBase>>();
                     break;
                 case 2:
                     path += "magician_base_onblock.png";
-                    newTower =
-                        new towerdefence::core::TowerFactory<MagicianBase>{};
+                    newTower = std::make_unique<TowerFactory<MagicianBase>>();
                     break;
                 case 3:
                     path += "helper_base_onblock.png";
-                    newTower =
-                        new towerdefence::core::TowerFactory<HelperBase>{};
+                    newTower = std::make_unique<TowerFactory<HelperBase>>();
                     break;
                 default:
+                    std::unreachable();
                     break;
                 }
                 auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
@@ -198,7 +200,7 @@ void LevelScene::deleteTower() {
     if (towerSprite) {
         towerSprite->removeFromParent();
     }
-       this->map->remove_tower(this->selectedTowerId);
+    this->map->remove_tower(this->selectedTowerId);
 }
 
 void LevelScene::upgradeTower() {
@@ -314,7 +316,6 @@ void LevelScene::onMouseMove(cocos2d::Event *event) {
     if (this->isSelecting && this->selectedTower) {
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        float SIZE = 140;
         float typeX = origin.x + 350 + SIZE;
         float typeY = origin.y + visibleSize.height - SIZE;
         this->selectedTower->setVisible(true);

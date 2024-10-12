@@ -26,6 +26,12 @@ static inline auto def(auto val) {
     return [val](auto &&) { return val; };
 }
 
+template <class T>
+static inline void hash_combine(std::size_t &seed, const T &v) {
+    std::hash<T> hasher;
+    seed ^= hasher(v) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
+}
+
 struct Timer {
     struct Period {
         uint32_t period = 1;
@@ -52,7 +58,9 @@ struct Timer {
     };
 
     struct Before {
-        uint32_t time;
+        uint32_t start;
+        uint32_t duration;
+        uint32_t period;
 
         bool operator==(const Before &rhs) const = default;
 
@@ -85,7 +93,11 @@ struct Timer {
                                    uint64_t(p.duration) << 32 | p.start);
                            },
                            [](const Before &b) {
-                               return std::hash<uint32_t>{}(b.time);
+                               size_t seed = 0;
+                               hash_combine(seed, b.start);
+                               hash_combine(seed, b.duration);
+                               hash_combine(seed, b.period);
+                               return seed;
                            },
                            [](const Never &n) {
                                return std::hash<std::monostate>{}(n);
@@ -102,7 +114,10 @@ struct Timer {
         return {Duration{duration, start}};
     }
 
-    constexpr static Timer before(uint32_t time) { return {Before{time}}; }
+    constexpr static Timer before(uint32_t duration, uint32_t period,
+                                  uint32_t start) {
+        return {Before{start, duration, period}};
+    }
 
     constexpr static Timer never() { return {.clk = Never{}}; }
 
@@ -131,15 +146,17 @@ struct Clock {
 
     bool is_triggered(Timer clk) const {
         return std::visit(
-            overloaded{
-                [this](const Timer::Period &p) {
-                    return (elapased_ - p.start) % p.period == 0;
-                },
-                [this](const Timer::Duration &d) {
-                    return d.duration == elapased_ - d.start;
-                },
-                [this](const Timer::Before &b) { return b.time >= elapased_; },
-                [](const Timer::Never &) { return false; }},
+            overloaded{[this](const Timer::Period &p) {
+                           return (elapased_ - p.start) % p.period == 0;
+                       },
+                       [this](const Timer::Duration &d) {
+                           return d.duration == elapased_ - d.start;
+                       },
+                       [this](const Timer::Before &b) {
+                           return (elapased_ - b.start) <= b.duration &&
+                                  (elapased_ - b.start) % b.period == 0;
+                       },
+                       [](const Timer::Never &) { return false; }},
             clk.clk);
     }
 
@@ -159,12 +176,12 @@ struct Clock {
         return this->with_period(secs * 30);
     }
 
-    Timer with_before(uint32_t duration) const {
-        return Timer::before(duration + elapased_);
+    Timer with_before(uint32_t duration, uint32_t period = 1) const {
+        return Timer::before(duration, period, this->elapased_);
     }
 
-    Timer with_before_sec(uint32_t secs) const {
-        return this->with_before(secs * 30);
+    Timer with_before_sec(uint32_t secs, uint32_t period = 1) const {
+        return this->with_before(secs * 30, period * 30);
     }
 
     Timer never() const { return Timer::never(); }
