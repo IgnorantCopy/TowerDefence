@@ -1,20 +1,26 @@
 #ifndef TOWERDEFENCE_DECELERATE_MAGICIAN_PLUS_H
 #define TOWERDEFENCE_DECELERATE_MAGICIAN_PLUS_H
 
+#include "../../id.h"
 #include "../entity.h"
+#include <unordered_set>
 
-namespace towerdefence {
-    namespace core {
+namespace towerdefence::core {
+    struct DecelerateMagicianPlus final : Tower, TimeOutMixin<DecelerateMagicianPlus>  {
+        timer::Timer release_skill_;
 
-        struct DecelerateMagicianPlus final : Tower {
+        std::unordered_set<id::Id> has_buff_;
 
-            static constexpr TowerInfo INFO { 600, 16, 0, 19, 2, AttackType::Magic };
-            TowerInfo info() const override { return INFO; }
+        DecelerateMagicianPlus(id::Id id, const timer::Clock & clk);
+        DecelerateMagicianPlus() = delete;
 
-            void on_tick(GridRef g) override;
-        };
-    } // namespace core
-} // namespace towerdefence
+        static constexpr TowerInfo INFO { 600, 16, 0, 19, 2, AttackType::Magic };
+        TowerInfo info() const override { return INFO; }
+
+        void on_tick(GridRef g) override;
+    };
+} // namespace towerdefence::core
+
 
 
 

@@ -19,29 +19,16 @@ void CoreMagicianPlus::on_tick(GridRef g) {
                 auto status = this->status();
 
                 e.increase_attack(status.attack_, status.attack_type_);
-                e.add_buff_in({this->id, Buff::DECREASE_SPEED},
-                              Buff::attack_speed(-40),
-                              clk.with_duration_sec(2));
             });
         }
     }
 
     if (clk.is_triggered(release_skill_)) {
         this->add_buff_in({this->id, Buff::DEFAULT},
-                          Buff::attack_radius(1) & Buff::attack(2.30),
+                          Buff::attack_radius(1) & Buff::attack(3.30),
                           g.clock().with_duration_sec(10));
-        auto status = this->status();
-        for (auto ref : g.with_radius(status.attack_radius_, linf_dis)) {
-            ref.grid.with_enemy([this, clk](Enemy &enemy) {
-                enemy.add_buff_in({this->id, Buff::DECREASE_ATTACK_SPEED},
-                                  Buff::attack_speed(-80),
-                                  clk.with_duration_sec(35));
-            });
         }
-
-        this->stop_timer_for(this->attack_, 35, clk);
     }
-}
 
 } // namespace core
 } // namespace towerdefence
