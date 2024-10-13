@@ -71,6 +71,7 @@ protected:
     const int aggressiveMagicianProCost = 14;
     Id selectedTowerId;
     bool isShowingTowerInfo = false;
+    bool isUpgrade = false;
     cocos2d::Menu *upgradeMenu = nullptr;
     cocos2d::ui::Button *deleteButton = nullptr;
     cocos2d::ui::Button *upgradeButton = nullptr;

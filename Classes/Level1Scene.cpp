@@ -481,11 +481,11 @@ bool Level1Scene::init()
     mouseListener->onMouseUp = CC_CALLBACK_1(Level1Scene::onMouseUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
-    // update the map
-//    schedule([this](float dt){
-//        map->update();
-//        this->update();
-//    }, 1.0/30, "update");
+//     update the map
+    schedule([this](float dt){
+        map->update();
+        this->update();
+    }, 1.0/30, "update");
 
     return true;
 }

@@ -46,6 +46,7 @@ Sprite *LevelScene::getTower(Id id) {
             return pair.second;
         }
     }
+    return nullptr;
 }
 
 Sprite *LevelScene::getEnemy(Id id) {
@@ -54,6 +55,7 @@ Sprite *LevelScene::getEnemy(Id id) {
             return pair.second;
         }
     }
+    return nullptr;
 }
 
 void LevelScene::addBullet(Bullet *bullet) {
@@ -383,6 +385,8 @@ void LevelScene::hideTowerInfo(float x, float y) {
 }
 
 void LevelScene::showUpgradeMenu() {
+    this->isUpgrade = true;
+    
     this->upgradeBackground1->setScale(0.1f);
     this->upgradeBackground1->setVisible(true);
     this->upgradeBackground2->setScale(0.1f);
@@ -428,6 +432,7 @@ void LevelScene::hideUpgradeMenu() {
         this->upgradeTower2->setVisible(false);
         this->upgradeTower3->setVisible(false);
         this->upgradeMenu->setVisible(false);
+        this->isUpgrade = false;
     }, 0.3f, "hideUpgradeMenu");
 }
 
@@ -659,7 +664,7 @@ void LevelScene::onMouseDown(cocos2d::Event *event) {
     if (this->isSelecting && this->selectedTower) {
         this->putTower(x, y);
     }
-    if (!this->isSelecting && !this->isShowingTowerInfo) {
+    if (!this->isSelecting && !this->isShowingTowerInfo && !this->isUpgrade) {
         this->showTowerInfo(x, y);
     }
 }
