@@ -280,6 +280,9 @@ struct Map {
         auto &new_grid = grids.at(shape.index_of(row, col));
         new_grid.enemies.push_back(std::move(enemy));
         enemy_refs_[id] = {row, col};
+        for (auto &[handle, f] : this->callbacks_.on_enemy_move) {
+            f(*enemy, {row, col});
+        }
     }
 
     void reached_end(id::Id id) {
