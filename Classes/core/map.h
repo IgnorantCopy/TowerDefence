@@ -148,6 +148,7 @@ struct Map {
         CallbackContainer<const Tower &, towerdefence::core::Map &, uint32_t> on_tower_release_skill;
         CallbackContainer<const Enemy &> on_enemy_death;
         CallbackContainer<const Enemy &, size_t, size_t> on_enemy_move;
+        CallbackContainer<id::Id> on_escape;
     } callbacks_;
 
     timer::CallbackTimer<Map &> timeouts_;
@@ -175,10 +176,12 @@ struct Map {
         }
     };
 
+    static constexpr uint32_t MAX_HEALTH = 10;
+
     std::vector<Grid> grids;
     Shape shape;
     uint32_t cost_ = 10;
-    uint32_t health_ = 10;
+    uint32_t health_{MAX_HEALTH};
 
     explicit Map(size_t width_, size_t height_,
                  std::function<Grid(size_t, size_t)> f)
@@ -274,6 +277,9 @@ struct Map {
     void reached_end(id::Id id) {
         this->remove_enemy(id);
 
+        for (auto &[handle, f] : this->callbacks_.on_escape) {
+            f(id);
+        }
         this->health_ -= 1;
     }
 
