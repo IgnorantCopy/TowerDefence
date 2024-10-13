@@ -148,8 +148,8 @@ struct Map {
         CallbackContainer<const Enemy &, CallbackParmas> on_enemy_move;
     } callbacks_;
 
-    timer::CallbackTimer<Map&> timeouts_;
-    
+    timer::CallbackTimer<Map &> timeouts_;
+
   public:
     struct iterator {
         using base_iter = std::vector<Grid>::iterator;
@@ -177,15 +177,9 @@ struct Map {
     Shape shape;
     uint32_t cost_ = 10;
 
-    explicit Map(std::vector<Grid> &&grids_, size_t width, size_t height)
-        : grids(std::move(grids_)), shape{width, height} {
-        assert(width * height == grids_.size());
-    }
-
     explicit Map(size_t width_, size_t height_,
                  std::function<Grid(size_t, size_t)> f)
-        : shape{width_, height_} {
-        cost_timer_ = clock_.with_period_sec(1);
+        : shape{width_, height_}, cost_timer_(clock_.with_period_sec(1)) {
         grids.reserve(width_ * height_);
         for (size_t i = 0; i < height_; ++i) {
             for (size_t j = 0; j < width_; ++j) {
@@ -326,7 +320,7 @@ struct Map {
     // lifetime NOT SHORTER than the object.
     //
     // Particularly, do not capture members in `Tower`s or `Enemy`s.
-    void set_timeout(timer::Timer t, std::function<bool(Map&)> callback) {
+    void set_timeout(timer::Timer t, std::function<bool(Map &)> callback) {
         this->timeouts_.add_callback(t, callback);
     }
 
@@ -391,7 +385,7 @@ struct GridRef {
         auto target_enemy = std::ranges::min_element(
             enemies.begin(), enemies.end(), {},
             [](std::unique_ptr<Enemy> &e) { return e->remaining_distance(); });
-        
+
         if (target_enemy != enemies.end()) {
             f(**target_enemy);
         }
@@ -440,7 +434,7 @@ struct GridRef {
     // lifetime NOT SHORTER than the object.
     //
     // Particularly, do not capture members in `Tower`s or `Enemy`s.
-    void set_timeout(timer::Timer t, std::function<bool(Map&)> callback) {
+    void set_timeout(timer::Timer t, std::function<bool(Map &)> callback) {
         this->map.set_timeout(t, callback);
     }
 };
