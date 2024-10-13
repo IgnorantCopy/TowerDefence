@@ -8,7 +8,6 @@
 namespace towerdefence::core {
     struct Bomber final : Tower {
         timer::Timer release_skill_;
-        std::unordered_set<id::Id> has_buff_;
 
         Bomber(id::Id id, const timer::Clock & clk);
         Bomber() = delete;

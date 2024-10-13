@@ -9,7 +9,6 @@ namespace towerdefence {
 
         struct AggressiveMagician final : Tower {
             timer::Timer release_skill_; // timer to release skill
-            timer::Timer attack_;        // timer to do normal attack
 
             std::unordered_set<id::Id> has_buff_;
 
