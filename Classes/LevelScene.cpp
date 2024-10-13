@@ -81,6 +81,46 @@ void LevelScene::updateSelectorEnabled() {
     }
 }
 
+void LevelScene::updateMoneyLabel() {
+    auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
+    cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
+    if (this->moneyLabel != nullptr) {
+        this->moneyLabel->setString(std::to_string(this->map->cost_));
+        this->moneyLabel->setPosition(
+                cocos2d::Vec2(origin.x + 150 + 15 * log10(map->getcost_()), origin.y + visibleSize.height - 70));
+    }
+}
+
+void LevelScene::updateUpgradeItemEnabled() {
+    if (upgradeItem1 != nullptr && upgradeItem2 != nullptr && upgradeItem3 != nullptr) {
+        if (this->map->cost_ < this->upgradeTower1Cost) {
+            this->upgradeItem1->setEnabled(false);
+        } else {
+            this->upgradeItem1->setEnabled(true);
+        }
+        if (this->map->cost_ < this->upgradeTower2Cost) {
+            this->upgradeItem2->setEnabled(false);
+        } else {
+            this->upgradeItem2->setEnabled(true);
+        }
+        if (this->map->cost_ < this->upgradeTower3Cost) {
+            this->upgradeItem3->setEnabled(false);
+        } else {
+            this->upgradeItem3->setEnabled(true);
+        }
+    }
+}
+
+void LevelScene::updateUpgradeButtonEnabled() {
+    if (this->upgradeButton != nullptr) {
+        if (this->map->cost_ < this->upgradeTowerCost) {
+            this->upgradeButton->setEnabled(false);
+        } else {
+            this->upgradeButton->setEnabled(true);
+        }
+    }
+}
+
 void LevelScene::cancelSelect() {
     this->selectedTower->setVisible(false);
     this->isSelecting = 0;
@@ -122,7 +162,7 @@ void LevelScene::putTower(float x, float y) {
                 this->towers.emplace_back(
                     id.value(),
                     newTowerSprite); // todo: handle spawning failure
-                this->moneyLabel->setString(std::to_string(this->map->cost_));
+                this->updateMoneyLabel();
                 this->updateSelectorEnabled();
             }
             scheduleOnce([this](float dt) {
@@ -167,145 +207,101 @@ void LevelScene::showTowerInfo(float x, float y) {
                 switch (towerType) {
                     case TowerType::ArcherBase:
                         skillIconPath = "images/towers/skill_icon/archer_base";
-                        if (this->map->cost_ < this->archerCost &&
-                            this->map->cost_ < this->highspeedArcherCost &&
-                            this->map->cost_ < this->bomberCost) {
-                            this->upgradeButton->setEnabled(false);
-                        } else {
-                            this->upgradeButton->setEnabled(true);
-                        }
+                        this->upgradeTower1Cost = this->archerCost;
+                        this->upgradeTower2Cost = this->highspeedArcherCost;
+                        this->upgradeTower3Cost = this->bomberCost;
+                        this->upgradeTowerCost = std::min(std::min(this->upgradeTower1Cost, this->upgradeTower2Cost), this->upgradeTower3Cost);
                         break;
                     case TowerType::MagicianBase:
                         skillIconPath = "images/towers/skill_icon/magician_base";
-                        if (this->map->cost_ < this->coreMagicianCost &&
-                            this->map->cost_ < this->diffusiveMagicianCost &&
-                            this->map->cost_ < this->specialMagicianCost) {
-                            this->upgradeButton->setEnabled(false);
-                        } else {
-                            this->upgradeButton->setEnabled(true);
-                        }
+                        this->upgradeTower1Cost = this->coreMagicianCost;
+                        this->upgradeTower2Cost = this->diffusiveMagicianCost;
+                        this->upgradeTower3Cost = this->specialMagicianCost;
+                        this->upgradeTowerCost = std::min(std::min(this->upgradeTower1Cost, this->upgradeTower2Cost), this->upgradeTower3Cost);
                         break;
                     case TowerType::HelperBase:
                         skillIconPath = "images/towers/skill_icon/helper_base";
-                        if (this->map->cost_ < this->decelerateMagicianCost &&
-                            this->map->cost_ < this->weakenMagicianCost &&
-                            this->map->cost_ < this->aggressiveMagicianCost) {
-                            this->upgradeButton->setEnabled(false);
-                        } else {
-                            this->upgradeButton->setEnabled(true);
-                        }
+                        this->upgradeTower1Cost = this->decelerateMagicianCost;
+                        this->upgradeTower2Cost = this->weakenMagicianCost;
+                        this->upgradeTower3Cost = this->aggressiveMagicianCost;
+                        this->upgradeTowerCost = std::min(std::min(this->upgradeTower1Cost, this->upgradeTower2Cost), this->upgradeTower3Cost);
                         break;
                     case TowerType::Archer:
                         skillIconPath = "images/towers/skill_icon/archer";
-                        if (this->map->cost_ < this->archerProCost) {
-                            this->upgradeButton->setEnabled(false);
-                        } else {
-                            this->upgradeButton->setEnabled(true);
-                        }
+                        this->upgradeTowerCost = this->archerProCost;
                         break;
                     case TowerType::ArcherPlus:
                         skillIconPath = "images/towers/skill_icon/archer_pro";
-                        this->upgradeButton->setEnabled(false);
+                        this->upgradeTowerCost = 1000000;
                         break;
                     case TowerType::Bomber:
                         skillIconPath = "images/towers/skill_icon/bomber";
-                        if (this->map->cost_ < this->bomberProCost) {
-                            this->upgradeButton->setEnabled(false);
-                        } else {
-                            this->upgradeButton->setEnabled(true);
-                        }
+                        this->upgradeTowerCost = this->bomberProCost;
                         break;
                     case TowerType::BomberPlus:
                         skillIconPath = "images/towers/skill_icon/bomber_pro";
-                        this->upgradeButton->setEnabled(false);
+                        this->upgradeTowerCost = 1000000;
                         break;
                     case TowerType::CoreMagician:
                         skillIconPath = "images/towers/skill_icon/core_magician";
-                        if (this->map->cost_ < this->coreMagicianProCost) {
-                            this->upgradeButton->setEnabled(false);
-                        } else {
-                            this->upgradeButton->setEnabled(true);
-                        }
+                        this->upgradeTowerCost = this->coreMagicianProCost;
                         break;
                     case TowerType::CoreMagicianPlus:
                         skillIconPath = "images/towers/skill_icon/core_magician_pro";
-                        this->upgradeButton->setEnabled(false);
+                        this->upgradeTowerCost = 1000000;
                         break;
                     case TowerType::DecelerateMagician:
                         skillIconPath = "images/towers/skill_icon/decelerate_magician";
-                        if (this->map->cost_ < this->decelerateMagicianProCost) {
-                            this->upgradeButton->setEnabled(false);
-                        } else {
-                            this->upgradeButton->setEnabled(true);
-                        }
+                        this->upgradeTowerCost = this->decelerateMagicianProCost;
                         break;
                     case TowerType::DecelerateMagicianPlus:
                         skillIconPath = "images/towers/skill_icon/decelerate_magician_pro";
-                        this->upgradeButton->setEnabled(false);
+                        this->upgradeTowerCost = 1000000;
                         break;
                     case TowerType::DiffusiveMagician:
                         skillIconPath = "images/towers/skill_icon/diffusive_magician";
-                        if (this->map->cost_ < this->diffusiveMagicianProCost) {
-                            this->upgradeButton->setEnabled(false);
-                        } else {
-                            this->upgradeButton->setEnabled(true);
-                        }
+                        this->upgradeTowerCost = this->diffusiveMagicianProCost;
                         break;
                     case TowerType::DiffusiveMagicianPlus:
                         skillIconPath = "images/towers/skill_icon/diffusive_magician_pro";
-                        this->upgradeButton->setEnabled(false);
+                        this->upgradeTowerCost = 1000000;
                         break;
                     case TowerType::HighspeedArcher:
                         skillIconPath = "images/towers/skill_icon/highspeed_archer";
-                        if (this->map->cost_ < this->highspeedArcherProCost) {
-                            this->upgradeButton->setEnabled(false);
-                        } else {
-                            this->upgradeButton->setEnabled(true);
-                        }
+                        this->upgradeTowerCost = this->highspeedArcherProCost;
                         break;
                     case TowerType::HighspeedArcherPlus:
                         skillIconPath = "images/towers/skill_icon/highspeed_archer_pro";
-                        this->upgradeButton->setEnabled(false);
+                        this->upgradeTowerCost = 1000000;
                         break;
                     case TowerType::SpecialMagician:
                         skillIconPath = "images/towers/skill_icon/special_magician";
-                        if (this->map->cost_ < this->specialMagicianProCost) {
-                            this->upgradeButton->setEnabled(false);
-                        } else {
-                            this->upgradeButton->setEnabled(true);
-                        }
+                        this->upgradeTowerCost = this->specialMagicianProCost;
                         break;
                     case TowerType::SpecialMagicianPlus:
                         skillIconPath = "images/towers/skill_icon/special_magician_pro";
-                        this->upgradeButton->setEnabled(false);
+                        this->upgradeTowerCost = 1000000;
                         break;
                     case TowerType::WeakenMagician:
                         skillIconPath = "images/towers/skill_icon/weaken_magician";
-                        if (this->map->cost_ < this->weakenMagicianProCost) {
-                            this->upgradeButton->setEnabled(false);
-                        } else {
-                            this->upgradeButton->setEnabled(true);
-                        }
+                        this->upgradeTowerCost = this->weakenMagicianProCost;
                         break;
                     case TowerType::WeakenMagicianPlus:
                         skillIconPath = "images/towers/skill_icon/weaken_magician_pro";
-                        this->upgradeButton->setEnabled(false);
+                        this->upgradeTowerCost = 1000000;
                         break;
                     case TowerType::AggressiveMagician:
                         skillIconPath = "images/towers/skill_icon/aggressive_magician";
-                        if (this->map->cost_ < this->aggressiveMagicianProCost) {
-                            this->upgradeButton->setEnabled(false);
-                        } else {
-                            this->upgradeButton->setEnabled(true);
-                        }
+                        this->upgradeTowerCost = this->aggressiveMagicianProCost;
                         break;
                     case TowerType::AggressiveMagicianPlus:
                         skillIconPath = "images/towers/skill_icon/aggressive_magician_pro";
-                        this->upgradeButton->setEnabled(false);
+                        this->upgradeTowerCost = 1000000;
                         break;
                     default:
                         break;
                 }
+                updateUpgradeButtonEnabled();
                 this->skillButton->setScale(1.0f);
                 this->skillButton->loadTextures(
                         skillIconPath + ".png",
@@ -386,7 +382,7 @@ void LevelScene::hideTowerInfo(float x, float y) {
 
 void LevelScene::showUpgradeMenu() {
     this->isUpgrade = true;
-    
+
     this->upgradeBackground1->setScale(0.1f);
     this->upgradeBackground1->setVisible(true);
     this->upgradeBackground2->setScale(0.1f);
@@ -448,7 +444,7 @@ void LevelScene::deleteTower(bool isReturn) {
         towerSprite->removeFromParent();
         if (isReturn) {
             this->map->withdraw_tower(this->selectedTowerId);
-            this->moneyLabel->setString(std::to_string(this->map->cost_));
+            this->updateMoneyLabel();
             this->updateSelectorEnabled();
         } else {
             this->map->remove_tower(this->selectedTowerId);
@@ -476,21 +472,7 @@ void LevelScene::upgradeTower() {
             this->upgradeTower1->setScale(2.0f);
             this->upgradeTower2->setScale(2.0f);
             this->upgradeTower3->setScale(2.0f);
-            if (this->map->cost_ < this->archerCost) {
-                this->upgradeItem1->setEnabled(false);
-            } else {
-                this->upgradeItem1->setEnabled(true);
-            }
-            if (this->map->cost_ < this->highspeedArcherCost) {
-                this->upgradeItem2->setEnabled(false);
-            } else {
-                this->upgradeItem2->setEnabled(true);
-            }
-            if (this->map->cost_ < this->bomberCost) {
-                this->upgradeItem3->setEnabled(false);
-            } else {
-                this->upgradeItem3->setEnabled(true);
-            }
+            updateUpgradeItemEnabled();
             this->showUpgradeMenu();
             return;
         case TowerType::MagicianBase:
@@ -500,21 +482,7 @@ void LevelScene::upgradeTower() {
             this->upgradeTower1->setScale(2.0f);
             this->upgradeTower2->setScale(2.0f);
             this->upgradeTower3->setScale(2.0f);
-            if (this->map->cost_ < this->coreMagicianCost) {
-                this->upgradeItem1->setEnabled(false);
-            } else {
-                this->upgradeItem1->setEnabled(true);
-            }
-            if (this->map->cost_ < this->diffusiveMagicianCost) {
-                this->upgradeItem2->setEnabled(false);
-            } else {
-                this->upgradeItem2->setEnabled(true);
-            }
-            if (this->map->cost_ < this->specialMagicianCost) {
-                this->upgradeItem3->setEnabled(false);
-            } else {
-                this->upgradeItem3->setEnabled(true);
-            }
+            updateUpgradeItemEnabled();
             this->showUpgradeMenu();
             return;
         case TowerType::HelperBase:
@@ -524,21 +492,7 @@ void LevelScene::upgradeTower() {
             this->upgradeTower1->setScale(2.0f);
             this->upgradeTower2->setScale(2.0f);
             this->upgradeTower3->setScale(2.0f);
-            if (this->map->cost_ < this->decelerateMagicianCost) {
-                this->upgradeItem1->setEnabled(false);
-            } else {
-                this->upgradeItem1->setEnabled(true);
-            }
-            if (this->map->cost_ < this->weakenMagicianCost) {
-                this->upgradeItem2->setEnabled(false);
-            } else {
-                this->upgradeItem2->setEnabled(true);
-            }
-            if (this->map->cost_ < this->aggressiveMagicianCost) {
-                this->upgradeItem3->setEnabled(false);
-            } else {
-                this->upgradeItem3->setEnabled(true);
-            }
+            updateUpgradeItemEnabled();
             this->showUpgradeMenu();
             return;
         case TowerType::Archer:
@@ -587,7 +541,7 @@ void LevelScene::upgradeTower() {
     this->addChild(newTowerSprite, 3);
     this->selectedTowerId = id.value();
     this->towers.emplace_back(id.value(), newTowerSprite);
-    this->moneyLabel->setString(std::to_string(this->map->cost_));
+    this->updateMoneyLabel();
     this->updateSelectorEnabled();
 }
 
@@ -704,11 +658,8 @@ void LevelScene::onMouseMove(cocos2d::Event *event) {
 }
 
 void LevelScene::update() {
-    // update money label
-    auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
-    cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
-    
-    this->moneyLabel->setString(std::to_string(map->cost_));
-    this->moneyLabel->setPosition(cocos2d::Vec2(origin.x + 150 + 15 * log10(map->getcost_()), origin.y + visibleSize.height - 70));
     this->updateSelectorEnabled();
+    this->updateMoneyLabel();
+    this->updateUpgradeItemEnabled();
+    this->updateUpgradeButtonEnabled();
 }

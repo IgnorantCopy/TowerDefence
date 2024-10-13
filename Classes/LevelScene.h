@@ -36,10 +36,13 @@ protected:
     std::vector<std::pair<Id, cocos2d::Sprite *>> enemies;
     // towers
     std::vector<std::pair<Id, cocos2d::Sprite *>> towers;
-    
+
     // update the ui
     void update();
-    
+    void updateMoneyLabel();
+    void updateUpgradeItemEnabled();
+    void updateUpgradeButtonEnabled();
+
     // select tower
     int isSelecting = 0;
     cocos2d::ui::Button *archerBaseSelector = nullptr;
@@ -48,7 +51,7 @@ protected:
     cocos2d::Sprite *selectedTower = nullptr;
     cocos2d::Label *moneyLabel = nullptr;
     cocos2d::Label *lifeLabel = nullptr;
-    
+
     // tower info
     const int archerBaseCost = 7;
     const int highspeedArcherCost = 10;
@@ -85,6 +88,10 @@ protected:
     cocos2d::Sprite *upgradeTower1 = nullptr;
     cocos2d::Sprite *upgradeTower2 = nullptr;
     cocos2d::Sprite *upgradeTower3 = nullptr;
+    uint32_t upgradeTowerCost = 0;
+    uint32_t upgradeTower1Cost = 0;
+    uint32_t upgradeTower2Cost = 0;
+    uint32_t upgradeTower3Cost = 0;
     cocos2d::MenuItemLabel *upgradeItem1 = nullptr;
     cocos2d::MenuItemLabel *upgradeItem2 = nullptr;
     cocos2d::MenuItemLabel *upgradeItem3 = nullptr;
@@ -93,23 +100,23 @@ protected:
     void updateSelectorEnabled();
     
     void deleteTower(bool isReturn = true);
-    
+
     void upgradeTower();
-    
+
     void showUpgradeMenu();
-    
+
     void hideUpgradeMenu();
-    
+
     void showTowerInfo();
-    
+
     void executeSkill();
     
     void cancelSelect();
-    
+
     void putTower(float x, float y);
-    
+
     void showTowerInfo(float x, float y);
-    
+
     void hideTowerInfo(float x, float y);
 
 public:
@@ -118,18 +125,18 @@ public:
     
     // a selector callback
     void menuCloseCallback(cocos2d::Ref *pSender);
-    
+
     // create the map
     void createMap(int level);
     
     void onMouseDown(cocos2d::Event *event);
-    
+
     void onMouseUp(cocos2d::Event *event);
-    
+
     void onMouseMove(cocos2d::Event *event);
     
     cocos2d::Sprite *getTower(Id id);
-    
+
     cocos2d::Sprite *getEnemy(Id id);
     
     void addBullet(Bullet *bullet);
