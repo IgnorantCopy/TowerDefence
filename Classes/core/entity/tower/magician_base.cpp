@@ -9,10 +9,12 @@ namespace towerdefence {
 
         void MagicianBase::on_tick(GridRef g) {
             Tower::on_tick(g);
-            auto grids = g.with_radius(this->status().attack_radius_, linf_dis);
-            auto enemy_grid = get_enemy_grid(*this,grids);
-            if(enemy_grid!=grids.end()){
-                single_attack(*this,*enemy_grid);
+            if (g.clock().is_triggered(attack_)) {
+                auto grids = g.with_radius(this->status().attack_radius_, linf_dis);
+                auto enemy_grid = get_enemy_grid(*this,grids);
+                if(enemy_grid!=grids.end()){
+                    single_attack(*this,*enemy_grid);
+                }
             }
 
             if (g.clock().is_triggered(release_skill_)) {
