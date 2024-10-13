@@ -176,10 +176,12 @@ struct Map {
         }
     };
 
+    static constexpr uint32_t MAX_HEALTH = 10;
+
     std::vector<Grid> grids;
     Shape shape;
     uint32_t cost_ = 10;
-    uint32_t health_ = 10;
+    uint32_t health_{MAX_HEALTH};
 
     explicit Map(size_t width_, size_t height_,
                  std::function<Grid(size_t, size_t)> f)
