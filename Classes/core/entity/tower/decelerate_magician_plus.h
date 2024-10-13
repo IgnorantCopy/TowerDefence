@@ -9,8 +9,6 @@ namespace towerdefence::core {
     struct DecelerateMagicianPlus final : Tower, TimeOutMixin<DecelerateMagicianPlus>  {
         timer::Timer release_skill_;
 
-        std::unordered_set<id::Id> has_buff_;
-
         DecelerateMagicianPlus(id::Id id, const timer::Clock & clk);
         DecelerateMagicianPlus() = delete;
 

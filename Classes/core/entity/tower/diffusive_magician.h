@@ -8,7 +8,6 @@
 namespace towerdefence::core {
     struct DiffusiveMagician final : Tower {
         timer::Timer release_skill_;
-        std::unordered_set<id::Id> has_buff_;
 
         DiffusiveMagician(id::Id id, const timer::Clock & clk);
         DiffusiveMagician() = delete;

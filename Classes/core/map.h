@@ -113,8 +113,6 @@ struct Shape {
 
 struct GridRef;
 
-struct CallbackParmas {};
-
 struct CallbackHandle {
     id::Id handle;
 
@@ -142,10 +140,14 @@ struct Map {
     std::unordered_map<id::Id, std::pair<size_t, size_t>> enemy_refs_;
     std::unordered_map<id::Id, std::pair<size_t, size_t>> tower_refs_;
 
+    friend GridRef;
+
     struct {
-        CallbackContainer<const Entity &, CallbackParmas> on_release_skill;
-        CallbackContainer<const Entity &, CallbackParmas> on_entity_death;
-        CallbackContainer<const Enemy &, CallbackParmas> on_enemy_move;
+        CallbackContainer<const Enemy &, const Tower &> on_enemy_attacked;
+        CallbackContainer<const Enemy &, towerdefence::core::Map &, uint32_t, int32_t> on_enemy_release_skill;//uint32_t duration, int32_t id
+        CallbackContainer<const Tower &, towerdefence::core::Map &, uint32_t> on_tower_release_skill;
+        CallbackContainer<const Enemy &> on_enemy_death;
+        CallbackContainer<const Enemy &, size_t, size_t> on_enemy_move;
     } callbacks_;
 
     timer::CallbackTimer<Map &> timeouts_;
@@ -176,6 +178,7 @@ struct Map {
     std::vector<Grid> grids;
     Shape shape;
     uint32_t cost_ = 10;
+    uint32_t health_ = 10;
 
     explicit Map(size_t width_, size_t height_,
                  std::function<Grid(size_t, size_t)> f)
@@ -191,25 +194,39 @@ struct Map {
     // register a callback function to be called whenver an entity releases a
     // skill
     CallbackHandle
-    on_release_skill(std::function<void(const Entity &, CallbackParmas)> f) {
+    on_enemy_release_skill(std::function<void(const Entity &, towerdefence::core::Map &map, uint32_t duration, int32_t id)> f) {
         CallbackHandle handle{this->assign_id()};
-        this->callbacks_.on_release_skill.insert({handle, f});
+        this->callbacks_.on_enemy_release_skill.insert({handle, f});
+        return handle;
+    }
+
+    CallbackHandle
+    on_tower_release_skill(std::function<void(const Entity &, towerdefence::core::Map &map, uint32_t duration)> f) {
+        CallbackHandle handle{this->assign_id()};
+        this->callbacks_.on_tower_release_skill.insert({handle, f});
         return handle;
     }
 
     // register a callback function to be called whenver an entity dies
     CallbackHandle
-    on_entity_death(std::function<void(const Entity &, CallbackParmas)> f) {
+    on_enemy_death(std::function<void(const Enemy &)> f) {
         CallbackHandle handle{this->assign_id()};
-        this->callbacks_.on_entity_death.insert({handle, f});
+        this->callbacks_.on_enemy_death.insert({handle, f});
         return handle;
     }
 
     // register a callback function to be called whenver an entity moves
     CallbackHandle
-    on_enemy_move(std::function<void(const Enemy &, CallbackParmas)> f) {
+    on_enemy_move(std::function<void(const Enemy &, size_t, size_t)> f) {
         CallbackHandle handle{this->assign_id()};
         this->callbacks_.on_enemy_move.insert({handle, f});
+        return handle;
+    }
+
+    CallbackHandle
+    on_enemy_attacked(std::function<void(const Enemy &, const Tower &)> f) {
+        CallbackHandle handle{this->assign_id()};
+        this->callbacks_.on_enemy_attacked.insert({handle, f});
         return handle;
     }
 
@@ -252,6 +269,12 @@ struct Map {
         auto &new_grid = grids.at(shape.index_of(row, col));
         new_grid.enemies.push_back(std::move(enemy));
         enemy_refs_[id] = {row, col};
+    }
+
+    void reached_end(id::Id id) {
+        this->remove_enemy(id);
+
+        this->health_ -= 1;
     }
 
     std::optional<id::Id> spawn_tower_at(size_t row, size_t column,
@@ -388,6 +411,41 @@ struct GridRef {
 
         if (target_enemy != enemies.end()) {
             f(**target_enemy);
+        }
+    }
+
+    template<class... Args>
+    void on_enemy_move(Args... args) {
+        for (auto & [id, f] : map.callbacks_.on_enemy_move) {
+            f(std::forward<Args>(args)...);
+        }
+    }
+
+    template<class... Args>
+    void on_enemy_attacked(Args... args) {
+        for (auto & [id, f] : map.callbacks_.on_enemy_attacked) {
+            f(std::forward<Args>(args)...);
+        }
+    }
+
+    template<class... Args>
+    void on_enemy_death(Args... args) {
+        for (auto & [id, f] : map.callbacks_.on_enemy_death) {
+            f(std::forward<Args>(args)...);
+        }
+    }
+
+    template<class... Args>
+    void on_enemy_release_skill(Args... args) {
+        for (auto & [id, f] : map.callbacks_.on_enemy_release_skill) {
+            f(std::forward<Args>(args)...);
+        }
+    }
+
+    template<class... Args>
+    void on_tower_release_skill(Args... args) {
+        for (auto & [id, f] : map.callbacks_.on_tower_release_skill) {
+            f(std::forward<Args>(args)...);
         }
     }
 
