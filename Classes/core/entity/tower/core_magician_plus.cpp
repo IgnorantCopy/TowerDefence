@@ -21,7 +21,7 @@ void CoreMagicianPlus::on_tick(GridRef g) {
     };
 
     if (clk.is_triggered(this->attack_)) {
-        if (this->skill_) {
+        if (!this->skill_) {
             with_nearest([this, &clk](Enemy &e) {
                 auto status = this->status();
 
