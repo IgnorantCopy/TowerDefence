@@ -8,7 +8,6 @@
 namespace towerdefence::core {
     struct HelperBase final : Tower {
         timer::Timer release_skill_;
-        std::unordered_set<id::Id> has_buff_;
 
         HelperBase(id::Id id, const timer::Clock & clk);
         HelperBase() = delete;

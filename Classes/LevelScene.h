@@ -17,28 +17,29 @@ using namespace towerdefence::core;
 using towerdefence::core::id::Id;
 
 class Bullet;
+
 class LevelScene : public cocos2d::Scene {
 protected:
     // the map of each level
     Map *map = nullptr;
-    Grid::Type type[7][12] = { Grid::Type::BlockPath };
+    Grid::Type type[7][12] = {Grid::Type::BlockPath};
     size_t width = 12, height = 7;
     // the size of each grid
     float SIZE = 140.0;
     // the images of each grid
-    std::vector<std::string> images = { "images/block_low.png", "images/in.png", "images/out.png",
-                                        "images/block_transport.png", "images/block_high.png" };
+    std::vector<std::string> images = {"images/block_low.png", "images/in.png", "images/out.png",
+                                       "images/block_transport.png", "images/block_high.png"};
     // the button of each grid
-    cocos2d::ui::Button* grid[7][12]={ nullptr };
+    cocos2d::ui::Button *grid[7][12] = {nullptr};
     
     // enemies
-    std::vector<std::pair<Id, cocos2d::Sprite*>> enemies;
+    std::vector<std::pair<Id, cocos2d::Sprite *>> enemies;
     // towers
-    std::vector<std::pair<Id, cocos2d::Sprite*>> towers;
-
+    std::vector<std::pair<Id, cocos2d::Sprite *>> towers;
+    
     // update the ui
     void update();
-
+    
     // select tower
     int isSelecting = 0;
     cocos2d::ui::Button *archerBaseSelector = nullptr;
@@ -46,6 +47,7 @@ protected:
     cocos2d::ui::Button *helperBaseSelector = nullptr;
     cocos2d::Sprite *selectedTower = nullptr;
     cocos2d::Label *moneyLabel = nullptr;
+    cocos2d::Label *lifeLabel = nullptr;
     
     // tower info
     const int archerBaseCost = 7;
@@ -91,33 +93,44 @@ protected:
     void updateSelectorEnabled();
     
     void deleteTower(bool isReturn = true);
+    
     void upgradeTower();
+    
     void showUpgradeMenu();
+    
     void hideUpgradeMenu();
+    
     void showTowerInfo();
+    
     void executeSkill();
     
     void cancelSelect();
-    void putTower(float x, float y);
-    void showTowerInfo(float x, float y);
-    void hideTowerInfo(float x, float y);
     
+    void putTower(float x, float y);
+    
+    void showTowerInfo(float x, float y);
+    
+    void hideTowerInfo(float x, float y);
+
 public:
     // bullets
-    std::vector<Bullet*> bullets;
+    std::vector<Bullet *> bullets;
     
     // a selector callback
     void menuCloseCallback(cocos2d::Ref *pSender);
-
+    
     // create the map
     void createMap(int level);
     
     void onMouseDown(cocos2d::Event *event);
+    
     void onMouseUp(cocos2d::Event *event);
+    
     void onMouseMove(cocos2d::Event *event);
     
-    cocos2d::Sprite* getTower(Id id);
-    cocos2d::Sprite* getEnemy(Id id);
+    cocos2d::Sprite *getTower(Id id);
+    
+    cocos2d::Sprite *getEnemy(Id id);
     
     void addBullet(Bullet *bullet);
 };

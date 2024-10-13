@@ -155,12 +155,16 @@ struct BuffMixin {
     }
 
     void update_buff(const timer::Clock &clk) {
-        for (auto it = buffs.cbegin(); it != buffs.cend(); ++it) {
-            if (const auto timer = it->second.second;
-                timer.has_value() && clk.is_triggered(*timer)) {
-                buffs.erase(it);
-            }
-        }
+        std::erase_if(this->buffs,
+                      [&clk](decltype(this->buffs)::value_type &item) {
+                          const auto &[buff, timer] = item.second;
+
+                          return timer
+                              .transform([clk](const timer::Timer &timer) {
+                                  return clk.is_triggered(timer);
+                              })
+                              .value_or(false);
+                      });
     }
 };
 
@@ -180,6 +184,10 @@ struct RouteMixin {
 
     route::Route &route() { return this->route_; }
     const route::Route &route() const { return this->route_; }
+};
+
+struct MoveMixin {
+    timer::Timer move_;
 };
 
 enum class AttackType { Physics, Magic, Real };
@@ -236,8 +244,8 @@ struct EnemyInfo {
           enemy_type_(enemy_type), total_frames_(total_frames) {}
 };
 
-struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin, RouteMixin {
-    Enemy(id::Id id, route::Route route) : IdMixin{id}, RouteMixin{route} {}
+struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin, RouteMixin, MoveMixin {
+    Enemy(id::Id id, route::Route route) : IdMixin{id}, RouteMixin{route}, MoveMixin {timer::Timer::never()} {}
 
     virtual EnemyInfo info() const = 0;
 

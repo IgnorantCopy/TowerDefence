@@ -8,7 +8,6 @@
 namespace towerdefence::core {
     struct HighspeedArcher final : Tower {
         timer::Timer release_skill_;
-        std::unordered_set<id::Id> has_buff_;
 
         HighspeedArcher(id::Id id, const timer::Clock & clk);
         HighspeedArcher() = delete;
