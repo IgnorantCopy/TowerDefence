@@ -1,5 +1,8 @@
 #include "entity.h"
 #include "../map.h"
+#include "route.h"
+#include <cassert>
+#include <stdexcept>
 
 namespace towerdefence::core {
 
@@ -21,7 +24,23 @@ void Enemy::increase_attack(int32_t atk, AttackType attack_type) {
     realized_attack_ += atk;
 }
 
-void Enemy::on_tick(GridRef g) { this->update_buff(g.clock()); }
+void Enemy::on_tick(GridRef g) {
+    auto &clk = g.clock();
+
+    this->update_buff(clk);
+
+    if (clk.is_triggered(this->move_)) {
+        try {
+            auto [dx, dy] = this->route_.next_direction();
+            auto nx = route::ssize(g.row) + dx;
+            auto ny = route::ssize(g.column) + dy;
+            assert(nx >= 0 && nx < g.map.shape.height_ && ny >= 0 && ny < g.map.shape.width_);
+            g.map.move_enemy_to(this->id, nx, ny);
+        } catch (const std::out_of_range &) {
+            g.map.reached_end(this->id);
+        }
+    }
+}
 
 void Tower::on_tick(GridRef g) {
     this->update_buff(g.clock());
