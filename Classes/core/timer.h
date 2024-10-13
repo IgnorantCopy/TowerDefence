@@ -204,10 +204,12 @@ template <class... Args> struct CallbackTimer {
     void on_tick(const Clock &clk, Args... parmas) {
         for (auto &[timer, cbs] : this->cbs) {
             if (clk.is_triggered(timer)) {
-                for (auto it = cbs.begin(); it != cbs.end(); ++it) {
+                for (auto it = cbs.begin(); it != cbs.end();) {
                     auto ret = (*it)(std::forward<Args>(parmas)...);
                     if (!ret) {
-                        cbs.erase(it);
+                        it = cbs.erase(it);
+                    } else {
+                        ++it;
                     }
                 }
 
