@@ -133,17 +133,17 @@ struct BuffMixin {
                        BuffIdentifier::hasher>
         buffs;
 
+    using Entry = decltype(buffs)::value_type;
+
     void add_buff(BuffIdentifier id, Buff b) { buffs.insert({id, {b, {}}}); }
     void add_buff_in(BuffIdentifier id, Buff b, timer::Timer t) {
         buffs.insert({id, {b, t}});
     }
 
     void remove_buff_from(id::Id id) {
-        for (auto it = buffs.cbegin(); it != buffs.cend(); ++it) {
-            if (it->first.is_from(id)) {
-                buffs.erase(it);
-            }
-        }
+        std::erase_if(this->buffs, [id](const Entry &item) {
+            return item.first.is_from(id);
+        });
     }
 
     Buff get_all_buff() const {
