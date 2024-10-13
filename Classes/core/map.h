@@ -113,8 +113,6 @@ struct Shape {
 
 struct GridRef;
 
-struct CallbackParmas {};
-
 struct CallbackHandle {
     id::Id handle;
 
@@ -142,10 +140,14 @@ struct Map {
     std::unordered_map<id::Id, std::pair<size_t, size_t>> enemy_refs_;
     std::unordered_map<id::Id, std::pair<size_t, size_t>> tower_refs_;
 
+    friend GridRef;
+
     struct {
-        CallbackContainer<const Entity &, CallbackParmas> on_release_skill;
-        CallbackContainer<const Entity &, CallbackParmas> on_entity_death;
-        CallbackContainer<const Enemy &, CallbackParmas> on_enemy_move;
+        CallbackContainer<const Enemy &, const Tower &> on_enemy_attacked;
+        CallbackContainer<const Enemy &, towerdefence::core::Map &, uint32_t, int32_t> on_enemy_release_skill;//uint32_t duration, int32_t id
+        CallbackContainer<const Tower &, towerdefence::core::Map &, uint32_t> on_tower_release_skill;
+        CallbackContainer<const Enemy &> on_enemy_death;
+        CallbackContainer<const Enemy &, size_t, size_t> on_enemy_move;
     } callbacks_;
 
     timer::CallbackTimer<Map &> timeouts_;
@@ -388,6 +390,41 @@ struct GridRef {
 
         if (target_enemy != enemies.end()) {
             f(**target_enemy);
+        }
+    }
+
+    template<class... Args>
+    void on_enemy_move(Args... args) {
+        for (auto & [id, f] : map.callbacks_.on_enemy_move) {
+            f(std::forward<Args>(args)...);
+        }
+    }
+
+    template<class... Args>
+    void on_enemy_attacked(Args... args) {
+        for (auto & [id, f] : map.callbacks_.on_enemy_attacked) {
+            f(std::forward<Args>(args)...);
+        }
+    }
+
+    template<class... Args>
+    void on_enemy_death(Args... args) {
+        for (auto & [id, f] : map.callbacks_.on_enemy_death) {
+            f(std::forward<Args>(args)...);
+        }
+    }
+
+    template<class... Args>
+    void on_enemy_release_skill(Args... args) {
+        for (auto & [id, f] : map.callbacks_.on_enemy_release_skill) {
+            f(std::forward<Args>(args)...);
+        }
+    }
+
+    template<class... Args>
+    void on_tower_release_skill(Args... args) {
+        for (auto & [id, f] : map.callbacks_.on_tower_release_skill) {
+            f(std::forward<Args>(args)...);
         }
     }
 
