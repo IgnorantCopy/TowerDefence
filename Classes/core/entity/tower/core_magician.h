@@ -8,7 +8,6 @@
 namespace towerdefence::core {
     struct CoreMagician final : Tower {
         timer::Timer release_skill_;
-        std::unordered_set<id::Id> has_buff_;
 
         CoreMagician(id::Id id, const timer::Clock & clk);
         CoreMagician() = delete;
