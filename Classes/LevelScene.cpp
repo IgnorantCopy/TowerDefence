@@ -172,11 +172,6 @@ void LevelScene::putTower(float x, float y) {
 }
 
 void LevelScene::showTowerInfo(float x, float y) {
-    if (this->upgradeTower1 != nullptr && this->upgradeTower2 != nullptr && this->upgradeTower3 != nullptr) {
-        this->upgradeTower1->setVisible(false);
-        this->upgradeTower2->setVisible(false);
-        this->upgradeTower3->setVisible(false);
-    }
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     float typeX = origin.x + 350 + SIZE;
