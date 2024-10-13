@@ -8,7 +8,6 @@
 namespace towerdefence::core {
     struct ArcherBase final : Tower {
         timer::Timer release_skill_;
-        std::unordered_set<id::Id> has_buff_;
 
         ArcherBase(id::Id id, const timer::Clock & clk);
         ArcherBase() = delete;

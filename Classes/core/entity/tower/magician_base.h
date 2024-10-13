@@ -8,7 +8,6 @@
 namespace towerdefence::core {
     struct MagicianBase final : Tower {
         timer::Timer release_skill_;
-        std::unordered_set<id::Id> has_buff_;
 
         MagicianBase(id::Id id, const timer::Clock & clk);
         MagicianBase() = delete;

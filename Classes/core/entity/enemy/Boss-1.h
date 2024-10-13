@@ -18,7 +18,7 @@ namespace towerdefence::core {
         Boss1(id::Id id, route::Route route, const timer::Clock & clk);
 
         EnemyInfo info() const override {
-            return { 50000, { 800, 30 }, 5, EnemyType::Boss1};
+            return { 50000, { 800, 30 }, 5, EnemyType::Boss1, 90};
         }
 
         void on_tick(GridRef g) override;
