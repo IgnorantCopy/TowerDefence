@@ -193,25 +193,39 @@ struct Map {
     // register a callback function to be called whenver an entity releases a
     // skill
     CallbackHandle
-    on_release_skill(std::function<void(const Entity &, CallbackParmas)> f) {
+    on_enemy_release_skill(std::function<void(const Entity &, towerdefence::core::Map &map, uint32_t duration, int32_t id)> f) {
         CallbackHandle handle{this->assign_id()};
-        this->callbacks_.on_release_skill.insert({handle, f});
+        this->callbacks_.on_enemy_release_skill.insert({handle, f});
+        return handle;
+    }
+
+    CallbackHandle
+    on_tower_release_skill(std::function<void(const Entity &, towerdefence::core::Map &map, uint32_t duration)> f) {
+        CallbackHandle handle{this->assign_id()};
+        this->callbacks_.on_tower_release_skill.insert({handle, f});
         return handle;
     }
 
     // register a callback function to be called whenver an entity dies
     CallbackHandle
-    on_entity_death(std::function<void(const Entity &, CallbackParmas)> f) {
+    on_enemy_death(std::function<void(const Enemy &)> f) {
         CallbackHandle handle{this->assign_id()};
-        this->callbacks_.on_entity_death.insert({handle, f});
+        this->callbacks_.on_enemy_death.insert({handle, f});
         return handle;
     }
 
     // register a callback function to be called whenver an entity moves
     CallbackHandle
-    on_enemy_move(std::function<void(const Enemy &, CallbackParmas)> f) {
+    on_enemy_move(std::function<void(const Enemy &, size_t, size_t)> f) {
         CallbackHandle handle{this->assign_id()};
         this->callbacks_.on_enemy_move.insert({handle, f});
+        return handle;
+    }
+
+    CallbackHandle
+    on_enemy_attacked(std::function<void(const Enemy &, const Tower &)> f) {
+        CallbackHandle handle{this->assign_id()};
+        this->callbacks_.on_enemy_attacked.insert({handle, f});
         return handle;
     }
 
