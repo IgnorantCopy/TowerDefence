@@ -13,7 +13,7 @@ struct LifeUp final : Enemy {
     LifeUp(id::Id id, route::Route route, const timer::Clock &clk)
         : Enemy(id, route), release_skill_(clk.with_period_sec(15)) {}
 
-    EnemyInfo info() const override { return {6000, {130, 30}, 8, EnemyType::LifeUp}; }
+    EnemyInfo info() const override { return {6000, {130, 30}, 8, EnemyType::LifeUp, 41}; }
 
     void on_tick(GridRef g) override;
 };

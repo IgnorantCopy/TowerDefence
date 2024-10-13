@@ -333,7 +333,6 @@ bool Level1Scene::init()
                 newTower = std::make_unique<TowerFactory<DecelerateMagician>>();
                 break;
             default:
-                std::unreachable();
                 break;
         }
         this->deleteTower(false);
@@ -483,10 +482,10 @@ bool Level1Scene::init()
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
     // update the map
-    schedule([this](float dt){
-        map->update();
-        this->update();
-    }, 1.0/30, "update");
+//    schedule([this](float dt){
+//        map->update();
+//        this->update();
+//    }, 1.0/30, "update");
 
     return true;
 }

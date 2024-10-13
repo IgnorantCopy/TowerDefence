@@ -227,11 +227,13 @@ struct EnemyInfo {
     Defence defence_;
     int32_t speed_ = 0;
     EnemyType enemy_type_;
+    size_t total_frames_ = 0;
+    size_t current_frame_ = 0;
 
     constexpr EnemyInfo(int32_t health, Defence defence, int32_t speed,
-                        EnemyType enemy_type)
+                        EnemyType enemy_type, size_t total_frames)
         : health_(health), defence_(defence), speed_(speed),
-          enemy_type_(enemy_type) {}
+          enemy_type_(enemy_type), total_frames_(total_frames) {}
 };
 
 struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin, RouteMixin {

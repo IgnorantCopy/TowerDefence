@@ -9,7 +9,7 @@ namespace towerdefence {
         struct Warlock final : Enemy {
 
             EnemyInfo info() const override {
-                return { 4000, { 150, 20 }, 10, EnemyType::Warlock};
+                return { 4000, { 150, 20 }, 10, EnemyType::Warlock, 41};
             }
         };
     } // namespace core
