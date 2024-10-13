@@ -3,11 +3,11 @@
 
 #include "../../id.h"
 #include "../entity.h"
-#include <unordered_set>
 
 namespace towerdefence::core {
-    struct DecelerateMagician final : Tower {
+    struct DecelerateMagician final : Tower, TimeOutMixin<DecelerateMagician> {
         timer::Timer release_skill_;
+        bool skill_ = false;
 
         DecelerateMagician(id::Id id, const timer::Clock & clk);
         DecelerateMagician() = delete;

@@ -6,8 +6,10 @@
 #include <unordered_set>
 
 namespace towerdefence::core {
-    struct CoreMagicianPlus final : Tower {
+    struct CoreMagicianPlus final : Tower, TimeOutMixin<CoreMagicianPlus> {
         timer::Timer release_skill_;
+
+        bool skill_ = false;
 
         CoreMagicianPlus(id::Id id, const timer::Clock & clk);
         CoreMagicianPlus() = delete;
