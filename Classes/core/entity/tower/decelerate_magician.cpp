@@ -19,7 +19,7 @@ void DecelerateMagician::on_tick(GridRef g) {
             grid.with_nearest_enemy([this, &clk](Enemy &e) {
                 auto status = this->status();
 
-                for (size_t i = 0; i < ((this->skill_) ? 3zu : 1zu); ++i) {
+                for (size_t i = 0; i < ((this->skill_) ? size_t(3) : size_t(1)); ++i) {
                     e.increase_attack(status.attack_, status.attack_type_);
                     e.add_buff_in({this->id, Buff::DECREASE_SPEED},
                                   Buff::speed(-40), clk.with_duration_sec(2));
