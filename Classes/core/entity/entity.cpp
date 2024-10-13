@@ -56,6 +56,11 @@ auto grid_of_nearest_enemy(std::vector<GridRef> &grids)
                 [](std::unique_ptr<Enemy> &x, std::unique_ptr<Enemy> &y) {
                     return x->remaining_distance() < y->remaining_distance();
                 });
+            if(a1 == a.grid.enemies.end()){
+                return false;
+            }else if(b1 == b.grid.enemies.end()){
+                return true;
+            }
             return (*a1)->remaining_distance() < (*b1)->remaining_distance();
         });
 }
