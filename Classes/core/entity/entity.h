@@ -186,6 +186,10 @@ struct RouteMixin {
     const route::Route &route() const { return this->route_; }
 };
 
+struct MoveMixin {
+    timer::Timer move_;
+};
+
 enum class AttackType { Physics, Magic, Real };
 enum class TowerType {
     ArcherBase,
@@ -238,8 +242,8 @@ struct EnemyInfo {
           enemy_type_(enemy_type) {}
 };
 
-struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin, RouteMixin {
-    Enemy(id::Id id, route::Route route) : IdMixin{id}, RouteMixin{route} {}
+struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin, RouteMixin, MoveMixin {
+    Enemy(id::Id id, route::Route route) : IdMixin{id}, RouteMixin{route}, MoveMixin {timer::Timer::never()} {}
 
     virtual EnemyInfo info() const = 0;
 
