@@ -46,6 +46,7 @@ Sprite *LevelScene::getTower(Id id) {
             return pair.second;
         }
     }
+    return nullptr;
 }
 
 Sprite *LevelScene::getEnemy(Id id) {
@@ -54,6 +55,7 @@ Sprite *LevelScene::getEnemy(Id id) {
             return pair.second;
         }
     }
+    return nullptr;
 }
 
 void LevelScene::addBullet(Bullet *bullet) {
@@ -111,7 +113,6 @@ void LevelScene::putTower(float x, float y) {
                     newTower = std::make_unique<TowerFactory<HelperBase>>();
                     break;
                 default:
-                    std::unreachable();
                     break;
                 }
                 auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
@@ -384,6 +385,8 @@ void LevelScene::hideTowerInfo(float x, float y) {
 }
 
 void LevelScene::showUpgradeMenu() {
+    this->isUpgrade = true;
+    
     this->upgradeBackground1->setScale(0.1f);
     this->upgradeBackground1->setVisible(true);
     this->upgradeBackground2->setScale(0.1f);
@@ -400,18 +403,20 @@ void LevelScene::showUpgradeMenu() {
     this->upgradeMenu->setVisible(true);
     
     auto scale = ScaleTo::create(0.5f, 1.0f);
+    auto scaleLarge = ScaleTo::create(0.5f, 2.0f);
     auto scaleEase = EaseBackOut::create(scale->clone());
+    auto scaleEaseLarge = EaseBackOut::create(scaleLarge->clone());
     this->upgradeBackground1->runAction(scaleEase);
     this->upgradeBackground2->runAction(scaleEase->clone());
     this->upgradeBackground3->runAction(scaleEase->clone());
-    this->upgradeTower1->runAction(scaleEase->clone());
-    this->upgradeTower2->runAction(scaleEase->clone());
-    this->upgradeTower3->runAction(scaleEase->clone());
+    this->upgradeTower1->runAction(scaleEaseLarge);
+    this->upgradeTower2->runAction(scaleEaseLarge->clone());
+    this->upgradeTower3->runAction(scaleEaseLarge->clone());
     this->upgradeMenu->runAction(scaleEase->clone());
 }
 
 void LevelScene::hideUpgradeMenu() {
-    auto scale = ScaleTo::create(0.5f, 0.1f);
+    auto scale = ScaleTo::create(0.3f, 0.1f);
     this->upgradeBackground1->runAction(scale);
     this->upgradeBackground2->runAction(scale->clone());
     this->upgradeBackground3->runAction(scale->clone());
@@ -427,7 +432,8 @@ void LevelScene::hideUpgradeMenu() {
         this->upgradeTower2->setVisible(false);
         this->upgradeTower3->setVisible(false);
         this->upgradeMenu->setVisible(false);
-    }, 0.2f, "hideUpgradeMenu");
+        this->isUpgrade = false;
+    }, 0.3f, "hideUpgradeMenu");
 }
 
 void LevelScene::deleteTower(bool isReturn) {
@@ -572,7 +578,6 @@ void LevelScene::upgradeTower() {
             newTower = std::make_unique<TowerFactory<AggressiveMagicianPlus>>();
             break;
         default:
-            std::unreachable();
             return;
     }
     this->deleteTower(false);
@@ -659,7 +664,7 @@ void LevelScene::onMouseDown(cocos2d::Event *event) {
     if (this->isSelecting && this->selectedTower) {
         this->putTower(x, y);
     }
-    if (!this->isSelecting && !this->isShowingTowerInfo) {
+    if (!this->isSelecting && !this->isShowingTowerInfo && !this->isUpgrade) {
         this->showTowerInfo(x, y);
     }
 }
@@ -698,14 +703,12 @@ void LevelScene::onMouseMove(cocos2d::Event *event) {
     }
 }
 
-void LevelScene::update()
-{
+void LevelScene::update() {
     // update money label
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
     
-    this->removeChild(moneyLabel);
-    moneyLabel = cocos2d::Label::createWithTTF(std::to_string(map->cost_), "fonts/Bender/BENDER.OTF", 75);
+    this->moneyLabel->setString(std::to_string(map->cost_));
     this->moneyLabel->setPosition(cocos2d::Vec2(origin.x + 150 + 15 * log10(map->getcost_()), origin.y + visibleSize.height - 70));
-    this->addChild(this->moneyLabel, 1);
+    this->updateSelectorEnabled();
 }

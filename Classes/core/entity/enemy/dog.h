@@ -9,7 +9,7 @@ namespace towerdefence {
         struct Dog final : Enemy {
 
             EnemyInfo info() const override {
-                return { 900, { 0, 0 }, 19, EnemyType::Dog};
+                return { 900, { 0, 0 }, 19, EnemyType::Dog, 15};
             }
         };
     } // namespace core

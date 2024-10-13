@@ -13,7 +13,7 @@ namespace towerdefence::core {
         Boss2() = delete;
 
         EnemyInfo info() const override {
-            return { 70000, { 1500, 60 }, 5, EnemyType::Boss2};
+            return { 70000, { 1500, 60 }, 5, EnemyType::Boss2, 48};
         }
 
         void on_tick(GridRef g) override;

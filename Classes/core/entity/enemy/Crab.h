@@ -9,7 +9,7 @@ namespace towerdefence {
         struct Crab final : Enemy {
 
             EnemyInfo info() const override {
-                return { 3000, { 1500, 85 }, 10, EnemyType::Crab};
+                return { 3000, { 1500, 85 }, 10, EnemyType::Crab, 30};
             }
         };
     } // namespace core
