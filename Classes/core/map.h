@@ -176,6 +176,7 @@ struct Map {
     std::vector<Grid> grids;
     Shape shape;
     uint32_t cost_ = 10;
+    uint32_t health_ = 10;
 
     explicit Map(size_t width_, size_t height_,
                  std::function<Grid(size_t, size_t)> f)
@@ -191,9 +192,9 @@ struct Map {
     // register a callback function to be called whenver an entity releases a
     // skill
     CallbackHandle
-    on_release_skill(std::function<void(const Entity &, CallbackParmas)> f) {
+    on_release_skill(std::function<void(const Entity &, Map&, uint32_t)> f) {
         CallbackHandle handle{this->assign_id()};
-        this->callbacks_.on_release_skill.insert({handle, f});
+        // this->callbacks_.on_release_skill.insert({handle, f});
         return handle;
     }
 
@@ -252,6 +253,12 @@ struct Map {
         auto &new_grid = grids.at(shape.index_of(row, col));
         new_grid.enemies.push_back(std::move(enemy));
         enemy_refs_[id] = {row, col};
+    }
+
+    void reached_end(id::Id id) {
+        this->remove_enemy(id);
+
+        this->health_ -= 1;
     }
 
     std::optional<id::Id> spawn_tower_at(size_t row, size_t column,
