@@ -155,12 +155,16 @@ struct BuffMixin {
     }
 
     void update_buff(const timer::Clock &clk) {
-        for (auto it = buffs.cbegin(); it != buffs.cend(); ++it) {
-            if (const auto timer = it->second.second;
-                timer.has_value() && clk.is_triggered(*timer)) {
-                buffs.erase(it);
-            }
-        }
+        std::erase_if(this->buffs,
+                      [&clk](decltype(this->buffs)::value_type &item) {
+                          const auto &[buff, timer] = item.second;
+
+                          return timer
+                              .transform([clk](const timer::Timer &timer) {
+                                  return clk.is_triggered(timer);
+                              })
+                              .value_or(false);
+                      });
     }
 };
 
