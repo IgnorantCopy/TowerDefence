@@ -343,7 +343,7 @@ bool Level1Scene::init()
         this->addChild(newTowerSprite, 3);
         this->selectedTowerId = id.value();
         this->towers.emplace_back(id.value(), newTowerSprite);
-        this->moneyLabel->setString(std::to_string(this->map->cost_));
+        this->updateMoneyLabel();
         this->updateSelectorEnabled();
         this->hideUpgradeMenu();
     });
@@ -384,7 +384,7 @@ bool Level1Scene::init()
         this->addChild(newTowerSprite, 3);
         this->selectedTowerId = id.value();
         this->towers.emplace_back(id.value(), newTowerSprite);
-        this->moneyLabel->setString(std::to_string(this->map->cost_));
+        this->updateMoneyLabel();
         this->updateSelectorEnabled();
         this->hideUpgradeMenu();
     });
@@ -425,7 +425,7 @@ bool Level1Scene::init()
         this->addChild(newTowerSprite, 3);
         this->selectedTowerId = id.value();
         this->towers.emplace_back(id.value(), newTowerSprite);
-        this->moneyLabel->setString(std::to_string(this->map->cost_));
+        this->updateMoneyLabel();
         this->updateSelectorEnabled();
         this->hideUpgradeMenu();
     });

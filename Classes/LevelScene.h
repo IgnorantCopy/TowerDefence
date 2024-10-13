@@ -38,6 +38,9 @@ protected:
 
     // update the ui
     void update();
+    void updateMoneyLabel();
+    void updateUpgradeItemEnabled();
+    void updateUpgradeButtonEnabled();
 
     // select tower
     int isSelecting = 0;
@@ -82,6 +85,10 @@ protected:
     cocos2d::Sprite *upgradeTower1 = nullptr;
     cocos2d::Sprite *upgradeTower2 = nullptr;
     cocos2d::Sprite *upgradeTower3 = nullptr;
+    uint32_t upgradeTowerCost = 0;
+    uint32_t upgradeTower1Cost = 0;
+    uint32_t upgradeTower2Cost = 0;
+    uint32_t upgradeTower3Cost = 0;
     cocos2d::MenuItemLabel *upgradeItem1 = nullptr;
     cocos2d::MenuItemLabel *upgradeItem2 = nullptr;
     cocos2d::MenuItemLabel *upgradeItem3 = nullptr;
