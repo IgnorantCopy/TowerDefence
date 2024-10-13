@@ -147,7 +147,7 @@ struct Map {
         CallbackContainer<const Enemy &, towerdefence::core::Map &, uint32_t, int32_t> on_enemy_release_skill;//uint32_t duration, int32_t id
         CallbackContainer<const Tower &, towerdefence::core::Map &, uint32_t> on_tower_release_skill;
         CallbackContainer<const Enemy &> on_enemy_death;
-        CallbackContainer<const Enemy &, std::pair<size_t, size_t>> on_enemy_move;
+        CallbackContainer<const Enemy &, std::pair<size_t, size_t>, std::pair<size_t, size_t>> on_enemy_move;
         CallbackContainer<id::Id> on_escape;
     } callbacks_;
 
@@ -221,7 +221,7 @@ struct Map {
 
     // register a callback function to be called whenver an entity moves
     CallbackHandle
-    on_enemy_move(std::function<void(const Enemy &, std::pair<size_t, size_t>)> f) {
+    on_enemy_move(std::function<void(const Enemy &, std::pair<size_t, size_t>, std::pair<size_t, size_t>)> f) {
         CallbackHandle handle{this->assign_id()};
         this->callbacks_.on_enemy_move.insert({handle, f});
         return handle;
@@ -280,9 +280,6 @@ struct Map {
         auto &new_grid = grids.at(shape.index_of(row, col));
         new_grid.enemies.push_back(std::move(enemy));
         enemy_refs_[id] = {row, col};
-        for (auto &[handle, f] : this->callbacks_.on_enemy_move) {
-            f(*enemy, {row, col});
-        }
     }
 
     void reached_end(id::Id id) {
@@ -432,35 +429,35 @@ struct GridRef {
     }
 
     template<class... Args>
-    void on_enemy_move(Args... args) {
+    void on_enemy_move(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_enemy_move) {
             f(std::forward<Args>(args)...);
         }
     }
 
     template<class... Args>
-    void on_enemy_attacked(Args... args) {
+    void on_enemy_attacked(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_enemy_attacked) {
             f(std::forward<Args>(args)...);
         }
     }
 
     template<class... Args>
-    void on_enemy_death(Args... args) {
+    void on_enemy_death(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_enemy_death) {
             f(std::forward<Args>(args)...);
         }
     }
 
     template<class... Args>
-    void on_enemy_release_skill(Args... args) {
+    void on_enemy_release_skill(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_enemy_release_skill) {
             f(std::forward<Args>(args)...);
         }
     }
 
     template<class... Args>
-    void on_tower_release_skill(Args... args) {
+    void on_tower_release_skill(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_tower_release_skill) {
             f(std::forward<Args>(args)...);
         }
