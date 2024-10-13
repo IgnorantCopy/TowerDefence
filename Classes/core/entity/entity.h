@@ -147,24 +147,22 @@ struct BuffMixin {
     }
 
     Buff get_all_buff() const {
-        return std::accumulate(
-            buffs.cbegin(), buffs.cend(), Buff{},
-            [](const Buff acc, const decltype(buffs)::value_type val) {
-                return acc & val.second.first;
-            });
+        return std::accumulate(buffs.cbegin(), buffs.cend(), Buff{},
+                               [](const Buff acc, const Entry &val) {
+                                   return acc & val.second.first;
+                               });
     }
 
     void update_buff(const timer::Clock &clk) {
-        std::erase_if(this->buffs,
-                      [&clk](decltype(this->buffs)::value_type &item) {
-                          const auto &[buff, timer] = item.second;
+        std::erase_if(this->buffs, [&clk](const Entry &item) {
+            const auto &[buff, timer] = item.second;
 
-                          return timer
-                              .transform([clk](const timer::Timer &timer) {
-                                  return clk.is_triggered(timer);
-                              })
-                              .value_or(false);
-                      });
+            return timer
+                .transform([clk](const timer::Timer &timer) {
+                    return clk.is_triggered(timer);
+                })
+                .value_or(false);
+        });
     }
 };
 
