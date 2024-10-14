@@ -1,6 +1,7 @@
 #ifndef TOWERDEFENCE_CORE_ENTITY_ENTITY
 #define TOWERDEFENCE_CORE_ENTITY_ENTITY
 
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
@@ -185,7 +186,7 @@ struct RouteMixin {
 };
 
 struct MoveMixin {
-    timer::Timer move_;
+    double move_progress_ = 0;
 };
 
 enum class AttackType { Physics, Magic, Real };
@@ -243,7 +244,8 @@ struct EnemyInfo {
 };
 
 struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin, RouteMixin, MoveMixin {
-    Enemy(id::Id id, route::Route route) : IdMixin{id}, RouteMixin{route}, MoveMixin {timer::Timer::never()} {}
+    Enemy(id::Id id, route::Route route)
+        : IdMixin{id}, RouteMixin{route} {}
 
     virtual EnemyInfo info() const = 0;
 
@@ -251,6 +253,12 @@ struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin, RouteMixin, MoveMixin {
 
     size_t remaining_distance() const {
         return this->route_.remaining_distance();
+    }
+
+    // Returns current progress of moving as a value in [0, 1]
+    double move_progress() const {
+        assert(this->move_progress_ >= 0 && this->move_progress_ <= 1);
+        return this->move_progress_;
     }
 
     // Calculates current defence and speed that takes buffs into account

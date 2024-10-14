@@ -4,7 +4,7 @@
   outputs = { self, nixpkgs, ... }@inputs:
     let
       pkgs = nixpkgs.legacyPackages."x86_64-linux";
-      build-deps = with pkgs; [ cmake pkg-config python3 gcc14 ];
+      build-deps = with pkgs; [ cmake pkg-config python3 ];
       deps = with pkgs; [
         sqlite
         fontconfig
@@ -17,10 +17,16 @@
         pcre2
         mount
       ];
-      dev-deps = with pkgs; [ clang-tools just ];
+      dev-deps = with pkgs; [ (llvmPackages_19.clang-tools.override {
+          clang = clang_19.override {
+            cc = gcc14.cc;
+            useCcForLibs = true;
+          };
+          # enableLibcxx = true;
+      }) just gdb ];
     in {
       devShells.x86_64-linux.default =
-        pkgs.mkShell { packages = build-deps ++ dev-deps ++ deps; };
+        pkgs.mkShell.override { stdenv = pkgs.gcc14Stdenv; } { packages = build-deps ++ dev-deps ++ deps; };
 
       packages.x86_64-linux = {
         doc = let

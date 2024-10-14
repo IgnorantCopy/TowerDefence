@@ -12,6 +12,8 @@
 
 namespace towerdefence::core::timer {
 
+constexpr uint32_t TICK_PER_SECOND = 30;
+
 template <class... Ts> struct overloaded : Ts... {
     using Ts::operator()...;
 };
