@@ -18,7 +18,6 @@
 #include "core/entity/enemy/Not-attacked.h"
 
 
-USING_NS_CC;
 using towerdefence::core::id::Id;
 using towerdefence::core::Enemy;
 using towerdefence::core::EnemyType;
@@ -33,58 +32,14 @@ using towerdefence::core::NotAttacked;
 
 
 class EnemyAnimation {
+    const static int size = 140;
 public:
-    static void move(LevelScene *levelScene, Enemy *enemy) {
-        std::string prefix = "images/enemies/";
-        switch (enemy->status().enemy_type_) {
-            case EnemyType::AttackDown:
-                prefix += "attackDown/move/attackDown_move";
-                break;
-            case EnemyType::Boss1:
-                prefix += "boss/stage1/move";
-                break;
-            case EnemyType::Boss2:
-                prefix += "boss/stage2";
-                break;
-            case EnemyType::Crab:
-                prefix += "crab/move/crab_move";
-                break;
-            case EnemyType::Destroyer:
-                prefix += "destroyer/move/destroyer_move";
-                break;
-            case EnemyType::Dog:
-                prefix += "dog/move/dog_move";
-                break;
-            case EnemyType::LifeUp:
-                prefix += "lifeUp/move/lifeUp_move";
-                break;
-            case EnemyType::NotAttacked:
-                prefix += "notAttacked/move/notAttacked_move";
-                break;
-            case EnemyType::Soldier:
-                prefix += "soldier/move/soldier_move";
-                break;
-            case EnemyType::SpeedUp:
-                prefix += "speedUp/move/speedUp_move";
-                break;
-            case EnemyType::Tank:
-                prefix += "tank/move/tank_move";
-                break;
-            case EnemyType::Warlock:
-                prefix += "warlock/move/warlock_move";
-                break;
-            case EnemyType::Worm:
-                prefix += "worm/move/worm_move";
-                break;
-            default:
-                break;
-        }
-        std::string movePath = std::format("{:02d}.png", enemy->status().current_frame_);
-        Id id = enemy->id;
-        auto enemySprite = levelScene->getEnemy(id);
-        enemySprite->setTexture(prefix + movePath);
-        
-    }
+    static void move(LevelScene *levelScene, Enemy *enemy, std::pair<size_t, size_t> currentPos,
+                     std::pair<size_t, size_t> targetPos);
+    
+    static void releaseSkill(LevelScene *levelScene, Enemy *enemy);
+    
+    static void dead(LevelScene *levelScene, Enemy *enemy);
 };
 
 #endif //TOWERDEFENCE_ENEMYANIMATION_H
