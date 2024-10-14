@@ -149,7 +149,7 @@ struct Map {
         CallbackContainer<Enemy &> on_enemy_death;
         CallbackContainer<Enemy &, std::pair<size_t, size_t>, std::pair<size_t, size_t>> on_enemy_move;
         CallbackContainer<id::Id> on_escape;
-        CallbackContainer<Enemy &> on_transport;
+        CallbackContainer<Enemy &, std::pair<size_t, size_t>, std::pair<size_t, size_t>> on_transport;
     } callbacks_;
 
     timer::CallbackTimer<Map &> timeouts_;
@@ -243,7 +243,7 @@ struct Map {
     }
 
     CallbackHandle
-    on_transport(std::function<void(Enemy &)> f) {
+    on_transport(std::function<void(Enemy &, std::pair<size_t, size_t>, std::pair<size_t, size_t>)> f) {
         CallbackHandle handle{this->assign_id()};
         this->callbacks_.on_transport.insert({handle, f});
         return handle;

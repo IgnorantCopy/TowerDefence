@@ -39,7 +39,11 @@ void Enemy::on_tick(GridRef g) {
             auto ny = route::ssize(g.column) + dy;
             assert(nx >= 0 && nx < g.map.shape.height_ && ny >= 0 && ny < g.map.shape.width_);
             g.map.move_enemy_to(this->id, nx, ny);
-            g.on_enemy_move(*this, std::make_pair(route::ssize(g.row), route::ssize(g.column)), std::make_pair(nx, ny));
+            if(dx < -1||dx > 1||dy < -1||dy >1){
+                g.on_transport(*this, std::make_pair(route::ssize(g.row), route::ssize(g.column)), std::make_pair(nx, ny));
+            }else{
+                g.on_enemy_move(*this, std::make_pair(route::ssize(g.row), route::ssize(g.column)), std::make_pair(nx, ny));
+            }
         } catch (const std::out_of_range &) {
             g.map.reached_end(this->id);
         }
