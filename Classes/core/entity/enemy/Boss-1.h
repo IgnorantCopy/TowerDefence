@@ -4,16 +4,10 @@
 #include "../../id.h"
 #include "../entity.h"
 #include "../route.h"
-#include <unordered_set>
 
 namespace towerdefence::core {
     struct Boss1 final : Enemy {
-        struct {
-            timer::Timer dec_atk_spd;
-            timer::Timer silent;
-            timer::Timer withdraw;
-        } release_skill_;
-        std::unordered_set<id::Id> has_buff_;
+        timer::Timer release_skill_;
 
         Boss1(id::Id id, route::Route route, const timer::Clock & clk);
 
