@@ -68,6 +68,15 @@ Bullet::Bullet(LevelScene *levelScene, towerdefence::core::Tower *tower, towerde
     this->levelScene->addBullet(this);
 }
 
+void Bullet::explosion() {
+    auto particle = cocos2d::ParticleSystemQuad::create("particles/blood.plist");
+    auto enemySprite = this->levelScene->getEnemy(this->enemy->id);
+    if (particle) {
+        particle->setPosition(enemySprite->getPositionX(), enemySprite->getPositionY());
+    }
+    this->levelScene->addChild(particle, 4);
+}
+
 void Bullet::move() {
     this->updateAngle();
     this->bullet->setRotation(this->angle);

@@ -33,11 +33,13 @@ protected:
 public:
     Bullet(LevelScene *levelScene, Tower *tower, Enemy *enemy);
     
-    virtual ~Bullet() = default;
+    ~Bullet() { this->explosion(); }
     
     cocos2d::Sprite *getBullet() const { return bullet; }
     
     virtual void move();
+    
+    virtual void explosion();
     
     void updateAngle();
     
@@ -53,11 +55,9 @@ class MagicBullet : public Bullet {
 public:
     MagicBullet(LevelScene *levelScene, Tower *tower, Enemy *enemy, std::string color);
     
-    ~MagicBullet() override { this->explosion(); }
-    
     void move() override;
     
-    void explosion();
+    void explosion() override;
 };
 
 #endif //TOWERDEFENCE_TOWERANIMATION_H

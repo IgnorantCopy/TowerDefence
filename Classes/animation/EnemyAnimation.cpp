@@ -55,6 +55,12 @@ void EnemyAnimation::move(LevelScene *levelScene, towerdefence::core::Enemy *ene
     auto enemySprite = levelScene->getEnemy(id);
     enemySprite->setTexture(prefix + movePath);
     
+    if (abs((int) currentPos.first - (int) targetPos.first) + abs((int) currentPos.second - (int) targetPos.second) >
+        1) {
+        EnemyAnimation::transport(levelScene, enemy, currentPos, targetPos);
+        return;
+    }
+    
     float delta = (float) enemy->status().speed_ / 10.0f * size / 30.0f;
     if (currentPos.first < targetPos.first) {
         enemySprite->setPositionY(enemySprite->getPositionY() - delta);
@@ -66,6 +72,16 @@ void EnemyAnimation::move(LevelScene *levelScene, towerdefence::core::Enemy *ene
     } else if (currentPos.second > targetPos.second) {
         enemySprite->setPositionX(enemySprite->getPositionX() - delta);
     }
+}
+
+void EnemyAnimation::transport(LevelScene *levelScene, towerdefence::core::Enemy *enemy,
+                               std::pair<size_t, size_t> currentPos, std::pair<size_t, size_t> targetPos) {
+    auto enemySprite = levelScene->getEnemy(enemy->id);
+    float duration = 1.0f / ((float) enemy->status().speed_ / 10.0f) / 2.0f;
+    auto scaleDown = cocos2d::ScaleTo::create(duration, 0.1f);
+    auto scaleUp = cocos2d::ScaleTo::create(duration, 1.0f);
+    auto seq = cocos2d::Sequence::create(scaleDown, scaleUp, nullptr);
+    enemySprite->runAction(seq);
 }
 
 void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::Enemy *enemy) {

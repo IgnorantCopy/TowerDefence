@@ -63,6 +63,17 @@ void LevelScene::addBullet(Bullet *bullet) {
     this->addChild(bullet->getBullet(), 4);
 }
 
+void LevelScene::updateEnemies() {
+    for (const auto &enemy: this->enemies) {
+        auto id = enemy.first;
+        auto enemySprite = enemy.second;
+        auto enemyEntity = this->map->get_enemy_by_id(id);
+        if (enemyEntity) {
+            this->map->on_enemy_attacked([this]())
+        }
+    }
+}
+
 void LevelScene::updateBullets() {
     for (auto it = this->bullets.begin(); it != this->bullets.end(); it++) {
         if ((*it)->isTouch()) {
@@ -673,6 +684,7 @@ void LevelScene::onMouseMove(cocos2d::Event *event) {
 
 void LevelScene::update() {
     this->updateBullets();
+    this->updateEnemies();
     this->updateMoneyLabel();
     this->updateSelectorEnabled();
     this->updateUpgradeItemEnabled();

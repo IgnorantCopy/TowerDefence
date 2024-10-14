@@ -40,6 +40,8 @@ protected:
     // update the ui
     void update();
     
+    void updateEnemies();
+    
     void updateBullets();
     
     void updateMoneyLabel();
