@@ -67,10 +67,7 @@ void LevelScene::updateEnemies() {
     for (const auto &enemy: this->enemies) {
         auto id = enemy.first;
         auto enemySprite = enemy.second;
-        auto enemyEntity = this->map->get_enemy_by_id(id);
-        if (enemyEntity) {
-            this->map->on_enemy_attacked([this]())
-        }
+        auto &enemyEntity = this->map->get_enemy_by_id(id);
     }
 }
 

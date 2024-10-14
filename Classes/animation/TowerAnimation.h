@@ -60,4 +60,9 @@ public:
     void explosion() override;
 };
 
+class TowerAnimation {
+public:
+    static void releaseSkill(LevelScene *levelScene, Tower *tower);
+};
+
 #endif //TOWERDEFENCE_TOWERANIMATION_H

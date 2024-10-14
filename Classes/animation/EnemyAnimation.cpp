@@ -50,7 +50,9 @@ void EnemyAnimation::move(LevelScene *levelScene, towerdefence::core::Enemy *ene
         default:
             break;
     }
-    std::string movePath = std::format("{:02d}.png", enemy->status().current_frame_);
+    int currentFrame = enemy->get_storage<int>("current_frame");
+    std::string movePath = std::format("{:02d}.png", currentFrame);
+    enemy->set_storage("current_frame", (currentFrame + 1) % enemy->status().total_frames_);
     Id id = enemy->id;
     auto enemySprite = levelScene->getEnemy(id);
     enemySprite->setTexture(prefix + movePath);
@@ -69,8 +71,10 @@ void EnemyAnimation::move(LevelScene *levelScene, towerdefence::core::Enemy *ene
     }
     if (currentPos.second < targetPos.second) {
         enemySprite->setPositionX(enemySprite->getPositionX() + delta);
+        enemySprite->setFlippedX(false);
     } else if (currentPos.second > targetPos.second) {
         enemySprite->setPositionX(enemySprite->getPositionX() - delta);
+        enemySprite->setFlippedX(true);
     }
 }
 
@@ -80,8 +84,17 @@ void EnemyAnimation::transport(LevelScene *levelScene, towerdefence::core::Enemy
     float duration = 1.0f / ((float) enemy->status().speed_ / 10.0f) / 2.0f;
     auto scaleDown = cocos2d::ScaleTo::create(duration, 0.1f);
     auto scaleUp = cocos2d::ScaleTo::create(duration, 1.0f);
-    auto seq = cocos2d::Sequence::create(scaleDown, scaleUp, nullptr);
-    enemySprite->runAction(seq);
+    enemySprite->runAction(scaleDown);
+    
+    auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
+    cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
+    float x = origin.x + 350 + size * targetPos.second;
+    float y = origin.y + visibleSize.height - size * targetPos.first;
+    
+    enemySprite->scheduleOnce([x, y, enemySprite, scaleUp](float dt) {
+        enemySprite->setPosition(x, y);
+        enemySprite->runAction(scaleUp);
+    }, duration, "transport");
 }
 
 void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::Enemy *enemy) {

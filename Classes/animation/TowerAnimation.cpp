@@ -149,3 +149,23 @@ void MagicBullet::explosion() {
     this->bullet->runAction(animate);
 }
 
+void TowerAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::Tower *tower) {
+    cocos2d::Vector<cocos2d::SpriteFrame *> frames;
+    frames.reserve(48);
+    for (int i = 0; i < 48; i++) {
+        std::string skillPath = std::format("images/bullet/skill/skill{:02d}.png", i);
+        auto *frame = cocos2d::SpriteFrame::create(skillPath, cocos2d::Rect(0, 0, 1080, 1080));
+        frames.pushBack(frame);
+    }
+    auto *animation = cocos2d::Animation::createWithSpriteFrames(frames, 0.05f);
+    auto *animate = cocos2d::Animate::create(animation);
+    
+    auto towerSprite = levelScene->getTower(tower->id);
+    
+    auto *skillSprite = cocos2d::Sprite::create("images/bullet/skill/skill00.png");
+    skillSprite->setPosition(towerSprite->getPositionX(), towerSprite->getPositionY());
+    skillSprite->setScale(0.15f);
+    switch (tower->status().tower_type_) {
+    
+    }
+}
