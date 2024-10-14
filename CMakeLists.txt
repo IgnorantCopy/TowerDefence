@@ -29,6 +29,8 @@ set(APP_NAME TowerDefence)
 
 project(${APP_NAME})
 
+option(TOWERDEFENCE_SANITIZER "enable sanitizer")
+
 if(XCODE)
     if(NOT DEFINED CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET)
         SET(CMAKE_XCODE_ATTRIBUTE_IPHONEOS_DEPLOYMENT_TARGET 8.0)
@@ -219,8 +221,14 @@ else()
 endif()
 
 if (TOWERDEFENCE_SANITIZER)
-    add_compile_options(-fsanitize=address,undefined)
-    add_link_options(-fsanitize=address,undefined)
+    if (WINDOWS)
+        message("enabling sanitizer")
+        add_compile_options("/fsanitize=address")
+        add_link_options("/fsanitize=address")
+    else()
+        add_compile_options(-fsanitize=address,undefined)
+        add_link_options(-fsanitize=address,undefined)
+    endif()
 endif()
 
 set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD ${TOWERDEFENCE_CXX_STANDARD})
