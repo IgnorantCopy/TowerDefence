@@ -10,6 +10,7 @@
 #include <optional>
 #include <ranges>
 #include <tuple>
+#include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -234,8 +235,7 @@ struct Map {
         return handle;
     }
 
-    CallbackHandle
-    on_escape(std::function<void(id::Id)> f) {
+    CallbackHandle on_escape(std::function<void(id::Id)> f) {
         CallbackHandle handle{this->assign_id()};
         this->callbacks_.on_escape.insert({handle, f});
         return handle;
@@ -251,6 +251,12 @@ struct Map {
         enemy_refs_.insert({id, {row, column}});
 
         return id;
+    }
+
+    // SAFETY: caller must ensure the id will not be used anymore.
+    void unregister_enemy_id(id::Id id) {
+        assert(enemy_refs_.count(id) > 0);
+        enemy_refs_.erase(id);
     }
 
     // throws std::out_of_range if id does not exist
@@ -283,8 +289,6 @@ struct Map {
     }
 
     void reached_end(id::Id id) {
-        this->remove_enemy(id);
-
         for (auto &[handle, f] : this->callbacks_.on_escape) {
             f(id);
         }
