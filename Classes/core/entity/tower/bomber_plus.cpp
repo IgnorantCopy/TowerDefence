@@ -25,7 +25,7 @@ void BomberPlus::on_tick(GridRef g) {
     }
 
     // release skill
-    if (clk.is_triggered(release_skill_)) {
+    if (clk.is_triggered(release_skill_)&&!get_all_buff().silent_) {
         this->attack_ = clk.never(); // stop attacking
         // after 3s
         this->timeouts_.add_callback(

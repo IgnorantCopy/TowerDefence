@@ -32,7 +32,7 @@ namespace towerdefence {
                 }
             }
 
-            if (g.clock().is_triggered(release_skill_)) {
+            if (g.clock().is_triggered(release_skill_)&&!get_all_buff().silent_) {
                 skill = true;
             }
         }
