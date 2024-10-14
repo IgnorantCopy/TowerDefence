@@ -4,8 +4,9 @@
 namespace towerdefence::core {
 
 Boss2::Boss2(id::Id id, route::Route route, const timer::Clock &clk)
-    : Enemy(id, route), release_skill_{clk.with_period_sec(20), clk.with_period_sec(30),
-                                       clk.with_period_sec(40)} {}
+    : Enemy(id, route), release_skill_(clk.with_period_sec(20)) {
+    this->add_buff_in({id, Buff::INVINCIBLE}, Buff::invincible(true),
+                      clk.with_duration_sec(20));
 }
 
 void Boss2::on_tick(GridRef g) {
@@ -41,4 +42,5 @@ void Boss2::on_tick(GridRef g) {
     if (g.clock().is_triggered(release_skill_.silent)) {
         g.on_enemy_release_skill(*this, g.map, 15);
     }
+}
 }// namespace towerdefence::core
