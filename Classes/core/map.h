@@ -10,6 +10,7 @@
 #include <optional>
 #include <ranges>
 #include <tuple>
+#include <type_traits>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -143,11 +144,11 @@ struct Map {
     friend GridRef;
 
     struct {
-        CallbackContainer<const Enemy &, const Tower &> on_enemy_attacked;
-        CallbackContainer<const Enemy &, towerdefence::core::Map &, uint32_t, int32_t> on_enemy_release_skill;//uint32_t duration, int32_t id
-        CallbackContainer<const Tower &, towerdefence::core::Map &, uint32_t> on_tower_release_skill;
-        CallbackContainer<const Enemy &> on_enemy_death;
-        CallbackContainer<const Enemy &, std::pair<size_t, size_t>, std::pair<size_t, size_t>> on_enemy_move;
+        CallbackContainer<Enemy &, Tower &> on_enemy_attacked;
+        CallbackContainer<Enemy &, towerdefence::core::Map &, uint32_t> on_enemy_release_skill;//uint32_t duration
+        CallbackContainer<Tower &, towerdefence::core::Map &, uint32_t> on_tower_release_skill;
+        CallbackContainer<Enemy &> on_enemy_death;
+        CallbackContainer<Enemy &, std::pair<size_t, size_t>, std::pair<size_t, size_t>> on_enemy_move;
         CallbackContainer<id::Id> on_escape;
     } callbacks_;
 
@@ -198,7 +199,7 @@ struct Map {
     // register a callback function to be called whenver an entity releases a
     // skill
     CallbackHandle
-    on_enemy_release_skill(std::function<void(const Entity &, towerdefence::core::Map &map, uint32_t duration, int32_t id)> f) {
+    on_enemy_release_skill(std::function<void(const Entity &, towerdefence::core::Map &map, uint32_t duration)> f) {
         CallbackHandle handle{this->assign_id()};
         this->callbacks_.on_enemy_release_skill.insert({handle, f});
         return handle;
@@ -213,7 +214,7 @@ struct Map {
 
     // register a callback function to be called whenver an entity dies
     CallbackHandle
-    on_enemy_death(std::function<void(const Enemy &)> f) {
+    on_enemy_death(std::function<void(Enemy &)> f) {
         CallbackHandle handle{this->assign_id()};
         this->callbacks_.on_enemy_death.insert({handle, f});
         return handle;
@@ -221,21 +222,20 @@ struct Map {
 
     // register a callback function to be called whenver an entity moves
     CallbackHandle
-    on_enemy_move(std::function<void(const Enemy &, std::pair<size_t, size_t>, std::pair<size_t, size_t>)> f) {
+    on_enemy_move(std::function<void(Enemy &, std::pair<size_t, size_t>, std::pair<size_t, size_t>)> f) {
         CallbackHandle handle{this->assign_id()};
         this->callbacks_.on_enemy_move.insert({handle, f});
         return handle;
     }
 
     CallbackHandle
-    on_enemy_attacked(std::function<void(const Enemy &, const Tower &)> f) {
+    on_enemy_attacked(std::function<void(Enemy &, Tower &)> f) {
         CallbackHandle handle{this->assign_id()};
         this->callbacks_.on_enemy_attacked.insert({handle, f});
         return handle;
     }
 
-    CallbackHandle
-    on_escape(std::function<void(id::Id)> f) {
+    CallbackHandle on_escape(std::function<void(id::Id)> f) {
         CallbackHandle handle{this->assign_id()};
         this->callbacks_.on_escape.insert({handle, f});
         return handle;
@@ -251,6 +251,12 @@ struct Map {
         enemy_refs_.insert({id, {row, column}});
 
         return id;
+    }
+
+    // SAFETY: caller must ensure the id will not be used anymore.
+    void unregister_enemy_id(id::Id id) {
+        assert(enemy_refs_.count(id) > 0);
+        enemy_refs_.erase(id);
     }
 
     // throws std::out_of_range if id does not exist
@@ -283,8 +289,6 @@ struct Map {
     }
 
     void reached_end(id::Id id) {
-        this->remove_enemy(id);
-
         for (auto &[handle, f] : this->callbacks_.on_escape) {
             f(id);
         }
@@ -429,6 +433,7 @@ struct GridRef {
     }
 
     template<class... Args>
+    requires std::is_invocable_v<decltype(map.callbacks_.on_enemy_move)::mapped_type, Args...>
     void on_enemy_move(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_enemy_move) {
             f(std::forward<Args>(args)...);
@@ -436,6 +441,7 @@ struct GridRef {
     }
 
     template<class... Args>
+    requires std::is_invocable_v<decltype(map.callbacks_.on_enemy_attacked)::mapped_type, Args...>
     void on_enemy_attacked(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_enemy_attacked) {
             f(std::forward<Args>(args)...);
@@ -443,6 +449,7 @@ struct GridRef {
     }
 
     template<class... Args>
+    requires std::is_invocable_v<decltype(map.callbacks_.on_enemy_death)::mapped_type, Args...>
     void on_enemy_death(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_enemy_death) {
             f(std::forward<Args>(args)...);
@@ -450,6 +457,7 @@ struct GridRef {
     }
 
     template<class... Args>
+    requires std::is_invocable_v<decltype(map.callbacks_.on_enemy_release_skill)::mapped_type, Args...>
     void on_enemy_release_skill(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_enemy_release_skill) {
             f(std::forward<Args>(args)...);
@@ -457,8 +465,17 @@ struct GridRef {
     }
 
     template<class... Args>
+    requires std::is_invocable_v<decltype(map.callbacks_.on_tower_release_skill)::mapped_type, Args...>
     void on_tower_release_skill(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_tower_release_skill) {
+            f(std::forward<Args>(args)...);
+        }
+    }
+
+    template<class... Args>
+    requires std::is_invocable_v<decltype(map.callbacks_.on_escape)::mapped_type, Args...>
+    void on_escape(Args&&... args) {
+        for (auto & [id, f] : map.callbacks_.on_escape) {
             f(std::forward<Args>(args)...);
         }
     }

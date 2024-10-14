@@ -28,7 +28,7 @@ void DecelerateMagician::on_tick(GridRef g) {
         }
     }
 
-    if (g.clock().is_triggered(release_skill_)) {
+    if (g.clock().is_triggered(release_skill_)&&!get_all_buff().silent_) {
         this->add_buff_in({this->id, Buff::DEFAULT},
                           Buff::attack(0.25) & Buff::attack_speed(25),
                           g.clock().with_duration_sec(15));

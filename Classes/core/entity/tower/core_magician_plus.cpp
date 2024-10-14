@@ -39,7 +39,7 @@ void CoreMagicianPlus::on_tick(GridRef g) {
         }
     }
 
-    if (clk.is_triggered(release_skill_)) {
+    if (clk.is_triggered(release_skill_)&&!get_all_buff().silent_) {
         this->add_buff_in({this->id, Buff::DEFAULT},
                           Buff::attack_radius(1) & Buff::attack(3.30),
                           g.clock().with_duration_sec(10));
