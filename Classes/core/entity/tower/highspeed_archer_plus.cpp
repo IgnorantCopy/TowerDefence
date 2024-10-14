@@ -18,6 +18,7 @@ namespace towerdefence {
                         single_attack(*this,*enemy_grid);
                         this->remove_buff_from(this->id);
                         skill = false;
+                        g.on_tower_release_skill(*this, g.map, 0);
                     }else{
                         single_attack(*this,*enemy_grid);
                     }
@@ -26,6 +27,7 @@ namespace towerdefence {
 
             if (g.clock().is_triggered(release_skill_)&&!get_all_buff().silent_) {
                 skill = true;
+                g.on_tower_release_skill(*this, g.map, 1);
             }
         }
     } // namespace core

@@ -39,6 +39,8 @@ namespace towerdefence {
                     });
                 }
 
+                g.on_tower_release_skill(*this, g.map, 35);
+
                 this->stop_timer_for(this->attack_, 35, clk);
             }
         }

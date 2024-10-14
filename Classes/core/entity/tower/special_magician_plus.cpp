@@ -49,6 +49,7 @@ namespace towerdefence {
 
             if (clk.is_triggered(this->release_skill_)&&!get_all_buff().silent_) {
                 this->skill = true;
+                g.on_tower_release_skill(*this, g.map, 15);
                 timeouts_.add_callback(clk.with_duration_sec(15),
                                        [](SpecialMagicianPlus &self, GridRef){
                                                     self.skill = false;
