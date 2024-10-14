@@ -40,11 +40,13 @@ void Boss1::on_tick(GridRef g) {
 }
 
 void Boss1::on_death(GridRef g) {
-    g.set_timeout(g.clock().with_duration_sec(30), [row = g.row, col = g.column](Map & map) {
-        auto boss2 = EnemyFactory<Boss2>{};
-        map.spawn_enemy_at(row, col, boss2);
-        return false;
-    });
+    g.set_timeout(
+        g.clock().with_duration_sec(30),
+        [row = g.row, col = g.column, route = this->route_](Map &map) {
+            auto boss2 = EnemyFactory<Boss2>{route};
+            map.spawn_enemy_at(row, col, boss2);
+            return false;
+        });
 }
 
 } // namespace core
