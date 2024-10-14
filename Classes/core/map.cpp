@@ -1,6 +1,7 @@
 #include "map.h"
 #include "entity/entity.h"
 #include <algorithm>
+#include <iostream>
 #include <iterator>
 #include <memory>
 
@@ -12,6 +13,9 @@ GridRef Map::iterator::operator*() {
 }
 
 void Map::update() {
+    int arr[5];
+    std::cout << arr[4];
+    std::cout << arr[5];
     if (clock_.is_triggered(cost_timer_)) {
         cost_++;
     }
