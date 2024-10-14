@@ -4,6 +4,10 @@
 
 #include "EnemyAnimation.h"
 
+bool isInRange(int x1, int y1, int x2, int y2, int range) {
+    return abs(x1 - x2) + abs(y1 - y2) <= range;
+}
+
 void EnemyAnimation::move(LevelScene *levelScene, towerdefence::core::Enemy *enemy,
                           std::pair<size_t, size_t> currentPos, std::pair<size_t, size_t> targetPos) {
     std::string prefix = "images/enemies/";
@@ -100,6 +104,16 @@ void EnemyAnimation::transport(LevelScene *levelScene, towerdefence::core::Enemy
 void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::Enemy *enemy, float duration) {
     std::string prefix = "images/enemies/";
     cocos2d::Vector<cocos2d::SpriteFrame *> frames;
+    auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
+    cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
+    float typeX = origin.x + 350 + size;
+    float typeY = origin.y + visibleSize.height - size;
+    auto enemySprite = levelScene->getEnemy(enemy->id);
+    float x = enemySprite->getPositionX();
+    float y = enemySprite->getPositionY();
+    int indexX = (int) ((x - typeX + 0.5f * size) / size);
+    int indexY = (int) ((typeY - y + 0.5f * size) / size);
+    
     switch (enemy->status().enemy_type_) {
         case EnemyType::AttackDown:
             prefix += "attackDown/skill/attackDown_skill";
@@ -108,7 +122,33 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
                 std::string skillPath = std::format("{:02d}.png", i);
                 frames.pushBack(cocos2d::SpriteFrame::create(prefix + skillPath, cocos2d::Rect(0, 0, 850, 850)));
             }
+            for (int i = indexY - 2; i <= indexY + 2; i++) {
+                for (int j = indexX - 2; j <= indexX + 2; j++) {
+                    auto &grid = levelScene->map->get_ref(i, j).grid;
+                    if (i >= 0 && i < 7 && j >= 0 && j < 12 && isInRange(indexX, indexY, j, i, 2) &&
+                        grid.type == Grid::Type::BlockTower && grid.tower.has_value()) {
+                        auto &tower = grid.tower.value();
+                        auto towerSprite = levelScene->getTower(tower->id);
+                        float towerX = towerSprite->getPositionX();
+                        float towerY = towerSprite->getPositionY();
+                        cocos2d::Sprite *attackDown = cocos2d::Sprite::create("images/towers/attack_down.png");
+                        attackDown->setPosition(cocos2d::Vec2(towerX - 40, towerY));
+                        levelScene->addChild(attackDown, 4);
+                        attackDown->scheduleOnce([attackDown](float dt) {
+                            attackDown->removeFromParent();
+                        }, duration, "attackDown");
+                    }
+                }
+            }
             break;
+        case EnemyType::NotAttacked:
+            enemySprite->setOpacity(50);
+            enemySprite->scheduleOnce([enemySprite](float dt) {
+                if (enemySprite) {
+                    enemySprite->setOpacity(255);
+                }
+            }, duration, "notAttacked");
+            return;
         case EnemyType::Boss1:
             prefix += "boss/stage1/skill/boss1_skill";
             frames.reserve(50);
@@ -130,7 +170,6 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
     }
     auto animation = cocos2d::Animation::createWithSpriteFrames(frames, 0.05f);
     auto animate = cocos2d::Animate::create(animation);
-    auto enemySprite = levelScene->getEnemy(enemy->id);
     enemySprite->runAction(animate);
 }
 
