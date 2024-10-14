@@ -7,7 +7,11 @@
 
 namespace towerdefence::core {
     struct Boss2 final : Enemy {
-        timer::Timer release_skill_;
+        struct {
+            timer::Timer dec_atk_spd;
+            timer::Timer silent;
+            timer::Timer withdraw;
+        } release_skill_;
 
         Boss2(id::Id id, route::Route route, const timer::Clock & clk);
         Boss2() = delete;

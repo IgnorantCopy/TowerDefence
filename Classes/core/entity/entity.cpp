@@ -2,6 +2,8 @@
 #include "../map.h"
 #include "route.h"
 #include <cassert>
+#include <cmath>
+#include <cstdint>
 #include <stdexcept>
 
 namespace towerdefence::core {
@@ -21,6 +23,9 @@ void Enemy::increase_attack(int32_t atk, AttackType attack_type) {
     default:
         break;
     }
+    if(get_all_buff().invincible_&&atk > 0){
+        return;
+    }
     realized_attack_ += atk;
 }
 
@@ -29,19 +34,34 @@ void Enemy::on_tick(GridRef g) {
 
     this->update_buff(clk);
 
-    if (clk.is_triggered(this->move_)) {
+    assert(this->move_progress_ >= 0 && this->move_progress_ <= 1);
+
+    this->move_progress_ +=
+        0.1 * this->status().speed_ / timer::TICK_PER_SECOND;
+
+    auto moves = static_cast<uint32_t>(std::floor(this->move_progress_));
+    this->move_progress_ = std::fmod(this->move_progress_, 1);
+
+    for (uint32_t i = 0; i < moves; ++i) {
         try {
             auto [dx, dy] = this->route_.next_direction();
             auto nx = route::ssize(g.row) + dx;
             auto ny = route::ssize(g.column) + dy;
-            assert(nx >= 0 && nx < g.map.shape.height_ && ny >= 0 && ny < g.map.shape.width_);
+            assert(nx >= 0 && nx < g.map.shape.height_ && ny >= 0 &&
+                   ny < g.map.shape.width_);
             g.map.move_enemy_to(this->id, nx, ny);
             g.on_enemy_move(*this, std::make_pair(route::ssize(g.row), route::ssize(g.column)), std::make_pair(nx, ny));
         } catch (const std::out_of_range &) {
-            g.map.reached_end(this->id);
+            g.map.reached_end(this->id); // todo: fix UAF in reached_end
+            break;
         }
     }
 
+    assert(this->move_progress_ >= 0 && this->move_progress_ <= 1);
+}
+
+void Enemy::on_death(GridRef g) {
+    g.on_enemy_death(*this);
 }
 
 void Tower::on_tick(GridRef g) {

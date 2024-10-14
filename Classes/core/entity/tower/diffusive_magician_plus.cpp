@@ -19,7 +19,7 @@ void DiffusiveMagicianPlus::on_tick(GridRef g) {
         }
     }
 
-    if (clk.is_triggered(this->release_skill_)) {
+    if (clk.is_triggered(this->release_skill_)&&!get_all_buff().silent_) {
         this->attack_ = clk.never();
         this->add_buff_in({this->id, Buff::DEFAULT},
                           Buff::attack_radius(-1) & Buff::attack(2.2),
