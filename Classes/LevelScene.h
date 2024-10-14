@@ -8,13 +8,13 @@
 #include "core/timer.h"
 #include "core/id.h"
 #include "core/entity/entity.h"
+#include "core/entity/route.h"
 using towerdefence::core::Grid;
 using towerdefence::core::Map;
+using towerdefence::core::route::Route;
 using towerdefence::core::id::Id;
-
-
-using namespace towerdefence::core;
-using towerdefence::core::id::Id;
+using towerdefence::core::EnemyType;
+using ssize = std::make_signed_t<size_t>;
 
 class Bullet;
 
@@ -36,6 +36,23 @@ protected:
     std::vector<std::pair<Id, cocos2d::Sprite *>> enemies;
     // towers
     std::vector<std::pair<Id, cocos2d::Sprite *>> towers;
+
+    // the route of enemies
+    enum DirType { U, D, L, R };
+    std::vector<std::pair<ssize, ssize>> Dir = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
+    std::vector<Route> routes;
+
+    // the FrameTime in 1s
+    const uint32_t FrameTime = 30;
+    // create enemies
+    size_t enemyNumber = 0;
+    std::vector<float> enemyCreateTime;
+    std::vector<std::pair<size_t, size_t>> enemyStartPos;
+    std::vector<std::vector<std::pair<size_t, uint32_t>>> enemyCreateType;
+    std::vector<EnemyType> enemyType = { EnemyType::Worm, EnemyType::Dog, EnemyType::Soldier, EnemyType::Warlock,
+                                         EnemyType::Destroyer, EnemyType::Tank, EnemyType::Crab, EnemyType::SpeedUp,
+                                         EnemyType::AttackDown, EnemyType::LifeUp, EnemyType::NotAttacked, EnemyType::Boss1, EnemyType::Boss2 };
+    void createEnemy();
 
     // update the ui
     void update();
