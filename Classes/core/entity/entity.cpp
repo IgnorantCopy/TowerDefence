@@ -13,9 +13,6 @@ void Entity::on_tick(GridRef g) {}
 void Entity::on_hit(GridRef g) {}
 
 void Enemy::increase_attack(int32_t atk, AttackType attack_type) {
-    if(get_all_buff().invincible_){
-        return;
-    }
     switch (attack_type) {
     case AttackType::Physics:
         atk = atk>status().defence_.physics_?(atk-status().defence_.physics_):(atk/20);
@@ -25,6 +22,9 @@ void Enemy::increase_attack(int32_t atk, AttackType attack_type) {
         break;
     default:
         break;
+    }
+    if(get_all_buff().invincible_&&atk > 0){
+        return;
     }
     realized_attack_ += atk;
 }
