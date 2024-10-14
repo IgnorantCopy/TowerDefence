@@ -21,7 +21,7 @@ namespace towerdefence {
             }
 
             // release skill
-            if (clk.is_triggered(release_skill_)) {
+            if (clk.is_triggered(release_skill_)&&!get_all_buff().silent_) {
                 for (auto ref : g.with_radius(status.attack_radius_, linf_dis)) {
                     ref.grid.with_enemy([this, clk](Enemy &enemy) {
                         enemy.add_buff_in({this->id, Buff::DEFAULT},

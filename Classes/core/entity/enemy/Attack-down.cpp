@@ -20,10 +20,12 @@ void AttackDown::on_tick(GridRef g) {
                     has_buff_.insert(tower->id);
                 });
         }
+        g.on_enemy_release_skill(*this, g.map, 25);
     }
 }
 
 void AttackDown::on_death(GridRef g) {
+    Enemy::on_death(g);
     for (auto tower_id : has_buff_) {
         try {
             auto &tower = g.map.get_tower_by_id(tower_id);

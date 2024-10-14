@@ -20,7 +20,7 @@ namespace towerdefence {
                             });
                 }
             }
-            if (clk.is_triggered(release_skill_)) {
+            if (clk.is_triggered(release_skill_)&&!get_all_buff().silent_) {
                 for (auto grid : g.with_radius(status.attack_radius_, linf_dis)) {
                     grid.current().with_tower(
                             [this, &clk](std::unique_ptr<Tower> &tower) {

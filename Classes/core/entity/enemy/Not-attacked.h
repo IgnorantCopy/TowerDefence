@@ -9,6 +9,11 @@ namespace towerdefence {
         struct NotAttacked final : Enemy {
             bool not_hit_ = true;
 
+            timer::Timer release_skill_;
+
+            NotAttacked(id::Id id, route::Route route);
+            NotAttacked() = delete;
+
             EnemyInfo info() const override {
                 return { 16000, { 500, 20 }, 8, EnemyType::NotAttacked, 36};
             }

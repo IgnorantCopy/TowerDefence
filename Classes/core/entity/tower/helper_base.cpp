@@ -17,7 +17,7 @@ namespace towerdefence {
                 }
             }
 
-            if (g.clock().is_triggered(release_skill_)) {
+            if (g.clock().is_triggered(release_skill_)&&!get_all_buff().silent_) {
                 this->add_buff_in({this->id, Buff::DEFAULT},
                                   Buff::attack(0.20),
                                   g.clock().with_duration_sec(15));
