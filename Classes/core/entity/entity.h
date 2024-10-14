@@ -200,7 +200,7 @@ struct ExtraStorage {
     // `std::bad_any_cast` if type mismatch.
     //
     // `std::out_of_range` if key does not exist.
-    template <class T> T get_storage(const std::string &key) {
+    template <class T> T get_storage(const std::string &key) const {
         auto &value = this->storage_.at(key);
 
         return std::any_cast<T>(value);
