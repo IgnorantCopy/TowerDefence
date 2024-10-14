@@ -29,6 +29,7 @@ namespace towerdefence {
                                                 Buff::attack(0.50)&Buff::attack_speed(50));
                             });
                 }
+                g.on_tower_release_skill(*this, g.map, 999);
             }
         }
 

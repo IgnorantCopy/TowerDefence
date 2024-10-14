@@ -45,6 +45,7 @@ void CoreMagicianPlus::on_tick(GridRef g) {
                           g.clock().with_duration_sec(10));
 
         this->skill_ = true;
+        g.on_tower_release_skill(*this, g.map, 10);
 
         this->timeouts_.add_callback(g.clock().with_duration_sec(10),
                                      [](CoreMagicianPlus &self, GridRef) {
