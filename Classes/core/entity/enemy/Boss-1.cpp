@@ -36,10 +36,20 @@ void Boss1::on_tick(GridRef g) {
         if (auto &tower = g.get_nearest_tower(); tower.has_value()) {
             g.map.remove_tower((*tower)->id);
         }
+        g.on_enemy_release_skill(*this, g.map, 0);
+    }
+
+    if (g.clock().is_triggered(release_skill_.dec_atk_spd)) {
+        g.on_enemy_release_skill(*this, g.map, 10);
+    }
+
+    if (g.clock().is_triggered(release_skill_.silent)) {
+        g.on_enemy_release_skill(*this, g.map, 15);
     }
 }
 
 void Boss1::on_death(GridRef g) {
+    Enemy::on_death(g);
     g.set_timeout(
         g.clock().with_duration_sec(30),
         [row = g.row, col = g.column, route = this->route_](Map &map) {

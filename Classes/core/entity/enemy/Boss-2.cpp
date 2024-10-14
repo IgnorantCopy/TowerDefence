@@ -21,6 +21,7 @@ void Boss2::on_tick(GridRef g) {
                                    clk.with_duration_sec(10));
             });
         }
+        g.on_enemy_release_skill(*this, g.map, 10);
     }
 }
 } // namespace towerdefence::core

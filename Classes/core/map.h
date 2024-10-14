@@ -144,7 +144,7 @@ struct Map {
 
     struct {
         CallbackContainer<Enemy &, Tower &> on_enemy_attacked;
-        CallbackContainer<Enemy &, towerdefence::core::Map &, uint32_t> on_enemy_release_skill;//uint32_t duration, int32_t id
+        CallbackContainer<Enemy &, towerdefence::core::Map &, uint32_t> on_enemy_release_skill;//uint32_t duration
         CallbackContainer<Tower &, towerdefence::core::Map &, uint32_t> on_tower_release_skill;
         CallbackContainer<Enemy &> on_enemy_death;
         CallbackContainer<Enemy &, std::pair<size_t, size_t>, std::pair<size_t, size_t>> on_enemy_move;

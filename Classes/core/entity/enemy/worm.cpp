@@ -7,8 +7,6 @@
 namespace towerdefence {
 namespace core {
 
-void Worm::on_tick(GridRef g) { this->update_buff(g.clock()); }
-
 void Worm::on_death(GridRef g) {
     Enemy::on_death(g);
     for (auto grid : g.with_radius(1, linf_dis)) {
