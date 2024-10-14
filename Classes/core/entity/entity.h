@@ -1,12 +1,14 @@
 #ifndef TOWERDEFENCE_CORE_ENTITY_ENTITY
 #define TOWERDEFENCE_CORE_ENTITY_ENTITY
 
+#include <any>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
 #include <memory>
 #include <numeric>
 #include <optional>
+#include <string>
 #include <unordered_map>
 #include <utility>
 
@@ -188,6 +190,28 @@ struct MoveMixin {
     timer::Timer move_;
 };
 
+struct ExtraStorage {
+    std::unordered_map<std::string, std::any> storage_;
+
+    // get storage of key
+    //
+    // # Throws
+    //
+    // `std::bad_any_cast` if type mismatch.
+    //
+    // `std::out_of_range` if key does not exist.
+    template <class T> T get_storage(const std::string &key) {
+        auto &value = this->storage_.at(key);
+
+        return std::any_cast<T>(value);
+    }
+
+    // set storage of key
+    template <class T> void set_storage(const std::string &key, T value) {
+        this->storage_[key] = value;
+    }
+};
+
 enum class AttackType { Physics, Magic, Real };
 enum class TowerType {
     ArcherBase,
@@ -242,8 +266,15 @@ struct EnemyInfo {
           enemy_type_(enemy_type), total_frames_(total_frames) {}
 };
 
-struct Enemy : Entity, AttackMixin, BuffMixin, IdMixin, RouteMixin, MoveMixin {
-    Enemy(id::Id id, route::Route route) : IdMixin{id}, RouteMixin{route}, MoveMixin {timer::Timer::never()} {}
+struct Enemy : Entity,
+               AttackMixin,
+               BuffMixin,
+               IdMixin,
+               RouteMixin,
+               MoveMixin,
+               ExtraStorage {
+    Enemy(id::Id id, route::Route route)
+        : IdMixin{id}, RouteMixin{route}, MoveMixin{timer::Timer::never()} {}
 
     virtual EnemyInfo info() const = 0;
 
@@ -342,8 +373,8 @@ template <class Self, class G = GridRef, class... Args> struct TimeOutMixin {
 bool restore_normal_attack(Tower &self, GridRef g);
 
 [[deprecated("use grid_of_nearest_enemy instead")]] auto
-get_enemy_grid(Tower &,
-               std::vector<GridRef> &) -> std::vector<GridRef>::iterator;
+get_enemy_grid(Tower &, std::vector<GridRef> &)
+    -> std::vector<GridRef>::iterator;
 
 auto grid_of_nearest_enemy(std::vector<GridRef> &grids)
     -> std::vector<GridRef>::iterator;
@@ -359,22 +390,33 @@ struct EnemyFactoryBase {
 
 template <class T> struct EnemyFactory final : EnemyFactoryBase {
     route::Route route;
+    std::unordered_map<std::string, std::any> extra_storage;
 
     std::unique_ptr<Enemy> construct(id::Id id,
                                      const timer::Clock &clk) override;
+
+    EnemyFactory(route::Route route_) : EnemyFactory(route_, {}) {}
+    EnemyFactory(route::Route route_,
+                 std::unordered_map<std::string, std::any> extra_storage_)
+        : route(std::move(route_)), extra_storage(std::move(extra_storage_)) {}
 };
 
 template <class T>
 std::unique_ptr<Enemy> EnemyFactory<T>::construct(id::Id id,
                                                   const timer::Clock &clk) {
+    std::unique_ptr<Enemy> res;
     if constexpr (std::is_constructible_v<T, id::Id, route::Route,
                                           const timer::Clock &>) {
-        return std::make_unique<T>(id, route, clk);
+        res = std::make_unique<T>(id, route, clk);
     } else if constexpr (std::is_constructible_v<T, id::Id, route::Route>) {
-        return std::make_unique<T>(id, route);
+        res = std::make_unique<T>(id, route);
     } else {
         static_assert(false, "Unsupported type");
     }
+
+    res->storage_ = extra_storage;
+
+    return res;
 }
 
 struct TowerFactoryBase {
