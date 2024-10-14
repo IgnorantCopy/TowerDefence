@@ -13,7 +13,6 @@ struct Worm final : Enemy {
     EnemyInfo info() const override { return {1000, {0, 0}, 10, EnemyType::Worm, 30}; }
 
     void on_tick(GridRef g) override;
-
     void on_death(GridRef g) override;
 };
 } // namespace core

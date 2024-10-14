@@ -47,6 +47,10 @@ void Enemy::on_tick(GridRef g) {
 
 }
 
+void Enemy::on_death(GridRef g) {
+    g.on_enemy_death(*this);
+}
+
 void Tower::on_tick(GridRef g) {
     this->update_buff(g.clock());
     this->attack_.visit_period(

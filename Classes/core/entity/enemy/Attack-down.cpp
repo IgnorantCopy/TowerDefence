@@ -24,6 +24,7 @@ void AttackDown::on_tick(GridRef g) {
 }
 
 void AttackDown::on_death(GridRef g) {
+    Enemy::on_death(g);
     for (auto tower_id : has_buff_) {
         try {
             auto &tower = g.map.get_tower_by_id(tower_id);
