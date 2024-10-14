@@ -13,8 +13,11 @@
 #include "core/entity/tower/weaken_magician_plus.h"
 #include "core/entity/tower/aggressive_magician_plus.h"
 #include "ui/CocosGUI.h"
+#include "animation/EnemyAnimation.h"
+#include "animation/TowerAnimation.h"
 #include <memory>
 #include <utility>
+
 
 USING_NS_CC;
 using towerdefence::core::Tower;
@@ -63,14 +66,6 @@ void LevelScene::addBullet(Bullet *bullet) {
     this->addChild(bullet->getBullet(), 4);
 }
 
-void LevelScene::updateEnemies() {
-    for (const auto &enemy: this->enemies) {
-        auto id = enemy.first;
-        auto enemySprite = enemy.second;
-        auto &enemyEntity = this->map->get_enemy_by_id(id);
-    }
-}
-
 void LevelScene::updateBullets() {
     for (auto it = this->bullets.begin(); it != this->bullets.end(); it++) {
         if ((*it)->isTouch()) {
@@ -106,6 +101,19 @@ void LevelScene::updateMoneyLabel() {
         this->moneyLabel->setString(std::to_string(this->map->cost_));
         this->moneyLabel->setPosition(
                 cocos2d::Vec2(origin.x + 150 + 15 * log10(map->getcost_()), origin.y + visibleSize.height - 70));
+    }
+}
+
+void LevelScene::decreaseLife() {
+    this->map->health_--;
+    auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
+    cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
+    if (this->map->health_ <= 0) {
+    
+    } else {
+        this->lifeLabel->setString(std::to_string(this->map->health_));
+        this->lifeLabel->setPosition(
+                cocos2d::Vec2(origin.x + 150 + 15 * log10(this->map->health_), origin.y + visibleSize.height - 180));
     }
 }
 
@@ -622,6 +630,26 @@ void LevelScene::createMap(int level) {
         default:
             break;
     }
+    
+    this->map->on_enemy_move(
+            [this](Enemy &enemy, std::pair<size_t, size_t> currentPos, std::pair<size_t, size_t> targetPos) {
+                EnemyAnimation::move(this, &enemy, currentPos, targetPos);
+            });
+    this->map->on_enemy_attacked([this](Enemy &enemy, Tower &tower) {
+    });
+    this->map->on_enemy_death([this](Enemy &enemy) {
+        EnemyAnimation::dead(this, &enemy);
+    });
+    this->map->on_escape([this](Id id) {
+        auto enemySprite = this->getEnemy(id);
+        if (enemySprite) {
+            enemySprite->removeFromParent();
+        }
+        this->decreaseLife();
+    });
+    this->map->on_enemy_release_skill([this](Enemy &enemy, towerdefence::core::Map &map, uint32_t duration) {
+    
+    });
 }
 
 void LevelScene::onMouseDown(cocos2d::Event *event) {
@@ -681,7 +709,6 @@ void LevelScene::onMouseMove(cocos2d::Event *event) {
 
 void LevelScene::update() {
     this->updateBullets();
-    this->updateEnemies();
     this->updateMoneyLabel();
     this->updateSelectorEnabled();
     this->updateUpgradeItemEnabled();

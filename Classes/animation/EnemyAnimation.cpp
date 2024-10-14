@@ -97,7 +97,7 @@ void EnemyAnimation::transport(LevelScene *levelScene, towerdefence::core::Enemy
     }, duration, "transport");
 }
 
-void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::Enemy *enemy) {
+void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::Enemy *enemy, float duration) {
     std::string prefix = "images/enemies/";
     cocos2d::Vector<cocos2d::SpriteFrame *> frames;
     switch (enemy->status().enemy_type_) {
@@ -137,6 +137,16 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
 void EnemyAnimation::dead(LevelScene *levelScene, towerdefence::core::Enemy *enemy) {
     std::string prefix = "images/enemies/";
     cocos2d::Vector<cocos2d::SpriteFrame *> frames;
+    auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
+    cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
+    float typeX = origin.x + 350 + size;
+    float typeY = origin.y + visibleSize.height - size;
+    auto enemySprite = levelScene->getEnemy(enemy->id);
+    float x = enemySprite->getPositionX();
+    float y = enemySprite->getPositionY();
+    int indexX = (int) ((x - typeX + 0.5f * size) / size);
+    int indexY = (int) ((typeY - y + 0.5f * size) / size);
+    
     switch (enemy->status().enemy_type_) {
         case EnemyType::AttackDown:
             prefix += "attackDown/die/attackDown_die";
@@ -241,12 +251,29 @@ void EnemyAnimation::dead(LevelScene *levelScene, towerdefence::core::Enemy *ene
                 std::string diePath = std::format("{:02d}.png", i);
                 frames.pushBack(cocos2d::SpriteFrame::create(prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
             }
+            for (int i = indexY - 1; i <= indexY + 1; i++) {
+                for (int j = indexX - 1; j <= indexX + 1; j++) {
+                    auto &grid = levelScene->map->get_ref(i, j).grid;
+                    if (i >= 0 && i < 7 && j >= 0 && j < 12 && grid.type == Grid::Type::BlockTower &&
+                        grid.tower.has_value()) {
+                        auto &tower = grid.tower.value();
+                        auto towerSprite = levelScene->getTower(tower->id);
+                        float towerX = towerSprite->getPositionX();
+                        float towerY = towerSprite->getPositionY();
+                        cocos2d::Sprite *decelerate = cocos2d::Sprite::create("images/towers/ice.png");
+                        decelerate->setPosition(cocos2d::Vec2(towerX - 40, towerY + 40));
+                        levelScene->addChild(decelerate, 4);
+                        decelerate->scheduleOnce([decelerate](float dt) {
+                            decelerate->removeFromParent();
+                        }, 10.0f, "decelerate");
+                    }
+                }
+            }
             break;
         default:
             return;
     }
     auto animation = cocos2d::Animation::createWithSpriteFrames(frames, 0.05f);
     auto animate = cocos2d::Animate::create(animation);
-    auto enemySprite = levelScene->getEnemy(enemy->id);
     enemySprite->runAction(animate);
 }

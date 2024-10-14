@@ -13,6 +13,7 @@
 using towerdefence::core::id::Id;
 using towerdefence::core::Enemy;
 using towerdefence::core::EnemyType;
+using towerdefence::core::Grid;
 
 
 class EnemyAnimation {
@@ -24,7 +25,7 @@ public:
     static void transport(LevelScene *levelScene, Enemy *enemy, std::pair<size_t, size_t> currentPos,
                           std::pair<size_t, size_t> targetPos);
     
-    static void releaseSkill(LevelScene *levelScene, Enemy *enemy);
+    static void releaseSkill(LevelScene *levelScene, Enemy *enemy, float duration);
     
     static void dead(LevelScene *levelScene, Enemy *enemy);
 };

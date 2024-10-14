@@ -20,8 +20,6 @@ class Bullet;
 
 class LevelScene : public cocos2d::Scene {
 protected:
-    // the map of each level
-    Map *map = nullptr;
     Grid::Type type[7][12] = {Grid::Type::BlockPath};
     size_t width = 12, height = 7;
     // the size of each grid
@@ -45,6 +43,8 @@ protected:
     void updateBullets();
     
     void updateMoneyLabel();
+    
+    void decreaseLife();
     
     void updateSelectorEnabled();
     
@@ -128,6 +128,8 @@ protected:
     void hideTowerInfo(float x, float y);
 
 public:
+    // the map of each level
+    Map *map = nullptr;
     // bullets
     std::vector<Bullet *> bullets;
     
