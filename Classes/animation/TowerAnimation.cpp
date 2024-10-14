@@ -5,7 +5,7 @@
 #include "TowerAnimation.h"
 
 Bullet::Bullet(LevelScene *levelScene, towerdefence::core::Tower *tower, towerdefence::core::Enemy *enemy) :
-levelScene(levelScene), tower(tower), enemy(enemy) {
+        levelScene(levelScene), tower(tower), enemy(enemy) {
     switch (this->tower->status().tower_type_) {
         case TowerType::ArcherBase:
             this->bullet = cocos2d::Sprite::create("images/bullet/arrows/arrow_basic.png");
@@ -96,6 +96,20 @@ void Bullet::updateAngle() {
     }
 }
 
+bool Bullet::isTouch() {
+    Id enemyId = this->enemy->id;
+    auto *enemySprite = this->levelScene->getEnemy(enemyId);
+    float enemyX = enemySprite->getPositionX();
+    float enemyY = enemySprite->getPositionY();
+    float bulletX = this->bullet->getPositionX();
+    float bulletY = this->bullet->getPositionY();
+    float distance = sqrt(pow(enemyX - bulletX, 2) + pow(enemyY - bulletY, 2));
+    if (distance < 10.0f) {
+        return true;
+    }
+    return false;
+}
+
 
 MagicBullet::MagicBullet(LevelScene *levelScene, towerdefence::core::Tower *tower, towerdefence::core::Enemy *enemy,
                          std::string color) : Bullet(levelScene, tower, enemy), color(color) {}
@@ -114,7 +128,7 @@ void MagicBullet::explosion() {
     this->bullet->setTexture(prefix + "Bomb00.png");
     auto *enemySprite = this->levelScene->getEnemy(this->enemy->id);
     this->bullet->setPosition(enemySprite->getPositionX(), enemySprite->getPositionY());
-    cocos2d::Vector<cocos2d::SpriteFrame*> frames;
+    cocos2d::Vector<cocos2d::SpriteFrame *> frames;
     frames.reserve(this->totalFrames);
     for (int i = 0; i < this->totalFrames; i++) {
         std::string frameName = std::format("Bomb{:02d}.png", i);

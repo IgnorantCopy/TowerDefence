@@ -13,7 +13,7 @@
 #include "core/entity/enemy/Boss-2.h"
 #include "core/entity/enemy/Crab.h"
 #include "core/entity/enemy/Destroyer.h"
-#include "core/entity/enemy/Dog.h"
+#include "core/entity/enemy/dog.h"
 #include "core/entity/enemy/Life-up.h"
 #include "core/entity/enemy/Not-attacked.h"
 
