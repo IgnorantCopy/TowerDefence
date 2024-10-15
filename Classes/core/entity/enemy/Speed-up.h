@@ -8,6 +8,8 @@ namespace towerdefence {
 
         struct SpeedUp final : Enemy {
 
+            SpeedUp(id::Id id, route::Route route): Enemy(id, route) {}
+
             EnemyInfo info() const override {
                 return { 5000, { 200, 30 }, 10, EnemyType::SpeedUp, 24};
             }
