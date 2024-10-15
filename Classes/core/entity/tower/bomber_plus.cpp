@@ -20,7 +20,7 @@ void BomberPlus::on_tick(GridRef g) {
         if (auto it = get_enemy_grid(*this, grids); it != grids.end()) {
             auto enemy_grid = *it;
             enemy_grid.attack_enemies_in_radius(status.with_attack_radius(1),
-                                                linf_dis);
+                                                linf_dis, g);
         }
     }
 
@@ -35,7 +35,7 @@ void BomberPlus::on_tick(GridRef g) {
 
                 // do 200% damage
                 g.attack_enemies_in_radius(
-                    status.with_attack(status.attack_ * 2), linf_dis);
+                    status.with_attack(status.attack_ * 2), linf_dis, g);
 
                 // increase attack speed in next 30s
                 self.add_buff_in({self.id, Buff::DEFAULT},
