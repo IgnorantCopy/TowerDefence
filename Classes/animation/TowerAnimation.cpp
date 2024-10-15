@@ -149,7 +149,7 @@ void MagicBullet::explosion() {
     this->bullet->runAction(animate);
 }
 
-void TowerAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::Tower *tower) {
+void TowerAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::Tower *tower, float duration) {
     cocos2d::Vector<cocos2d::SpriteFrame *> frames;
     frames.reserve(48);
     for (int i = 0; i < 48; i++) {
@@ -171,9 +171,10 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::To
         case TowerType::ArcherBase:
             skillSprite->scheduleOnce([skillSprite](float dt) {
                 skillSprite->removeFromParent();
-            }, 20.0f, "remove");
+            }, duration, "remove");
             break;
         case TowerType::HighspeedArcher:
+        
         case TowerType::HighspeedArcherPlus:
             
             break;

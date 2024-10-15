@@ -30,15 +30,8 @@ protected:
     // the button of each grid
     cocos2d::ui::Button *grid[7][12] = {nullptr};
     
-    // enemies
-    std::vector<std::pair<Id, cocos2d::Sprite *>> enemies;
-    // towers
-    std::vector<std::pair<Id, cocos2d::Sprite *>> towers;
-    
     // update the ui
     void update();
-    
-    void updateEnemies();
     
     void updateBullets();
     
@@ -107,8 +100,6 @@ protected:
     cocos2d::MenuItemLabel *cancelUpgradeItem = nullptr;
     
     
-    void deleteTower(bool isReturn = true);
-    
     void upgradeTower();
     
     void showUpgradeMenu();
@@ -130,6 +121,10 @@ protected:
 public:
     // the map of each level
     Map *map = nullptr;
+    // enemies
+    std::vector<std::pair<Id, cocos2d::Sprite *>> enemies;
+    // towers
+    std::vector<std::pair<Id, cocos2d::Sprite *>> towers;
     // bullets
     std::vector<Bullet *> bullets;
     
@@ -150,6 +145,8 @@ public:
     cocos2d::Sprite *getEnemy(Id id);
     
     void addBullet(Bullet *bullet);
+    
+    void deleteTower(bool isReturn = true);
 };
 
 #endif //TOWERDEFENCE_LEVELSCENE_H

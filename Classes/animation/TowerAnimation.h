@@ -62,7 +62,7 @@ public:
 
 class TowerAnimation {
 public:
-    static void releaseSkill(LevelScene *levelScene, Tower *tower);
+    static void releaseSkill(LevelScene *levelScene, Tower *tower, float duration);
 };
 
 #endif //TOWERDEFENCE_TOWERANIMATION_H

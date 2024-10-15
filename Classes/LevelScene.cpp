@@ -648,7 +648,7 @@ void LevelScene::createMap(int level) {
         this->decreaseLife();
     });
     this->map->on_enemy_release_skill([this](const Enemy &enemy, towerdefence::core::Map &map, uint32_t duration) {
-        
+    
     });
 }
 
