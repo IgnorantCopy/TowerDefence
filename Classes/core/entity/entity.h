@@ -403,8 +403,8 @@ template <class T> struct EnemyFactory final : EnemyFactoryBase {
     std::unique_ptr<Enemy> construct(id::Id id,
                                      const timer::Clock &clk) override;
 
-    EnemyFactory(route::Route route_) : EnemyFactory(route_, {}) {}
-    EnemyFactory(route::Route route_,
+    explicit EnemyFactory(route::Route route_) : EnemyFactory(route_, {}) {}
+    explicit EnemyFactory(route::Route route_,
                  std::unordered_map<std::string, std::any> extra_storage_)
         : route(std::move(route_)), extra_storage(std::move(extra_storage_)) {}
 };

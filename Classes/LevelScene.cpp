@@ -12,12 +12,24 @@
 #include "core/entity/tower/decelerate_magician_plus.h"
 #include "core/entity/tower/weaken_magician_plus.h"
 #include "core/entity/tower/aggressive_magician_plus.h"
+#include "core/entity/enemy/dog.h"
+#include "core/entity/enemy/worm.h"
+#include "core/entity/enemy/Tank.h"
+#include "core/entity/enemy/Warlock.h"
+#include "core/entity/enemy/Speed-up.h"
+#include "core/entity/enemy/Soldier.h"
+#include "core/entity/enemy/Attack-down.h"
+#include "core/entity/enemy/Boss-1.h"
+#include "core/entity/enemy/Boss-2.h"
+#include "core/entity/enemy/Crab.h"
+#include "core/entity/enemy/Destroyer.h"
+#include "core/entity/enemy/Life-up.h"
+#include "core/entity/enemy/Not-attacked.h"
 #include "ui/CocosGUI.h"
 #include "animation/EnemyAnimation.h"
 #include "animation/TowerAnimation.h"
 #include <memory>
 #include <utility>
-
 
 USING_NS_CC;
 using towerdefence::core::Tower;
@@ -36,6 +48,19 @@ using towerdefence::core::AggressiveMagicianPlus;
 using towerdefence::core::TowerType;
 using towerdefence::core::TowerFactory;
 using towerdefence::core::TowerFactoryBase;
+using towerdefence::core::Dog;
+using towerdefence::core::Worm;
+using towerdefence::core::Tank;
+using towerdefence::core::Warlock;
+using towerdefence::core::SpeedUp;
+using towerdefence::core::Soldier;
+using towerdefence::core::AttackDown;
+using towerdefence::core::Boss1;
+using towerdefence::core::Boss2;
+using towerdefence::core::Crab;
+using towerdefence::core::Destroyer;
+using towerdefence::core::LifeUp;
+using towerdefence::core::NotAttacked;
 
 static void problemLoading(const char *filename) {
     printf("Error while loading: %s\n", filename);
@@ -109,7 +134,7 @@ void LevelScene::decreaseLife() {
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
     if (this->map->health_ <= 0) {
-    
+
     } else {
         this->lifeLabel->setString(std::to_string(this->map->health_));
         this->lifeLabel->setPosition(
@@ -346,7 +371,7 @@ void LevelScene::showTowerInfo(float x, float y) {
                 auto move2 = MoveBy::create(0.2f, Vec2(-50, 90));
                 auto move3 = MoveBy::create(0.2f, Vec2(50, -90));
                 auto move4 = MoveBy::create(0.2f, Vec2(-50, -90));
-                
+
                 auto towerInfoSpawn = Spawn::create(scale, move3, nullptr);
                 auto deleteSpawn = Spawn::create(scale->clone(), move2, nullptr);
                 auto upgradeSpawn = Spawn::create(scale->clone(), move4, nullptr);
@@ -411,7 +436,7 @@ void LevelScene::hideTowerInfo(float x, float y) {
 
 void LevelScene::showUpgradeMenu() {
     this->isUpgrade = true;
-    
+
     this->upgradeBackground1->setScale(0.1f);
     this->upgradeBackground1->setVisible(true);
     this->upgradeBackground2->setScale(0.1f);
@@ -581,12 +606,12 @@ void LevelScene::executeSkill() {}
 void LevelScene::menuCloseCallback(cocos2d::Ref *pSender) {
     //Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();
-    
+
     /*To navigate back to native iOS screen(if present) without quitting the
      * application  ,do not use Director::getInstance()->end() as given
      * above,instead trigger a custom event created in RootViewController.mm as
      * below*/
-    
+
     // EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 }
@@ -594,15 +619,72 @@ void LevelScene::menuCloseCallback(cocos2d::Ref *pSender) {
 void LevelScene::createMap(int level) {
     switch (level) {
         case 1:
-            type[0][0] = type[0][11] = type[2][11] = type[3][11] = type[4][11] = type[6][0] = Grid::Type::BlockOut;
-            type[2][0] = type[3][0] = type[4][0] = type[6][11] = Grid::Type::BlockIn;
-            type[0][7] = type[6][7] = Grid::Type::BlockTransport;
-            type[0][5] = type[0][6] = type[1][0] = type[1][8] = type[1][9] = type[1][10] =
-            type[1][11] = type[5][0] = type[5][7] = type[5][11] = type[6][6] = Grid::Type::None;
-            type[1][1] = type[1][2] = type[1][3] = type[1][5] = type[1][6] = type[1][7] = type[3][2] = type[4][6] = type[4][7] = type[5][1] = type[5][2] =
-            type[5][3] = type[5][4] = type[5][6] = type[5][8] = type[5][9] = type[5][10] = Grid::Type::BlockTower;
-            map = new towerdefence::core::Map(width, height,
-                                              [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
+            gridType = {
+                    { 2, 0, 0, 0, 0, 5, 5, 3, 0, 0, 0, 2 },
+                    { 5, 4, 4, 4, 0, 4, 4, 4, 5, 5, 5, 5 },
+                    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 },
+                    { 1, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2 },
+                    { 1, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 2 },
+                    { 5, 4, 4, 4, 4, 0, 4, 5, 4, 4, 4, 5 },
+                    { 2, 0, 0, 0, 0, 0, 5, 3, 0, 0, 0, 1 }
+            };
+            for(size_t i = 0; i < height; i++) {
+                for(size_t j = 0; j < width; j++) {
+                    type[i][j] = gridTypes[gridType[i][j]];
+                }
+            }
+            map = new towerdefence::core::Map(width, height, [&](size_t x,size_t y) -> Grid{ return Grid(type[x][y]);});
+            routes = {
+                    Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D], Dir[D], Dir[D], Dir[L], Dir[L],
+                           Dir[L], Dir[U], Dir[U], Dir[R], Dir[R], Dir[D],Dir[D], Dir[L], Dir[L], Dir[L]}),
+                    Route({Dir[L], Dir[L], Dir[L], Dir[L], {6, 0}, Dir[R], Dir[R], Dir[R], Dir[R]}),
+                    Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L]}),
+                    Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L], Dir[U], Dir[L]}),
+                    Route({Dir[L], Dir[L], Dir[L], Dir[U], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L]}),
+                    Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[U], Dir[U], Dir[U], Dir[U], Dir[L],
+                           Dir[L], Dir[D], Dir[D], Dir[R], Dir[R], Dir[U], Dir[U], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L]})
+            };
+            enemyCreateTime = { 10.0, 11.0, 12.0, 15.0, 16.0, 17.0, 20.0, 22.0, 24.0, 30.0, 33.0, 36.0, 39.0, 45.0, 46.0, 47.0, 55.0, 57.0,
+                                59.0, 65.0, 68.0, 71.0, 72.0, 77.0, 80.0, 85.0, 95.0, 101.0, 110.0, 120.0, 130.0, 145.0, 160.0, 180.0, 200.0 };
+            enemyNumber = 167;
+            enemyStartPos = { {0, 0}, {0, 0}, {0, 11}, {2, 11}, {3, 11}, {4, 11}, {6, 0} };
+            enemyCreateType = {
+                    { {3, 2} },
+                    { {3, 2} },
+                    { {3, 2} },
+                    { {3, 2}, {4, 1}, {5, 1} },
+                    { {3, 2}, {4, 1}, {5, 1} },
+                    { {3, 2}, {4, 1}, {5, 1} },
+                    { {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3} },
+                    { {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3} },
+                    { {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3} },
+                    { {3, 3}, {3, 4}, {4, 3}, {4, 4} },
+                    { {3, 3}, {3, 4}, {4, 3}, {4, 4} },
+                    { {3, 3}, {3, 4}, {4, 3}, {4, 4}, {5, 3}, {5, 4} },
+                    { {3, 3}, {3, 4}, {4, 3}, {4, 4}, {5, 3}, {5, 4} },
+                    { {1, 7}, {3, 2}, {4, 1}, {5, 1} },
+                    { {1, 7}, {3, 2}, {4, 1}, {5, 1} },
+                    { {1, 7}, {3, 2}, {4, 1}, {5, 1} },
+                    { {1, 7}, {3, 3}, {4, 3}, {5, 4} },
+                    { {1, 7}, {3, 3}, {4, 3}, {5, 4} },
+                    { {1, 7}, {3, 3}, {4, 3}, {5, 4} },
+                    { {1, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3} },
+                    { {1, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3} },
+                    { {1, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3} },
+                    { {1, 5} },
+                    { {6, 6} },
+                    { {1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6} },
+                    { {1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6} },
+                    { {1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3} },
+                    { {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}, {6, 6} },
+                    { {1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}, {6, 6} },
+                    { {1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}, {6, 6} },
+                    { {1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}, {6, 6} },
+                    { {2, 7}, {3, 5}, {4, 8}, {5, 6} },
+                    { {2, 7}, {3, 5}, {4, 8}, {5, 6} },
+                    { {1, 9}, {3, 5}, {4, 8}, {5, 6} },
+                    { {1, 9}, {2, 7}, {3, 5}, {4, 8}, {5, 6}, {6, 9} }
+            };
             break;
         case 2:
             type[2][11] = type[0][11] = type[3][11] = type[4][11] = type[6][11] = Grid::Type::BlockOut;
@@ -630,7 +712,7 @@ void LevelScene::createMap(int level) {
         default:
             break;
     }
-    
+
     this->map->on_enemy_move(
             [this](Enemy &enemy, std::pair<size_t, size_t> currentPos, std::pair<size_t, size_t> targetPos) {
                 EnemyAnimation::move(this, &enemy, currentPos, targetPos);
@@ -648,7 +730,7 @@ void LevelScene::createMap(int level) {
         this->decreaseLife();
     });
     this->map->on_enemy_release_skill([this](const Enemy &enemy, towerdefence::core::Map &map, uint32_t duration) {
-        
+
     });
 }
 
@@ -704,6 +786,94 @@ void LevelScene::onMouseMove(cocos2d::Event *event) {
         } else {
             this->selectedTower->setPosition(Vec2(x, y));
         }
+    }
+}
+
+void LevelScene::createEnemy() {
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    float X = origin.x + 350 + SIZE;
+    float Y = origin.y + visibleSize.height - SIZE;
+    for(size_t i = 0; i < enemyCreateTime.size(); i++) {
+        for (size_t j = 0; j < enemyCreateType[i].size(); j++) {
+            std::string enemyPath = "images/enemies/";
+            size_t x = enemyStartPos[enemyCreateType[i][j].first].first;
+            size_t y = enemyStartPos[enemyCreateType[i][j].first].second;
+            enemyPos.emplace_back(x, y);
+            Route new_route = routes[enemyCreateType[i][j].first - 1];
+            std::unique_ptr<EnemyFactoryBase> newEnemy;
+
+            switch (enemyType[enemyCreateType[i][j].second - 1]) {
+                case EnemyType::Dog:
+                    enemyPath += "dog/move/dog_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Dog>>(new_route);
+                    break;
+                case EnemyType::Soldier:
+                    enemyPath += "soldier/move/soldier_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Soldier>>(new_route);
+                    break;
+                case EnemyType::Worm:
+                    enemyPath += "worm/move/worm_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Worm>>(new_route);
+                    break;
+                case EnemyType::Warlock:
+                    enemyPath += "warlock/move/warlock_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Warlock>>(new_route);
+                    break;
+                case EnemyType::Destroyer:
+                    enemyPath += "destroyer/move/destroyer_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Destroyer>>(new_route);
+                    break;
+                case EnemyType::Tank:
+                    enemyPath += "tank/move/tank_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Tank>>(new_route);
+                    break;
+                case EnemyType::Crab:
+                    enemyPath += "crab/move/crab_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Crab>>(new_route);
+                    break;
+                case EnemyType::SpeedUp:
+                    enemyPath += "speedUp/move/speedUp_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<SpeedUp>>(new_route);
+                    break;
+                case EnemyType::AttackDown:
+                    enemyPath += "attackDown/move/attackDown_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<AttackDown>>(new_route);
+                    break;
+                case EnemyType::LifeUp:
+                    enemyPath += "lifeUp/move/lifeUp_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<LifeUp>>(new_route);
+                    break;
+                case EnemyType::NotAttacked:
+                    enemyPath += "notAttacked/move/notAttacked_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<NotAttacked>>(new_route);
+                    break;
+                case EnemyType::Boss1:
+                    enemyPath += "boss/stage1/move/boss1_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Boss1>>(new_route);
+                    break;
+                case EnemyType::Boss2:
+                    enemyPath += "boss/stage2/move/boss2_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Boss2>>(new_route);
+                    break;
+                default:
+                    break;
+            }
+
+            enemyFactories.push_back(std::move(newEnemy));
+            auto newEnemySprite = Sprite::create(enemyPath);
+            newEnemySprite->setScale(0.25f);
+            newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE));
+            newEnemySprite->setVisible(false);
+            enemySprites.emplace_back(enemyCreateTime[i], newEnemySprite);
+            this->addChild(newEnemySprite, 5);
+        }
+    }
+    for(size_t i = 0; i < enemyNumber; i++) {
+        scheduleOnce([this, i](float dt) {
+            enemySprites[i].second->setVisible(true);
+            enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i].first, enemyPos[i].second, *enemyFactories[i]), enemySprites[i].second);
+        }, enemySprites[i].first, "createEnemy" + std::to_string(i));
     }
 }
 

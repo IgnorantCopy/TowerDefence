@@ -475,11 +475,14 @@ bool Level1Scene::init() {
     mouseListener->onMouseUp = CC_CALLBACK_1(Level1Scene::onMouseUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
-//     update the map
-    schedule([this](float dt) {
-        map->update();
-        this->update();
-    }, 1.0 / 30, "update");
+    this->createEnemy();
     
+    // update the map and ui every frame time
+    scheduleOnce([this](float dt) {
+        schedule([this](float dt) {
+            map->update();
+            this->update();
+        }, 1.0 / 30, "update");
+    }, 1.0f, "gameLoading");
     return true;
 }
