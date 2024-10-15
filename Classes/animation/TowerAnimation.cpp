@@ -165,92 +165,65 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::To
     auto *skillSprite = cocos2d::Sprite::create("images/bullet/skill/skill00.png");
     skillSprite->setPosition(towerSprite->getPositionX(), towerSprite->getPositionY());
     skillSprite->setScale(0.15f);
-    levelScene->addChild(skillSprite, 2);
+    skillSprite->setOpacity(50);
+    towerSprite->addChild(skillSprite);
     skillSprite->runAction(cocos2d::RepeatForever::create(animate));
     switch (tower->status().tower_type_) {
+        case TowerType::HighspeedArcher:
+        case TowerType::HighspeedArcherPlus:
+        case TowerType::CoreMagician:
+            if (duration <= epsilon) {
+                towerSprite->removeAllChildren();
+            }
+            break;
+        case TowerType::Bomber:
+        case TowerType::BomberPlus:
+            if (duration <= epsilon) {
+                towerSprite->removeAllChildren();
+                
+            }
+            break;
         case TowerType::ArcherBase:
+        case TowerType::Archer:
+        case TowerType::ArcherPlus:
+        case TowerType::MagicianBase:
+        case TowerType::CoreMagicianPlus:
+        case TowerType::DiffusiveMagician:
+        case TowerType::SpecialMagicianPlus:
+        case TowerType::HelperBase:
+        case TowerType::DecelerateMagician:
+        case TowerType::WeakenMagician:
+        case TowerType::WeakenMagicianPlus:
             skillSprite->scheduleOnce([skillSprite](float dt) {
                 skillSprite->removeFromParent();
             }, duration, "remove");
             break;
-        case TowerType::HighspeedArcher:
-        
-        case TowerType::HighspeedArcherPlus:
-            
-            break;
-        case TowerType::Bomber:
-        case TowerType::BomberPlus:
-            
-            break;
-        case TowerType::Archer:
-            skillSprite->scheduleOnce([skillSprite](float dt) {
-                skillSprite->removeFromParent();
-            }, 10.0f, "remove");
-            break;
-        case TowerType::ArcherPlus:
-            skillSprite->scheduleOnce([skillSprite](float dt) {
-                skillSprite->removeFromParent();
-            }, 20.0f, "remove");
-            break;
-        case TowerType::MagicianBase:
-            skillSprite->scheduleOnce([skillSprite](float dt) {
-                skillSprite->removeFromParent();
-            }, 10.0f, "remove");
-            break;
-        case TowerType::CoreMagician:
-            
-            break;
-        case TowerType::CoreMagicianPlus:
-            skillSprite->scheduleOnce([skillSprite](float dt) {
-                skillSprite->removeFromParent();
-            }, 10.0f, "remove");
-            break;
-        case TowerType::DiffusiveMagician:
-            skillSprite->scheduleOnce([skillSprite](float dt) {
-                skillSprite->removeFromParent();
-            }, 10.0f, "remove");
-            break;
         case TowerType::DiffusiveMagicianPlus:
             skillSprite->scheduleOnce([skillSprite](float dt) {
                 skillSprite->removeFromParent();
-            }, 20.0f, "remove");
+            }, duration, "remove");
             break;
         case TowerType::SpecialMagician:
-            skillSprite->scheduleOnce([skillSprite](float dt) {
-                skillSprite->removeFromParent();
-            }, 15.0f, "remove");
+            if (duration <= epsilon) {
+                towerSprite->removeAllChildren();
+                
+            }
             break;
-        case TowerType::HelperBase:
-            skillSprite->scheduleOnce([skillSprite](float dt) {
-                skillSprite->removeFromParent();
-            }, 15.0f, "remove");
-            break;
-        case TowerType::DecelerateMagician:
-            skillSprite->scheduleOnce([skillSprite](float dt) {
-                skillSprite->removeFromParent();
-            }, 15.0f, "remove");
-            break;
+        
         case TowerType::DecelerateMagicianPlus:
             skillSprite->scheduleOnce([skillSprite](float dt) {
                 skillSprite->removeFromParent();
-            }, 35.0f, "remove");
-            break;
-        case TowerType::WeakenMagician:
-            skillSprite->scheduleOnce([skillSprite](float dt) {
-                skillSprite->removeFromParent();
-            }, 10.0f, "remove");
-            break;
-        case TowerType::WeakenMagicianPlus:
-            skillSprite->scheduleOnce([skillSprite](float dt) {
-                skillSprite->removeFromParent();
-            }, 20.0f, "remove");
+            }, duration, "remove");
+            
             break;
         case TowerType::AggressiveMagician:
+            
             break;
         case TowerType::AggressiveMagicianPlus:
             skillSprite->scheduleOnce([skillSprite](float dt) {
                 skillSprite->removeFromParent();
-            }, 20.0f, "remove");
+            }, duration, "remove");
+            
             break;
         default:
             break;
