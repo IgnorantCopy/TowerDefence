@@ -22,8 +22,6 @@ class Bullet;
 
 class LevelScene : public cocos2d::Scene {
 protected:
-    // the map of each level
-    Map *map = nullptr;
     Grid::Type type[7][12] = {Grid::Type::BlockPath};
     std::vector<std::vector<size_t>> gridType;
     std::vector<Grid::Type> gridTypes = {Grid::Type::BlockPath, Grid::Type::BlockIn, Grid::Type::BlockOut,
@@ -64,8 +62,19 @@ protected:
 
     // update the ui
     void update();
+
+    void updateEnemies();
+
+    void updateBullets();
+
     void updateMoneyLabel();
+
+    void decreaseLife();
+
+    void updateSelectorEnabled();
+
     void updateUpgradeItemEnabled();
+
     void updateUpgradeButtonEnabled();
 
     // select tower
@@ -121,8 +130,7 @@ protected:
     cocos2d::MenuItemLabel *upgradeItem2 = nullptr;
     cocos2d::MenuItemLabel *upgradeItem3 = nullptr;
     cocos2d::MenuItemLabel *cancelUpgradeItem = nullptr;
-    
-    void updateSelectorEnabled();
+
     
     void deleteTower(bool isReturn = true);
 
@@ -145,6 +153,8 @@ protected:
     void hideTowerInfo(float x, float y);
 
 public:
+    // the map of each level
+    Map *map = nullptr;
     // bullets
     std::vector<Bullet *> bullets;
     

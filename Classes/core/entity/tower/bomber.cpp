@@ -22,6 +22,7 @@ namespace towerdefence {
                         }
                         sputter_radius = 1;
                         skill = false;
+                        g.on_tower_release_skill(*this, g.map, 0);
                     }else{
                         for (auto ref : enemy_grid->with_radius(sputter_radius, l1_dis)) {
                             ref.grid.with_enemy([this](Enemy &enemy) {
@@ -34,6 +35,7 @@ namespace towerdefence {
 
             if (g.clock().is_triggered(release_skill_)&&!get_all_buff().silent_) {
                 skill = true;
+                g.on_tower_release_skill(*this, g.map, 1);
             }
         }
     } // namespace core

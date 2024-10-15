@@ -257,8 +257,9 @@ bool Level1Scene::init() {
     this->moneyLabel = cocos2d::Label::createWithTTF(std::to_string(this->map->cost_), "fonts/Bender/BENDER.OTF", 75);
     this->moneyLabel->setPosition(
             cocos2d::Vec2(origin.x + 150 + 15 * log10(this->map->cost_), origin.y + visibleSize.height - 70));
-    this->lifeLabel = cocos2d::Label::createWithTTF(std::to_string(15), "fonts/Bender/BENDER.OTF", 75);
-    this->lifeLabel->setPosition(cocos2d::Vec2(origin.x + 150 + 15 * log10(15), origin.y + visibleSize.height - 180));
+    this->lifeLabel = cocos2d::Label::createWithTTF(std::to_string(this->map->health_), "fonts/Bender/BENDER.OTF", 75);
+    this->lifeLabel->setPosition(
+            cocos2d::Vec2(origin.x + 150 + 15 * log10(this->map->health_), origin.y + visibleSize.height - 180));
     this->addChild(this->moneyLabel, 1);
     this->addChild(this->lifeLabel, 1);
     
@@ -450,28 +451,6 @@ bool Level1Scene::init() {
     });
     this->cancelUpgradeItem->setPosition(
             Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 300));
-    
-    auto enemyExample = Sprite::create("images/enemies/dog/move/dog_move00.png");
-    if (enemyExample == nullptr) {
-        problemLoading("'images/enemies/dog/move/dog_move00.png'");
-    } else {
-        enemyExample->setPosition(Vec2(origin.x, origin.y + visibleSize.height / 2));
-        enemyExample->setScale(0.25f);
-        this->addChild(enemyExample, 5);
-        Vector<SpriteFrame *> frames;
-        int num = 15;
-        frames.reserve(num);
-        for (int i = 0; i < num; i++) {
-            std::string path = std::format("images/enemies/dog/move/dog_move{:02d}.png", i);
-            frames.pushBack(SpriteFrame::create(path, Rect(0, 0, 900, 900)));
-        }
-        Animation *animation = Animation::createWithSpriteFrames(frames, 0.05f);
-        Animate *animate = Animate::create(animation);
-        
-        auto moveBy = MoveBy::create(0.8f, Vec2(140, 0));
-        auto spawn = Spawn::create(moveBy, animate, nullptr);
-        enemyExample->runAction(RepeatForever::create(spawn));
-    }
     
     Vector<MenuItem *> MenuItems;
     MenuItems.pushBack(backItem);

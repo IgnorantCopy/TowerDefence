@@ -47,6 +47,7 @@ void BomberPlus::on_tick(GridRef g) {
 
                 return false;
             });
+        g.on_tower_release_skill(*this, g.map, 8);
     }
 }
 } // namespace core
