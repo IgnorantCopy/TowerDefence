@@ -15,6 +15,8 @@ using towerdefence::core::route::Route;
 using towerdefence::core::id::Id;
 using towerdefence::core::EnemyType;
 using ssize = std::make_signed_t<size_t>;
+using towerdefence::core::EnemyFactory;
+using towerdefence::core::EnemyFactoryBase;
 
 class Bullet;
 
@@ -23,6 +25,9 @@ protected:
     // the map of each level
     Map *map = nullptr;
     Grid::Type type[7][12] = {Grid::Type::BlockPath};
+    std::vector<std::vector<size_t>> gridType;
+    std::vector<Grid::Type> gridTypes = {Grid::Type::BlockPath, Grid::Type::BlockIn, Grid::Type::BlockOut,
+                                         Grid::Type::BlockTransport, Grid::Type::BlockTower, Grid::Type::None};
     size_t width = 12, height = 7;
     // the size of each grid
     float SIZE = 140.0;
@@ -53,7 +58,9 @@ protected:
                                          EnemyType::Destroyer, EnemyType::Tank, EnemyType::Crab, EnemyType::SpeedUp,
                                          EnemyType::AttackDown, EnemyType::LifeUp, EnemyType::NotAttacked, EnemyType::Boss1, EnemyType::Boss2 };
     void createEnemy();
-    cocos2d::Sprite *newEnemySprite;
+    std::vector<std::pair<float, cocos2d::Sprite *>> enemySprites;
+    std::vector<std::unique_ptr<EnemyFactoryBase>> enemyFactories;
+    std::vector<std::pair<size_t, size_t>> enemyPos;
 
     // update the ui
     void update();

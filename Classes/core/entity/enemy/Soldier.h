@@ -8,6 +8,8 @@ namespace towerdefence {
 
         struct Soldier final : Enemy {
 
+            Soldier(id::Id id, route::Route route): Enemy(id, route) {}
+
             EnemyInfo info() const override {
                 return { 3200, { 50, 0 }, 10, EnemyType::Soldier, 24};
             }

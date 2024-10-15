@@ -46,8 +46,6 @@ using towerdefence::core::AggressiveMagicianPlus;
 using towerdefence::core::TowerType;
 using towerdefence::core::TowerFactory;
 using towerdefence::core::TowerFactoryBase;
-using towerdefence::core::EnemyFactory;
-using towerdefence::core::EnemyFactoryBase;
 using towerdefence::core::Dog;
 using towerdefence::core::Worm;
 using towerdefence::core::Tank;
@@ -593,15 +591,22 @@ void LevelScene::menuCloseCallback(cocos2d::Ref *pSender)
 
 void LevelScene::createMap(int level)
 {
-    switch(level){
+    switch(level) {
         case 1:
-            type[0][0]=type[0][11]=type[2][11]=type[3][11]=type[4][11]=type[6][0]=Grid::Type::BlockOut;
-            type[2][0]=type[3][0]=type[4][0]=type[6][11]=Grid::Type::BlockIn;
-            type[0][7]=type[6][7]=Grid::Type::BlockTransport;
-            type[0][5]=type[0][6]=type[1][0]=type[1][8]=type[1][9]=type[1][10]=
-            type[1][11]=type[5][0]=type[5][7]=type[5][11]=type[6][6]=Grid::Type::None;
-            type[1][1]=type[1][2]=type[1][3]=type[1][5]=type[1][6]=type[1][7]=type[3][2]=type[4][6]=type[4][7]=type[5][1]=type[5][2]=
-            type[5][3]=type[5][4]=type[5][6]=type[5][8]=type[5][9]=type[5][10]=Grid::Type::BlockTower;
+            gridType = {
+                    { 2, 0, 0, 0, 0, 5, 5, 3, 0, 0, 0, 2 },
+                    { 5, 4, 4, 4, 0, 4, 4, 4, 5, 5, 5, 5 },
+                    { 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2 },
+                    { 1, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2 },
+                    { 1, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 2 },
+                    { 5, 4, 4, 4, 4, 0, 4, 5, 4, 4, 4, 5 },
+                    { 2, 0, 0, 0, 0, 0, 5, 3, 0, 0, 0, 1 }
+            };
+            for(size_t i = 0; i < height; i++) {
+                for(size_t j = 0; j < width; j++) {
+                    type[i][j] = gridTypes[gridType[i][j]];
+                }
+            }
             map = new towerdefence::core::Map(width, height, [&](size_t x,size_t y) -> Grid{ return Grid(type[x][y]);});
             routes = {
                     Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D], Dir[D], Dir[D], Dir[L], Dir[L],
@@ -746,62 +751,83 @@ void LevelScene::createEnemy() {
             std::string enemyPath = "images/enemies/";
             size_t x = enemyStartPos[enemyCreateType[i][j].first].first;
             size_t y = enemyStartPos[enemyCreateType[i][j].first].second;
+            enemyPos.emplace_back(x, y);
             Route new_route = routes[enemyCreateType[i][j].first - 1];
-            /*
             std::unique_ptr<EnemyFactoryBase> newEnemy;
-            Id id = this->map->spawn_enemy_at(x, y, *newEnemy);
-            */
+
             switch (enemyType[enemyCreateType[i][j].second - 1]) {
                 case EnemyType::Dog:
                     enemyPath += "dog/move/dog_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Dog>>(new_route);
                     break;
                 case EnemyType::Soldier:
                     enemyPath += "soldier/move/soldier_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Soldier>>(new_route);
                     break;
                 case EnemyType::Worm:
                     enemyPath += "worm/move/worm_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Worm>>(new_route);
                     break;
                 case EnemyType::Warlock:
                     enemyPath += "warlock/move/warlock_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Warlock>>(new_route);
                     break;
                 case EnemyType::Destroyer:
                     enemyPath += "destroyer/move/destroyer_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Destroyer>>(new_route);
                     break;
                 case EnemyType::Tank:
                     enemyPath += "tank/move/tank_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Tank>>(new_route);
                     break;
                 case EnemyType::Crab:
                     enemyPath += "crab/move/crab_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Crab>>(new_route);
                     break;
                 case EnemyType::SpeedUp:
                     enemyPath += "speedUp/move/speedUp_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<SpeedUp>>(new_route);
                     break;
                 case EnemyType::AttackDown:
                     enemyPath += "attackDown/move/attackDown_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<AttackDown>>(new_route);
                     break;
                 case EnemyType::LifeUp:
                     enemyPath += "lifeUp/move/lifeUp_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<LifeUp>>(new_route);
                     break;
                 case EnemyType::NotAttacked:
                     enemyPath += "notAttacked/move/notAttacked_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<NotAttacked>>(new_route);
                     break;
                 case EnemyType::Boss1:
                     enemyPath += "boss/stage1/move/boss1_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Boss1>>(new_route);
                     break;
                 case EnemyType::Boss2:
                     enemyPath += "boss/stage2/move/boss2_move00.png";
+                    newEnemy = std::make_unique<EnemyFactory<Boss2>>(new_route);
                     break;
                 default:
                     break;
             }
-            newEnemySprite = Sprite::create(enemyPath);
+
+            enemyFactories.push_back(std::move(newEnemy));
+            auto newEnemySprite = Sprite::create(enemyPath);
             newEnemySprite->setScale(0.25f);
             newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE));
-            //scheduleOnce([this](float dt) {
-                this->addChild(newEnemySprite, 5);
-            //}, enemyCreateTime[i], "createEnemy");
+            newEnemySprite->setVisible(false);
+            enemySprites.emplace_back(enemyCreateTime[i], newEnemySprite);
+            this->addChild(newEnemySprite, 5);
             //this->enemies.emplace_back(id, newEnemySprite);
+            //Id id = this->map->spawn_enemy_at(x, y, *newEnemy);
         }
+    }
+    for(size_t i = 0; i < enemyNumber; i++) {
+        scheduleOnce([this, i, X, Y](float dt) {
+            enemySprites[i].second->setVisible(true);
+            enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i].first, enemyPos[i].second, *enemyFactories[i]), enemySprites[i].second);
+        }, enemySprites[i].first, "createEnemy" + std::to_string(i));
     }
 }
 

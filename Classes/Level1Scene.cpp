@@ -497,7 +497,7 @@ bool Level1Scene::init() {
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
     this->createEnemy();
-
+    
     // update the map and ui every frame time
     scheduleOnce([this](float dt) {
         schedule([this](float dt) {

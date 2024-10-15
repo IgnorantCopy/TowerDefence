@@ -8,6 +8,8 @@ namespace towerdefence {
 
         struct Crab final : Enemy {
 
+            Crab(id::Id id, route::Route route) : Enemy(id, route) {}
+
             EnemyInfo info() const override {
                 return { 3000, { 1500, 85 }, 10, EnemyType::Crab, 30};
             }
