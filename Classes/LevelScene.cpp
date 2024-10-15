@@ -884,4 +884,3 @@ void LevelScene::update() {
     this->updateUpgradeItemEnabled();
     this->updateUpgradeButtonEnabled();
 }
-
