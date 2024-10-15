@@ -18,6 +18,7 @@ using towerdefence::core::Grid;
 
 class EnemyAnimation {
     const static int size = 140;
+    constexpr const static float epsilon = 1e-6;
 public:
     static void move(LevelScene *levelScene, Enemy *enemy, std::pair<size_t, size_t> currentPos,
                      std::pair<size_t, size_t> targetPos);

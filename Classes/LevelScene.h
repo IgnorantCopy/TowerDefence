@@ -35,16 +35,14 @@ protected:
     // the button of each grid
     cocos2d::ui::Button *grid[7][12] = {nullptr};
     
-    // enemies
-    std::vector<std::pair<Id, cocos2d::Sprite *>> enemies;
-    // towers
-    std::vector<std::pair<Id, cocos2d::Sprite *>> towers;
-
     // the route of enemies
     enum DirType { U, D, L, R };
-    std::vector<std::pair<ssize, ssize>> Dir = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
+    std::vector<std::pair<ssize, ssize>> Dir = {{-1, 0},
+                                                {1,  0},
+                                                {0,  -1},
+                                                {0,  1}};
     std::vector<Route> routes;
-
+    
     // the FrameTime in 1s
     const uint32_t FrameTime = 30;
     // create enemies
@@ -52,31 +50,32 @@ protected:
     std::vector<float> enemyCreateTime;
     std::vector<std::pair<size_t, size_t>> enemyStartPos;
     std::vector<std::vector<std::pair<size_t, size_t>>> enemyCreateType;
-    std::vector<EnemyType> enemyType = { EnemyType::Worm, EnemyType::Dog, EnemyType::Soldier, EnemyType::Warlock,
-                                         EnemyType::Destroyer, EnemyType::Tank, EnemyType::Crab, EnemyType::SpeedUp,
-                                         EnemyType::AttackDown, EnemyType::LifeUp, EnemyType::NotAttacked, EnemyType::Boss1, EnemyType::Boss2 };
+    std::vector<EnemyType> enemyType = {EnemyType::Worm, EnemyType::Dog, EnemyType::Soldier, EnemyType::Warlock,
+                                        EnemyType::Destroyer, EnemyType::Tank, EnemyType::Crab, EnemyType::SpeedUp,
+                                        EnemyType::AttackDown, EnemyType::LifeUp, EnemyType::NotAttacked,
+                                        EnemyType::Boss1, EnemyType::Boss2};
+    
     void createEnemy();
+    
     std::vector<std::pair<float, cocos2d::Sprite *>> enemySprites;
     std::vector<std::unique_ptr<EnemyFactoryBase>> enemyFactories;
     std::vector<std::pair<size_t, size_t>> enemyPos;
-
+    
     // update the ui
     void update();
-
-    void updateEnemies();
-
+    
     void updateBullets();
-
+    
     void updateMoneyLabel();
-
+    
     void decreaseLife();
-
+    
     void updateSelectorEnabled();
-
+    
     void updateUpgradeItemEnabled();
-
+    
     void updateUpgradeButtonEnabled();
-
+    
     // select tower
     int isSelecting = 0;
     cocos2d::ui::Button *archerBaseSelector = nullptr;
@@ -85,7 +84,7 @@ protected:
     cocos2d::Sprite *selectedTower = nullptr;
     cocos2d::Label *moneyLabel = nullptr;
     cocos2d::Label *lifeLabel = nullptr;
-
+    
     // tower info
     const int archerBaseCost = 7;
     const int highspeedArcherCost = 10;
@@ -130,51 +129,55 @@ protected:
     cocos2d::MenuItemLabel *upgradeItem2 = nullptr;
     cocos2d::MenuItemLabel *upgradeItem3 = nullptr;
     cocos2d::MenuItemLabel *cancelUpgradeItem = nullptr;
-
     
-    void deleteTower(bool isReturn = true);
-
+    
     void upgradeTower();
-
+    
     void showUpgradeMenu();
-
+    
     void hideUpgradeMenu();
-
+    
     void showTowerInfo();
-
+    
     void executeSkill();
     
     void cancelSelect();
-
+    
     void putTower(float x, float y);
-
+    
     void showTowerInfo(float x, float y);
-
+    
     void hideTowerInfo(float x, float y);
 
 public:
     // the map of each level
     Map *map = nullptr;
+    // towers
+    std::vector<std::pair<Id, cocos2d::Sprite *>> towers;
+    // enemies
+    std::vector<std::pair<Id, cocos2d::Sprite *>> enemies;
     // bullets
     std::vector<Bullet *> bullets;
     
     // a selector callback
     void menuCloseCallback(cocos2d::Ref *pSender);
-
+    
     // create the map
     void createMap(int level);
     
     void onMouseDown(cocos2d::Event *event);
-
+    
     void onMouseUp(cocos2d::Event *event);
-
+    
     void onMouseMove(cocos2d::Event *event);
     
     cocos2d::Sprite *getTower(Id id);
-
+    
     cocos2d::Sprite *getEnemy(Id id);
     
     void addBullet(Bullet *bullet);
+    
+    void deleteTower(bool isReturn = true);
 };
 
 #endif //TOWERDEFENCE_LEVELSCENE_H
