@@ -867,12 +867,10 @@ void LevelScene::createEnemy() {
             newEnemySprite->setVisible(false);
             enemySprites.emplace_back(enemyCreateTime[i], newEnemySprite);
             this->addChild(newEnemySprite, 5);
-            //this->enemies.emplace_back(id, newEnemySprite);
-            //Id id = this->map->spawn_enemy_at(x, y, *newEnemy);
         }
     }
     for(size_t i = 0; i < enemyNumber; i++) {
-        scheduleOnce([this, i, X, Y](float dt) {
+        scheduleOnce([this, i](float dt) {
             enemySprites[i].second->setVisible(true);
             enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i].first, enemyPos[i].second, *enemyFactories[i]), enemySprites[i].second);
         }, enemySprites[i].first, "createEnemy" + std::to_string(i));
@@ -886,3 +884,4 @@ void LevelScene::update() {
     this->updateUpgradeItemEnabled();
     this->updateUpgradeButtonEnabled();
 }
+
