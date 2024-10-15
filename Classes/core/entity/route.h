@@ -13,7 +13,7 @@ namespace towerdefence::core::route {
 using ssize = std::make_signed_t<size_t>;
 
 struct reached_end : std::out_of_range {
-    constexpr reached_end() : std::out_of_range("A route reached end") {}
+    reached_end() : std::out_of_range("A route reached end") {}
 };
 
 struct Route {
