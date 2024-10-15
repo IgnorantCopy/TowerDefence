@@ -16,7 +16,7 @@ namespace towerdefence {
                     auto ref = *it;
 
                     ref.attack_enemies_in_radius(this->status().with_attack_radius(1),
-                                                 linf_dis);
+                                                 linf_dis, g);
                 }
             }
 

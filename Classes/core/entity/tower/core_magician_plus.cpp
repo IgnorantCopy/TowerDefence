@@ -22,18 +22,18 @@ void CoreMagicianPlus::on_tick(GridRef g) {
 
     if (clk.is_triggered(this->attack_)) {
         if (!this->skill_) {
-            with_nearest([this, &clk](Enemy &e) {
+            with_nearest([this, g](Enemy &e) {
                 auto status = this->status();
 
-                e.increase_attack(status.attack_, status.attack_type_);
+                e.on_hit(status.attack_, status.attack_type_,g);
             });
         } else {
 
-            with_nearest([this, &clk](Enemy &e) {
+            with_nearest([this, g](Enemy &e) {
                 auto status = this->status();
 
                 for (size_t i = 0; i < 4; ++i) {
-                    e.increase_attack(status.attack_, status.attack_type_);
+                    e.on_hit(status.attack_, status.attack_type_, g);
                 }
             });
         }

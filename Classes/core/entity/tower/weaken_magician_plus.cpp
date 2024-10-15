@@ -30,7 +30,7 @@ namespace towerdefence {
                     });
                 }
                 g.attack_enemies_in_radius(
-                        status.with_attack(status.attack_ * 2.0), linf_dis);
+                        status.with_attack(status.attack_ * 2.0), linf_dis, g);
                 g.on_tower_release_skill(*this, g.map, 20);
             }
         }
