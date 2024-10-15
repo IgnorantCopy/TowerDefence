@@ -20,7 +20,7 @@ namespace towerdefence {
                     layer = 0;
                     if(skill){
                         enemy_grid->attack_enemies_in_radius(status.with_attack_radius(1).with_attack(status.attack_ * 1.5),
-                                                                linf_dis);
+                                                                linf_dis, g);
                         g.on_tower_release_skill(*this, g.map, 1);
                     }else{
                         single_attack(*this,*enemy_grid);

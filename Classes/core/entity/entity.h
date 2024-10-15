@@ -174,8 +174,6 @@ struct Entity {
     virtual void on_tick(GridRef g);
     // called when the entity dies
     virtual void on_death(GridRef g);
-    // called when entity is hit
-    virtual void on_hit(GridRef g);
 
     virtual ~Entity() {};
 };
@@ -279,8 +277,6 @@ struct Enemy : Entity,
 
     virtual EnemyInfo info() const = 0;
 
-    void increase_attack(int32_t atk, AttackType attack_type);
-
     size_t remaining_distance() const {
         return this->route_.remaining_distance();
     }
@@ -306,6 +302,8 @@ struct Enemy : Entity,
 
     void on_tick(GridRef g) override;
     void on_death(GridRef g) override;
+
+    virtual void on_hit(int32_t atk, AttackType attack_type, GridRef g) ;
 };
 
 struct TowerInfo {

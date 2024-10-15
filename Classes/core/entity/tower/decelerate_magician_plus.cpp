@@ -15,10 +15,10 @@ namespace towerdefence {
                 auto grids = g.with_radius(this->status().attack_radius_, linf_dis);
                 if (auto it = grid_of_nearest_enemy(grids); it != grids.end()) {
                     auto grid = *it;
-                    grid.with_nearest_enemy([this, &clk](Enemy &e) {
+                    grid.with_nearest_enemy([this, &clk, g](Enemy &e) {
                         auto status = this->status();
 
-                        e.increase_attack(status.attack_, status.attack_type_);
+                        e.on_hit(status.attack_, status.attack_type_, g);
                         e.add_buff_in({this->id, Buff::DECREASE_SPEED},
                                       Buff::speed(-40),
                                       clk.with_duration_sec(2));

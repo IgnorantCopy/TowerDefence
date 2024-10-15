@@ -10,9 +10,8 @@ namespace towerdefence::core {
 
 void Entity::on_death(GridRef g) {}
 void Entity::on_tick(GridRef g) {}
-void Entity::on_hit(GridRef g) {}
 
-void Enemy::increase_attack(int32_t atk, AttackType attack_type) {
+void Enemy::on_hit(int32_t atk, AttackType attack_type, GridRef g) {
     switch (attack_type) {
     case AttackType::Physics:
         atk = atk>status().defence_.physics_?(atk-status().defence_.physics_):(atk/20);
@@ -23,8 +22,10 @@ void Enemy::increase_attack(int32_t atk, AttackType attack_type) {
     default:
         break;
     }
-    if(get_all_buff().invincible_&&atk > 0){
-        return;
+    if(atk > 0){
+        if(get_all_buff().invincible_){
+            return;
+        }
     }
     realized_attack_ += atk;
 }
@@ -111,12 +112,13 @@ void single_attack(Tower &tower, GridRef enemy_grid) {
     if (buffs.attack_stop_) {
         return;
     }
-    enemy_grid.with_nearest_enemy([&tower, buffs](Enemy &target_enemy) {
-        target_enemy.increase_attack(tower.status().attack_,
-                                     tower.status().attack_type_);
+    enemy_grid.with_nearest_enemy([&tower, buffs, enemy_grid](Enemy &target_enemy) mutable {
+        target_enemy.on_hit(tower.status().attack_,
+                            tower.status().attack_type_,enemy_grid);
+        enemy_grid.on_enemy_attacked(target_enemy, tower);
         if (buffs.real_attack_ > 0) {
-            target_enemy.increase_attack(
-                tower.status().attack_ * buffs.real_attack_, AttackType::Real);
+            target_enemy.on_hit(
+                    tower.status().attack_ * buffs.real_attack_, AttackType::Real, enemy_grid);
         }
     });
 }

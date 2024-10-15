@@ -15,7 +15,7 @@ void DiffusiveMagicianPlus::on_tick(GridRef g) {
             auto ref = *it;
 
             ref.attack_enemies_in_radius(this->status().with_attack_radius(1),
-                                         linf_dis);
+                                         linf_dis, g);
         }
     }
 
@@ -32,7 +32,7 @@ void DiffusiveMagicianPlus::on_tick(GridRef g) {
                                    auto status = self.status();
                                    g.attack_enemies_in_radius(
                                        status.with_attack(status.attack_ * 1.2),
-                                       linf_dis);
+                                       linf_dis, g);
 
                                    return true;
                                });
