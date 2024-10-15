@@ -8,21 +8,24 @@
 #include "core/timer.h"
 #include "core/id.h"
 #include "core/entity/entity.h"
+#include "core/entity/route.h"
 using towerdefence::core::Grid;
 using towerdefence::core::Map;
+using towerdefence::core::route::Route;
 using towerdefence::core::id::Id;
-
-
-using namespace towerdefence::core;
-using towerdefence::core::id::Id;
+using towerdefence::core::EnemyType;
+using ssize = std::make_signed_t<size_t>;
+using towerdefence::core::EnemyFactory;
+using towerdefence::core::EnemyFactoryBase;
 
 class Bullet;
 
 class LevelScene : public cocos2d::Scene {
 protected:
-    // the map of each level
-    Map *map = nullptr;
     Grid::Type type[7][12] = {Grid::Type::BlockPath};
+    std::vector<std::vector<size_t>> gridType;
+    std::vector<Grid::Type> gridTypes = {Grid::Type::BlockPath, Grid::Type::BlockIn, Grid::Type::BlockOut,
+                                         Grid::Type::BlockTransport, Grid::Type::BlockTower, Grid::Type::None};
     size_t width = 12, height = 7;
     // the size of each grid
     float SIZE = 140.0;
@@ -37,10 +40,41 @@ protected:
     // towers
     std::vector<std::pair<Id, cocos2d::Sprite *>> towers;
 
+    // the route of enemies
+    enum DirType { U, D, L, R };
+    std::vector<std::pair<ssize, ssize>> Dir = { {-1, 0}, {1, 0}, {0, -1}, {0, 1} };
+    std::vector<Route> routes;
+
+    // the FrameTime in 1s
+    const uint32_t FrameTime = 30;
+    // create enemies
+    size_t enemyNumber = 0;
+    std::vector<float> enemyCreateTime;
+    std::vector<std::pair<size_t, size_t>> enemyStartPos;
+    std::vector<std::vector<std::pair<size_t, size_t>>> enemyCreateType;
+    std::vector<EnemyType> enemyType = { EnemyType::Worm, EnemyType::Dog, EnemyType::Soldier, EnemyType::Warlock,
+                                         EnemyType::Destroyer, EnemyType::Tank, EnemyType::Crab, EnemyType::SpeedUp,
+                                         EnemyType::AttackDown, EnemyType::LifeUp, EnemyType::NotAttacked, EnemyType::Boss1, EnemyType::Boss2 };
+    void createEnemy();
+    std::vector<std::pair<float, cocos2d::Sprite *>> enemySprites;
+    std::vector<std::unique_ptr<EnemyFactoryBase>> enemyFactories;
+    std::vector<std::pair<size_t, size_t>> enemyPos;
+
     // update the ui
     void update();
+
+    void updateEnemies();
+
+    void updateBullets();
+
     void updateMoneyLabel();
+
+    void decreaseLife();
+
+    void updateSelectorEnabled();
+
     void updateUpgradeItemEnabled();
+
     void updateUpgradeButtonEnabled();
 
     // select tower
@@ -96,8 +130,7 @@ protected:
     cocos2d::MenuItemLabel *upgradeItem2 = nullptr;
     cocos2d::MenuItemLabel *upgradeItem3 = nullptr;
     cocos2d::MenuItemLabel *cancelUpgradeItem = nullptr;
-    
-    void updateSelectorEnabled();
+
     
     void deleteTower(bool isReturn = true);
 
@@ -120,6 +153,8 @@ protected:
     void hideTowerInfo(float x, float y);
 
 public:
+    // the map of each level
+    Map *map = nullptr;
     // bullets
     std::vector<Bullet *> bullets;
     
