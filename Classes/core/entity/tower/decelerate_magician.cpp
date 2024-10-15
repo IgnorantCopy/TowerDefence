@@ -34,6 +34,7 @@ void DecelerateMagician::on_tick(GridRef g) {
                           g.clock().with_duration_sec(15));
 
         this->skill_ = true;
+        g.on_tower_release_skill(*this, g.map, 15);
         this->timeouts_.add_callback(g.clock().with_duration_sec(15),
                                      [](DecelerateMagician &self, GridRef) {
                                          self.skill_ = false;

@@ -25,6 +25,8 @@ void DiffusiveMagicianPlus::on_tick(GridRef g) {
                           Buff::attack_radius(-1) & Buff::attack(2.2),
                           clk.with_duration_sec(20));
 
+        g.on_tower_release_skill(*this, g.map, 20);
+
         timeouts_.add_callback(clk.with_before_sec(20),
                                [](DiffusiveMagicianPlus &self, GridRef g) {
                                    auto status = self.status();

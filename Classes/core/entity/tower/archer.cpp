@@ -21,6 +21,7 @@ namespace towerdefence {
                 this->add_buff_in({this->id, Buff::DEFAULT},
                                   Buff::attack(0.20),
                                   g.clock().with_duration_sec(10));
+                g.on_tower_release_skill(*this, g.map, 10);
             }
         }
 

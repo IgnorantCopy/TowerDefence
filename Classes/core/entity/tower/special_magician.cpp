@@ -21,6 +21,7 @@ namespace towerdefence {
                     if(skill){
                         enemy_grid->attack_enemies_in_radius(status.with_attack_radius(1).with_attack(status.attack_ * 1.5),
                                                                 linf_dis);
+                        g.on_tower_release_skill(*this, g.map, 1);
                     }else{
                         single_attack(*this,*enemy_grid);
                     }
@@ -32,6 +33,7 @@ namespace towerdefence {
 
             if (g.clock().is_triggered(release_skill_)&&!get_all_buff().silent_) {
                 skill = true;
+                g.on_tower_release_skill(*this, g.map, 0);
             }
         }
     } // namespace core
