@@ -115,6 +115,7 @@ void single_attack(Tower &tower, GridRef enemy_grid) {
     enemy_grid.with_nearest_enemy([&tower, buffs, enemy_grid](Enemy &target_enemy) {
         target_enemy.on_hit(tower.status().attack_,
                             tower.status().attack_type_,enemy_grid);
+        enemy_grid.on_enemy_attacked(target_enemy, tower);
         if (buffs.real_attack_ > 0) {
             target_enemy.on_hit(
                     tower.status().attack_ * buffs.real_attack_, AttackType::Real, enemy_grid);

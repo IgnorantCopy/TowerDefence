@@ -433,7 +433,7 @@ struct GridRef {
     }
 
     template<class... Args>
-    requires std::is_invocable_v<decltype(map.callbacks_.on_enemy_move)::mapped_type, Args...>
+    requires std::is_invocable_v<typename decltype(map.callbacks_.on_enemy_move)::mapped_type, Args...>
     void on_enemy_move(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_enemy_move) {
             f(std::forward<Args>(args)...);
@@ -441,7 +441,7 @@ struct GridRef {
     }
 
     template<class... Args>
-    requires std::is_invocable_v<decltype(map.callbacks_.on_enemy_attacked)::mapped_type, Args...>
+    requires std::is_invocable_v<typename decltype(map.callbacks_.on_enemy_attacked)::mapped_type, Args...>
     void on_enemy_attacked(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_enemy_attacked) {
             f(std::forward<Args>(args)...);
@@ -449,7 +449,7 @@ struct GridRef {
     }
 
     template<class... Args>
-    requires std::is_invocable_v<decltype(map.callbacks_.on_enemy_death)::mapped_type, Args...>
+    requires std::is_invocable_v<typename decltype(map.callbacks_.on_enemy_death)::mapped_type, Args...>
     void on_enemy_death(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_enemy_death) {
             f(std::forward<Args>(args)...);
@@ -457,7 +457,7 @@ struct GridRef {
     }
 
     template<class... Args>
-    requires std::is_invocable_v<decltype(map.callbacks_.on_enemy_release_skill)::mapped_type, Args...>
+    requires std::is_invocable_v<typename decltype(map.callbacks_.on_enemy_release_skill)::mapped_type, Args...>
     void on_enemy_release_skill(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_enemy_release_skill) {
             f(std::forward<Args>(args)...);
@@ -465,7 +465,7 @@ struct GridRef {
     }
 
     template<class... Args>
-    requires std::is_invocable_v<decltype(map.callbacks_.on_tower_release_skill)::mapped_type, Args...>
+    requires std::is_invocable_v<typename decltype(map.callbacks_.on_tower_release_skill)::mapped_type, Args...>
     void on_tower_release_skill(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_tower_release_skill) {
             f(std::forward<Args>(args)...);
@@ -473,7 +473,7 @@ struct GridRef {
     }
 
     template<class... Args>
-    requires std::is_invocable_v<decltype(map.callbacks_.on_escape)::mapped_type, Args...>
+    requires std::is_invocable_v<typename decltype(map.callbacks_.on_escape)::mapped_type, Args...>
     void on_escape(Args&&... args) {
         for (auto & [id, f] : map.callbacks_.on_escape) {
             f(std::forward<Args>(args)...);
