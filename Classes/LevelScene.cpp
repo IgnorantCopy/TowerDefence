@@ -28,7 +28,11 @@
 #include "ui/CocosGUI.h"
 #include "animation/EnemyAnimation.h"
 #include "animation/TowerAnimation.h"
+#include <any>
 #include <memory>
+#include <ostream>
+#include <string>
+#include <unordered_map>
 #include <utility>
 
 
@@ -814,60 +818,62 @@ void LevelScene::createEnemy() {
             size_t y = enemyStartPos[enemyCreateType[i][j].first].second;
             enemyPos.emplace_back(x, y);
             Route new_route = routes[enemyCreateType[i][j].first - 1];
+            auto extra_storage = 
+                std::unordered_map<std::string, std::any>{{"current_frame", 0}};
             std::unique_ptr<EnemyFactoryBase> newEnemy;
             
             switch (enemyType[enemyCreateType[i][j].second - 1]) {
                 case EnemyType::Dog:
                     enemyPath += "dog/move/dog_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Dog>>(new_route);
+                    newEnemy = std::make_unique<EnemyFactory<Dog>>(new_route, extra_storage);
                     break;
                 case EnemyType::Soldier:
                     enemyPath += "soldier/move/soldier_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Soldier>>(new_route);
+                    newEnemy = std::make_unique<EnemyFactory<Soldier>>(new_route, extra_storage);
                     break;
                 case EnemyType::Worm:
                     enemyPath += "worm/move/worm_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Worm>>(new_route);
+                    newEnemy = std::make_unique<EnemyFactory<Worm>>(new_route, extra_storage);
                     break;
                 case EnemyType::Warlock:
                     enemyPath += "warlock/move/warlock_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Warlock>>(new_route);
+                    newEnemy = std::make_unique<EnemyFactory<Warlock>>(new_route, extra_storage);
                     break;
                 case EnemyType::Destroyer:
                     enemyPath += "destroyer/move/destroyer_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Destroyer>>(new_route);
+                    newEnemy = std::make_unique<EnemyFactory<Destroyer>>(new_route, extra_storage);
                     break;
                 case EnemyType::Tank:
                     enemyPath += "tank/move/tank_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Tank>>(new_route);
+                    newEnemy = std::make_unique<EnemyFactory<Tank>>(new_route, extra_storage);
                     break;
                 case EnemyType::Crab:
                     enemyPath += "crab/move/crab_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Crab>>(new_route);
+                    newEnemy = std::make_unique<EnemyFactory<Crab>>(new_route, extra_storage);
                     break;
                 case EnemyType::SpeedUp:
                     enemyPath += "speedUp/move/speedUp_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<SpeedUp>>(new_route);
+                    newEnemy = std::make_unique<EnemyFactory<SpeedUp>>(new_route, extra_storage);
                     break;
                 case EnemyType::AttackDown:
                     enemyPath += "attackDown/move/attackDown_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<AttackDown>>(new_route);
+                    newEnemy = std::make_unique<EnemyFactory<AttackDown>>(new_route, extra_storage);
                     break;
                 case EnemyType::LifeUp:
                     enemyPath += "lifeUp/move/lifeUp_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<LifeUp>>(new_route);
+                    newEnemy = std::make_unique<EnemyFactory<LifeUp>>(new_route, extra_storage);
                     break;
                 case EnemyType::NotAttacked:
                     enemyPath += "notAttacked/move/notAttacked_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<NotAttacked>>(new_route);
+                    newEnemy = std::make_unique<EnemyFactory<NotAttacked>>(new_route, extra_storage);
                     break;
                 case EnemyType::Boss1:
                     enemyPath += "boss/stage1/move/boss1_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Boss1>>(new_route);
+                    newEnemy = std::make_unique<EnemyFactory<Boss1>>(new_route, extra_storage);
                     break;
                 case EnemyType::Boss2:
                     enemyPath += "boss/stage2/move/boss2_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Boss2>>(new_route);
+                    newEnemy = std::make_unique<EnemyFactory<Boss2>>(new_route, extra_storage);
                     break;
                 default:
                     break;
