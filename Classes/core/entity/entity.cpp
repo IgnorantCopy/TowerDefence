@@ -112,7 +112,7 @@ void single_attack(Tower &tower, GridRef enemy_grid) {
     if (buffs.attack_stop_) {
         return;
     }
-    enemy_grid.with_nearest_enemy([&tower, buffs, enemy_grid](Enemy &target_enemy) {
+    enemy_grid.with_nearest_enemy([&tower, buffs, enemy_grid](Enemy &target_enemy) mutable {
         target_enemy.on_hit(tower.status().attack_,
                             tower.status().attack_type_,enemy_grid);
         enemy_grid.on_enemy_attacked(target_enemy, tower);

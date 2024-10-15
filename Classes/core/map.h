@@ -442,7 +442,7 @@ struct GridRef {
 
     template<class... Args>
     requires std::is_invocable_v<typename decltype(map.callbacks_.on_enemy_attacked)::mapped_type, Args...>
-    void on_enemy_attacked(Args&&... args) {
+    void on_enemy_attacked(Args&&... args) const {
         for (auto & [id, f] : map.callbacks_.on_enemy_attacked) {
             f(std::forward<Args>(args)...);
         }
