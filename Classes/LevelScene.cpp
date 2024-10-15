@@ -741,29 +741,66 @@ void LevelScene::createEnemy() {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     float X = origin.x + 350 + SIZE;
     float Y = origin.y + visibleSize.height - SIZE;
-    for(size_t i = 0; i < enemyCreateTime.size(); ++i) {
-        for(size_t j = 0; j < enemyCreateType[i].size(); ++j) {
-            std::string Path = "images/enemies/dog/move/dog_move00.png";
-            scheduleOnce([&](float dt) {
-                size_t x = enemyStartPos[enemyCreateType[i][j].first].first;
-                size_t y = enemyStartPos[enemyCreateType[i][j].first].second;
-                EnemyType new_type = enemyType[enemyCreateType[i][j].second - 1];
-                Route new_route = routes[enemyCreateType[i][j].first];
-                std::unique_ptr<EnemyFactoryBase> newEnemy;
-                switch (new_type) {
-                    case EnemyType::Dog:
-                        newEnemy = std::make_unique<EnemyFactory<Dog>>(new_route);
-                        break;
-                    default:
-                        break;
-                }
-                Id id = this->map->spawn_enemy_at(x, y, *newEnemy);
-                auto newEnemySprite = Sprite::create(Path);
-                newEnemySprite->setScale(0.25f);
-                newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE));
+    for(size_t i = 0; i < enemyCreateTime.size(); i++) {
+        for (size_t j = 0; j < enemyCreateType[i].size(); j++) {
+            std::string enemyPath = "images/enemies/";
+            size_t x = enemyStartPos[enemyCreateType[i][j].first].first;
+            size_t y = enemyStartPos[enemyCreateType[i][j].first].second;
+            Route new_route = routes[enemyCreateType[i][j].first - 1];
+            /*
+            std::unique_ptr<EnemyFactoryBase> newEnemy;
+            Id id = this->map->spawn_enemy_at(x, y, *newEnemy);
+            */
+            switch (enemyType[enemyCreateType[i][j].second - 1]) {
+                case EnemyType::Dog:
+                    enemyPath += "dog/move/dog_move00.png";
+                    break;
+                case EnemyType::Soldier:
+                    enemyPath += "soldier/move/soldier_move00.png";
+                    break;
+                case EnemyType::Worm:
+                    enemyPath += "worm/move/worm_move00.png";
+                    break;
+                case EnemyType::Warlock:
+                    enemyPath += "warlock/move/warlock_move00.png";
+                    break;
+                case EnemyType::Destroyer:
+                    enemyPath += "destroyer/move/destroyer_move00.png";
+                    break;
+                case EnemyType::Tank:
+                    enemyPath += "tank/move/tank_move00.png";
+                    break;
+                case EnemyType::Crab:
+                    enemyPath += "crab/move/crab_move00.png";
+                    break;
+                case EnemyType::SpeedUp:
+                    enemyPath += "speedUp/move/speedUp_move00.png";
+                    break;
+                case EnemyType::AttackDown:
+                    enemyPath += "attackDown/move/attackDown_move00.png";
+                    break;
+                case EnemyType::LifeUp:
+                    enemyPath += "lifeUp/move/lifeUp_move00.png";
+                    break;
+                case EnemyType::NotAttacked:
+                    enemyPath += "notAttacked/move/notAttacked_move00.png";
+                    break;
+                case EnemyType::Boss1:
+                    enemyPath += "boss/stage1/move/boss1_move00.png";
+                    break;
+                case EnemyType::Boss2:
+                    enemyPath += "boss/stage2/move/boss2_move00.png";
+                    break;
+                default:
+                    break;
+            }
+            newEnemySprite = Sprite::create(enemyPath);
+            newEnemySprite->setScale(0.25f);
+            newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE));
+            //scheduleOnce([this](float dt) {
                 this->addChild(newEnemySprite, 5);
-                //this->enemies.emplace_back(id, newEnemySprite);
-            }, enemyCreateTime[i] + 0.1f * i, "createEnemy");
+            //}, enemyCreateTime[i], "createEnemy");
+            //this->enemies.emplace_back(id, newEnemySprite);
         }
     }
 }

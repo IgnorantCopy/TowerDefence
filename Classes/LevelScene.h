@@ -48,11 +48,12 @@ protected:
     size_t enemyNumber = 0;
     std::vector<float> enemyCreateTime;
     std::vector<std::pair<size_t, size_t>> enemyStartPos;
-    std::vector<std::vector<std::pair<size_t, uint32_t>>> enemyCreateType;
+    std::vector<std::vector<std::pair<size_t, size_t>>> enemyCreateType;
     std::vector<EnemyType> enemyType = { EnemyType::Worm, EnemyType::Dog, EnemyType::Soldier, EnemyType::Warlock,
                                          EnemyType::Destroyer, EnemyType::Tank, EnemyType::Crab, EnemyType::SpeedUp,
                                          EnemyType::AttackDown, EnemyType::LifeUp, EnemyType::NotAttacked, EnemyType::Boss1, EnemyType::Boss2 };
     void createEnemy();
+    cocos2d::Sprite *newEnemySprite;
 
     // update the ui
     void update();

@@ -472,8 +472,6 @@ bool Level1Scene::init() {
         auto spawn = Spawn::create(moveBy, animate, nullptr);
         enemyExample->runAction(RepeatForever::create(spawn));
     }
-
-    this->createEnemy();
     
     Vector<MenuItem *> MenuItems;
     MenuItems.pushBack(backItem);
@@ -498,11 +496,14 @@ bool Level1Scene::init() {
     mouseListener->onMouseUp = CC_CALLBACK_1(Level1Scene::onMouseUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
+    this->createEnemy();
+
     // update the map and ui every frame time
-    schedule([this](float dt) {
-        map->update();
-        this->update();
-    }, 1.0 / 30, "update");
-    
+    scheduleOnce([this](float dt) {
+        schedule([this](float dt) {
+            map->update();
+            this->update();
+        }, 1.0 / 30, "update");
+    }, 1.0f, "gameLoading");
     return true;
 }
