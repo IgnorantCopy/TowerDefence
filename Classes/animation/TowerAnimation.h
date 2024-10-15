@@ -61,8 +61,9 @@ public:
 };
 
 class TowerAnimation {
+    constexpr const static float epsilon = 1e-6;
 public:
-    static void releaseSkill(LevelScene *levelScene, Tower *tower);
+    static void releaseSkill(LevelScene *levelScene, Tower *tower, float duration);
 };
 
 #endif //TOWERDEFENCE_TOWERANIMATION_H
