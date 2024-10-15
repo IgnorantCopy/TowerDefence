@@ -392,6 +392,8 @@ struct Map;
 struct EnemyFactoryBase {
     virtual std::unique_ptr<Enemy> construct(id::Id id,
                                              const timer::Clock &clk) = 0;
+
+    virtual ~EnemyFactoryBase() = default;
 };
 
 template <class T> struct EnemyFactory final : EnemyFactoryBase {
