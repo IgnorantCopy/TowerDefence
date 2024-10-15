@@ -5,7 +5,7 @@
 #include "TowerAnimation.h"
 
 Bullet::Bullet(LevelScene *levelScene, towerdefence::core::Tower *tower, towerdefence::core::Enemy *enemy) :
-levelScene(levelScene), tower(tower), enemy(enemy) {
+        levelScene(levelScene), tower(tower), enemy(enemy) {
     switch (this->tower->status().tower_type_) {
         case TowerType::ArcherBase:
             this->bullet = cocos2d::Sprite::create("images/bullet/arrows/arrow_basic.png");
@@ -68,6 +68,15 @@ levelScene(levelScene), tower(tower), enemy(enemy) {
     this->levelScene->addBullet(this);
 }
 
+void Bullet::explosion() {
+    auto particle = cocos2d::ParticleSystemQuad::create("particles/blood.plist");
+    auto enemySprite = this->levelScene->getEnemy(this->enemy->id);
+    if (particle) {
+        particle->setPosition(enemySprite->getPositionX(), enemySprite->getPositionY());
+    }
+    this->levelScene->addChild(particle, 4);
+}
+
 void Bullet::move() {
     this->updateAngle();
     this->bullet->setRotation(this->angle);
@@ -96,6 +105,20 @@ void Bullet::updateAngle() {
     }
 }
 
+bool Bullet::isTouch() {
+    Id enemyId = this->enemy->id;
+    auto *enemySprite = this->levelScene->getEnemy(enemyId);
+    float enemyX = enemySprite->getPositionX();
+    float enemyY = enemySprite->getPositionY();
+    float bulletX = this->bullet->getPositionX();
+    float bulletY = this->bullet->getPositionY();
+    float distance = sqrt(pow(enemyX - bulletX, 2) + pow(enemyY - bulletY, 2));
+    if (distance < 10.0f) {
+        return true;
+    }
+    return false;
+}
+
 
 MagicBullet::MagicBullet(LevelScene *levelScene, towerdefence::core::Tower *tower, towerdefence::core::Enemy *enemy,
                          std::string color) : Bullet(levelScene, tower, enemy), color(color) {}
@@ -114,7 +137,7 @@ void MagicBullet::explosion() {
     this->bullet->setTexture(prefix + "Bomb00.png");
     auto *enemySprite = this->levelScene->getEnemy(this->enemy->id);
     this->bullet->setPosition(enemySprite->getPositionX(), enemySprite->getPositionY());
-    cocos2d::Vector<cocos2d::SpriteFrame*> frames;
+    cocos2d::Vector<cocos2d::SpriteFrame *> frames;
     frames.reserve(this->totalFrames);
     for (int i = 0; i < this->totalFrames; i++) {
         std::string frameName = std::format("Bomb{:02d}.png", i);
@@ -126,3 +149,109 @@ void MagicBullet::explosion() {
     this->bullet->runAction(animate);
 }
 
+void TowerAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::Tower *tower) {
+    cocos2d::Vector<cocos2d::SpriteFrame *> frames;
+    frames.reserve(48);
+    for (int i = 0; i < 48; i++) {
+        std::string skillPath = std::format("images/bullet/skill/skill{:02d}.png", i);
+        auto *frame = cocos2d::SpriteFrame::create(skillPath, cocos2d::Rect(0, 0, 1080, 1080));
+        frames.pushBack(frame);
+    }
+    auto *animation = cocos2d::Animation::createWithSpriteFrames(frames, 0.05f);
+    auto *animate = cocos2d::Animate::create(animation);
+    
+    auto towerSprite = levelScene->getTower(tower->id);
+    
+    auto *skillSprite = cocos2d::Sprite::create("images/bullet/skill/skill00.png");
+    skillSprite->setPosition(towerSprite->getPositionX(), towerSprite->getPositionY());
+    skillSprite->setScale(0.15f);
+    levelScene->addChild(skillSprite, 2);
+    skillSprite->runAction(cocos2d::RepeatForever::create(animate));
+    switch (tower->status().tower_type_) {
+        case TowerType::ArcherBase:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 20.0f, "remove");
+            break;
+        case TowerType::HighspeedArcher:
+        case TowerType::HighspeedArcherPlus:
+            
+            break;
+        case TowerType::Bomber:
+        case TowerType::BomberPlus:
+            
+            break;
+        case TowerType::Archer:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 10.0f, "remove");
+            break;
+        case TowerType::ArcherPlus:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 20.0f, "remove");
+            break;
+        case TowerType::MagicianBase:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 10.0f, "remove");
+            break;
+        case TowerType::CoreMagician:
+            
+            break;
+        case TowerType::CoreMagicianPlus:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 10.0f, "remove");
+            break;
+        case TowerType::DiffusiveMagician:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 10.0f, "remove");
+            break;
+        case TowerType::DiffusiveMagicianPlus:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 20.0f, "remove");
+            break;
+        case TowerType::SpecialMagician:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 15.0f, "remove");
+            break;
+        case TowerType::HelperBase:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 15.0f, "remove");
+            break;
+        case TowerType::DecelerateMagician:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 15.0f, "remove");
+            break;
+        case TowerType::DecelerateMagicianPlus:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 35.0f, "remove");
+            break;
+        case TowerType::WeakenMagician:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 10.0f, "remove");
+            break;
+        case TowerType::WeakenMagicianPlus:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 20.0f, "remove");
+            break;
+        case TowerType::AggressiveMagician:
+            break;
+        case TowerType::AggressiveMagicianPlus:
+            skillSprite->scheduleOnce([skillSprite](float dt) {
+                skillSprite->removeFromParent();
+            }, 20.0f, "remove");
+            break;
+        default:
+            break;
+    }
+}

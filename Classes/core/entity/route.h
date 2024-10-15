@@ -15,6 +15,10 @@ struct Route {
     std::vector<std::pair<ssize, ssize>> diffs;
     size_t pos = 0;
 
+    explicit Route() {}
+
+    explicit Route(std::vector<std::pair<ssize, ssize>> diffs) : diffs(std::move(diffs)) {}
+
     // Returns a tuple of (x, y),
     // which indicates how far the entity should move in x(row)
     // and y(column) axis.
