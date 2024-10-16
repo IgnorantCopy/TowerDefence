@@ -154,6 +154,19 @@ namespace towerdefence {
             
             timer::CallbackTimer<Map &> timeouts_;
         
+            // put an existing enemy at (row, col)
+            //
+            // SAFETY: caller must ensure no reference to corresponding grid's enemies
+            Enemy &relocate_enemy_at(std::unique_ptr<Enemy> enemy, size_t row,
+                                     size_t col) {
+                auto &id_ref = this->enemy_refs_.at(enemy->id);
+                auto &grid = this->grid_of(row, col);
+                auto &ret = grid.enemies.emplace_back(std::move(enemy));
+                id_ref = {row, col};
+
+                return *ret;
+            }
+
         public:
             struct iterator {
                 using base_iter = std::vector<Grid>::iterator;
@@ -245,6 +258,10 @@ namespace towerdefence {
             }
             
             GridRef get_ref(size_t row, size_t column);
+
+    Grid &grid_of(size_t row, size_t col) {
+        return this->grids.at(this->shape.index_of(row, col));
+    }
             
             id::Id spawn_enemy_at(size_t row, size_t column, EnemyFactoryBase &enemy) {
                 auto &grid = grids.at(shape.index_of(row, column));
