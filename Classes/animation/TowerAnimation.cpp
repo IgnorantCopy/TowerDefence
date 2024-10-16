@@ -345,21 +345,22 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                     "remove" + std::to_string(TowerAnimation::removeCounter++));
             for (int i = indexY - 3; i <= indexY + 3; i++) {
                 for (int j = indexX - 3; j <= indexX + 3; j++) {
-                    auto &grid = levelScene->map->get_ref(i, j).grid;
-                    if (i >= 0 && i < 7 && j >= 0 && j < 12 &&
-                        grid.type == Grid::Type::BlockPath &&
-                        isInRange(i, j, indexY, indexX, 3)) {
-                        auto particle = cocos2d::ParticleSystemQuad::create(
-                                "particles/fire.plist");
-                        particle->setPosition(
-                                cocos2d::Vec2(typeX + size * j, typeY - size * i));
-                        levelScene->addChild(particle, 4);
-                        particle->scheduleOnce(
-                                [particle](float dt) { particle->removeFromParent(); },
-                                duration,
-                                "removeFire" +
-                                std::to_string(TowerAnimation::removeCounter++));
+                    if (i >= 0 && i < 7 && j >= 0 && j < 12) {
+                        auto &grid = levelScene->map->get_ref(i, j).grid;
+                        if (grid.type == Grid::Type::BlockPath && isInRange(i, j, indexY, indexX, 3)) {
+                            auto particle = cocos2d::ParticleSystemQuad::create(
+                                    "particles/fire.plist");
+                            particle->setPosition(
+                                    cocos2d::Vec2(typeX + size * j, typeY - size * i));
+                            levelScene->addChild(particle, 4);
+                            particle->scheduleOnce(
+                                    [particle](float dt) { particle->removeFromParent(); },
+                                    duration,
+                                    "removeFire" +
+                                    std::to_string(TowerAnimation::removeCounter++));
+                        }
                     }
+
                 }
             }
             break;
@@ -371,21 +372,22 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                     "remove" + std::to_string(TowerAnimation::removeCounter++));
             for (int i = indexY - 3; i <= indexY + 3; i++) {
                 for (int j = indexX - 3; j <= indexX + 3; j++) {
-                    auto &grid = levelScene->map->get_ref(i, j).grid;
-                    if (i >= 0 && i < 7 && j >= 0 && j < 12 &&
-                        grid.type == Grid::Type::BlockPath &&
-                        isInRange(i, j, indexY, indexX, 3)) {
-                        auto particle = cocos2d::ParticleSystemQuad::create(
-                                "particles/weaken.plist");
-                        particle->setPosition(
-                                cocos2d::Vec2(typeX + size * j, typeY - size * i));
-                        levelScene->addChild(particle, 4);
-                        particle->scheduleOnce(
-                                [particle](float dt) { particle->removeFromParent(); },
-                                duration,
-                                "removeWeaken" +
-                                std::to_string(TowerAnimation::removeCounter++));
+                    if (i >= 0 && i < 7 && j >= 0 && j < 12) {
+                        auto &grid = levelScene->map->get_ref(i, j).grid;
+                        if (grid.type == Grid::Type::BlockPath && isInRange(i, j, indexY, indexX, 3)) {
+                            auto particle = cocos2d::ParticleSystemQuad::create(
+                                    "particles/weaken.plist");
+                            particle->setPosition(
+                                    cocos2d::Vec2(typeX + size * j, typeY - size * i));
+                            levelScene->addChild(particle, 4);
+                            particle->scheduleOnce(
+                                    [particle](float dt) { particle->removeFromParent(); },
+                                    duration,
+                                    "removeWeaken" +
+                                    std::to_string(TowerAnimation::removeCounter++));
+                        }
                     }
+
                 }
             }
             break;
@@ -396,38 +398,40 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                     "remove" + std::to_string(TowerAnimation::removeCounter++));
             for (int i = indexY - 3; i <= indexY + 3; i++) {
                 for (int j = indexX - 3; j <= indexX + 3; j++) {
-                    auto &grid = levelScene->map->get_ref(i, j).grid;
-                    if (i >= 0 && i < 7 && j >= 0 && j < 12 &&
-                        grid.type == Grid::Type::BlockPath &&
-                        isInRange(i, j, indexY, indexX, 3)) {
-                        auto particle = cocos2d::ParticleSystemQuad::create(
-                                "particles/decelerate.plist");
-                        particle->setPosition(
-                                cocos2d::Vec2(typeX + size * j, typeY - size * i));
-                        levelScene->addChild(particle, 4);
-                        particle->scheduleOnce(
-                                [particle](float dt) { particle->removeFromParent(); },
-                                duration,
-                                "removeDecelerate" +
-                                std::to_string(TowerAnimation::removeCounter++));
+                    if (i >= 0 && i < 7 && j >= 0 && j < 12) {
+                        auto &grid = levelScene->map->get_ref(i, j).grid;
+                        if (grid.type == Grid::Type::BlockPath && isInRange(i, j, indexY, indexX, 3)) {
+                            auto particle = cocos2d::ParticleSystemQuad::create(
+                                    "particles/decelerate.plist");
+                            particle->setPosition(
+                                    cocos2d::Vec2(typeX + size * j, typeY - size * i));
+                            levelScene->addChild(particle, 4);
+                            particle->scheduleOnce(
+                                    [particle](float dt) { particle->removeFromParent(); },
+                                    duration,
+                                    "removeDecelerate" +
+                                    std::to_string(TowerAnimation::removeCounter++));
+                        }
                     }
+
                 }
             }
             break;
         case TowerType::AggressiveMagician:
             for (int i = indexY - 3; i <= indexY + 3; i++) {
                 for (int j = indexX - 3; j <= indexX + 3; j++) {
-                    auto &grid = levelScene->map->get_ref(i, j).grid;
-                    if (i >= 0 && i < 7 && j >= 0 && j < 12 &&
-                        grid.type == Grid::Type::BlockTower &&
-                        isInRange(i, j, indexY, indexX, 3) && i != indexY &&
-                        j != indexX) {
-                        auto attackUp =
-                                cocos2d::Sprite::create("images/towers/attack_up.png");
-                        attackUp->setPosition(
-                                cocos2d::Vec2(typeX + size * j + 40, typeY - size * i));
-                        levelScene->addChild(attackUp, 4);
+                    if (i >= 0 && i < 7 && j >= 0 && j < 12) {
+                        auto &grid = levelScene->map->get_ref(i, j).grid;
+                        if (grid.type == Grid::Type::BlockTower && isInRange(i, j, indexY, indexX, 3) && i != indexY &&
+                            j != indexX) {
+                            auto attackUp =
+                                    cocos2d::Sprite::create("images/towers/attack_up.png");
+                            attackUp->setPosition(
+                                    cocos2d::Vec2(typeX + size * j + 40, typeY - size * i));
+                            levelScene->addChild(attackUp, 4);
+                        }
                     }
+
                 }
             }
             break;
@@ -438,22 +442,23 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                     "remove" + std::to_string(TowerAnimation::removeCounter++));
             for (int i = indexY - 3; i <= indexY + 3; i++) {
                 for (int j = indexX - 3; j <= indexX + 3; j++) {
-                    auto &grid = levelScene->map->get_ref(i, j).grid;
-                    if (i >= 0 && i < 7 && j >= 0 && j < 12 &&
-                        grid.type == Grid::Type::BlockTower &&
-                        isInRange(i, j, indexY, indexX, 3) && i != indexY &&
-                        j != indexX) {
-                        auto attackUp =
-                                cocos2d::Sprite::create("images/towers/attack_up.png");
-                        attackUp->setPosition(
-                                cocos2d::Vec2(typeX + size * j + 40, typeY - size * i));
-                        levelScene->addChild(attackUp, 4);
-                        attackUp->scheduleOnce(
-                                [attackUp](float dt) { attackUp->removeFromParent(); },
-                                duration,
-                                "removeAttackUp" +
-                                std::to_string(TowerAnimation::removeCounter++));
+                    if (i >= 0 && i < 7 && j >= 0 && j < 12) {
+                        auto &grid = levelScene->map->get_ref(i, j).grid;
+                        if (grid.type == Grid::Type::BlockTower && isInRange(i, j, indexY, indexX, 3)
+                            && i != indexY && j != indexX) {
+                            auto attackUp =
+                                    cocos2d::Sprite::create("images/towers/attack_up.png");
+                            attackUp->setPosition(
+                                    cocos2d::Vec2(typeX + size * j + 40, typeY - size * i));
+                            levelScene->addChild(attackUp, 4);
+                            attackUp->scheduleOnce(
+                                    [attackUp](float dt) { attackUp->removeFromParent(); },
+                                    duration,
+                                    "removeAttackUp" +
+                                    std::to_string(TowerAnimation::removeCounter++));
+                        }
                     }
+
                 }
             }
             break;
