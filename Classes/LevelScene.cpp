@@ -652,11 +652,11 @@ void LevelScene::createMap(int level) {
                            Dir[L], Dir[D], Dir[D], Dir[R], Dir[R], Dir[U], Dir[U], Dir[L], Dir[L], Dir[L], Dir[L],
                            Dir[L]})
             };
+            enemyFirstDir = { R, L, L, L, L, R };
             enemyCreateTime = {10.0, 11.0, 12.0, 15.0, 16.0, 17.0, 20.0, 22.0, 24.0, 30.0, 33.0, 36.0, 39.0, 45.0, 46.0,
                                47.0, 55.0, 57.0,
                                59.0, 65.0, 68.0, 71.0, 72.0, 77.0, 80.0, 85.0, 95.0, 101.0, 110.0, 120.0, 130.0, 145.0,
                                160.0, 180.0, 200.0};
-            enemyNumber = 167;
             enemyStartPos = {{0, 0},
                              {0, 0},
                              {0, 11},
@@ -727,11 +727,11 @@ void LevelScene::createMap(int level) {
                     Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D], Dir[L], Dir[L], Dir[U], Dir[U], Dir[U], Dir[U],
                            Dir[L], Dir[L], Dir[D], Dir[D], Dir[L], Dir[L]})
             };
+            enemyFirstDir = { L, L, L, L, L, L };
             enemyCreateTime = { 10.0, 12.0, 14.0, 16.0, 20.0, 22.0, 25.0, 27.0, 29.0, 32.0, 35.0, 38.0, 41.0, 45.0, 50.0, 60.0, 70.0,
                                 75.0, 80.0, 81.0, 82.0, 83.0, 84.0, 85.0, 90.0, 92.0, 94.0, 96.0, 98.0, 100.0, 105.0, 106.0, 107.0,
                                 108.0, 109.0, 110.0, 115.0, 120.0, 125.0, 150.0, 155.0, 160.0, 165.0, 170.0, 173.0, 175.0, 178.0,
                                 200.0, 205.0, 210.0, 215.0, 250.0, 255.0, 260.0, 265.0, 270.0, 280.0, 290.0, 293.0, 295.0, 298.0, 300.0 };
-            enemyNumber = 212;
             enemyStartPos = { {0, 0}, {0, 11}, {2, 11}, {3, 11}, {4, 11}, {6, 11}, {3, 11} };
             enemyCreateType = {
                     { {2, 2} },
@@ -827,13 +827,13 @@ void LevelScene::createMap(int level) {
                     Route({Dir[D], Dir[D], Dir[D], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D], Dir[D], Dir[L], Dir[L]}),
                     Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]})
             };
+            enemyFirstDir = { R, R, R, R, L, R, L, R };
             enemyCreateTime = { 10.0, 12.0, 14.0, 20.0, 22.0, 24.0, 28.0, 30.0, 32.0, 34.0, 36.0, 38.0, 44.0, 46.0, 48.0, 50.0, 55.0, 58.0, 60.0,
                                 63.0, 65.0, 66.0, 67.0, 68.0, 69.0, 70.0, 71.0, 72.0, 73.0, 74.0, 90.0, 100.0, 110.0, 120.0, 140.0, 145.0, 150.0,
                                 160.0, 165.0, 170.0, 175.0, 180.0, 185.0, 190.0, 195.0, 200.0, 205.0, 206.0, 207.0, 208.0, 209.0, 210.0, 211.0,
                                 212.0, 213.0, 214.0, 230.0, 235.0, 240.0, 250.0, 260.0, 280.0, 281.0, 282.0, 283.0, 284.0, 285.0, 286.0, 287.0,
                                 288.0, 289.0, 290.0, 295.0, 300.0, 310.0, 312.0, 315.0, 317.0, 320.0, 322.0, 325.0, 327.0, 330.0, 335.0, 340.0,
                                 345.0, 350.0, 355.0, 360.0, 365.0, 370.0, 375.0, 380.0, 385.0, 390.0, 395.0, 400.0, 405.0, 410.0, 415.0, 420.0 };
-            enemyNumber = 374;
             enemyStartPos = { {0, 0}, {0, 0}, {0, 5}, {0, 6}, {2, 0}, {1, 11},
                               {0, 0}, {0, 5}, {2, 0} };
             enemyCreateType = {
@@ -943,7 +943,7 @@ void LevelScene::createMap(int level) {
         default:
             break;
     }
-    
+
     this->map->on_enemy_move(
             [this](Enemy &enemy, std::pair<size_t, size_t> currentPos, std::pair<size_t, size_t> targetPos) {
                 EnemyAnimation::move(this, &enemy, currentPos, targetPos);
@@ -1035,10 +1035,11 @@ void LevelScene::createEnemy() {
             size_t y = enemyStartPos[j.first].second;
             enemySameTimePos.emplace_back(x, y);
             Route new_route = routes[j.first - 1];
+            DirType firstDir = enemyFirstDir[j.first - 1];
             auto extra_storage = 
                 std::unordered_map<std::string, std::any>{{"current_frame", 0}};
             std::unique_ptr<EnemyFactoryBase> newEnemy;
-            
+            enemyNumber++;
             switch (enemyType[j.second - 1]) {
                 case EnemyType::Dog:
                     enemyPath += "dog/move/dog_move00.png";
@@ -1111,11 +1112,20 @@ void LevelScene::createEnemy() {
     for (size_t i = 0; i < enemyCreateType.size(); i++) {
         scheduleOnce([this, i](float dt) {
             for(size_t j = 0; j < enemyCreateType[i].size(); j++) {
+                if (enemyFirstDir[enemyCreateType[i][j].first - 1] == L) {
+                    enemySprites[i][j]->setFlippedX(true);
+                    enemySprites[i][j]->setFlippedY(false);
+                }
                 enemySprites[i][j]->setVisible(true);
-                //enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i][j].first, enemyPos[i][j].second,
-                                                               //*enemyFactories[i][j]), enemySprites[i][j]);
+                enemySprites[i][j]->setOpacity(0);
+                auto fadeIn = FadeIn::create(0.5f);
+                enemySprites[i][j]->runAction(fadeIn);
+                scheduleOnce([this, i, j](float dt) {
+                    enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i][j].first,enemyPos[i][j].second,
+                                                                   *enemyFactories[i][j]), enemySprites[i][j]);
+                }, 0.5f, "AddEnemyToMap" + std::to_string(i) + std::to_string(j));
             }
-        }, enemyCreateTime[i], "createEnemy" + std::to_string(i));
+        }, enemyCreateTime[i] - 0.5f, "createEnemy" + std::to_string(i));
     }
 }
 

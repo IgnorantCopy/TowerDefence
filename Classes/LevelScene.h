@@ -49,6 +49,7 @@ protected:
     size_t enemyNumber = 0;
     std::vector<float> enemyCreateTime;
     std::vector<std::pair<size_t, size_t>> enemyStartPos;
+    std::vector<DirType> enemyFirstDir;
     std::vector<std::vector<std::pair<size_t, size_t>>> enemyCreateType;
     std::vector<EnemyType> enemyType = {EnemyType::Worm, EnemyType::Dog, EnemyType::Soldier, EnemyType::Warlock,
                                         EnemyType::Destroyer, EnemyType::Tank, EnemyType::Crab, EnemyType::SpeedUp,
