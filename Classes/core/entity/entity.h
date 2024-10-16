@@ -335,7 +335,12 @@ struct TowerInfo {
     }
 };
 
-struct Tower : Entity, AttackMixin, BuffMixin, IdMixin, NormalAttackMixin {
+struct Tower : Entity,
+               AttackMixin,
+               BuffMixin,
+               IdMixin,
+               NormalAttackMixin,
+               ExtraStorage {
     Tower(id::Id id, const timer::Clock &clk) : IdMixin{id} {}
 
     Tower(Tower &&) = delete;
@@ -436,6 +441,12 @@ struct TowerFactoryBase {
 };
 
 template <class T> struct TowerFactory : TowerFactoryBase {
+    std::unordered_map<std::string, std::any> extra_storage;
+
+    TowerFactory() = default;
+    explicit TowerFactory(std::unordered_map<std::string, std::any> storage_)
+        : extra_storage(storage_) {}
+
     std::unique_ptr<Tower> construct(id::Id id,
                                      const timer::Clock &clk) override;
     TowerInfo info() const override;
@@ -454,6 +465,7 @@ std::unique_ptr<Tower> TowerFactory<T>::construct(id::Id id,
     }
 
     res->reset_attack_timer(clk);
+    res->storage_ = extra_storage;
 
     return res;
 }
