@@ -16,6 +16,7 @@ void DiffusiveMagicianPlus::on_tick(GridRef g) {
 
             ref.attack_enemies_in_radius(this->status().with_attack_radius(1),
                                          linf_dis, g);
+            ref.on_enemy_attacked(**(ref.grid.enemies.begin()), *this);
         }
     }
 

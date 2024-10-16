@@ -21,6 +21,7 @@ void BomberPlus::on_tick(GridRef g) {
             auto enemy_grid = *it;
             enemy_grid.attack_enemies_in_radius(status.with_attack_radius(1),
                                                 linf_dis, g);
+            enemy_grid.on_enemy_attacked(**(enemy_grid.grid.enemies.begin()), *this);
         }
     }
 

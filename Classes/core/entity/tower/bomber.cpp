@@ -30,6 +30,7 @@ namespace towerdefence {
                             });
                         }
                     }
+                    enemy_grid->on_enemy_attacked(**(enemy_grid->grid.enemies.begin()), *this);
                 }
             }
 
