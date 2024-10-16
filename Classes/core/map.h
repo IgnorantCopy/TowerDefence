@@ -150,6 +150,7 @@ namespace towerdefence {
                 CallbackContainer<Enemy &> on_enemy_death;
                 CallbackContainer<Enemy &, std::pair<size_t, size_t>, std::pair<size_t, size_t>> on_enemy_move;
                 CallbackContainer<id::Id> on_escape;
+                CallbackContainer<bool> on_end;//bool is_win
             } callbacks_;
             
             timer::CallbackTimer<Map &> timeouts_;
@@ -185,6 +186,7 @@ namespace towerdefence {
             
             uint32_t cost_ = 1000;
             uint32_t health_{MAX_HEALTH};
+            uint32_t enemy_alive = 100;
             
             explicit Map(size_t width_, size_t height_,
                          std::function<Grid(size_t, size_t)> f)
@@ -243,6 +245,12 @@ namespace towerdefence {
                 this->callbacks_.on_escape.insert({handle, f});
                 return handle;
             }
+
+            CallbackHandle on_end(std::function<void(bool)> f) {
+                CallbackHandle handle{this->assign_id()};
+                this->callbacks_.on_end.insert({handle, f});
+                return handle;
+            }
             
             GridRef get_ref(size_t row, size_t column);
             
@@ -296,6 +304,17 @@ namespace towerdefence {
                     f(id);
                 }
                 this->health_ -= 1;
+                if(this->health_ == 0){
+                    for (auto &[handle, f]: this->callbacks_.on_end) {
+                        f(false);
+                    }
+                }
+                this->enemy_alive -= 1;
+                if(this->enemy_alive == 0){
+                    for (auto &[handle, f]: this->callbacks_.on_end) {
+                        f(true);
+                    }
+                }
             }
             
             std::optional<id::Id> spawn_tower_at(size_t row, size_t column,
@@ -479,6 +498,14 @@ namespace towerdefence {
             requires std::is_invocable_v<typename decltype(map.callbacks_.on_escape)::mapped_type, Args...>
             void on_escape(Args &&... args) {
                 for (auto &[id, f]: map.callbacks_.on_escape) {
+                    f(std::forward<Args>(args)...);
+                }
+            }
+
+            template<class... Args>
+                requires std::is_invocable_v<typename decltype(map.callbacks_.on_end)::mapped_type, Args...>
+            void on_end(Args &&... args) {
+                for (auto &[id, f]: map.callbacks_.on_end) {
                     f(std::forward<Args>(args)...);
                 }
             }
