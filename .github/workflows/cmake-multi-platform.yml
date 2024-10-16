@@ -60,7 +60,7 @@ jobs:
 
     - name: copy asan
       working-directory: ${{ steps.strings.outputs.build-output-dir }}
-      run: cp C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.39.33519/bin/Hostx86/x86/clang_rt.asan_dynamic-i386.dll .
+      run: cp "C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.39.33519/bin/Hostx86/x86/clang_rt.asan_dynamic-i386.dll" .
 
     - name: PostBuild
       run: tar.exe -a -c -f TowerDefence.zip ${{ steps.strings.outputs.build-output-dir }}/bin
