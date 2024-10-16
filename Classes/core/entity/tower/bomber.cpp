@@ -12,7 +12,7 @@ namespace towerdefence {
             if(g.clock().is_triggered(attack_)){
                 auto grids = g.with_radius(this->status().attack_radius_, linf_dis);
                 auto enemy_grid = get_enemy_grid(*this,grids);
-                if(enemy_grid!=grids.end()){
+                if(enemy_grid!=grids.end()&&enemy_grid->grid.enemies.size()>0){
                     if(skill){
                         sputter_radius = 2;
                         for (auto ref : enemy_grid->with_radius(sputter_radius, l1_dis)) {

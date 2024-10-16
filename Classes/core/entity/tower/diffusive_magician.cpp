@@ -11,8 +11,9 @@ namespace towerdefence {
             Tower::on_tick(g);
             if (g.clock().is_triggered(attack_)){
                 auto grids = g.with_radius(this->status().attack_radius_, linf_dis);
+                auto it = grid_of_nearest_enemy(grids);
 
-                if (auto it = grid_of_nearest_enemy(grids); it != grids.end()) {
+                if ( it != grids.end()&&it->grid.enemies.size()>0) {
                     auto ref = *it;
 
                     ref.attack_enemies_in_radius(this->status().with_attack_radius(1),
