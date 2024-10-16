@@ -1,14 +1,17 @@
 #include "Boss-1.h"
 #include "../../map.h"
+#include "../route.h"
+#include "Boss-2.h"
+
 #include <cstdint>
-#include <stdexcept>
 
 namespace towerdefence {
 namespace core {
 
-Boss1::Boss1(id::Id id, const timer::Clock &clk)
-    : Enemy(id),
-      release_skill_{clk.with_period_sec(20), clk.with_period_sec(30), clk.with_period_sec(40)} {}
+Boss1::Boss1(id::Id id, route::Route route, const timer::Clock &clk)
+    : Enemy(id, route),
+      release_skill_{clk.with_period_sec(20), clk.with_period_sec(30),
+                     clk.with_period_sec(40)} {}
 
 void Boss1::on_tick(GridRef g) {
     this->update_buff(g.clock());
@@ -20,12 +23,12 @@ void Boss1::on_tick(GridRef g) {
         };
     };
 
-    g.for_each_tower_on_tigger(
+    g.for_each_tower_on_trigger(
         release_skill_.dec_atk_spd,
         add_buff_with_dur({this->id, Buff::DECREASE_ATTACK_SPEED},
                           Buff::attack_speed(-30), 10));
 
-    g.for_each_tower_on_tigger(
+    g.for_each_tower_on_trigger(
         release_skill_.silent,
         add_buff_with_dur({this->id, Buff::SILENT}, Buff::silent(true), 15));
 
@@ -37,7 +40,11 @@ void Boss1::on_tick(GridRef g) {
 }
 
 void Boss1::on_death(GridRef g) {
-    // todo: spawn boss-2
+    g.set_timeout(g.clock().with_duration_sec(30), [row = g.row, col = g.column](Map & map) {
+        auto boss2 = EnemyFactory<Boss2>{};
+        map.spawn_enemy_at(row, col, boss2);
+        return false;
+    });
 }
 
 } // namespace core

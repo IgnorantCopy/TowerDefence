@@ -4,7 +4,7 @@
   outputs = { self, nixpkgs, ... }@inputs:
     let
       pkgs = nixpkgs.legacyPackages."x86_64-linux";
-      build-deps = with pkgs; [ cmake pkg-config python3 ];
+      build-deps = with pkgs; [ cmake pkg-config python3 gcc14 ];
       deps = with pkgs; [
         sqlite
         fontconfig
@@ -58,7 +58,7 @@
           '') docs;
         };
 
-        tower-defence = pkgs.stdenv.mkDerivation rec {
+        tower-defence = pkgs.gcc14Stdenv.mkDerivation rec {
           name = "tower-defence";
           src = ./.;
           buildInputs = deps;

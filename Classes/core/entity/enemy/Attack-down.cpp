@@ -5,8 +5,7 @@
 namespace towerdefence {
 namespace core {
 
-AttackDown::AttackDown(id::Id id, const timer::Clock &clk)
-    : Enemy(id), release_skill_(clk.with_period_sec(20)) {}
+AttackDown::AttackDown(id::Id id, route::Route route, const timer::Clock &clk) : Enemy(id, route), release_skill_(clk.with_period_sec(20)) {}
 
 void AttackDown::on_tick(GridRef g) {
     this->update_buff(g.clock());

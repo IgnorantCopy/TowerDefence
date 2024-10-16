@@ -28,6 +28,8 @@
 
 USING_NS_CC;
 
+bool firstTouch = true;
+
 Scene* HelloWorld::createScene()
 {
     return HelloWorld::create();
@@ -48,7 +50,7 @@ bool HelloWorld::init()
     if ( !Scene::init() ) {
         return false;
     }
-
+    
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -76,7 +78,7 @@ bool HelloWorld::init()
     auto playItem =  MenuItemLabel::create(
             labelPlay,
             [this](Ref *ref){
-                Director::getInstance()->pushScene(TransitionCrossFade::create(0.5f, SelectLevelScene::createScene()));
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.5f, SelectLevelScene::createScene()));
             }
     );
     playItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
@@ -86,7 +88,7 @@ bool HelloWorld::init()
     auto manualItem = MenuItemLabel::create(
             labelManual,
             [this](Ref *ref){
-                log("create ManualScene");//TODO: create a manualScene
+                log("Manual clicked");
             }
     );
     manualItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
@@ -110,17 +112,23 @@ bool HelloWorld::init()
         problemLoading("'fonts/Bender/BENDER.OTF'");
     } else {
         // position the labelTitle on the center of the screen
-        labelTitle->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                                origin.y + visibleSize.height / 2));
-        labelTitle->setOpacity(0);
-        // add the labelTitle as a child to this layer
-        this->addChild(labelTitle, 1);
-        auto delay = DelayTime::create(1);
-        auto fadeIn = FadeIn::create(3.0f);
-        auto move = MoveBy::create(1, Vec2(0, 400));
-        auto move_ease = EaseBackOut::create(move->clone());
-        auto seq = Sequence::create(fadeIn, delay, move_ease, NULL);
-        labelTitle->runAction(seq);
+        if (firstTouch) {
+            labelTitle->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                                         origin.y + visibleSize.height / 2));
+            labelTitle->setOpacity(0);
+            // add the labelTitle as a child to this layer
+            this->addChild(labelTitle, 1);
+            auto delay = DelayTime::create(1);
+            auto fadeIn = FadeIn::create(3.0f);
+            auto move = MoveBy::create(1, Vec2(0, 400));
+            auto move_ease = EaseBackOut::create(move->clone());
+            auto seq = Sequence::create(fadeIn, delay, move_ease, NULL);
+            labelTitle->runAction(seq);
+        } else {
+            labelTitle->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                                         origin.y + visibleSize.height / 2 + 400));
+            this->addChild(labelTitle, 1);
+        }
     }
 
     auto background = Sprite::create("images/menu_background.png", Rect(0, 0, 2500, 1500));
@@ -129,9 +137,11 @@ bool HelloWorld::init()
     } else {
         background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
         this->addChild(background, 0);
-        background->setOpacity(0);
-        auto fadeIn = FadeIn::create(3.0f);
-        background->runAction(fadeIn);
+        if (firstTouch) {
+            background->setOpacity(0);
+            auto fadeIn = FadeIn::create(3.0f);
+            background->runAction(fadeIn);
+        }
     }
     
     // create menu, it's an autorelease object
@@ -144,15 +154,26 @@ bool HelloWorld::init()
     menu->setPosition(Vec2::ZERO);
     
     // animation for menu
-    menu->setOpacity(0);
-    auto delay1 = DelayTime::create(3.8f);
-    auto scaleDown = ScaleBy::create(0.1f, 0.1f);
-    auto fadeIn = FadeIn::create(0.1f);
-    auto scaleUp = ScaleBy::create(0.5f, 10.0f);
-    auto scaleEase = EaseBackOut::create(scaleUp->clone());
-    auto delay2 = DelayTime::create(0.8f);
-    auto seq = Sequence::create(delay1, scaleDown, fadeIn, delay2, scaleEase, NULL);
-    menu->runAction(seq);
+    if (firstTouch) {
+        menu->setVisible(false);
+        menu->setScale(0.1f);
+        auto delay = DelayTime::create(4.8f);
+        auto scaleUp = ScaleBy::create(0.5f, 10.0f);
+        auto scaleEase = EaseBackOut::create(scaleUp->clone());
+        auto seq = Sequence::create(delay, scaleEase, NULL);
+        menu->runAction(seq);
+        scheduleOnce([this, menu, scaleEase](float dt) {
+            menu->setVisible(true);
+        }, 4.8f, "animateMenu");
+    }
+    if (firstTouch) {
+        firstTouch = false;
+    }
+    
+    // add a mouse click event listener
+    auto mouseListener = EventListenerMouse::create();
+    mouseListener->onMouseDown = CC_CALLBACK_1(HelloWorld::onMouseDown, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
     
     return true;
 }
@@ -168,4 +189,18 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
+}
+
+void HelloWorld::onMouseDown(cocos2d::Event *event) {
+    EventMouse const* e = (EventMouse*)event;
+    float x = e->getCursorX();
+    float y = e->getCursorY();
+    
+    auto particle = ParticleSystemQuad::create("particles/mouse.plist");
+    if (particle == nullptr) {
+        problemLoading("'particles/mouse.plist'");
+    } else {
+        particle->setPosition(Vec2(x, y));
+        this->addChild(particle, 3);
+    }
 }

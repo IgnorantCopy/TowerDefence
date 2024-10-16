@@ -2,14 +2,15 @@
 #define TOWERDEFENCE_CORE_ENTITY_WORM
 
 #include "../entity.h"
+#include "../route.h"
 
 namespace towerdefence {
 namespace core {
 
 struct Worm final : Enemy {
-    Worm(id::Id id) : Enemy(id) {}
+    Worm(id::Id id, route::Route route) : Enemy(id, route) {}
 
-    EnemyInfo info() const override { return {1000, {0, 0}, 10}; }
+    EnemyInfo info() const override { return {1000, {0, 0}, 10, EnemyType::Worm}; }
 
     void on_tick(GridRef g) override;
 

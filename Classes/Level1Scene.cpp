@@ -1,10 +1,7 @@
 #include "Level1Scene.h"
-#include "ui/CocosGUI.h"
 #include "SelectLevelScene.h"
 
 USING_NS_CC;
-//using towerdefence::core::Grid;
-//using towerdefence::core::Map;
 
 Scene* Level1Scene::createScene()
 {
@@ -15,7 +12,7 @@ Scene* Level1Scene::createScene()
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
+    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in Level1Scene.cpp\n");
 }
 
 bool Level1Scene::init()
@@ -26,20 +23,6 @@ bool Level1Scene::init()
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
-    auto closeItem = MenuItemImage::create(
-            "CloseNormal.png",
-            "CloseSelected.png",
-            CC_CALLBACK_1(Level1Scene::menuCloseCallback, this));
-    if (closeItem == nullptr ||
-        closeItem->getContentSize().width <= 0 ||
-        closeItem->getContentSize().height <= 0) {
-        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-    } else {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
-        float y = origin.y + closeItem->getContentSize().height/2;
-        closeItem->setPosition(Vec2(x,y));
-    }
 
     auto background = Sprite::create("images/level1_background.png",Rect(0,0,2500,1500));
     if(background == nullptr) {
@@ -58,33 +41,82 @@ bool Level1Scene::init()
     }
     
     float gap = 300;
-    auto archerBaseSelector = Sprite::create("images/towers/archer_base.png");
-    if(archerBaseSelector == nullptr) {
-        problemLoading("'images/towers/archer_base.png'");
-    } else {
-        archerBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 - 2 * gap,
-                                                    origin.y + 1680 - visibleSize.height));
-        this->addChild(archerBaseSelector, 2);
-    }
+    this->selectedTower = Sprite::create("images/towers/archer_base_onblock.png");
+    this->selectedTower->setVisible(false);
+    this->selectedTower->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+    this->addChild(this->selectedTower, 5);
+    auto archerBaseSelector = MenuItemImage::create(
+            "images/towers/archer_base.png",
+            "images/towers/archer_base.png",
+            [this](Ref *ref) {
+                this->isSelecting = 1;
+                this->selectedTower->setTexture("images/towers/archer_base_onblock.png");
+            }
+    );
+    archerBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 - 2 * gap,
+                                         origin.y + 1680 - visibleSize.height));
     
-    auto magicianBaseSelector = Sprite::create("images/towers/magician_base.png");
-    if(magicianBaseSelector == nullptr) {
-        problemLoading("'images/towers/magician_base.png'");
-    } else {
-        magicianBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                                                    origin.y + 1680 - visibleSize.height));
-        this->addChild(magicianBaseSelector, 2);
-    }
+    auto magicianBaseSelector = MenuItemImage::create(
+            "images/towers/magician_base.png",
+            "images/towers/magician_base.png",
+            [this](Ref *ref) {
+                this->isSelecting = 2;
+                this->selectedTower->setTexture("images/towers/magician_base_onblock.png");
+            }
+    );
+    magicianBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                                           origin.y + 1680 - visibleSize.height));
     
-    auto helperBaseSelector = Sprite::create("images/towers/helper_base.png");
-    if(helperBaseSelector == nullptr) {
-        problemLoading("'images/towers/helper_base.png'");
-    } else {
-        helperBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
-                                                    origin.y + 1680 - visibleSize.height));
-        this->addChild(helperBaseSelector, 2);
-    }
-
+    auto helperBaseSelector = MenuItemImage::create(
+            "images/towers/helper_base.png",
+            "images/towers/helper_base.png",
+            [this](Ref *ref) {
+                this->isSelecting = 3;
+                this->selectedTower->setTexture("images/towers/helper_base_onblock.png");
+            }
+    );
+    helperBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
+                                         origin.y + 1680 - visibleSize.height));
+    
+    // tower info
+    this->deleteItem = MenuItemImage::create(
+            "images/delete.png",
+            "images/delete.png",
+            [this](Ref *ref) {
+                scheduleOnce([this](float dt) {
+                    this->deleteTower();
+                }, 0.2f, "deleteTower");
+            }
+    );
+    this->deleteItem->setVisible(false);
+    this->upgradeItem = MenuItemImage::create(
+            "images/upgrade.png",
+            "images/upgrade.png",
+            [this](Ref *ref) {
+                // TODO: upgrade the tower
+                log("upgrade");
+            }
+    );
+    this->upgradeItem->setVisible(false);
+    this->towerInfoItem = MenuItemImage::create(
+            "images/info.png",
+            "images/info.png",
+            [this](Ref *ref) {
+                // TODO: show the tower info
+                log("info");
+            }
+    );
+    this->towerInfoItem->setVisible(false);
+    this->skillItem = MenuItemImage::create(
+            "images/towers/skill_icon/archer_base.png",
+            "images/towers/skill_icon/archer_base.png",
+            [this](Ref *ref) {
+                // TODO: execute the skill
+                log("skill");
+            }
+    );
+    this->skillItem->setVisible(false);
+    
     // the back button to go back to the SelectLevel scene
     auto Back=Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
     auto backItem=MenuItemLabel::create(
@@ -100,51 +132,79 @@ bool Level1Scene::init()
     float delta = 140;
     float x = origin.x + 350 + delta;
     float y = origin.y + visibleSize.height - delta;
-    float SIZE = 140.0;
-    ui::Button* grid[7][12]={};
-    std::string type[7][12]={};
-    type[0][0]=type[0][11]=type[2][11]=type[3][11]=type[4][11]=type[6][0]="block_out";
-    type[2][0]=type[3][0]=type[4][0]=type[6][11]="block_in";
-    type[0][7]=type[6][7]="block_transport";
-    type[0][5]=type[0][6]=type[1][0]=type[1][8]=type[1][9]=type[1][10]=type[1][11]=type[5][0]=type[5][7]=type[5][11]=type[6][6]="none";
-    type[1][1]=type[1][2]=type[1][3]=type[1][5]=type[1][6]=type[1][7]=type[3][2]=type[4][6]=type[4][7]=type[5][1]=type[5][2]=
-    type[5][3]=type[5][4]=type[5][6]=type[5][8]=type[5][9]=type[5][10]="block_tower";
-
-    for(size_t i = 0; i < 7; i++) {
-        for (size_t j = 0; j < 12; j++) {
-            if(type[i][j] == "block_out") {
-                grid[i][j] = ui::Button::create("images/out.png", "images/out.png");
-            } else if(type[i][j] == "block_in") {
-                grid[i][j] = ui::Button::create("images/in.png", "images/in.png");
-            } else if(type[i][j] == "block_transport") {
-                grid[i][j] = ui::Button::create("images/block_transport.png", "images/block_transport.png");
-            } else if(type[i][j] == "block_tower") {
-                grid[i][j] = ui::Button::create("images/block_high.png", "images/block_high.png");
-            } else {
-                grid[i][j] = ui::Button::create("images/block_low.png", "images/block_low.png");
+    createMap(1);
+    for(size_t i = 0; i < height; i++) {
+        for (size_t j = 0; j < width; j++) {
+            Grid::Type type_ = map->grids[map->shape.index_of(i, j)].type;
+            if(type_ != Grid::Type::None) {
+                grid[i][j] = ui::Button::create(images[type_], images[type_]);
+                grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
+                this->addChild(grid[i][j], 2);
             }
-            grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
-            this->addChild(grid[i][j], 1);
         }
     }
-
+    
+    auto blockBackground = Sprite::create("images/block_background.png", Rect(0, 0, 1680, 980));
+    if(blockBackground == nullptr) {
+        problemLoading("'images/block_background.png'");
+    } else {
+        blockBackground->setPosition(Vec2(x + 5.5f * delta, y - 3 * delta));
+        this->addChild(blockBackground, 1);
+    }
+    
+    auto money = Sprite::create("images/gold.png");
+    if(money == nullptr) {
+        problemLoading("'images/gold.png'");
+    } else {
+        money->setPosition(Vec2(origin.x + 70, origin.y + visibleSize.height - 70));
+        this->addChild(money, 1);
+    }
+    this->moneyLabel = Label::createWithTTF("0", "fonts/Bender/BENDER.OTF", 75);
+    this->moneyLabel->setPosition(Vec2(origin.x + 150, origin.y + visibleSize.height - 70));
+    this->addChild(this->moneyLabel, 1);
+    
+    auto enemyExample = Sprite::create("images/enemies/dog/move/dog_move00.png");
+    if (enemyExample == nullptr) {
+        problemLoading("'images/enemies/dog/move/dog_move00.png'");
+    } else {
+        enemyExample->setPosition(Vec2(origin.x, origin.y + visibleSize.height / 2));
+        enemyExample->setScale(0.25f);
+        this->addChild(enemyExample, 5);
+        Vector<SpriteFrame*> frames;
+        int num = 15;
+        frames.reserve(num);
+        for (int i = 0; i < num; i++) {
+            std::string path = "images/enemies/dog/move/dog_move";
+            path += (i < 10 ? "0" : "") + std::to_string(i) + ".png";
+            frames.pushBack(SpriteFrame::create(path, Rect(0, 0, 900, 900)));
+        }
+        Animation* animation = Animation::createWithSpriteFrames(frames, 0.05f);
+        Animate* animate = Animate::create(animation);
+        
+        auto moveBy = MoveBy::create(0.8f, Vec2(140, 0));
+        auto spawn = Spawn::create(moveBy, animate, nullptr);
+        enemyExample->runAction(RepeatForever::create(spawn));
+    }
+    
     Vector<MenuItem*> MenuItems;
     MenuItems.pushBack(backItem);
+    MenuItems.pushBack(archerBaseSelector);
+    MenuItems.pushBack(magicianBaseSelector);
+    MenuItems.pushBack(helperBaseSelector);
+    MenuItems.pushBack(this->deleteItem);
+    MenuItems.pushBack(this->upgradeItem);
+    MenuItems.pushBack(this->towerInfoItem);
+    MenuItems.pushBack(this->skillItem);
     auto menu = Menu::createWithArray(MenuItems);
-    this->addChild(menu, MenuItems.size());
+    this->addChild(menu, 4);
     menu->setPosition(Vec2::ZERO);
+    
+    // add a mouse click event listener
+    auto mouseListener = EventListenerMouse::create();
+    mouseListener->onMouseDown = CC_CALLBACK_1(Level1Scene::onMouseDown, this);
+    mouseListener->onMouseMove = CC_CALLBACK_1(Level1Scene::onMouseMove, this);
+    mouseListener->onMouseUp = CC_CALLBACK_1(Level1Scene::onMouseUp, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
     return true;
-}
-
-void Level1Scene::menuCloseCallback(cocos2d::Ref *pSender)
-{
-    //Close the cocos2d-x game scene and quit the application
-    Director::getInstance()->end();
-
-    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
-
-    //EventCustom customEndEvent("game_scene_close_event");
-    //_eventDispatcher->dispatchEvent(&customEndEvent);
-
 }

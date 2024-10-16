@@ -13,6 +13,7 @@ GridRef Map::iterator::operator*() {
 
 void Map::update() {
     clock_.on_tick();
+    this->timeouts_.on_tick(this->clock(), *this);
     for (auto ref : *this) {
         auto &grid = ref.grid;
         if (grid.tower.has_value()) {
