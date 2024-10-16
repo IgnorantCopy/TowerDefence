@@ -325,6 +325,7 @@ bool Level1Scene::init() {
     this->upgradeItem1 = MenuItemLabel::create(upgradeLabel1, [this](Ref *ref) {
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
         std::unique_ptr<TowerFactoryBase> newTower;
+        auto isScaling = std::unordered_map<std::string, bool>{{"isScaling", false}};
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         float typeX = origin.x + 350 + SIZE;
@@ -337,15 +338,15 @@ bool Level1Scene::init() {
         switch (this->map->get_ref(indexY, indexX).grid.tower.value()->status().tower_type_) {
             case TowerType::ArcherBase:
                 path = "images/towers/archer.png";
-                newTower = std::make_unique<TowerFactory<Archer>>();
+                newTower = std::make_unique<TowerFactory<Archer>>(isScaling);
                 break;
             case TowerType::MagicianBase:
                 path = "images/towers/core_magician.png";
-                newTower = std::make_unique<TowerFactory<CoreMagician>>();
+                newTower = std::make_unique<TowerFactory<CoreMagician>>(isScaling);
                 break;
             case TowerType::HelperBase:
                 path = "images/towers/decelerate_magician.png";
-                newTower = std::make_unique<TowerFactory<DecelerateMagician>>();
+                newTower = std::make_unique<TowerFactory<DecelerateMagician>>(isScaling);
                 break;
             default:
                 break;
@@ -366,6 +367,7 @@ bool Level1Scene::init() {
     this->upgradeItem2 = MenuItemLabel::create(upgradeLabel2, [this](Ref *ref) {
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
         std::unique_ptr<TowerFactoryBase> newTower;
+        auto isScaling = std::unordered_map<std::string, bool>{{"isScaling", false}};
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         float typeX = origin.x + 350 + SIZE;
@@ -378,15 +380,15 @@ bool Level1Scene::init() {
         switch (this->map->get_ref(indexY, indexX).grid.tower.value()->status().tower_type_) {
             case TowerType::ArcherBase:
                 path = "images/towers/highspeed_archer.png";
-                newTower = std::make_unique<TowerFactory<HighspeedArcher>>();
+                newTower = std::make_unique<TowerFactory<HighspeedArcher>>(isScaling);
                 break;
             case TowerType::MagicianBase:
                 path = "images/towers/diffusive_magician.png";
-                newTower = std::make_unique<TowerFactory<DiffusiveMagician>>();
+                newTower = std::make_unique<TowerFactory<DiffusiveMagician>>(isScaling);
                 break;
             case TowerType::HelperBase:
                 path = "images/towers/weaken_magician.png";
-                newTower = std::make_unique<TowerFactory<WeakenMagician>>();
+                newTower = std::make_unique<TowerFactory<WeakenMagician>>(isScaling);
                 break;
             default:
                 break;
@@ -407,6 +409,7 @@ bool Level1Scene::init() {
     this->upgradeItem3 = MenuItemLabel::create(upgradeLabel3, [this](Ref *ref) {
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
         std::unique_ptr<TowerFactoryBase> newTower;
+        auto isScaling = std::unordered_map<std::string, bool>{{"isScaling", false}};
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         float typeX = origin.x + 350 + SIZE;
@@ -419,15 +422,15 @@ bool Level1Scene::init() {
         switch (this->map->get_ref(indexY, indexX).grid.tower.value()->status().tower_type_) {
             case TowerType::ArcherBase:
                 path = "images/towers/bomber.png";
-                newTower = std::make_unique<TowerFactory<Bomber>>();
+                newTower = std::make_unique<TowerFactory<Bomber>>(isScaling);
                 break;
             case TowerType::MagicianBase:
                 path = "images/towers/special_magician.png";
-                newTower = std::make_unique<TowerFactory<SpecialMagician>>();
+                newTower = std::make_unique<TowerFactory<SpecialMagician>>(isScaling);
                 break;
             case TowerType::HelperBase:
                 path = "images/towers/aggressive_magician.png";
-                newTower = std::make_unique<TowerFactory<AggressiveMagician>>();
+                newTower = std::make_unique<TowerFactory<AggressiveMagician>>(isScaling);
                 break;
             default:
                 break;
@@ -474,7 +477,7 @@ bool Level1Scene::init() {
     mouseListener->onMouseMove = CC_CALLBACK_1(Level1Scene::onMouseMove, this);
     mouseListener->onMouseUp = CC_CALLBACK_1(Level1Scene::onMouseUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
-
+    
     this->createEnemy();
     
     // update the map and ui every frame time

@@ -195,18 +195,19 @@ void LevelScene::putTower(float x, float y) {
             if (!this->map->get_ref(indexY, indexX).grid.tower.has_value()) {
                 std::string path = "images/towers/";
                 std::unique_ptr<TowerFactoryBase> newTower;
+                auto isScaling = std::unordered_map<std::string, bool>{{"isScaling", false}};
                 switch (this->isSelecting) {
                     case 1:
                         path += "archer_base_onblock.png";
-                        newTower = std::make_unique<TowerFactory<ArcherBase>>();
+                        newTower = std::make_unique<TowerFactory<ArcherBase>>(isScaling);
                         break;
                     case 2:
                         path += "magician_base_onblock.png";
-                        newTower = std::make_unique<TowerFactory<MagicianBase>>();
+                        newTower = std::make_unique<TowerFactory<MagicianBase>>(isScaling);
                         break;
                     case 3:
                         path += "helper_base_onblock.png";
-                        newTower = std::make_unique<TowerFactory<HelperBase>>();
+                        newTower = std::make_unique<TowerFactory<HelperBase>>(isScaling);
                         break;
                     default:
                         break;
@@ -735,6 +736,7 @@ void LevelScene::createMap(int level) {
                 EnemyAnimation::move(this, &enemy, currentPos, targetPos);
             });
     this->map->on_enemy_attacked([this](Enemy &enemy, Tower &tower) {
+        Bullet *bullet = new Bullet(this, &tower, &enemy);
     });
     this->map->on_enemy_death([this](Enemy &enemy) {
         EnemyAnimation::dead(this, &enemy);
@@ -818,8 +820,8 @@ void LevelScene::createEnemy() {
             size_t y = enemyStartPos[enemyCreateType[i][j].first].second;
             enemyPos.emplace_back(x, y);
             Route new_route = routes[enemyCreateType[i][j].first - 1];
-            auto extra_storage = 
-                std::unordered_map<std::string, std::any>{{"current_frame", 0}};
+            auto extra_storage =
+                    std::unordered_map<std::string, std::any>{{"current_frame", 0}};
             std::unique_ptr<EnemyFactoryBase> newEnemy;
             
             switch (enemyType[enemyCreateType[i][j].second - 1]) {

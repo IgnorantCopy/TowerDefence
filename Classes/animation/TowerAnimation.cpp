@@ -4,6 +4,10 @@
 
 #include "TowerAnimation.h"
 
+bool isInRange(int x1, int y1, int x2, int y2, int range) {
+    return abs(x1 - x2) + abs(y1 - y2) <= range;
+}
+
 Bullet::Bullet(LevelScene *levelScene, towerdefence::core::Tower *tower, towerdefence::core::Enemy *enemy) :
         levelScene(levelScene), tower(tower), enemy(enemy) {
     switch (this->tower->status().tower_type_) {
@@ -159,8 +163,15 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::To
     }
     auto *animation = cocos2d::Animation::createWithSpriteFrames(frames, 0.05f);
     auto *animate = cocos2d::Animate::create(animation);
-    
+    auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
+    cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
+    float typeX = origin.x + 350 + size;
+    float typeY = origin.y + visibleSize.height - size;
     auto towerSprite = levelScene->getTower(tower->id);
+    float x = towerSprite->getPositionX();
+    float y = towerSprite->getPositionY();
+    int indexX = (int) ((x - typeX + 0.5f * size) / size);
+    int indexY = (int) ((typeY - y + 0.5f * size) / size);
     
     auto *skillSprite = cocos2d::Sprite::create("images/bullet/skill/skill00.png");
     skillSprite->setPosition(towerSprite->getPositionX(), towerSprite->getPositionY());
@@ -202,6 +213,19 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::To
             skillSprite->scheduleOnce([skillSprite](float dt) {
                 skillSprite->removeFromParent();
             }, duration, "remove");
+            for (int i = indexY - 3; i <= indexY + 3; i++) {
+                for (int j = indexX - 3; j <= indexX + 3; j++) {
+                    auto &grid = levelScene->map->get_ref(i, j).grid;
+                    if (i >= 0 && i < 7 && j >= 0 && j < 12 && grid.type == Grid::Type::BlockPath) {
+                        auto particle = cocos2d::ParticleSystemQuad::create("particles/fire.plist");
+                        particle->setPosition(cocos2d::Vec2(typeY - size * i, typeX + size * j));
+                        levelScene->addChild(particle, 4);
+                        particle->scheduleOnce([particle](float dt) {
+                            particle->removeFromParent();
+                        }, duration, "remove");
+                    }
+                }
+            }
             break;
         case TowerType::SpecialMagician:
             if (duration <= epsilon) {
