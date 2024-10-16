@@ -6,6 +6,8 @@ build-asan
 result
 *.mp4
 
+.vs
+.idea
 .cache
 .devenv
 .direnv

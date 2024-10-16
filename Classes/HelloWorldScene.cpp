@@ -25,6 +25,7 @@
 #include "HelloWorldScene.h"
 #include "2d/CCLabel.h"
 #include "SelectLevelScene.h"
+#include "manual/manual.h"
 #include "cocostudio/SimpleAudioEngine.h"
 USING_NS_CC;
 
@@ -53,7 +54,7 @@ bool HelloWorld::init()
     
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    
+
     // add bgm
     auto player = CocosDenshion::SimpleAudioEngine::getInstance();
     player->playEffect("audio/menu_bgm.mp3", true);
@@ -92,7 +93,7 @@ bool HelloWorld::init()
     auto manualItem = MenuItemLabel::create(
             labelManual,
             [this](Ref *ref){
-                log("Manual clicked");
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.5f, manual::createScene()));
             }
     );
     manualItem->setPosition(Vec2(origin.x + visibleSize.width / 2,

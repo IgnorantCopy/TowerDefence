@@ -98,10 +98,10 @@ add_library(core
     Classes/core/entity/tower/diffusive_magician_plus.h
     Classes/core/entity/tower/helper_base.cpp
     Classes/core/entity/tower/helper_base.h
-        Classes/core/entity/tower/highspeed_archer.cpp
-        Classes/core/entity/tower/highspeed_archer.h
-        Classes/core/entity/tower/highspeed_archer_plus.cpp
-        Classes/core/entity/tower/highspeed_archer_plus.h
+    Classes/core/entity/tower/highspeed_archer.cpp
+    Classes/core/entity/tower/highspeed_archer.h
+    Classes/core/entity/tower/highspeed_archer_plus.cpp
+    Classes/core/entity/tower/highspeed_archer_plus.h
     Classes/core/entity/tower/magician_base.cpp
     Classes/core/entity/tower/magician_base.h
     Classes/core/entity/tower/special_magician.cpp
@@ -118,8 +118,12 @@ set(TOWERDEFENCE_CXX_STANDARD 23)
 set_property(TARGET core PROPERTY CXX_STANDARD ${TOWERDEFENCE_CXX_STANDARD})
 
 # record sources, headers, resources...
-set(GAME_SOURCE)
-set(GAME_HEADER)
+set(GAME_SOURCE
+        Classes/manual/manual.cpp
+)
+set(GAME_HEADER
+        Classes/manual/manual.h
+)
 
 set(GAME_RES_FOLDER
     "${CMAKE_CURRENT_SOURCE_DIR}/Resources"
