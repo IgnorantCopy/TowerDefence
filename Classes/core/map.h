@@ -201,7 +201,7 @@ namespace towerdefence {
             // skill
             CallbackHandle
             on_enemy_release_skill(
-                    std::function<void(const Enemy &, towerdefence::core::Map &map, uint32_t duration)> f) {
+                    std::function<void(Enemy &, towerdefence::core::Map &map, uint32_t duration)> f) {
                 CallbackHandle handle{this->assign_id()};
                 this->callbacks_.on_enemy_release_skill.insert({handle, f});
                 return handle;
@@ -209,7 +209,7 @@ namespace towerdefence {
             
             CallbackHandle
             on_tower_release_skill(
-                    std::function<void(const Tower &, towerdefence::core::Map &map, uint32_t duration)> f) {
+                    std::function<void(Tower &, towerdefence::core::Map &map, uint32_t duration)> f) {
                 CallbackHandle handle{this->assign_id()};
                 this->callbacks_.on_tower_release_skill.insert({handle, f});
                 return handle;
@@ -379,159 +379,160 @@ namespace towerdefence {
         }
 
 // max(||x1 - x2||, ||y1 - y2||)
-static size_t linf_dis(size_t x1, size_t y1, size_t x2, size_t y2) {
-    return std::max(absdiff(x1, x2), absdiff(y1, y2));
-}
-
-using DisFn = std::function<size_t(size_t, size_t, size_t, size_t)>;
-
-struct GridRef {
-    Map &map;
-    Grid &grid;
-    size_t row;
-    size_t column;
-
-    // SAFETY: (row_, column_) must be a valid index
-    explicit GridRef(Map &m, size_t row_, size_t column_)
-        : GridRef(m, m.grids[m.shape.index_of(row_, column_)], row_, column_) {}
-
-    explicit GridRef(Map &m, Grid &g, size_t row_, size_t column_)
-        : map(m), grid(g), row(row_), column(column_) {}
-
-    GridRef(const GridRef &) = default;
-
-    // Returns points whose distance between self <= radix
-    std::vector<GridRef> with_radius(size_t radius, DisFn dis) {
-        std::vector<GridRef> res;
-        // todo: optimize to O(radix) algorithm
-        for (size_t i = 0; i < map.shape.height_; ++i) {
-            for (size_t j = 0; j < map.shape.width_; ++j) {
-                if (dis(row, column, i, j) <= radius) {
-                    res.emplace_back(map, i, j);
+        static size_t linf_dis(size_t x1, size_t y1, size_t x2, size_t y2) {
+            return std::max(absdiff(x1, x2), absdiff(y1, y2));
+        }
+        
+        using DisFn = std::function<size_t(size_t, size_t, size_t, size_t)>;
+        
+        struct GridRef {
+            Map &map;
+            Grid &grid;
+            size_t row;
+            size_t column;
+            
+            // SAFETY: (row_, column_) must be a valid index
+            explicit GridRef(Map &m, size_t row_, size_t column_)
+                    : GridRef(m, m.grids[m.shape.index_of(row_, column_)], row_, column_) {}
+            
+            explicit GridRef(Map &m, Grid &g, size_t row_, size_t column_)
+                    : map(m), grid(g), row(row_), column(column_) {}
+            
+            GridRef(const GridRef &) = default;
+            
+            // Returns points whose distance between self <= radix
+            std::vector<GridRef> with_radius(size_t radius, DisFn dis) {
+                std::vector<GridRef> res;
+                // todo: optimize to O(radix) algorithm
+                for (size_t i = 0; i < map.shape.height_; ++i) {
+                    for (size_t j = 0; j < map.shape.width_; ++j) {
+                        if (dis(row, column, i, j) <= radius) {
+                            res.emplace_back(map, i, j);
+                        }
+                    }
+                }
+                
+                return res;
+            }
+            
+            // attack all enemies in grids found by (status.attack_radius_, dis)
+            void attack_enemies_in_radius(TowerInfo status, DisFn dis, GridRef g) {
+                for (auto ref: this->with_radius(status.attack_radius_, dis)) {
+                    ref.grid.with_enemy([&](Enemy &e) {
+                        e.on_hit(status.attack_, status.attack_type_, g);
+                    });
                 }
             }
-        }
-
-        return res;
-    }
-
-    // attack all enemies in grids found by (status.attack_radius_, dis)
-    void attack_enemies_in_radius(TowerInfo status, DisFn dis, GridRef g) {
-        for (auto ref : this->with_radius(status.attack_radius_, dis)) {
-            ref.grid.with_enemy([&](Enemy &e) {
-                e.on_hit(status.attack_, status.attack_type_, g);
-            });
-        }
-    }
-
-    void with_nearest_enemy(std::function<void(Enemy &)> f) {
-        auto &enemies = this->grid.enemies;
-        auto target_enemy = std::ranges::min_element(
-            enemies.begin(), enemies.end(), {},
-            [](std::unique_ptr<Enemy> &e) { return e->remaining_distance(); });
-
-        if (target_enemy != enemies.end()) {
-            f(**target_enemy);
-        }
-    }
-
-    template<class... Args>
-    requires std::is_invocable_v<typename decltype(map.callbacks_.on_enemy_move)::mapped_type, Args...>
-    void on_enemy_move(Args&&... args) {
-        for (auto & [id, f] : map.callbacks_.on_enemy_move) {
-            f(std::forward<Args>(args)...);
-        }
-    }
-
-    template<class... Args>
-    requires std::is_invocable_v<typename decltype(map.callbacks_.on_enemy_attacked)::mapped_type, Args...>
-    void on_enemy_attacked(Args&&... args) const {
-        for (auto & [id, f] : map.callbacks_.on_enemy_attacked) {
-            f(std::forward<Args>(args)...);
-        }
-    }
-
-    template<class... Args>
-    requires std::is_invocable_v<typename decltype(map.callbacks_.on_enemy_death)::mapped_type, Args...>
-    void on_enemy_death(Args&&... args) {
-        for (auto & [id, f] : map.callbacks_.on_enemy_death) {
-            f(std::forward<Args>(args)...);
-        }
-    }
-
-    template<class... Args>
-    requires std::is_invocable_v<typename decltype(map.callbacks_.on_enemy_release_skill)::mapped_type, Args...>
-    void on_enemy_release_skill(Args&&... args) {
-        for (auto & [id, f] : map.callbacks_.on_enemy_release_skill) {
-            f(std::forward<Args>(args)...);
-        }
-    }
-
-    template<class... Args>
-    requires std::is_invocable_v<typename decltype(map.callbacks_.on_tower_release_skill)::mapped_type, Args...>
-    void on_tower_release_skill(Args&&... args) {
-        for (auto & [id, f] : map.callbacks_.on_tower_release_skill) {
-            f(std::forward<Args>(args)...);
-        }
-    }
-
-    template<class... Args>
-    requires std::is_invocable_v<typename decltype(map.callbacks_.on_escape)::mapped_type, Args...>
-    void on_escape(Args&&... args) {
-        for (auto & [id, f] : map.callbacks_.on_escape) {
-            f(std::forward<Args>(args)...);
-        }
-    }
-
-    std::optional<std::unique_ptr<Tower>> &get_nearest_tower() {
-        size_t r = 0, c = 0;
-        for (auto [i, j] : std::views::cartesian_product(
-                 std::views::iota(size_t(0), map.shape.height_),
-                 std::views::iota(size_t(0), map.shape.width_))) {
-            if (l1_dis(row, column, i, j) < l1_dis(row, column, r, c) &&
-                map.grids[map.shape.index_of(i, j)].tower.has_value()) {
-                r = i;
-                c = j;
+            
+            void with_nearest_enemy(std::function<void(Enemy &)> f) {
+                auto &enemies = this->grid.enemies;
+                auto target_enemy = std::ranges::min_element(
+                        enemies.begin(), enemies.end(), {},
+                        [](std::unique_ptr<Enemy> &e) { return e->remaining_distance(); });
+                
+                if (target_enemy != enemies.end()) {
+                    f(**target_enemy);
+                }
             }
-        }
-
-        return map.grids[map.shape.index_of(r, c)].tower;
-    }
-
-    // if timer is triggered, call f(tower) for all towers on the map
-    void for_each_tower_on_trigger(timer::Timer timer,
-                                   std::function<void(Tower &)> f) {
-        if (clock().is_triggered(timer)) {
-            for (auto &grid : map.grids) {
-                grid.with_tower([f](auto &t) { f(*t); });
+            
+            template<class... Args>
+            requires std::is_invocable_v<typename decltype(map.callbacks_.on_enemy_move)::mapped_type, Args...>
+            void on_enemy_move(Args &&... args) {
+                for (auto &[id, f]: map.callbacks_.on_enemy_move) {
+                    f(std::forward<Args>(args)...);
+                }
             }
-        }
-    }
-
-    id::Id spawn_enemy(EnemyFactoryBase &enemy) {
-        return this->map.spawn_enemy_at(this->row, this->column, enemy);
-    }
-
-    std::optional<id::Id> spawn_tower(TowerFactoryBase &tower) {
-        return this->map.spawn_tower_at(this->row, this->column, tower);
-    }
-
-    const timer::Clock &clock() const { return map.clock(); }
-    Grid &current() { return grid; }
-
-    // add a callback called when t tiggers.
-    // if callback returns false, it will be removed.
-    //
-    // SAFETY: caller must ensure that all captured variables of callback's
-    // lifetime NOT SHORTER than the object.
-    //
-    // Particularly, do not capture members in `Tower`s or `Enemy`s.
-    void set_timeout(timer::Timer t, std::function<bool(Map &)> callback) {
-        this->map.set_timeout(t, callback);
-    }
-};
-
-} // namespace core
+            
+            template<class... Args>
+            requires std::is_invocable_v<typename decltype(map.callbacks_.on_enemy_attacked)::mapped_type, Args...>
+            void on_enemy_attacked(Args &&... args) const {
+                for (auto &[id, f]: map.callbacks_.on_enemy_attacked) {
+                    f(std::forward<Args>(args)...);
+                }
+            }
+            
+            template<class... Args>
+            requires std::is_invocable_v<typename decltype(map.callbacks_.on_enemy_death)::mapped_type, Args...>
+            void on_enemy_death(Args &&... args) {
+                for (auto &[id, f]: map.callbacks_.on_enemy_death) {
+                    f(std::forward<Args>(args)...);
+                }
+            }
+            
+            template<class... Args>
+            requires std::is_invocable_v<typename decltype(map.callbacks_.on_enemy_release_skill)::mapped_type, Args...>
+            void on_enemy_release_skill(Args &&... args) {
+                for (auto &[id, f]: map.callbacks_.on_enemy_release_skill) {
+                    f(std::forward<Args>(args)...);
+                }
+            }
+            
+            template<class... Args>
+            requires std::is_invocable_v<typename decltype(map.callbacks_.on_tower_release_skill)::mapped_type, Args...>
+            void on_tower_release_skill(Args &&... args) {
+                for (auto &[id, f]: map.callbacks_.on_tower_release_skill) {
+                    f(std::forward<Args>(args)...);
+                }
+            }
+            
+            template<class... Args>
+            requires std::is_invocable_v<typename decltype(map.callbacks_.on_escape)::mapped_type, Args...>
+            void on_escape(Args &&... args) {
+                for (auto &[id, f]: map.callbacks_.on_escape) {
+                    f(std::forward<Args>(args)...);
+                }
+            }
+            
+            std::optional<std::unique_ptr<Tower>> &get_nearest_tower() {
+                size_t r = 0, c = 0;
+                for (auto [i, j]: std::views::cartesian_product(
+                        std::views::iota(size_t(0), map.shape.height_),
+                        std::views::iota(size_t(0), map.shape.width_))) {
+                    if (l1_dis(row, column, i, j) < l1_dis(row, column, r, c) &&
+                        map.grids[map.shape.index_of(i, j)].tower.has_value()) {
+                        r = i;
+                        c = j;
+                    }
+                }
+                
+                return map.grids[map.shape.index_of(r, c)].tower;
+            }
+            
+            // if timer is triggered, call f(tower) for all towers on the map
+            void for_each_tower_on_trigger(timer::Timer timer,
+                                           std::function<void(Tower &)> f) {
+                if (clock().is_triggered(timer)) {
+                    for (auto &grid: map.grids) {
+                        grid.with_tower([f](auto &t) { f(*t); });
+                    }
+                }
+            }
+            
+            id::Id spawn_enemy(EnemyFactoryBase &enemy) {
+                return this->map.spawn_enemy_at(this->row, this->column, enemy);
+            }
+            
+            std::optional<id::Id> spawn_tower(TowerFactoryBase &tower) {
+                return this->map.spawn_tower_at(this->row, this->column, tower);
+            }
+            
+            const timer::Clock &clock() const { return map.clock(); }
+            
+            Grid &current() { return grid; }
+            
+            // add a callback called when t tiggers.
+            // if callback returns false, it will be removed.
+            //
+            // SAFETY: caller must ensure that all captured variables of callback's
+            // lifetime NOT SHORTER than the object.
+            //
+            // Particularly, do not capture members in `Tower`s or `Enemy`s.
+            void set_timeout(timer::Timer t, std::function<bool(Map &)> callback) {
+                this->map.set_timeout(t, callback);
+            }
+        };
+        
+    } // namespace core
 } // namespace towerdefence
 
 #endif
