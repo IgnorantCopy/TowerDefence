@@ -10,12 +10,13 @@ void DiffusiveMagicianPlus::on_tick(GridRef g) {
 
     if (clk.is_triggered(this->attack_)) {
         auto grids = g.with_radius(this->status().attack_radius_, linf_dis);
-
-        if (auto it = grid_of_nearest_enemy(grids); it != grids.end()) {
+        auto it = grid_of_nearest_enemy(grids);
+        if ( it != grids.end()&&it->grid.enemies.size()>0) {
             auto ref = *it;
 
             ref.attack_enemies_in_radius(this->status().with_attack_radius(1),
                                          linf_dis, g);
+            ref.on_enemy_attacked(**(ref.grid.enemies.begin()), *this);
         }
     }
 
