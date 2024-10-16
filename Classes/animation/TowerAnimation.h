@@ -29,6 +29,7 @@ protected:
     float dy;
     float angle;
     const float speed = 10;
+    bool isScaling = false;
 
 public:
     Bullet(LevelScene *levelScene, Tower *tower, Enemy *enemy);
@@ -62,6 +63,8 @@ public:
 
 class TowerAnimation {
     constexpr const static float epsilon = 1e-6;
+    constexpr const static float size = 140.0f;
+    static size_t removeCounter;
 public:
     static void releaseSkill(LevelScene *levelScene, Tower *tower, float duration);
 };

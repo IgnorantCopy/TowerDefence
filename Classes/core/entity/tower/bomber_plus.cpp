@@ -16,11 +16,13 @@ void BomberPlus::on_tick(GridRef g) {
     // do normal attack
     if (clk.is_triggered(this->attack_)) {
         auto grids = g.with_radius(status.attack_radius_, linf_dis);
+        auto it = get_enemy_grid(*this, grids);
 
-        if (auto it = get_enemy_grid(*this, grids); it != grids.end()) {
+        if ( it != grids.end()&&it->grid.enemies.size()>0) {
             auto enemy_grid = *it;
             enemy_grid.attack_enemies_in_radius(status.with_attack_radius(1),
                                                 linf_dis, g);
+            enemy_grid.on_enemy_attacked(**(enemy_grid.grid.enemies.begin()), *this);
         }
     }
 
