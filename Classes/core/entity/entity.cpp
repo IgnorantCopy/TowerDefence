@@ -38,6 +38,10 @@ void Enemy::on_tick(GridRef g) {
 
 void Enemy::on_death(GridRef g) {
     g.on_enemy_death(*this);
+    g.map.enemy_alive -= 1;
+    if(g.map.enemy_alive == 0){
+        g.on_end(true);
+    }
 }
 
 void Tower::on_tick(GridRef g) {
