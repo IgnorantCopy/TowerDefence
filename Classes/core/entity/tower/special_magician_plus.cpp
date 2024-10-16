@@ -21,15 +21,15 @@ namespace towerdefence {
                                        Buff::attack(1.50 * layer));
                         SpecialMagicianPlus &self = *this;
                         auto buffs = self.get_all_buff();
-                        enemy_grid->with_nearest_enemy([&self, buffs](Enemy &target_enemy) {
+                        enemy_grid->with_nearest_enemy([&self, buffs, g](Enemy &target_enemy) {
                             target_enemy.add_buff({self.id, Buff::DEFAULT},
                                                   Buff::defence_correction({0,-50}));
-                            target_enemy.increase_attack(self.status().attack_,
-                                                         self.status().attack_type_);
+                            target_enemy.on_hit(self.status().attack_,
+                                                self.status().attack_type_,g);
                             target_enemy.remove_buff_from(self.id);
                             if (buffs.real_attack_ > 0) {
-                                target_enemy.increase_attack(
-                                        self.status().attack_ * buffs.real_attack_, AttackType::Real);
+                                target_enemy.on_hit(
+                                        self.status().attack_ * buffs.real_attack_, AttackType::Real, g);
                             }
                         });
                         layer = 0;

@@ -18,7 +18,7 @@ namespace towerdefence {
                 return { 16000, { 500, 20 }, 8, EnemyType::NotAttacked, 36};
             }
             
-            void on_hit(GridRef g) override;
+            void on_hit(int32_t atk, AttackType attack_type, GridRef g) override;
         };
     } // namespace core
 } // namespace towerdefence

@@ -174,8 +174,6 @@ struct Entity {
     virtual void on_tick(GridRef g);
     // called when the entity dies
     virtual void on_death(GridRef g);
-    // called when entity is hit
-    virtual void on_hit(GridRef g);
 
     virtual ~Entity() {};
 };
@@ -279,8 +277,6 @@ struct Enemy : Entity,
 
     virtual EnemyInfo info() const = 0;
 
-    void increase_attack(int32_t atk, AttackType attack_type);
-
     size_t remaining_distance() const {
         return this->route_.remaining_distance();
     }
@@ -306,6 +302,8 @@ struct Enemy : Entity,
 
     void on_tick(GridRef g) override;
     void on_death(GridRef g) override;
+
+    virtual void on_hit(int32_t atk, AttackType attack_type, GridRef g) ;
 };
 
 struct TowerInfo {
@@ -337,7 +335,12 @@ struct TowerInfo {
     }
 };
 
-struct Tower : Entity, AttackMixin, BuffMixin, IdMixin, NormalAttackMixin {
+struct Tower : Entity,
+               AttackMixin,
+               BuffMixin,
+               IdMixin,
+               NormalAttackMixin,
+               ExtraStorage {
     Tower(id::Id id, const timer::Clock &clk) : IdMixin{id} {}
 
     Tower(Tower &&) = delete;
@@ -438,6 +441,12 @@ struct TowerFactoryBase {
 };
 
 template <class T> struct TowerFactory : TowerFactoryBase {
+    std::unordered_map<std::string, std::any> extra_storage;
+
+    TowerFactory() = default;
+    explicit TowerFactory(std::unordered_map<std::string, std::any> storage_)
+        : extra_storage(storage_) {}
+
     std::unique_ptr<Tower> construct(id::Id id,
                                      const timer::Clock &clk) override;
     TowerInfo info() const override;
@@ -456,6 +465,7 @@ std::unique_ptr<Tower> TowerFactory<T>::construct(id::Id id,
     }
 
     res->reset_attack_timer(clk);
+    res->storage_ = extra_storage;
 
     return res;
 }

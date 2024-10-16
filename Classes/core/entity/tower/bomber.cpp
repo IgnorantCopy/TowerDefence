@@ -16,8 +16,8 @@ namespace towerdefence {
                     if(skill){
                         sputter_radius = 2;
                         for (auto ref : enemy_grid->with_radius(sputter_radius, l1_dis)) {
-                            ref.grid.with_enemy([this](Enemy &enemy) {
-                                enemy.increase_attack(this->status().attack_,this->status().attack_type_);
+                            ref.grid.with_enemy([this,g](Enemy &enemy) {
+                                enemy.on_hit(this->status().attack_, this->status().attack_type_,g);
                             });
                         }
                         sputter_radius = 1;
@@ -25,8 +25,8 @@ namespace towerdefence {
                         g.on_tower_release_skill(*this, g.map, 0);
                     }else{
                         for (auto ref : enemy_grid->with_radius(sputter_radius, l1_dis)) {
-                            ref.grid.with_enemy([this](Enemy &enemy) {
-                                enemy.increase_attack(this->status().attack_,this->status().attack_type_);
+                            ref.grid.with_enemy([this, g](Enemy &enemy) {
+                                enemy.on_hit(this->status().attack_, this->status().attack_type_, g);
                             });
                         }
                     }
