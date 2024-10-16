@@ -1,29 +1,8 @@
 #include "Level1Scene.h"
 #include "SelectLevelScene.h"
 #include "cocostudio/SimpleAudioEngine.h"
-#include "core/entity/tower/archer.h"
-#include "core/entity/tower/highspeed_archer.h"
-#include "core/entity/tower/bomber.h"
-#include "core/entity/tower/core_magician.h"
-#include "core/entity/tower/diffusive_magician.h"
-#include "core/entity/tower/special_magician.h"
-#include "core/entity/tower/decelerate_magician.h"
-#include "core/entity/tower/weaken_magician.h"
-#include "core/entity/tower/aggressive_magician.h"
 
 USING_NS_CC;
-using towerdefence::core::Archer;
-using towerdefence::core::HighspeedArcher;
-using towerdefence::core::Bomber;
-using towerdefence::core::CoreMagician;
-using towerdefence::core::DiffusiveMagician;
-using towerdefence::core::SpecialMagician;
-using towerdefence::core::DecelerateMagician;
-using towerdefence::core::WeakenMagician;
-using towerdefence::core::AggressiveMagician;
-using towerdefence::core::TowerType;
-using towerdefence::core::TowerFactory;
-using towerdefence::core::TowerFactoryBase;
 
 Scene *Level1Scene::createScene() {
     return Level1Scene::create();
@@ -36,10 +15,19 @@ static void problemLoading(const char *filename) {
 }
 
 bool Level1Scene::init() {
-    LevelScene::init();
-    
+    LevelScene::init(1);
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+    // add the level1 background
+    auto background = Sprite::create("images/level1_background.png", Rect(0, 0, 2500, 1500));
+    if (background == nullptr) {
+        problemLoading("'images/level1_background.png'");
+    } else {
+        background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+        this->addChild(background, 0);
+    }
     
     // add bgm
     auto player = CocosDenshion::SimpleAudioEngine::getInstance();

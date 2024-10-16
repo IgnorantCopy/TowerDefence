@@ -46,7 +46,7 @@ protected:
     // the FrameTime in 1s
     const uint32_t FrameTime = 30;
     // create enemies
-    size_t enemyNumber = 0;//todo:initialize map.enemy_alive with enemyNumber
+    size_t enemyNumber = 0;
     std::vector<float> enemyCreateTime;
     std::vector<std::pair<size_t, size_t>> enemyStartPos;
     std::vector<DirType> enemyFirstDir;
@@ -180,7 +180,7 @@ public:
     
     void deleteTower(bool isReturn = true);
     
-    virtual bool init();
+    virtual bool init(int level);
 };
 
 #endif //TOWERDEFENCE_LEVELSCENE_H
