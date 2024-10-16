@@ -95,10 +95,10 @@ bool LevelScene::init() {
     if (!Scene::init()) {
         return false;
     }
-    
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    
+
     auto background = Sprite::create("images/level1_background.png", Rect(0, 0, 2500, 1500));
     if (background == nullptr) {
         problemLoading("'images/level1_background.png'");
@@ -106,7 +106,7 @@ bool LevelScene::init() {
         background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
         this->addChild(background, 0);
     }
-    
+
     auto frameBase = Sprite::create("images/frame_base.png");
     if (frameBase == nullptr) {
         problemLoading("'images/frame_base.png'");
@@ -114,7 +114,7 @@ bool LevelScene::init() {
         frameBase->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 1500 - visibleSize.height));
         this->addChild(frameBase, 1);
     }
-    
+
     float gap = 300;
     this->selectedTower = Sprite::create("images/towers/archer_base_onblock.png");
     this->selectedTower->setVisible(false);
@@ -140,7 +140,7 @@ bool LevelScene::init() {
     this->archerBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 - 2 * gap,
                                                origin.y + 1680 - visibleSize.height));
     this->addChild(this->archerBaseSelector, 4);
-    
+
     this->magicianBaseSelector = ui::Button::create(
             "images/towers/magician_base.png",
             "images/towers/magician_base.png",
@@ -161,7 +161,7 @@ bool LevelScene::init() {
     this->magicianBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2,
                                                  origin.y + 1680 - visibleSize.height));
     this->addChild(this->magicianBaseSelector, 4);
-    
+
     this->helperBaseSelector = ui::Button::create(
             "images/towers/helper_base.png",
             "images/towers/helper_base.png",
@@ -182,7 +182,7 @@ bool LevelScene::init() {
     this->helperBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
                                                origin.y + 1680 - visibleSize.height));
     this->addChild(this->helperBaseSelector, 4);
-    
+
     // tower info
     this->deleteButton = ui::Button::create(
             "images/delete.png",
@@ -258,7 +258,7 @@ bool LevelScene::init() {
     this->addChild(this->upgradeButton, 4);
     this->addChild(this->towerInfoButton, 4);
     this->addChild(this->skillButton, 4);
-    
+
     //create map
     float x = origin.x + 350 + SIZE;
     float y = origin.y + visibleSize.height - SIZE;
@@ -273,7 +273,7 @@ bool LevelScene::init() {
             }
         }
     }
-    
+
     auto blockBackground = Sprite::create("images/block_background.png", Rect(0, 0, 1680, 980));
     if (blockBackground == nullptr) {
         problemLoading("'images/block_background.png'");
@@ -281,7 +281,7 @@ bool LevelScene::init() {
         blockBackground->setPosition(Vec2(x + 5.5f * SIZE, y - 3 * SIZE));
         this->addChild(blockBackground, 1);
     }
-    
+
     auto money = Sprite::create("images/gold.png");
     if (money == nullptr) {
         problemLoading("'images/gold.png'");
@@ -304,7 +304,7 @@ bool LevelScene::init() {
             cocos2d::Vec2(origin.x + 150 + 15 * log10(this->map->health_), origin.y + visibleSize.height - 180));
     this->addChild(this->moneyLabel, 1);
     this->addChild(this->lifeLabel, 1);
-    
+
     // upgrade menu
     this->upgradeBackground1 = Sprite::create("images/upgrade_background.png");
     if (this->upgradeBackground1 == nullptr) {
@@ -334,7 +334,7 @@ bool LevelScene::init() {
         this->addChild(this->upgradeBackground3, 5);
         this->upgradeBackground3->setVisible(false);
     }
-    
+
     this->upgradeTower1 = Sprite::create("images/towers/archer_base.png");
     if (this->upgradeTower1 == nullptr) {
         problemLoading("'images/towers/archer.png'");
@@ -362,7 +362,7 @@ bool LevelScene::init() {
         this->addChild(this->upgradeTower3, 6);
         this->upgradeTower3->setVisible(false);
     }
-    
+
     auto upgradeLabel1 = Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
     this->upgradeItem1 = MenuItemLabel::create(upgradeLabel1, [this](Ref *ref) {
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
@@ -496,7 +496,7 @@ bool LevelScene::init() {
     });
     this->cancelUpgradeItem->setPosition(
             Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 - 300));
-    
+
     Vector<MenuItem *> upgradeMenuItems;
     upgradeMenuItems.pushBack(this->upgradeItem1);
     upgradeMenuItems.pushBack(this->upgradeItem2);
@@ -506,16 +506,16 @@ bool LevelScene::init() {
     this->addChild(this->upgradeMenu, 6);
     this->upgradeMenu->setPosition(Vec2::ZERO);
     this->upgradeMenu->setVisible(false);
-    
+
     // add a mouse click event listener
     auto mouseListener = EventListenerMouse::create();
     mouseListener->onMouseDown = CC_CALLBACK_1(LevelScene::onMouseDown, this);
     mouseListener->onMouseMove = CC_CALLBACK_1(LevelScene::onMouseMove, this);
     mouseListener->onMouseUp = CC_CALLBACK_1(LevelScene::onMouseUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
-    
+
     this->createEnemy();
-    
+
     // update the map and ui every frame time
     scheduleOnce([this](float dt) {
         schedule([this](float dt) {
@@ -1108,11 +1108,11 @@ void LevelScene::createMap(int level) {
                            Dir[L], Dir[D], Dir[D], Dir[R], Dir[R], Dir[U], Dir[U], Dir[L], Dir[L], Dir[L], Dir[L],
                            Dir[L]})
             };
+            enemyFirstDir = { R, L, L, L, L, R };
             enemyCreateTime = {10.0, 11.0, 12.0, 15.0, 16.0, 17.0, 20.0, 22.0, 24.0, 30.0, 33.0, 36.0, 39.0, 45.0, 46.0,
                                47.0, 55.0, 57.0,
                                59.0, 65.0, 68.0, 71.0, 72.0, 77.0, 80.0, 85.0, 95.0, 101.0, 110.0, 120.0, 130.0, 145.0,
                                160.0, 180.0, 200.0};
-            enemyNumber = 167;
             enemyStartPos = {{0, 0},
                              {0, 0},
                              {0, 11},
@@ -1187,6 +1187,7 @@ void LevelScene::createMap(int level) {
                            Dir[U],
                            Dir[L], Dir[L], Dir[D], Dir[D], Dir[L], Dir[L]})
             };
+            enemyFirstDir = { L, L, L, L, L, L };
             enemyCreateTime = {10.0, 12.0, 14.0, 16.0, 20.0, 22.0, 25.0, 27.0, 29.0, 32.0, 35.0, 38.0, 41.0, 45.0, 50.0,
                                60.0, 70.0,
                                75.0, 80.0, 81.0, 82.0, 83.0, 84.0, 85.0, 90.0, 92.0, 94.0, 96.0, 98.0, 100.0, 105.0,
@@ -1195,7 +1196,6 @@ void LevelScene::createMap(int level) {
                                175.0, 178.0,
                                200.0, 205.0, 210.0, 215.0, 250.0, 255.0, 260.0, 265.0, 270.0, 280.0, 290.0, 293.0,
                                295.0, 298.0, 300.0};
-            enemyNumber = 212;
             enemyStartPos = {{0, 0},
                              {0, 11},
                              {2, 11},
@@ -1301,6 +1301,7 @@ void LevelScene::createMap(int level) {
                     Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R],
                            Dir[R], Dir[R]})
             };
+            enemyFirstDir = { R, R, R, R, L, R, L, R };
             enemyCreateTime = {10.0, 12.0, 14.0, 20.0, 22.0, 24.0, 28.0, 30.0, 32.0, 34.0, 36.0, 38.0, 44.0, 46.0, 48.0,
                                50.0, 55.0, 58.0, 60.0,
                                63.0, 65.0, 66.0, 67.0, 68.0, 69.0, 70.0, 71.0, 72.0, 73.0, 74.0, 90.0, 100.0, 110.0,
@@ -1313,7 +1314,6 @@ void LevelScene::createMap(int level) {
                                327.0, 330.0, 335.0, 340.0,
                                345.0, 350.0, 355.0, 360.0, 365.0, 370.0, 375.0, 380.0, 385.0, 390.0, 395.0, 400.0,
                                405.0, 410.0, 415.0, 420.0};
-            enemyNumber = 374;
             enemyStartPos = {{0, 0},
                              {0, 0},
                              {0, 5},
@@ -1430,7 +1430,7 @@ void LevelScene::createMap(int level) {
         default:
             break;
     }
-    
+
     this->map->on_enemy_move(
             [this](Enemy &enemy, std::pair<size_t, size_t> currentPos, std::pair<size_t, size_t> targetPos) {
                 EnemyAnimation::move(this, &enemy, currentPos, targetPos);
@@ -1519,17 +1519,22 @@ void LevelScene::createEnemy() {
     float X = origin.x + 350 + SIZE;
     float Y = origin.y + visibleSize.height - SIZE;
     for (size_t i = 0; i < enemyCreateTime.size(); i++) {
-        for (size_t j = 0; j < enemyCreateType[i].size(); j++) {
+        std::vector<Sprite *> enemySameTime;
+        std::vector<std::pair<size_t, size_t>> enemySameTimePos;
+        std::vector<std::unique_ptr<EnemyFactoryBase>> enemySameTimeFactories;
+        for (auto & j : enemyCreateType[i]) {
             std::string enemyPath = "images/enemies/";
-            size_t x = enemyStartPos[enemyCreateType[i][j].first].first;
-            size_t y = enemyStartPos[enemyCreateType[i][j].first].second;
-            enemyPos.emplace_back(x, y);
-            Route new_route = routes[enemyCreateType[i][j].first - 1];
+            size_t x = enemyStartPos[j.first].first;
+            size_t y = enemyStartPos[j.first].second;
+            enemySameTimePos.emplace_back(x, y);
+            Route new_route = routes[j.first - 1];
+            DirType firstDir = enemyFirstDir[j.first - 1];
             auto extra_storage =
                     std::unordered_map<std::string, std::any>{{"current_frame", 0}};
             std::unique_ptr<EnemyFactoryBase> newEnemy;
+            enemyNumber++;
             ParticleSystemQuad *particle = nullptr;
-            switch (enemyType[enemyCreateType[i][j].second - 1]) {
+            switch (enemyType[j.second - 1]) {
                 case EnemyType::Dog:
                     enemyPath += "dog/move/dog_move00.png";
                     newEnemy = std::make_unique<EnemyFactory<Dog>>(new_route, extra_storage);
@@ -1586,28 +1591,42 @@ void LevelScene::createEnemy() {
                 default:
                     break;
             }
-            
-            enemyFactories.push_back(std::move(newEnemy));
+            enemySameTimeFactories.push_back(std::move(newEnemy));
             auto newEnemySprite = Sprite::create(enemyPath);
             newEnemySprite->setScale(0.25f);
             newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE));
             newEnemySprite->setVisible(false);
+            enemySameTime.push_back(newEnemySprite);
             if (particle) {
                 newEnemySprite->addChild(particle);
                 schedule([particle, newEnemySprite](float dt) {
                     particle->setPosition(newEnemySprite->getPosition());
                 }, 1.0f / 30, "updateParticle");
             }
-            enemySprites.emplace_back(enemyCreateTime[i], newEnemySprite);
             this->addChild(newEnemySprite, 5);
         }
+        enemySprites.push_back(enemySameTime);
+        enemyPos.push_back(enemySameTimePos);
+        enemyFactories.push_back(std::move(enemySameTimeFactories));
     }
-    for (size_t i = 0; i < enemyNumber; i++) {
+    for (size_t i = 0; i < enemyCreateType.size(); i++) {
         scheduleOnce([this, i](float dt) {
-            enemySprites[i].second->setVisible(true);
-            enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i].first, enemyPos[i].second, *enemyFactories[i]),
-                                 enemySprites[i].second);
-        }, enemySprites[i].first, "createEnemy" + std::to_string(i));
+            for(size_t j = 0; j < enemyCreateType[i].size(); j++) {
+                if (enemyFirstDir[enemyCreateType[i][j].first - 1] == L) {
+                    enemySprites[i][j]->setFlippedX(true);
+                    enemySprites[i][j]->setFlippedY(false);
+                }
+                enemySprites[i][j]->setVisible(true);
+                enemySprites[i][j]->setOpacity(0);
+                auto fadeIn = FadeIn::create(0.5f);
+                enemySprites[i][j]->runAction(fadeIn);
+                scheduleOnce([this, i, j](float dt) {
+                    // TODO: fix the bug of "spawn_enemy_at"
+                    enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i][j].first,enemyPos[i][j].second,
+                                                                   *enemyFactories[i][j]), enemySprites[i][j]);
+                }, 0.5f, "AddEnemyToMap" + std::to_string(i) + std::to_string(j));
+            }
+        }, enemyCreateTime[i] - 0.5f, "createEnemy" + std::to_string(i));
     }
 }
 
