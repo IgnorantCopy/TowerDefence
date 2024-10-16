@@ -4,7 +4,9 @@
 
 #include "TowerAnimation.h"
 
-bool isInRange(int x1, int y1, int x2, int y2, int range) {
+size_t TowerAnimation::removeCounter = 0;
+
+static bool isInRange(int x1, int y1, int x2, int y2, int range) {
     return abs(x1 - x2) + abs(y1 - y2) <= range;
 }
 
@@ -82,7 +84,17 @@ Bullet::Bullet(LevelScene *levelScene, towerdefence::core::Tower *tower, towerde
 
 void Bullet::explosion() {
     if (this->isScaling) {
-    
+        cocos2d::Vector<cocos2d::SpriteFrame *> frames;
+        frames.reserve(44);
+        for (int i = 0; i < 44; i++) {
+            std::string frameName = std::format("images/bullet/bomb/bomb{:02d}.png", i);
+            auto *frame = cocos2d::SpriteFrame::create(frameName, cocos2d::Rect(0, 0, 1080, 1080));
+            frames.pushBack(frame);
+        }
+        auto *animation = cocos2d::Animation::createWithSpriteFrames(frames, 0.05f);
+        auto *animate = cocos2d::Animate::create(animation);
+        this->bullet->setScale(0.5f);
+        this->bullet->runAction(animate);
     } else {
         auto particle = cocos2d::ParticleSystemQuad::create("particles/blood.plist");
         auto enemySprite = this->levelScene->getEnemy(this->enemy->id);
@@ -135,6 +147,7 @@ bool Bullet::isTouch() {
     return false;
 }
 
+/* ---------------------- MagicBullet ------------------------ */
 
 MagicBullet::MagicBullet(LevelScene *levelScene, towerdefence::core::Tower *tower, towerdefence::core::Enemy *enemy,
                          std::string color) : Bullet(levelScene, tower, enemy), color(color) {}

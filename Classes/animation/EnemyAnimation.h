@@ -34,8 +34,4 @@ public:
     static void dead(LevelScene *levelScene, Enemy *enemy);
 };
 
-size_t EnemyAnimation::transportCounter = 0;
-size_t EnemyAnimation::attackDownCounter = 0;
-size_t EnemyAnimation::notAttackedCounter = 0;
-
 #endif //TOWERDEFENCE_ENEMYANIMATION_H

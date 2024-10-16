@@ -69,6 +69,4 @@ public:
     static void releaseSkill(LevelScene *levelScene, Tower *tower, float duration);
 };
 
-size_t TowerAnimation::removeCounter = 0;
-
 #endif //TOWERDEFENCE_TOWERANIMATION_H

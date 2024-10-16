@@ -177,6 +177,8 @@ public:
     cocos2d::Sprite *getEnemy(Id id);
     
     void deleteTower(bool isReturn = true);
+    
+    virtual bool init();
 };
 
 #endif //TOWERDEFENCE_LEVELSCENE_H

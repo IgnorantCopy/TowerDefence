@@ -4,7 +4,11 @@
 
 #include "EnemyAnimation.h"
 
-bool isInRange(int x1, int y1, int x2, int y2, int range) {
+size_t EnemyAnimation::transportCounter = 0;
+size_t EnemyAnimation::attackDownCounter = 0;
+size_t EnemyAnimation::notAttackedCounter = 0;
+
+static bool isInRange(int x1, int y1, int x2, int y2, int range) {
     return abs(x1 - x2) + abs(y1 - y2) <= range;
 }
 
@@ -147,7 +151,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
                 particle->scheduleOnce([levelScene, particle, x, y](float dt) {
                     particle->setPosition(cocos2d::Vec2(x, y));
                     levelScene->addChild(particle, 2);
-                }, 0.6f, "attackRing" + std::to_string(EnemyAnimation::transportCounter++));
+                }, 0.6f, "attackRing" + std::to_string(EnemyAnimation::attackDownCounter++));
             }
             break;
         case EnemyType::NotAttacked:
@@ -156,7 +160,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
                 if (enemySprite) {
                     enemySprite->setOpacity(255);
                 }
-            }, duration, "notAttacked" + std::to_string(EnemyAnimation::notAttackedCounter++);
+            }, duration, "notAttacked" + std::to_string(EnemyAnimation::notAttackedCounter++));
             return;
         case EnemyType::LifeUp:
             particle = cocos2d::ParticleSystemQuad::create("particles/green_ring.plist");
