@@ -34,34 +34,14 @@ void Enemy::on_tick(GridRef g) {
     auto &clk = g.clock();
 
     this->update_buff(clk);
-
-    assert(this->move_progress_ >= 0 && this->move_progress_ <= 1);
-
-    this->move_progress_ +=
-        0.1 * this->status().speed_ / timer::TICK_PER_SECOND;
-
-    auto moves = static_cast<uint32_t>(std::floor(this->move_progress_));
-    this->move_progress_ = std::fmod(this->move_progress_, 1);
-
-    for (uint32_t i = 0; i < moves; ++i) {
-        try {
-            auto [dx, dy] = this->route_.next_direction();
-            auto nx = route::ssize(g.row) + dx;
-            auto ny = route::ssize(g.column) + dy;
-            assert(nx >= 0 && nx < g.map.shape.height_ && ny >= 0 &&
-                   ny < g.map.shape.width_);
-            g.map.move_enemy_to(this->id, nx, ny);
-        } catch (const route::reached_end &) {
-            g.map.reached_end(this->id); // todo: fix UAF in reached_end
-            break;
-        }
-    }
-
-    assert(this->move_progress_ >= 0 && this->move_progress_ <= 1);
 }
 
 void Enemy::on_death(GridRef g) {
     g.on_enemy_death(*this);
+    g.map.enemy_alive -= 1;
+    if(g.map.enemy_alive == 0){
+        g.on_end(true);
+    }
 }
 
 void Tower::on_tick(GridRef g) {
