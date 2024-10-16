@@ -25,6 +25,7 @@
 #include "HelloWorldScene.h"
 #include "2d/CCLabel.h"
 #include "SelectLevelScene.h"
+#include "manual/manual.h"
 
 USING_NS_CC;
 
@@ -88,7 +89,7 @@ bool HelloWorld::init()
     auto manualItem = MenuItemLabel::create(
             labelManual,
             [this](Ref *ref){
-                log("Manual clicked");
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.5f, manual::createScene()));
             }
     );
     manualItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
