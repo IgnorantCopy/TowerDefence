@@ -115,6 +115,8 @@ bool Level2Scene::init()
     mouseListener->onMouseMove = CC_CALLBACK_1(Level2Scene::onMouseMove, this);
     mouseListener->onMouseUp = CC_CALLBACK_1(Level2Scene::onMouseUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+
+    this->createEnemy();
     
     return true;
 }

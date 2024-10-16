@@ -30,7 +30,6 @@
 #include "animation/TowerAnimation.h"
 #include <any>
 #include <memory>
-#include <ostream>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -1027,17 +1026,20 @@ void LevelScene::createEnemy() {
     float X = origin.x + 350 + SIZE;
     float Y = origin.y + visibleSize.height - SIZE;
     for (size_t i = 0; i < enemyCreateTime.size(); i++) {
-        for (size_t j = 0; j < enemyCreateType[i].size(); j++) {
+        std::vector<Sprite *> enemySameTime;
+        std::vector<std::pair<size_t, size_t>> enemySameTimePos;
+        std::vector<std::unique_ptr<EnemyFactoryBase>> enemySameTimeFactories;
+        for (auto & j : enemyCreateType[i]) {
             std::string enemyPath = "images/enemies/";
-            size_t x = enemyStartPos[enemyCreateType[i][j].first].first;
-            size_t y = enemyStartPos[enemyCreateType[i][j].first].second;
-            enemyPos.emplace_back(x, y);
-            Route new_route = routes[enemyCreateType[i][j].first - 1];
+            size_t x = enemyStartPos[j.first].first;
+            size_t y = enemyStartPos[j.first].second;
+            enemySameTimePos.emplace_back(x, y);
+            Route new_route = routes[j.first - 1];
             auto extra_storage = 
                 std::unordered_map<std::string, std::any>{{"current_frame", 0}};
             std::unique_ptr<EnemyFactoryBase> newEnemy;
             
-            switch (enemyType[enemyCreateType[i][j].second - 1]) {
+            switch (enemyType[j.second - 1]) {
                 case EnemyType::Dog:
                     enemyPath += "dog/move/dog_move00.png";
                     newEnemy = std::make_unique<EnemyFactory<Dog>>(new_route, extra_storage);
@@ -1093,22 +1095,27 @@ void LevelScene::createEnemy() {
                 default:
                     break;
             }
-            
-            enemyFactories.push_back(std::move(newEnemy));
+
+            enemySameTimeFactories.push_back(std::move(newEnemy));
             auto newEnemySprite = Sprite::create(enemyPath);
             newEnemySprite->setScale(0.25f);
             newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE));
             newEnemySprite->setVisible(false);
-            enemySprites.emplace_back(enemyCreateTime[i], newEnemySprite);
+            enemySameTime.push_back(newEnemySprite);
             this->addChild(newEnemySprite, 5);
         }
+        enemySprites.push_back(enemySameTime);
+        enemyPos.push_back(enemySameTimePos);
+        enemyFactories.push_back(std::move(enemySameTimeFactories));
     }
-    for (size_t i = 0; i < enemyNumber; i++) {
+    for (size_t i = 0; i < enemyCreateType.size(); i++) {
         scheduleOnce([this, i](float dt) {
-            enemySprites[i].second->setVisible(true);
-            enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i].first, enemyPos[i].second, *enemyFactories[i]),
-                                 enemySprites[i].second);
-        }, enemySprites[i].first, "createEnemy" + std::to_string(i));
+            for(size_t j = 0; j < enemyCreateType[i].size(); j++) {
+                enemySprites[i][j]->setVisible(true);
+                //enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i][j].first, enemyPos[i][j].second,
+                                                               //*enemyFactories[i][j]), enemySprites[i][j]);
+            }
+        }, enemyCreateTime[i], "createEnemy" + std::to_string(i));
     }
 }
 

@@ -56,10 +56,11 @@ protected:
                                         EnemyType::Boss1, EnemyType::Boss2};
     
     void createEnemy();
-    
-    std::vector<std::pair<float, cocos2d::Sprite *>> enemySprites;
-    std::vector<std::unique_ptr<EnemyFactoryBase>> enemyFactories;
-    std::vector<std::pair<size_t, size_t>> enemyPos;
+
+    // Show enemies
+    std::vector<std::vector<cocos2d::Sprite *>> enemySprites;
+    std::vector<std::vector<std::unique_ptr<EnemyFactoryBase>>> enemyFactories;
+    std::vector<std::vector<std::pair<size_t, size_t>>> enemyPos;
     
     // update the ui
     void update();
