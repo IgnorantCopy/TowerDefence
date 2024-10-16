@@ -8,12 +8,14 @@
 namespace towerdefence::core {
     struct CoreMagician final : Tower {
         timer::Timer release_skill_;
-        std::unordered_set<id::Id> has_buff_;
 
         CoreMagician(id::Id id, const timer::Clock & clk);
         CoreMagician() = delete;
 
-        TowerInfo info() const override { return { 700, 12, 0, 16, 2, AttackType::Magic }; }
+        static constexpr TowerInfo INFO { 700, 12, 0, 16, 2, AttackType::Magic, TowerType::CoreMagician};
+        TowerInfo info() const override { return INFO; }
+
+        bool skill = false;
 
         void on_tick(GridRef g) override;
     };

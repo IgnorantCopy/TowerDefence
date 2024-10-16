@@ -5,6 +5,9 @@
 
 class SelectLevelScene : public cocos2d::Scene
 {
+    bool level2Scene = false;
+    bool level3Scene = false;
+
 public:
     static cocos2d::Scene* createScene();
 
@@ -15,6 +18,9 @@ public:
 
     // implement the "static create()" method manually
     CREATE_FUNC(SelectLevelScene);
+    
+    void onMouseDown(cocos2d::Event *event);
+    
 };
 
 #endif //TOWERDEFENCE_SELECTLEVELSCENE_H

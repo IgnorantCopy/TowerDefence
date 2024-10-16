@@ -1,150 +1,65 @@
 #include "Level1Scene.h"
-#include "ui/CocosGUI.h"
 #include "SelectLevelScene.h"
+#include "cocostudio/SimpleAudioEngine.h"
+#include "core/entity/tower/archer.h"
+#include "core/entity/tower/highspeed_archer.h"
+#include "core/entity/tower/bomber.h"
+#include "core/entity/tower/core_magician.h"
+#include "core/entity/tower/diffusive_magician.h"
+#include "core/entity/tower/special_magician.h"
+#include "core/entity/tower/decelerate_magician.h"
+#include "core/entity/tower/weaken_magician.h"
+#include "core/entity/tower/aggressive_magician.h"
 
 USING_NS_CC;
-//using towerdefence::core::Grid;
-//using towerdefence::core::Map;
+using towerdefence::core::Archer;
+using towerdefence::core::HighspeedArcher;
+using towerdefence::core::Bomber;
+using towerdefence::core::CoreMagician;
+using towerdefence::core::DiffusiveMagician;
+using towerdefence::core::SpecialMagician;
+using towerdefence::core::DecelerateMagician;
+using towerdefence::core::WeakenMagician;
+using towerdefence::core::AggressiveMagician;
+using towerdefence::core::TowerType;
+using towerdefence::core::TowerFactory;
+using towerdefence::core::TowerFactoryBase;
 
-Scene* Level1Scene::createScene()
-{
+Scene *Level1Scene::createScene() {
     return Level1Scene::create();
 }
 
 // Print useful error message instead of segfaulting when files are not there.
-static void problemLoading(const char* filename)
-{
+static void problemLoading(const char *filename) {
     printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
+    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in Level1Scene.cpp\n");
 }
 
-bool Level1Scene::init()
-{
-    if ( !Scene::init() ){
-        return false;
-    }
-
+bool Level1Scene::init() {
+    LevelScene::init();
+    
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-
-    auto closeItem = MenuItemImage::create(
-            "CloseNormal.png",
-            "CloseSelected.png",
-            CC_CALLBACK_1(Level1Scene::menuCloseCallback, this));
-    if (closeItem == nullptr ||
-        closeItem->getContentSize().width <= 0 ||
-        closeItem->getContentSize().height <= 0) {
-        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-    } else {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
-        float y = origin.y + closeItem->getContentSize().height/2;
-        closeItem->setPosition(Vec2(x,y));
-    }
-
-    auto background = Sprite::create("images/level1_background.png",Rect(0,0,2500,1500));
-    if(background == nullptr) {
-        problemLoading("'images/level1_background.png'");
-    } else {
-        background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
-        this->addChild(background, 0);
-    }
     
-    auto frameBase = Sprite::create("images/frame_base.png");
-    if(frameBase == nullptr) {
-        problemLoading("'images/frame_base.png'");
-    } else {
-        frameBase->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + 1500 - visibleSize.height));
-        this->addChild(frameBase, 1);
-    }
+    // add bgm
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
+    player->playBackgroundMusic("audio/level1_bgm.MP3", true);
     
-    float gap = 300;
-    auto archerBaseSelector = Sprite::create("images/towers/archer_base.png");
-    if(archerBaseSelector == nullptr) {
-        problemLoading("'images/towers/archer_base.png'");
-    } else {
-        archerBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 - 2 * gap,
-                                                    origin.y + 1680 - visibleSize.height));
-        this->addChild(archerBaseSelector, 2);
-    }
-    
-    auto magicianBaseSelector = Sprite::create("images/towers/magician_base.png");
-    if(magicianBaseSelector == nullptr) {
-        problemLoading("'images/towers/magician_base.png'");
-    } else {
-        magicianBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                                                    origin.y + 1680 - visibleSize.height));
-        this->addChild(magicianBaseSelector, 2);
-    }
-    
-    auto helperBaseSelector = Sprite::create("images/towers/helper_base.png");
-    if(helperBaseSelector == nullptr) {
-        problemLoading("'images/towers/helper_base.png'");
-    } else {
-        helperBaseSelector->setPosition(Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
-                                                    origin.y + 1680 - visibleSize.height));
-        this->addChild(helperBaseSelector, 2);
-    }
-
     // the back button to go back to the SelectLevel scene
-    auto Back=Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
-    auto backItem=MenuItemLabel::create(
-            Back,
-            [this](Ref *ref){
-                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
-            }
-    );
+    auto Back = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
+    auto backItem = MenuItemLabel::create(Back, [this, player](Ref *ref) {
+        player->stopBackgroundMusic();
+        player->playBackgroundMusic("audio/menu_bgm.MP3", true);
+        Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+    });
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
                                origin.y + visibleSize.height - 50));
-
-    //create map
-    float delta = 140;
-    float x = origin.x + 350 + delta;
-    float y = origin.y + visibleSize.height - delta;
-    float SIZE = 140.0;
-    ui::Button* grid[7][12]={};
-    std::string type[7][12]={};
-    type[0][0]=type[0][11]=type[2][11]=type[3][11]=type[4][11]=type[6][0]="block_out";
-    type[2][0]=type[3][0]=type[4][0]=type[6][11]="block_in";
-    type[0][7]=type[6][7]="block_transport";
-    type[0][5]=type[0][6]=type[1][0]=type[1][8]=type[1][9]=type[1][10]=type[1][11]=type[5][0]=type[5][7]=type[5][11]=type[6][6]="none";
-    type[1][1]=type[1][2]=type[1][3]=type[1][5]=type[1][6]=type[1][7]=type[3][2]=type[4][6]=type[4][7]=type[5][1]=type[5][2]=
-    type[5][3]=type[5][4]=type[5][6]=type[5][8]=type[5][9]=type[5][10]="block_tower";
-
-    for(size_t i = 0; i < 7; i++) {
-        for (size_t j = 0; j < 12; j++) {
-            if(type[i][j] == "block_out") {
-                grid[i][j] = ui::Button::create("images/out.png", "images/out.png");
-            } else if(type[i][j] == "block_in") {
-                grid[i][j] = ui::Button::create("images/in.png", "images/in.png");
-            } else if(type[i][j] == "block_transport") {
-                grid[i][j] = ui::Button::create("images/block_transport.png", "images/block_transport.png");
-            } else if(type[i][j] == "block_tower") {
-                grid[i][j] = ui::Button::create("images/block_high.png", "images/block_high.png");
-            } else {
-                grid[i][j] = ui::Button::create("images/block_low.png", "images/block_low.png");
-            }
-            grid[i][j]->setPosition(Vec2(x + j * SIZE, y - i * SIZE));
-            this->addChild(grid[i][j], 1);
-        }
-    }
-
-    Vector<MenuItem*> MenuItems;
-    MenuItems.pushBack(backItem);
-    auto menu = Menu::createWithArray(MenuItems);
-    this->addChild(menu, MenuItems.size());
+    
+    Vector<MenuItem *> menuItems;
+    menuItems.pushBack(backItem);
+    auto menu = Menu::createWithArray(menuItems);
     menu->setPosition(Vec2::ZERO);
-
+    this->addChild(menu, 1);
+    
     return true;
-}
-
-void Level1Scene::menuCloseCallback(cocos2d::Ref *pSender)
-{
-    //Close the cocos2d-x game scene and quit the application
-    Director::getInstance()->end();
-
-    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() as given above,instead trigger a custom event created in RootViewController.mm as below*/
-
-    //EventCustom customEndEvent("game_scene_close_event");
-    //_eventDispatcher->dispatchEvent(&customEndEvent);
-
 }

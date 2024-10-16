@@ -8,12 +8,12 @@
 namespace towerdefence::core {
     struct ArcherPlus final : Tower {
         timer::Timer release_skill_;
-        std::unordered_set<id::Id> has_buff_;
 
         ArcherPlus(id::Id id, const timer::Clock & clk);
         ArcherPlus() = delete;
 
-        TowerInfo info() const override { return { 2800, 24, 0, 25, 3, AttackType::Physics };}
+        static constexpr TowerInfo INFO { 2800, 24, 0, 25, 3, AttackType::Physics, TowerType::ArcherPlus};
+        TowerInfo info() const override { return INFO; }
 
         void on_tick(GridRef g) override;
     };

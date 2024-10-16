@@ -12,7 +12,11 @@ GridRef Map::iterator::operator*() {
 }
 
 void Map::update() {
+    if (clock_.is_triggered(cost_timer_)) {
+        cost_++;
+    }
     clock_.on_tick();
+    this->timeouts_.on_tick(this->clock(), *this);
     for (auto ref : *this) {
         auto &grid = ref.grid;
         if (grid.tower.has_value()) {
@@ -25,17 +29,23 @@ void Map::update() {
     }
 
     for (auto ref : *this) {
+        auto &enemies = ref.grid.enemies;
+
         auto pos = std::remove_if(
-            ref.grid.enemies.begin(), ref.grid.enemies.end(),
-            [](std::unique_ptr<Enemy> &enemy) {
-                return enemy->realized_attack_ >= enemy->info().health_;
+            enemies.begin(), enemies.end(), [](std::unique_ptr<Enemy> &enemy) {
+                return enemy->realized_attack_ >= enemy->info().health_ ||
+                       enemy->remaining_distance() == 0;
             });
 
-        for (auto it = pos; it != ref.grid.enemies.end(); ++it) {
-            (*it)->on_death(ref);
+        for (auto it = pos; it != enemies.end(); ++it) {
+            auto &enemy = *it;
+            enemy->on_death(ref);
+            // unregister id from map
+            this->unregister_enemy_id(enemy->id);
         }
 
-        ref.grid.enemies.erase(pos, ref.grid.enemies.end());
+        // erase enemies before, maintaining invariance of map
+        enemies.erase(pos, enemies.end());
     }
 }
 

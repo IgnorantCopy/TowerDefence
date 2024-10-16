@@ -3,18 +3,32 @@
 
 namespace towerdefence {
     namespace core {
-
         CoreMagician::CoreMagician(id::Id id, const timer::Clock &clk)
-                : Tower(id), release_skill_(clk.with_period_sec(8)) {}
+                : Tower(id, clk), release_skill_(clk.with_period_sec(8)) {}
 
         void CoreMagician::on_tick(GridRef g) {
-            this->update_buff(g.clock());
+            Tower::on_tick(g);
+            if (g.clock().is_triggered(this->attack_)){
+                auto grids = g.with_radius(this->status().attack_radius_, linf_dis);
+                auto enemy_grid = get_enemy_grid(*this,grids);
+                if(enemy_grid!=grids.end()){
+                    if(skill){
+                        this->add_buff({this->id, Buff::DEFAULT},
+                                       Buff::attack(0.60));
+                        single_attack(*this,*enemy_grid);
+                        this->remove_buff_from(this->id);
+                        skill = false;
+                        g.on_tower_release_skill(*this, g.map, 1);
+                    }else{
+                        single_attack(*this,*enemy_grid);
+                    }
+                }
+            }
 
-            if (g.clock().is_triggered(release_skill_)) {
-                this->add_buff({this->id, Buff::DEFAULT},
-                                  Buff::inspiration_strike(0.60));
+            if (g.clock().is_triggered(release_skill_)&&!get_all_buff().silent_) {
+                skill = true;
+                g.on_tower_release_skill(*this, g.map, 1);
             }
         }
-
     } // namespace core
 } // namespace towerdefence

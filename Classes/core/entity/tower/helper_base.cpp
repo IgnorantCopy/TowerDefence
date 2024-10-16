@@ -5,15 +5,23 @@ namespace towerdefence {
     namespace core {
 
         HelperBase::HelperBase(id::Id id, const timer::Clock &clk)
-                : Tower(id), release_skill_(clk.with_period_sec(30)) {}
+                : Tower(id, clk), release_skill_(clk.with_period_sec(30)) {}
 
         void HelperBase::on_tick(GridRef g) {
-            this->update_buff(g.clock());
+            Tower::on_tick(g);
+            if (g.clock().is_triggered(this->attack_)){
+                auto grids = g.with_radius(this->status().attack_radius_, linf_dis);
+                auto enemy_grid = get_enemy_grid(*this,grids);
+                if(enemy_grid!=grids.end()){
+                    single_attack(*this,*enemy_grid);
+                }
+            }
 
-            if (g.clock().is_triggered(release_skill_)) {
+            if (g.clock().is_triggered(release_skill_)&&!get_all_buff().silent_) {
                 this->add_buff_in({this->id, Buff::DEFAULT},
                                   Buff::attack(0.20),
                                   g.clock().with_duration_sec(15));
+                g.on_tower_release_skill(*this, g.map, 15);
             }
         }
 

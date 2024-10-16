@@ -17,10 +17,16 @@
         pcre2
         mount
       ];
-      dev-deps = with pkgs; [ clang-tools just ];
+      dev-deps = with pkgs; [ (llvmPackages_19.clang-tools.override {
+          clang = clang_19.override {
+            cc = gcc14.cc;
+            useCcForLibs = true;
+          };
+          # enableLibcxx = true;
+      }) just gdb ];
     in {
       devShells.x86_64-linux.default =
-        pkgs.mkShell { packages = build-deps ++ dev-deps ++ deps; };
+        pkgs.mkShell.override { stdenv = pkgs.gcc14Stdenv; } { packages = build-deps ++ dev-deps ++ deps; };
 
       packages.x86_64-linux = {
         doc = let
@@ -58,7 +64,7 @@
           '') docs;
         };
 
-        tower-defence = pkgs.stdenv.mkDerivation rec {
+        tower-defence = pkgs.gcc14Stdenv.mkDerivation rec {
           name = "tower-defence";
           src = ./.;
           buildInputs = deps;

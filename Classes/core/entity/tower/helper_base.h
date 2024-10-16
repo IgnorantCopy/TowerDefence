@@ -8,12 +8,12 @@
 namespace towerdefence::core {
     struct HelperBase final : Tower {
         timer::Timer release_skill_;
-        std::unordered_set<id::Id> has_buff_;
 
         HelperBase(id::Id id, const timer::Clock & clk);
         HelperBase() = delete;
 
-        TowerInfo info() const override { return { 250, 5, 25, 18, 2, AttackType::Magic }; }
+        static constexpr TowerInfo INFO { 250, 5, 25, 18, 2, AttackType::Magic, TowerType::HelperBase};
+        TowerInfo info() const override { return INFO; }
 
         void on_tick(GridRef g) override;
     };

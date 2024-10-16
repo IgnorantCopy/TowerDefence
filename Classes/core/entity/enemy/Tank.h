@@ -8,8 +8,10 @@ namespace towerdefence {
 
         struct Tank final : Enemy {
 
+            Tank(id::Id id, route::Route route): Enemy(id, route) {}
+
             EnemyInfo info() const override {
-                return { 10000, { 300, 40 }, 5 };
+                return { 10000, { 300, 40 }, 5, EnemyType::Tank, 36};
             }
         };
     } // namespace core

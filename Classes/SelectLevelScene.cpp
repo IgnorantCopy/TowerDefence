@@ -1,6 +1,10 @@
 #include "SelectLevelScene.h"
 #include "Level1Scene.h"
+#include "Level2Scene.h"
+#include "Level3Scene.h"
 #include "ui/CocosGUI.h"
+#include "HelloWorldScene.h"
+#include "cocostudio/SimpleAudioEngine.h"
 
 USING_NS_CC;
 
@@ -13,7 +17,7 @@ Scene* SelectLevelScene::createScene()
 static void problemLoading(const char* filename)
 {
     printf("Error while loading: %s\n", filename);
-    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
+    printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in SelectLevelScene.cpp\n");
 }
 
 bool SelectLevelScene::init()
@@ -24,6 +28,9 @@ bool SelectLevelScene::init()
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    
+    // add bgm
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
 
     auto closeItem = MenuItemImage::create(
             "CloseNormal.png",
@@ -53,53 +60,93 @@ bool SelectLevelScene::init()
     auto backItem=MenuItemLabel::create(
             Back,
             [this](Ref *ref){
-                Director::getInstance()->popSceneWithTransition<TransitionCrossFade>(0.4f);
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, HelloWorld::createScene()));
             }
     );
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
                                origin.y + visibleSize.height - 50));
-
-    auto level1=MenuItemImage::create(
-            "images/locked.png",
-            "images/locked.png",
-            [this](Ref *ref){
+    
+    auto level1Button = ui::Button::create(
+            "images/level1_background_select.png",
+            "images/level1_background_select.png",
+            "images/locked.png"
+    );
+    level1Button->addTouchEventListener([this, player](Ref *pSender, ui::Widget::TouchEventType type){
+        switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                player->stopBackgroundMusic();
                 Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level1Scene::createScene()));
-            }
-    );
-    level1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800,
-                               origin.y + visibleSize.height / 2));
+                break;
+            default:
+                break;
+        }
+    });
+    level1Button->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800,
+                                        origin.y + visibleSize.height / 2));
 
-    auto level2=MenuItemImage::create(
-            "images/locked.png",
-            "images/locked.png",
-            [this](Ref *ref){
-                // TODO: fill the below code with the class level2
-                //Director::getInstance()->replaceScene(*****::createScene());
-            }
+    auto level2Button = ui::Button::create(
+            "images/level2_background_select.png",
+            "images/level2_background_select.png",
+            "images/locked.png"
     );
-    level2->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                             origin.y + visibleSize.height / 2));
+    level2Button->addTouchEventListener([this, player](Ref *pSender, ui::Widget::TouchEventType type){
+        switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                player->stopBackgroundMusic();
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level2Scene::createScene()));
+                break;
+            default:
+                break;
+        }
+    });
+    level2Button->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                                        origin.y + visibleSize.height / 2));
 
-    auto level3=MenuItemImage::create(
-            "images/locked.png",
-            "images/locked.png",
-            [this](Ref *ref){
-                // TODO: fill the below code with the class level3
-                //Director::getInstance()->replaceScene(*****::createScene());
-            }
+    auto level3Button = ui::Button::create(
+            "images/level3_background_select.png",
+            "images/level3_background_select.png",
+            "images/locked.png"
     );
-    level3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800,
-                             origin.y + visibleSize.height / 2));
+    level3Button->addTouchEventListener([this, player](Ref *pSender, ui::Widget::TouchEventType type){
+        switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                player->stopBackgroundMusic();
+                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, Level3Scene::createScene()));
+                break;
+            default:
+                break;
+        }
+    });
+    level3Button->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800,
+                                        origin.y + visibleSize.height / 2));
+
+    if (!level2Scene) {
+        level2Button->setEnabled(false);
+    }
+    if (!level3Scene) {
+        level3Button->setEnabled(false);
+    }
+    this->addChild(level1Button, 1);
+    this->addChild(level2Button, 1);
+    this->addChild(level3Button, 1);
 
     // create menu, it's an autorelease object
     Vector<MenuItem*> MenuItems;
     MenuItems.pushBack(backItem);
-    MenuItems.pushBack(level1);
-    MenuItems.pushBack(level2);
-    MenuItems.pushBack(level3);
     auto menu = Menu::createWithArray(MenuItems);
     this->addChild(menu, MenuItems.size());
     menu->setPosition(Vec2::ZERO);
+    
+    // add a mouse click event listener
+    auto mouseListener = EventListenerMouse::create();
+    mouseListener->onMouseDown = CC_CALLBACK_1(SelectLevelScene::onMouseDown, this);
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
 
     return true;
 }
@@ -114,4 +161,18 @@ void SelectLevelScene::menuCloseCallback(cocos2d::Ref *pSender)
     //EventCustom customEndEvent("game_scene_close_event");
     //_eventDispatcher->dispatchEvent(&customEndEvent);
 
+}
+
+void SelectLevelScene::onMouseDown(cocos2d::Event *event) {
+    EventMouse const* e = (EventMouse*)event;
+    float x = e->getCursorX();
+    float y = e->getCursorY();
+    
+    auto particle = ParticleSystemQuad::create("particles/mouse.plist");
+    if (particle == nullptr) {
+        problemLoading("'particles/mouse.plist'");
+    } else {
+        particle->setPosition(Vec2(x, y));
+        this->addChild(particle, 5);
+    }
 }
