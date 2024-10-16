@@ -325,7 +325,7 @@ bool Level1Scene::init() {
     this->upgradeItem1 = MenuItemLabel::create(upgradeLabel1, [this](Ref *ref) {
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
         std::unique_ptr<TowerFactoryBase> newTower;
-        auto isScaling = std::unordered_map<std::string, bool>{{"isScaling", false}};
+        auto isScaling = std::unordered_map<std::string, std::any>{{"isScaling", false}};
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         float typeX = origin.x + 350 + SIZE;
@@ -367,7 +367,7 @@ bool Level1Scene::init() {
     this->upgradeItem2 = MenuItemLabel::create(upgradeLabel2, [this](Ref *ref) {
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
         std::unique_ptr<TowerFactoryBase> newTower;
-        auto isScaling = std::unordered_map<std::string, bool>{{"isScaling", false}};
+        auto isScaling = std::unordered_map<std::string, std::any>{{"isScaling", false}};
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         float typeX = origin.x + 350 + SIZE;
@@ -409,7 +409,7 @@ bool Level1Scene::init() {
     this->upgradeItem3 = MenuItemLabel::create(upgradeLabel3, [this](Ref *ref) {
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
         std::unique_ptr<TowerFactoryBase> newTower;
-        auto isScaling = std::unordered_map<std::string, bool>{{"isScaling", false}};
+        auto isScaling = std::unordered_map<std::string, std::any>{{"isScaling", false}};
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         float typeX = origin.x + 350 + SIZE;

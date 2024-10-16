@@ -98,7 +98,7 @@ void EnemyAnimation::transport(LevelScene *levelScene, towerdefence::core::Enemy
     enemySprite->scheduleOnce([x, y, enemySprite, scaleUp](float dt) {
         enemySprite->setPosition(x, y);
         enemySprite->runAction(scaleUp);
-    }, duration, "transport");
+    }, duration, "transport" + std::to_string(EnemyAnimation::transportCounter++));
 }
 
 void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::Enemy *enemy, float duration) {
@@ -115,6 +115,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
     int indexY = (int) ((typeY - y + 0.5f * size) / size);
     
     cocos2d::ParticleSystemQuad *particle;
+    int counter = 0;
     switch (enemy->status().enemy_type_) {
         case EnemyType::AttackDown:
             prefix += "attackDown/skill/attackDown_skill";
@@ -137,7 +138,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
                         levelScene->addChild(attackDown, 4);
                         attackDown->scheduleOnce([attackDown](float dt) {
                             attackDown->removeFromParent();
-                        }, duration, "attackDown");
+                        }, duration, "attackDown" + std::to_string(i) + std::to_string(j));
                     }
                 }
             }
@@ -146,7 +147,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
                 particle->scheduleOnce([levelScene, particle, x, y](float dt) {
                     particle->setPosition(cocos2d::Vec2(x, y));
                     levelScene->addChild(particle, 2);
-                }, 0.6f, "particle");
+                }, 0.6f, "attackRing" + std::to_string(EnemyAnimation::transportCounter++));
             }
             break;
         case EnemyType::NotAttacked:
@@ -155,7 +156,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
                 if (enemySprite) {
                     enemySprite->setOpacity(255);
                 }
-            }, duration, "notAttacked");
+            }, duration, "notAttacked" + std::to_string(EnemyAnimation::notAttackedCounter++);
             return;
         case EnemyType::LifeUp:
             particle = cocos2d::ParticleSystemQuad::create("particles/green_ring.plist");
@@ -180,7 +181,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
                 levelScene->addChild(decelerate, 4);
                 decelerate->scheduleOnce([decelerate](float dt) {
                     decelerate->removeFromParent();
-                }, duration, "decelerate");
+                }, duration, "decelerate" + std::to_string(counter++));
             }
             for (int i = indexY - 2; i <= indexY + 2; i++) {
                 for (int j = indexX - 2; j <= indexX + 2; j++) {
@@ -196,7 +197,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
                         levelScene->addChild(silence, 4);
                         silence->scheduleOnce([silence](float dt) {
                             silence->removeFromParent();
-                        }, duration, "silence");
+                        }, duration, "silence" + std::to_string(i) + std::to_string(j));
                     }
                 }
             }
@@ -218,7 +219,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
                     levelScene->addChild(decelerate, 4);
                     decelerate->scheduleOnce([decelerate](float dt) {
                         decelerate->removeFromParent();
-                    }, duration, "decelerate");
+                    }, duration, "decelerate" + std::to_string(counter++));
                 }
             } else if (abs(duration - 15.0f) <= epsilon) {
                 for (int i = indexY - 2; i <= indexY + 2; i++) {
@@ -235,7 +236,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
                             levelScene->addChild(silence, 4);
                             silence->scheduleOnce([silence](float dt) {
                                 silence->removeFromParent();
-                            }, duration, "silence");
+                            }, duration, "silence" + std::to_string(i) + std::to_string(j));
                         }
                     }
                 }
@@ -407,7 +408,7 @@ void EnemyAnimation::dead(LevelScene *levelScene, towerdefence::core::Enemy *ene
                         levelScene->addChild(decelerate, 4);
                         decelerate->scheduleOnce([decelerate](float dt) {
                             decelerate->removeFromParent();
-                        }, 10.0f, "decelerate");
+                        }, 10.0f, "decelerate" + std::to_string(i) + std::to_string(j));
                     }
                 }
             }
@@ -416,7 +417,7 @@ void EnemyAnimation::dead(LevelScene *levelScene, towerdefence::core::Enemy *ene
                 particle->scheduleOnce([levelScene, particle, x, y](float dt) {
                     particle->setPosition(cocos2d::Vec2(x, y));
                     levelScene->addChild(particle, 2);
-                }, 0.4f, "particle");
+                }, 0.4f, "icyRing");
             }
             break;
         default:

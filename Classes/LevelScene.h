@@ -130,6 +130,7 @@ protected:
     cocos2d::MenuItemLabel *upgradeItem3 = nullptr;
     cocos2d::MenuItemLabel *cancelUpgradeItem = nullptr;
     
+    void addBullet(Bullet *bullet);
     
     void upgradeTower();
     
@@ -174,8 +175,6 @@ public:
     cocos2d::Sprite *getTower(Id id);
     
     cocos2d::Sprite *getEnemy(Id id);
-    
-    void addBullet(Bullet *bullet);
     
     void deleteTower(bool isReturn = true);
 };
