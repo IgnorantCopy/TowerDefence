@@ -1765,7 +1765,7 @@ void LevelScene::createEnemy() {
             }
             enemySameTimeFactories.push_back(std::move(newEnemy));
             auto newEnemySprite = Sprite::create(enemyPath);
-            newEnemySprite->setScale(0.25f);
+            newEnemySprite->setScale(enemyScale[j.second - 1]);
             newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE));
             newEnemySprite->setVisible(false);
             enemySameTime.push_back(newEnemySprite);
