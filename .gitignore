@@ -5,6 +5,7 @@ build-doc
 build-asan
 result
 *.mp4
+*.psd
 
 .vs
 .idea
