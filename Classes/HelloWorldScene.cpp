@@ -27,31 +27,29 @@
 #include "SelectLevelScene.h"
 #include "manual/manual.h"
 #include "cocostudio/SimpleAudioEngine.h"
+
 USING_NS_CC;
 
 bool firstTouch = true;
 
-Scene* HelloWorld::createScene()
-{
+Scene *HelloWorld::createScene() {
     return HelloWorld::create();
 }
 
 // Print useful error message instead of segfaulting when files are not there.
-static void problemLoading(const char* filename)
-{
+static void problemLoading(const char *filename) {
     printf("Error while loading: %s\n", filename);
     printf("Depending on how you compiled you might have to add 'Resources/' in front of filenames in HelloWorldScene.cpp\n");
 }
 
 // on "init" you need to initialize your instance
-bool HelloWorld::init()
-{
+bool HelloWorld::init() {
     //////////////////////////////
     // 1. super init first
-    if ( !Scene::init() ) {
+    if (!Scene::init()) {
         return false;
     }
-    
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -65,40 +63,41 @@ bool HelloWorld::init()
 
     // add a "close" icon to exit the progress. it's an autorelease object
     auto closeItem = MenuItemImage::create(
-                                           "CloseNormal.png",
-                                           "CloseSelected.png",
-                                           CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
+            "CloseNormal.png",
+            "CloseSelected.png",
+            CC_CALLBACK_1(HelloWorld::menuCloseCallback, this));
 
     if (closeItem == nullptr ||
         closeItem->getContentSize().width <= 0 ||
         closeItem->getContentSize().height <= 0) {
         problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
     } else {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
-        float y = origin.y + closeItem->getContentSize().height/2;
-        closeItem->setPosition(Vec2(x,y));
+        float x = origin.x + visibleSize.width - closeItem->getContentSize().width / 2;
+        float y = origin.y + closeItem->getContentSize().height / 2;
+        closeItem->setPosition(Vec2(x, y));
     }
 
     auto labelPlay = Label::createWithTTF("Play", "fonts/Bender/BENDER.OTF", 100);
-    auto playItem =  MenuItemLabel::create(
+    auto playItem = MenuItemLabel::create(
             labelPlay,
-            [this](Ref *ref){
-                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.5f, SelectLevelScene::createScene()));
+            [this](Ref *ref) {
+                Director::getInstance()->replaceScene(
+                        TransitionCrossFade::create(0.5f, SelectLevelScene::createScene()));
             }
     );
     playItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
                                origin.y + visibleSize.height / 2));
-    
+
     auto labelManual = Label::createWithTTF("Manual", "fonts/Bender/BENDER.OTF", 100);
     auto manualItem = MenuItemLabel::create(
             labelManual,
-            [this](Ref *ref){
-                Director::getInstance()->replaceScene(TransitionCrossFade::create(0.5f, manual::createScene()));
+            [this](Ref *ref) {
+                Director::getInstance()->pushScene(TransitionTurnOffTiles::create(0.5f, manual::createScene()));
             }
     );
     manualItem->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                               origin.y + visibleSize.height / 2 - 200));
-    
+                                 origin.y + visibleSize.height / 2 - 200));
+
     auto labelQuit = Label::createWithTTF("Quit", "fonts/Bender/BENDER.OTF", 100);
     auto quitItem = MenuItemLabel::create(
             labelQuit,
@@ -148,16 +147,16 @@ bool HelloWorld::init()
             background->runAction(fadeIn);
         }
     }
-    
+
     // create menu, it's an autorelease object
-    Vector<MenuItem*> MenuItems;
+    Vector<MenuItem *> MenuItems;
     MenuItems.pushBack(playItem);
     MenuItems.pushBack(quitItem);
     MenuItems.pushBack(manualItem);
     auto menu = Menu::createWithArray(MenuItems);
     this->addChild(menu, 2);
     menu->setPosition(Vec2::ZERO);
-    
+
     // animation for menu
     if (firstTouch) {
         menu->setVisible(false);
@@ -174,18 +173,17 @@ bool HelloWorld::init()
     if (firstTouch) {
         firstTouch = false;
     }
-    
+
     // add a mouse click event listener
     auto mouseListener = EventListenerMouse::create();
     mouseListener->onMouseDown = CC_CALLBACK_1(HelloWorld::onMouseDown, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
-    
+
     return true;
 }
 
 
-void HelloWorld::menuCloseCallback(Ref* pSender)
-{
+void HelloWorld::menuCloseCallback(Ref *pSender) {
     //Close the cocos2d-x game scene and quit the application
     Director::getInstance()->end();
 
@@ -197,10 +195,10 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 }
 
 void HelloWorld::onMouseDown(cocos2d::Event *event) {
-    EventMouse const* e = (EventMouse*)event;
+    EventMouse const *e = (EventMouse *) event;
     float x = e->getCursorX();
     float y = e->getCursorY();
-    
+
     auto particle = ParticleSystemQuad::create("particles/mouse.plist");
     if (particle == nullptr) {
         problemLoading("'particles/mouse.plist'");

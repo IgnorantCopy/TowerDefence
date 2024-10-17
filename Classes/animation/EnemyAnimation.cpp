@@ -64,13 +64,13 @@ void EnemyAnimation::move(LevelScene *levelScene, towerdefence::core::Enemy *ene
     Id id = enemy->id;
     auto enemySprite = levelScene->getEnemy(id);
     enemySprite->setTexture(prefix + movePath);
-    
+
     if (abs((int) currentPos.first - (int) targetPos.first) + abs((int) currentPos.second - (int) targetPos.second) >
         1) {
         EnemyAnimation::transport(levelScene, enemy, currentPos, targetPos);
         return;
     }
-    
+
     float delta = (float) enemy->status().speed_ / 10.0f * size / 30.0f;
     if (currentPos.first < targetPos.first) {
         enemySprite->setPositionY(enemySprite->getPositionY() - delta);
@@ -93,12 +93,12 @@ void EnemyAnimation::transport(LevelScene *levelScene, towerdefence::core::Enemy
     auto scaleDown = cocos2d::ScaleTo::create(duration, 0.1f);
     auto scaleUp = cocos2d::ScaleTo::create(duration, 1.0f);
     enemySprite->runAction(scaleDown);
-    
+
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
     float x = origin.x + 350 + size * targetPos.second;
     float y = origin.y + visibleSize.height - size * targetPos.first;
-    
+
     enemySprite->scheduleOnce([x, y, enemySprite, scaleUp](float dt) {
         enemySprite->setPosition(x, y);
         enemySprite->runAction(scaleUp);
@@ -117,7 +117,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
     float y = enemySprite->getPositionY();
     int indexX = (int) ((x - typeX + 0.5f * size) / size);
     int indexY = (int) ((typeY - y + 0.5f * size) / size);
-    
+
     cocos2d::ParticleSystemQuad *particle;
     int counter = 0;
     switch (enemy->status().enemy_type_) {
@@ -130,19 +130,21 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
             }
             for (int i = indexY - 2; i <= indexY + 2; i++) {
                 for (int j = indexX - 2; j <= indexX + 2; j++) {
-                    auto &grid = levelScene->map->get_ref(i, j).grid;
-                    if (i >= 0 && i < 7 && j >= 0 && j < 12 && isInRange(indexX, indexY, j, i, 2) &&
-                        grid.type == Grid::Type::BlockTower && grid.tower.has_value()) {
-                        auto &tower = grid.tower.value();
-                        auto towerSprite = levelScene->getTower(tower->id);
-                        float towerX = towerSprite->getPositionX();
-                        float towerY = towerSprite->getPositionY();
-                        cocos2d::Sprite *attackDown = cocos2d::Sprite::create("images/towers/attack_down.png");
-                        attackDown->setPosition(cocos2d::Vec2(towerX - 40, towerY));
-                        levelScene->addChild(attackDown, 4);
-                        attackDown->scheduleOnce([attackDown](float dt) {
-                            attackDown->removeFromParent();
-                        }, duration, "attackDown" + std::to_string(i) + std::to_string(j));
+                    if (i >= 0 && i < 7 && j >= 0 && j < 12) {
+                        auto &grid = levelScene->map->get_ref(i, j).grid;
+                        if (isInRange(indexX, indexY, j, i, 2) &&
+                            grid.type == Grid::Type::BlockTower && grid.tower.has_value()) {
+                            auto &tower = grid.tower.value();
+                            auto towerSprite = levelScene->getTower(tower->id);
+                            float towerX = towerSprite->getPositionX();
+                            float towerY = towerSprite->getPositionY();
+                            cocos2d::Sprite *attackDown = cocos2d::Sprite::create("images/towers/attack_down.png");
+                            attackDown->setPosition(cocos2d::Vec2(towerX - 40, towerY));
+                            levelScene->addChild(attackDown, 4);
+                            attackDown->scheduleOnce([attackDown](float dt) {
+                                attackDown->removeFromParent();
+                            }, duration, "attackDown" + std::to_string(i) + std::to_string(j));
+                        }
                     }
                 }
             }
@@ -189,20 +191,23 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
             }
             for (int i = indexY - 2; i <= indexY + 2; i++) {
                 for (int j = indexX - 2; j <= indexX + 2; j++) {
-                    auto &grid = levelScene->map->get_ref(i, j).grid;
-                    if (i >= 0 && i < 7 && j >= 0 && j < 12 && grid.type == Grid::Type::BlockTower &&
-                        grid.tower.has_value()) {
-                        auto &tower = grid.tower.value();
-                        auto towerSprite = levelScene->getTower(tower->id);
-                        float towerX = towerSprite->getPositionX();
-                        float towerY = towerSprite->getPositionY();
-                        cocos2d::Sprite *silence = cocos2d::Sprite::create("images/towers/silence.png");
-                        silence->setPosition(cocos2d::Vec2(towerX - 40, towerY - 40));
-                        levelScene->addChild(silence, 4);
-                        silence->scheduleOnce([silence](float dt) {
-                            silence->removeFromParent();
-                        }, duration, "silence" + std::to_string(i) + std::to_string(j));
+                    if (i >= 0 && i < 7 && j >= 0 && j < 12) {
+                        auto &grid = levelScene->map->get_ref(i, j).grid;
+                        if (grid.type == Grid::Type::BlockTower && grid.tower.has_value() &&
+                            isInRange(indexX, indexY, j, i, 2)) {
+                            auto &tower = grid.tower.value();
+                            auto towerSprite = levelScene->getTower(tower->id);
+                            float towerX = towerSprite->getPositionX();
+                            float towerY = towerSprite->getPositionY();
+                            cocos2d::Sprite *silence = cocos2d::Sprite::create("images/towers/silence.png");
+                            silence->setPosition(cocos2d::Vec2(towerX - 40, towerY - 40));
+                            levelScene->addChild(silence, 4);
+                            silence->scheduleOnce([silence](float dt) {
+                                silence->removeFromParent();
+                            }, duration, "silence" + std::to_string(i) + std::to_string(j));
+                        }
                     }
+
                 }
             }
             break;
@@ -228,19 +233,21 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene, towerdefence::core::En
             } else if (abs(duration - 15.0f) <= epsilon) {
                 for (int i = indexY - 2; i <= indexY + 2; i++) {
                     for (int j = indexX - 2; j <= indexX + 2; j++) {
-                        auto &grid = levelScene->map->get_ref(i, j).grid;
-                        if (i >= 0 && i < 7 && j >= 0 && j < 12 && grid.type == Grid::Type::BlockTower &&
-                            grid.tower.has_value()) {
-                            auto &tower = grid.tower.value();
-                            auto towerSprite = levelScene->getTower(tower->id);
-                            float towerX = towerSprite->getPositionX();
-                            float towerY = towerSprite->getPositionY();
-                            cocos2d::Sprite *silence = cocos2d::Sprite::create("images/towers/silence.png");
-                            silence->setPosition(cocos2d::Vec2(towerX - 40, towerY - 40));
-                            levelScene->addChild(silence, 4);
-                            silence->scheduleOnce([silence](float dt) {
-                                silence->removeFromParent();
-                            }, duration, "silence" + std::to_string(i) + std::to_string(j));
+                        if (i >= 0 && i < 7 && j >= 0 && j < 12) {
+                            auto &grid = levelScene->map->get_ref(i, j).grid;
+                            if (grid.type == Grid::Type::BlockTower && grid.tower.has_value() &&
+                                isInRange(indexX, indexY, j, i, 2)) {
+                                auto &tower = grid.tower.value();
+                                auto towerSprite = levelScene->getTower(tower->id);
+                                float towerX = towerSprite->getPositionX();
+                                float towerY = towerSprite->getPositionY();
+                                cocos2d::Sprite *silence = cocos2d::Sprite::create("images/towers/silence.png");
+                                silence->setPosition(cocos2d::Vec2(towerX - 40, towerY - 40));
+                                levelScene->addChild(silence, 4);
+                                silence->scheduleOnce([silence](float dt) {
+                                    silence->removeFromParent();
+                                }, duration, "silence" + std::to_string(i) + std::to_string(j));
+                            }
                         }
                     }
                 }
@@ -292,7 +299,7 @@ void EnemyAnimation::dead(LevelScene *levelScene, towerdefence::core::Enemy *ene
     float y = enemySprite->getPositionY();
     int indexX = (int) ((x - typeX + 0.5f * size) / size);
     int indexY = (int) ((typeY - y + 0.5f * size) / size);
-    
+
     cocos2d::ParticleSystemQuad *particle;
     switch (enemy->status().enemy_type_) {
         case EnemyType::AttackDown:
@@ -400,19 +407,20 @@ void EnemyAnimation::dead(LevelScene *levelScene, towerdefence::core::Enemy *ene
             }
             for (int i = indexY - 1; i <= indexY + 1; i++) {
                 for (int j = indexX - 1; j <= indexX + 1; j++) {
-                    auto &grid = levelScene->map->get_ref(i, j).grid;
-                    if (i >= 0 && i < 7 && j >= 0 && j < 12 && grid.type == Grid::Type::BlockTower &&
-                        grid.tower.has_value()) {
-                        auto &tower = grid.tower.value();
-                        auto towerSprite = levelScene->getTower(tower->id);
-                        float towerX = towerSprite->getPositionX();
-                        float towerY = towerSprite->getPositionY();
-                        cocos2d::Sprite *decelerate = cocos2d::Sprite::create("images/towers/ice.png");
-                        decelerate->setPosition(cocos2d::Vec2(towerX - 40, towerY + 40));
-                        levelScene->addChild(decelerate, 4);
-                        decelerate->scheduleOnce([decelerate](float dt) {
-                            decelerate->removeFromParent();
-                        }, 10.0f, "decelerate" + std::to_string(i) + std::to_string(j));
+                    if (i >= 0 && i < 7 && j >= 0 && j < 12) {
+                        auto &grid = levelScene->map->get_ref(i, j).grid;
+                        if (grid.type == Grid::Type::BlockTower && grid.tower.has_value()) {
+                            auto &tower = grid.tower.value();
+                            auto towerSprite = levelScene->getTower(tower->id);
+                            float towerX = towerSprite->getPositionX();
+                            float towerY = towerSprite->getPositionY();
+                            cocos2d::Sprite *decelerate = cocos2d::Sprite::create("images/towers/ice.png");
+                            decelerate->setPosition(cocos2d::Vec2(towerX - 40, towerY + 40));
+                            levelScene->addChild(decelerate, 4);
+                            decelerate->scheduleOnce([decelerate](float dt) {
+                                decelerate->removeFromParent();
+                            }, 10.0f, "decelerate" + std::to_string(i) + std::to_string(j));
+                        }
                     }
                 }
             }
