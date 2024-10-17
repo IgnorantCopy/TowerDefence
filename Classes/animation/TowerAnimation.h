@@ -18,7 +18,7 @@ using towerdefence::core::id::Id;
 class LevelScene;
 
 class Bullet {
-protected:
+  protected:
     cocos2d::Sprite *bullet;
     Tower *tower;
     Enemy *enemy;
@@ -26,11 +26,11 @@ protected:
     float dx;
     float dy;
     float angle;
-    const float speed = 10;
+    const float speed = 5.0f;
     bool isScaling = false;
     bool isExploding = false;
 
-public:
+  public:
     Bullet(LevelScene *levelScene, Tower *tower, Enemy *enemy);
 
     cocos2d::Sprite *getBullet() const { return bullet; }
@@ -49,7 +49,7 @@ class MagicBullet : public Bullet {
     int currentFrame = 0;
     std::string color;
 
-public:
+  public:
     MagicBullet(LevelScene *levelScene, Tower *tower, Enemy *enemy);
 
     void move() override;
@@ -62,7 +62,7 @@ class TowerAnimation {
     constexpr const static float size = 140.0f;
     static size_t removeCounter;
 
-public:
+  public:
     static void releaseSkill(LevelScene *levelScene, Tower *tower,
                              float duration);
 };

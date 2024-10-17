@@ -1750,7 +1750,7 @@ void LevelScene::createEnemy() {
             newEnemySprite->setVisible(false);
             enemySameTime.push_back(newEnemySprite);
             if (particle) {
-                newEnemySprite->addChild(particle, 4);
+                newEnemySprite->addChild(particle, 6);
                 schedule(
                     [particle, newEnemySprite](float dt) {
                         particle->setPosition(newEnemySprite->getPosition());

@@ -17,6 +17,7 @@ void EnemyAnimation::move(LevelScene *levelScene,
                           std::pair<size_t, size_t> currentPos,
                           std::pair<size_t, size_t> targetPos) {
     std::string prefix = "images/enemies/";
+
     switch (enemy->status().enemy_type_) {
     case EnemyType::AttackDown:
         prefix += "attackDown/move/attackDown_move";
@@ -60,12 +61,7 @@ void EnemyAnimation::move(LevelScene *levelScene,
     default:
         break;
     }
-    int currentFrame = enemy->get_storage<int>("current_frame");
-    std::string movePath = std::format("{:02d}.png", currentFrame);
-    enemy->set_storage<int>("current_frame", (currentFrame + 1) % enemy->status().total_frames_);
-    Id id = enemy->id;
-    auto enemySprite = levelScene->getEnemy(id);
-    enemySprite->setTexture(prefix + movePath);
+    auto enemySprite = levelScene->getEnemy(enemy->id);
 
     if (abs((int)currentPos.first - (int)targetPos.first) +
             abs((int)currentPos.second - (int)targetPos.second) >
@@ -75,18 +71,37 @@ void EnemyAnimation::move(LevelScene *levelScene,
     }
 
     float delta = (float)enemy->status().speed_ / 10.0f * size / 30.0f;
+    cocos2d::MoveBy *moveX = nullptr;
+    cocos2d::MoveBy *moveY = nullptr;
     if (currentPos.first < targetPos.first) {
-        enemySprite->setPositionY(enemySprite->getPositionY() - delta);
+        moveY = cocos2d::MoveBy::create(1.0f / 30, cocos2d::Vec2(0, -delta));
     } else if (currentPos.first > targetPos.first) {
-        enemySprite->setPositionY(enemySprite->getPositionY() + delta);
+        moveY = cocos2d::MoveBy::create(1.0f / 30, cocos2d::Vec2(0, delta));
+    } else {
+        moveY = cocos2d::MoveBy::create(1.0f / 30, cocos2d::Vec2(0, 0));
     }
     if (currentPos.second < targetPos.second) {
-        enemySprite->setPositionX(enemySprite->getPositionX() + delta);
+        moveX = cocos2d::MoveBy::create(1.0f / 30, cocos2d::Vec2(delta, 0));
         enemySprite->setFlippedX(false);
     } else if (currentPos.second > targetPos.second) {
-        enemySprite->setPositionX(enemySprite->getPositionX() - delta);
+        moveX = cocos2d::MoveBy::create(1.0f / 30, cocos2d::Vec2(-delta, 0));
         enemySprite->setFlippedX(true);
+    } else {
+        moveX = cocos2d::MoveBy::create(1.0f / 30, cocos2d::Vec2(0, 0));
     }
+    auto move = cocos2d::Spawn::create(moveX, moveY, nullptr);
+    auto callback = cocos2d::CallFunc::create([enemy, enemySprite, prefix]() {
+        int currentFrame = enemy->get_storage<int>("current_frame");
+        std::string movePath = std::format("{:02d}.png", currentFrame);
+        enemy->set_storage<int>("current_frame",
+                                (currentFrame + 1) %
+                                    enemy->status().total_frames_);
+        enemySprite->setTexture(prefix + movePath);
+    });
+    auto seqBase = cocos2d::Sequence::create(move, callback, nullptr);
+    int numOfSeqs = (int)(size / delta);
+    auto seq = cocos2d::Repeat::create(seqBase, numOfSeqs);
+    enemySprite->runAction(seq);
 }
 
 void EnemyAnimation::transport(LevelScene *levelScene,
@@ -94,23 +109,18 @@ void EnemyAnimation::transport(LevelScene *levelScene,
                                std::pair<size_t, size_t> currentPos,
                                std::pair<size_t, size_t> targetPos) {
     auto enemySprite = levelScene->getEnemy(enemy->id);
-    float duration = 1.0f / ((float)enemy->status().speed_ / 10.0f) / 2.0f;
+    float duration = 1.0f / ((float)enemy->status().speed_ / 10.0f) / 4.0f;
     auto scaleDown = cocos2d::ScaleTo::create(duration, 0.1f);
-    auto scaleUp = cocos2d::ScaleTo::create(duration, 1.0f);
-    enemySprite->runAction(scaleDown);
+    auto scaleUp = cocos2d::ScaleTo::create(duration, 0.25f);
 
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
-    float x = origin.x + 350 + size * targetPos.second;
-    float y = origin.y + visibleSize.height - size * targetPos.first;
-
-    enemySprite->scheduleOnce(
-        [x, y, enemySprite, scaleUp](float dt) {
-            enemySprite->setPosition(x, y);
-            enemySprite->runAction(scaleUp);
-        },
-        duration,
-        "transport" + std::to_string(EnemyAnimation::transportCounter++));
+    float x = origin.x + 350 + size * (targetPos.second + 1);
+    float y = origin.y + visibleSize.height - size * (targetPos.first + 1);
+    auto callback = cocos2d::CallFunc::create(
+        [enemySprite, x, y]() { enemySprite->setPosition(x, y); });
+    auto seq = cocos2d::Sequence::create(scaleDown, callback, scaleUp, nullptr);
+    enemySprite->runAction(seq);
 }
 
 void EnemyAnimation::releaseSkill(LevelScene *levelScene,
@@ -512,5 +522,6 @@ void EnemyAnimation::dead(LevelScene *levelScene,
     auto remove = cocos2d::RemoveSelf::create(true);
     auto seq =
         cocos2d::Sequence::create(animate, delay, fadeOut, remove, nullptr);
+    enemySprite->stopAllActions();
     enemySprite->runAction(seq);
 }
