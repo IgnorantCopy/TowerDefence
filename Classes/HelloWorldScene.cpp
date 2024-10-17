@@ -52,7 +52,7 @@ bool HelloWorld::init() {
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
-    
+
     if (firstTouch) {
         // add bgm
         auto player = CocosDenshion::SimpleAudioEngine::getInstance();
