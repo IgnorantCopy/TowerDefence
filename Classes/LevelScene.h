@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "ui/CocosGUI.h"
+#include "cocostudio/SimpleAudioEngine.h"
 #include "animation/TowerAnimation.h"
 #include "core/map.h"
 #include "core/timer.h"
@@ -137,6 +138,9 @@ protected:
     cocos2d::MenuItemLabel *upgradeItem3 = nullptr;
     cocos2d::MenuItemLabel *cancelUpgradeItem = nullptr;
 
+    // music player
+    CocosDenshion::SimpleAudioEngine *player = nullptr;
+
     void addBullet(Tower *tower, Enemy *enemy);
 
     void upgradeTower();
@@ -154,6 +158,10 @@ protected:
     void showTowerInfo(float x, float y);
 
     void hideTowerInfo(float x, float y);
+
+    bool gameContinuing = true;
+    bool Win = false;
+    void gameOver(bool isWin);
 
 public:
     // the map of each level
