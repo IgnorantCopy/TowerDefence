@@ -102,7 +102,7 @@ bool LevelScene::init(int level) {
     std::string backgroundImage = "images/level" + std::to_string(level) + "_background.png";
     auto background = Sprite::create(backgroundImage, Rect(0, 0, 2500, 1500));
     if (background == nullptr) {
-        switch(level) {
+        switch (level) {
         case 1:
             problemLoading("'images/level1_background.png'");
             break;
@@ -143,16 +143,18 @@ bool LevelScene::init(int level) {
         "images/towers/archer_base_inactive.png");
     this->archerBaseSelector->addTouchEventListener(
         [this](Ref *ref, ui::Widget::TouchEventType type) {
-            switch (type) {
-            case ui::Widget::TouchEventType::BEGAN:
-                this->isSelecting = 1;
-                this->selectedTower->setTexture(
-                    "images/towers/archer_base_onblock.png");
-                break;
-            case ui::Widget::TouchEventType::ENDED:
-                break;
-            default:
-                break;
+            if (this->gameContinuing) {
+                switch (type) {
+                case ui::Widget::TouchEventType::BEGAN:
+                    this->isSelecting = 1;
+                    this->selectedTower->setTexture(
+                        "images/towers/archer_base_onblock.png");
+                    break;
+                case ui::Widget::TouchEventType::ENDED:
+                    break;
+                default:
+                    break;
+                }
             }
         });
     this->archerBaseSelector->setPosition(
@@ -165,16 +167,18 @@ bool LevelScene::init(int level) {
         "images/towers/magician_base_inactive.png");
     this->magicianBaseSelector->addTouchEventListener(
         [this](Ref *ref, ui::Widget::TouchEventType type) {
-            switch (type) {
-            case ui::Widget::TouchEventType::BEGAN:
-                this->isSelecting = 2;
-                this->selectedTower->setTexture(
-                    "images/towers/magician_base_onblock.png");
-                break;
-            case ui::Widget::TouchEventType::ENDED:
-                break;
-            default:
-                break;
+            if (this->gameContinuing) {
+                switch (type) {
+                case ui::Widget::TouchEventType::BEGAN:
+                    this->isSelecting = 2;
+                    this->selectedTower->setTexture(
+                        "images/towers/magician_base_onblock.png");
+                    break;
+                case ui::Widget::TouchEventType::ENDED:
+                    break;
+                default:
+                    break;
+                }
             }
         });
     this->magicianBaseSelector->setPosition(
@@ -187,16 +191,18 @@ bool LevelScene::init(int level) {
         "images/towers/helper_base_inactive.png");
     this->helperBaseSelector->addTouchEventListener(
         [this](Ref *ref, ui::Widget::TouchEventType type) {
-            switch (type) {
-            case ui::Widget::TouchEventType::BEGAN:
-                this->isSelecting = 3;
-                this->selectedTower->setTexture(
-                    "images/towers/helper_base_onblock.png");
-                break;
-            case ui::Widget::TouchEventType::ENDED:
-                break;
-            default:
-                break;
+            if (gameContinuing) {
+                switch (type) {
+                case ui::Widget::TouchEventType::BEGAN:
+                    this->isSelecting = 3;
+                    this->selectedTower->setTexture(
+                        "images/towers/helper_base_onblock.png");
+                    break;
+                case ui::Widget::TouchEventType::ENDED:
+                    break;
+                default:
+                    break;
+                }
             }
         });
     this->helperBaseSelector->setPosition(
@@ -337,7 +343,7 @@ bool LevelScene::init(int level) {
         this->upgradeBackground1->setPosition(
             Vec2(origin.x + visibleSize.width / 2 - 800,
                  origin.y + visibleSize.height / 2));
-        this->addChild(this->upgradeBackground1, 5);
+        this->addChild(this->upgradeBackground1, 6);
         this->upgradeBackground1->setVisible(false);
     }
     this->upgradeBackground2 = Sprite::create("images/upgrade_background.png");
@@ -347,7 +353,7 @@ bool LevelScene::init(int level) {
         this->upgradeBackground2->setPosition(
             Vec2(origin.x + visibleSize.width / 2,
                  origin.y + visibleSize.height / 2));
-        this->addChild(this->upgradeBackground2, 5);
+        this->addChild(this->upgradeBackground2, 6);
         this->upgradeBackground2->setVisible(false);
     }
     this->upgradeBackground3 = Sprite::create("images/upgrade_background.png");
@@ -357,7 +363,7 @@ bool LevelScene::init(int level) {
         this->upgradeBackground3->setPosition(
             Vec2(origin.x + visibleSize.width / 2 + 800,
                  origin.y + visibleSize.height / 2));
-        this->addChild(this->upgradeBackground3, 5);
+        this->addChild(this->upgradeBackground3, 6);
         this->upgradeBackground3->setVisible(false);
     }
 
@@ -368,7 +374,7 @@ bool LevelScene::init(int level) {
         this->upgradeTower1->setPosition(
             Vec2(origin.x + visibleSize.width / 2 - 800,
                  origin.y + visibleSize.height / 2 + 150));
-        this->addChild(this->upgradeTower1, 6);
+        this->addChild(this->upgradeTower1, 7);
         this->upgradeTower1->setVisible(false);
     }
     this->upgradeTower2 = Sprite::create("images/towers/magician_base.png");
@@ -378,7 +384,7 @@ bool LevelScene::init(int level) {
         this->upgradeTower2->setPosition(
             Vec2(origin.x + visibleSize.width / 2,
                  origin.y + visibleSize.height / 2 + 150));
-        this->addChild(this->upgradeTower2, 6);
+        this->addChild(this->upgradeTower2, 7);
         this->upgradeTower2->setVisible(false);
     }
     this->upgradeTower3 = Sprite::create("images/towers/helper_base.png");
@@ -388,7 +394,7 @@ bool LevelScene::init(int level) {
         this->upgradeTower3->setPosition(
             Vec2(origin.x + visibleSize.width / 2 + 800,
                  origin.y + visibleSize.height / 2 + 150));
-        this->addChild(this->upgradeTower3, 6);
+        this->addChild(this->upgradeTower3, 7);
         this->upgradeTower3->setVisible(false);
     }
 
@@ -557,7 +563,7 @@ bool LevelScene::init(int level) {
     upgradeMenuItems.pushBack(this->upgradeItem3);
     upgradeMenuItems.pushBack(this->cancelUpgradeItem);
     this->upgradeMenu = Menu::createWithArray(upgradeMenuItems);
-    this->addChild(this->upgradeMenu, 6);
+    this->addChild(this->upgradeMenu, 7);
     this->upgradeMenu->setPosition(Vec2::ZERO);
     this->upgradeMenu->setVisible(false);
 
@@ -666,8 +672,12 @@ void LevelScene::updateMoneyLabel() {
 void LevelScene::decreaseLife() {
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
-    if (this->map->health_ <= 0) {
-
+    if (this->map->health_ > 1000) {
+        this->lifeLabel->setString("0");
+        this->lifeLabel->setPosition(
+            cocos2d::Vec2(origin.x + 150,
+                          origin.y + visibleSize.height - 180));
+        this->gameOver(false);
     } else {
         this->lifeLabel->setString(std::to_string(this->map->health_));
         this->lifeLabel->setPosition(
@@ -778,7 +788,7 @@ void LevelScene::showTowerInfo(float x, float y) {
                 this->map->get_ref(indexY, indexX).grid.tower.value()->id;
             this->selectedTowerId = towerId;
             Sprite *towerSprite = this->getTower(towerId);
-            if (towerSprite) {
+            if (towerSprite && gameContinuing) {
                 float towerX = towerSprite->getPositionX();
                 float towerY = towerSprite->getPositionY();
 
@@ -1778,21 +1788,63 @@ void LevelScene::createEnemy() {
     this->map->enemy_alive = enemyNumber;
     for (size_t i = 0; i < enemyCreateType.size(); i++) {
         scheduleOnce([this, i](float dt) {
-            for(size_t j = 0; j < enemyCreateType[i].size(); j++) {
-                if (enemyFirstDir[enemyCreateType[i][j].first - 1] == L) {
-                    enemySprites[i][j]->setFlippedX(true);
-                    enemySprites[i][j]->setFlippedY(false);
+            if (gameContinuing) {
+                for (size_t j = 0; j < enemyCreateType[i].size(); j++) {
+                    if (enemyFirstDir[enemyCreateType[i][j].first - 1] == L) {
+                        enemySprites[i][j]->setFlippedX(true);
+                        enemySprites[i][j]->setFlippedY(false);
+                    }
+                    if (gameContinuing) {
+                        enemySprites[i][j]->setVisible(true);
+                        enemySprites[i][j]->setOpacity(0);
+                        auto fadeIn = FadeIn::create(0.5f);
+                        enemySprites[i][j]->runAction(fadeIn);
+                        scheduleOnce([this, i, j](float dt) {
+                            enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i][j].first,enemyPos[i][j].second,
+                                                                           *enemyFactories[i][j]), enemySprites[i][j]);
+                        }, 0.5f, "AddEnemyToMap" + std::to_string(i) + std::to_string(j));
+                    }
                 }
-                enemySprites[i][j]->setVisible(true);
-                enemySprites[i][j]->setOpacity(0);
-                auto fadeIn = FadeIn::create(0.5f);
-                enemySprites[i][j]->runAction(fadeIn);
-                scheduleOnce([this, i, j](float dt) {
-                    enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i][j].first,enemyPos[i][j].second,
-                                                                   *enemyFactories[i][j]), enemySprites[i][j]);
-                }, 0.5f, "AddEnemyToMap" + std::to_string(i) + std::to_string(j));
             }
         }, enemyCreateTime[i] - 0.5f, "createEnemy" + std::to_string(i));
+    }
+}
+
+void LevelScene::gameOver(bool isWin) {
+    this->gameContinuing = false;
+    unschedule("update");
+    isSelecting = 0;
+    archerBaseSelector->setEnabled(true);
+    magicianBaseSelector->setEnabled(true);
+    helperBaseSelector->setEnabled(true);
+    if (selectedTower != nullptr) {
+        selectedTower->setVisible(false);
+    }
+    if (upgradeMenu != nullptr) {
+        upgradeMenu->setVisible(false);
+    }
+    if (deleteButton != nullptr) {
+        deleteButton->setVisible(false);
+        upgradeButton->setVisible(false);
+        towerInfoButton->setVisible(false);
+        skillButton->setVisible(false);
+    }
+    if (upgradeBackground1 != nullptr) {
+        upgradeBackground1->setVisible(false);
+        upgradeBackground2->setVisible(false);
+        upgradeBackground3->setVisible(false);
+        upgradeTower1->setVisible(false);
+        upgradeTower2->setVisible(false);
+        upgradeTower3->setVisible(false);
+        upgradeItem1->setVisible(false);
+        upgradeItem2->setVisible(false);
+        upgradeItem3->setVisible(false);
+        cancelUpgradeItem->setVisible(false);
+    }
+    if (isWin) {
+        // TODO: win
+    } else {
+        // TODO: lose
     }
 }
 

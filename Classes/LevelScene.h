@@ -155,6 +155,9 @@ protected:
 
     void hideTowerInfo(float x, float y);
 
+    bool gameContinuing = true;
+    void gameOver(bool isWin);
+
 public:
     // the map of each level
     Map *map = nullptr;
