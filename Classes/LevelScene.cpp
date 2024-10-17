@@ -99,10 +99,11 @@ bool LevelScene::init(int level) {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     // add background
-    std::string backgroundImage = "images/level" + std::to_string(level) + "_background.png";
+    std::string backgroundImage =
+        "images/level" + std::to_string(level) + "_background.png";
     auto background = Sprite::create(backgroundImage, Rect(0, 0, 2500, 1500));
     if (background == nullptr) {
-        switch(level) {
+        switch (level) {
         case 1:
             problemLoading("'images/level1_background.png'");
             break;
@@ -116,7 +117,8 @@ bool LevelScene::init(int level) {
             break;
         }
     } else {
-        background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+        background->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                                     origin.y + visibleSize.height / 2));
         this->addChild(background, 0);
     }
 
@@ -337,7 +339,7 @@ bool LevelScene::init(int level) {
         this->upgradeBackground1->setPosition(
             Vec2(origin.x + visibleSize.width / 2 - 800,
                  origin.y + visibleSize.height / 2));
-        this->addChild(this->upgradeBackground1, 5);
+        this->addChild(this->upgradeBackground1, 6);
         this->upgradeBackground1->setVisible(false);
     }
     this->upgradeBackground2 = Sprite::create("images/upgrade_background.png");
@@ -347,7 +349,7 @@ bool LevelScene::init(int level) {
         this->upgradeBackground2->setPosition(
             Vec2(origin.x + visibleSize.width / 2,
                  origin.y + visibleSize.height / 2));
-        this->addChild(this->upgradeBackground2, 5);
+        this->addChild(this->upgradeBackground2, 6);
         this->upgradeBackground2->setVisible(false);
     }
     this->upgradeBackground3 = Sprite::create("images/upgrade_background.png");
@@ -357,7 +359,7 @@ bool LevelScene::init(int level) {
         this->upgradeBackground3->setPosition(
             Vec2(origin.x + visibleSize.width / 2 + 800,
                  origin.y + visibleSize.height / 2));
-        this->addChild(this->upgradeBackground3, 5);
+        this->addChild(this->upgradeBackground3, 6);
         this->upgradeBackground3->setVisible(false);
     }
 
@@ -1086,6 +1088,8 @@ void LevelScene::upgradeTower() {
     int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
     std::string path;
     std::unique_ptr<TowerFactoryBase> newTower;
+    auto isScaling =
+        std::unordered_map<std::string, std::any>{{"isScaling", false}};
     switch (this->map->get_ref(indexY, indexX)
                 .grid.tower.value()
                 ->status()
@@ -1124,39 +1128,45 @@ void LevelScene::upgradeTower() {
         return;
     case TowerType::Archer:
         path = "images/towers/archer_pro.png";
-        newTower = std::make_unique<TowerFactory<ArcherPlus>>();
+        newTower = std::make_unique<TowerFactory<ArcherPlus>>(isScaling);
         break;
     case TowerType::Bomber:
         path = "images/towers/bomber_pro.png";
-        newTower = std::make_unique<TowerFactory<BomberPlus>>();
+        newTower = std::make_unique<TowerFactory<BomberPlus>>(isScaling);
         break;
     case TowerType::CoreMagician:
         path = "images/towers/core_magician_pro.png";
-        newTower = std::make_unique<TowerFactory<CoreMagicianPlus>>();
+        newTower = std::make_unique<TowerFactory<CoreMagicianPlus>>(isScaling);
         break;
     case TowerType::DecelerateMagician:
         path = "images/towers/decelerate_magician_pro.png";
-        newTower = std::make_unique<TowerFactory<DecelerateMagicianPlus>>();
+        newTower =
+            std::make_unique<TowerFactory<DecelerateMagicianPlus>>(isScaling);
         break;
     case TowerType::DiffusiveMagician:
         path = "images/towers/diffusive_magician_pro.png";
-        newTower = std::make_unique<TowerFactory<DiffusiveMagicianPlus>>();
+        newTower =
+            std::make_unique<TowerFactory<DiffusiveMagicianPlus>>(isScaling);
         break;
     case TowerType::HighspeedArcher:
         path = "images/towers/highspeed_archer_pro.png";
-        newTower = std::make_unique<TowerFactory<HighspeedArcherPlus>>();
+        newTower =
+            std::make_unique<TowerFactory<HighspeedArcherPlus>>(isScaling);
         break;
     case TowerType::SpecialMagician:
         path = "images/towers/special_magician_pro.png";
-        newTower = std::make_unique<TowerFactory<SpecialMagicianPlus>>();
+        newTower =
+            std::make_unique<TowerFactory<SpecialMagicianPlus>>(isScaling);
         break;
     case TowerType::WeakenMagician:
         path = "images/towers/weaken_magician_pro.png";
-        newTower = std::make_unique<TowerFactory<WeakenMagicianPlus>>();
+        newTower =
+            std::make_unique<TowerFactory<WeakenMagicianPlus>>(isScaling);
         break;
     case TowerType::AggressiveMagician:
         path = "images/towers/aggressive_magician_pro.png";
-        newTower = std::make_unique<TowerFactory<AggressiveMagicianPlus>>();
+        newTower =
+            std::make_unique<TowerFactory<AggressiveMagicianPlus>>(isScaling);
         break;
     default:
         return;
@@ -1763,11 +1773,11 @@ void LevelScene::createEnemy() {
             enemySameTime.push_back(newEnemySprite);
             if (particle) {
                 newEnemySprite->addChild(particle, 6);
-                schedule(
-                    [particle, newEnemySprite](float dt) {
-                        particle->setPosition(newEnemySprite->getPosition());
-                    },
-                    1.0f / 30, "updateParticle");
+                //                schedule(
+                //                    [particle, newEnemySprite](float dt) {
+                //                        particle->setPosition(newEnemySprite->getPosition());
+                //                    },
+                //                    1.0f / 30, "updateParticle");
             }
             this->addChild(newEnemySprite, 5);
         }
@@ -1777,22 +1787,31 @@ void LevelScene::createEnemy() {
     }
     this->map->enemy_alive = enemyNumber;
     for (size_t i = 0; i < enemyCreateType.size(); i++) {
-        scheduleOnce([this, i](float dt) {
-            for(size_t j = 0; j < enemyCreateType[i].size(); j++) {
-                if (enemyFirstDir[enemyCreateType[i][j].first - 1] == L) {
-                    enemySprites[i][j]->setFlippedX(true);
-                    enemySprites[i][j]->setFlippedY(false);
+        scheduleOnce(
+            [this, i](float dt) {
+                for (size_t j = 0; j < enemyCreateType[i].size(); j++) {
+                    if (enemyFirstDir[enemyCreateType[i][j].first - 1] == L) {
+                        enemySprites[i][j]->setFlippedX(true);
+                        enemySprites[i][j]->setFlippedY(false);
+                    }
+                    enemySprites[i][j]->setVisible(true);
+                    enemySprites[i][j]->setOpacity(0);
+                    auto fadeIn = FadeIn::create(0.5f);
+                    enemySprites[i][j]->runAction(fadeIn);
+                    scheduleOnce(
+                        [this, i, j](float dt) {
+                            enemies.emplace_back(this->map->spawn_enemy_at(
+                                                     enemyPos[i][j].first,
+                                                     enemyPos[i][j].second,
+                                                     *enemyFactories[i][j]),
+                                                 enemySprites[i][j]);
+                        },
+                        0.5f,
+                        "AddEnemyToMap" + std::to_string(i) +
+                            std::to_string(j));
                 }
-                enemySprites[i][j]->setVisible(true);
-                enemySprites[i][j]->setOpacity(0);
-                auto fadeIn = FadeIn::create(0.5f);
-                enemySprites[i][j]->runAction(fadeIn);
-                scheduleOnce([this, i, j](float dt) {
-                    enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i][j].first,enemyPos[i][j].second,
-                                                                   *enemyFactories[i][j]), enemySprites[i][j]);
-                }, 0.5f, "AddEnemyToMap" + std::to_string(i) + std::to_string(j));
-            }
-        }, enemyCreateTime[i] - 0.5f, "createEnemy" + std::to_string(i));
+            },
+            enemyCreateTime[i] - 0.5f, "createEnemy" + std::to_string(i));
     }
 }
 
