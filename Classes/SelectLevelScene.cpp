@@ -70,6 +70,7 @@ bool SelectLevelScene::init() {
             case ui::Widget::TouchEventType::BEGAN:
                 break;
             case ui::Widget::TouchEventType::ENDED:
+                player->stopBackgroundMusic();
                 Director::getInstance()->replaceScene(
                     TransitionCrossFade::create(0.4f,
                                                 Level1Scene::createScene()));
