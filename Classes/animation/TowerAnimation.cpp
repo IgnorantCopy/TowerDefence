@@ -119,6 +119,8 @@ void Bullet::explosion() {
             [this]() { this->bullet->removeFromParent(); });
         auto seq = cocos2d::Sequence::create(animate, callback, nullptr);
         this->bullet->setScale(0.5f);
+        this->bullet->setRotation(0);
+        this->bullet->setTexture("images/bullet/bomb/bomb00.png");
         this->bullet->runAction(seq);
     } else {
         auto particle =
@@ -311,8 +313,7 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
 
     auto *skillSprite =
         cocos2d::Sprite::create("images/bullet/skill/skill00.png");
-    skillSprite->setPosition(towerSprite->getPositionX(),
-                             towerSprite->getPositionY());
+    skillSprite->setPosition(towerSprite->getPosition());
     skillSprite->setScale(0.15f);
     skillSprite->setOpacity(100);
     towerSprite->addChild(skillSprite);
@@ -361,8 +362,9 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                         isInRange(i, j, indexY, indexX, 3)) {
                         auto particle = cocos2d::ParticleSystemQuad::create(
                             "particles/fire.plist");
-                        particle->setPosition(
-                            cocos2d::Vec2(typeX + size * j, typeY - size * i));
+                        particle->setPosition(cocos2d::Vec2(
+                            typeX + size * j, typeY - size * i - 70));
+                        particle->setScale(0.25f);
                         levelScene->addChild(particle, 4);
                         particle->scheduleOnce(
                             [particle](float dt) {
@@ -393,6 +395,7 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                             "particles/weaken.plist");
                         particle->setPosition(
                             cocos2d::Vec2(typeX + size * j, typeY - size * i));
+                        particle->setScale(0.25f);
                         levelScene->addChild(particle, 4);
                         particle->scheduleOnce(
                             [particle](float dt) {
@@ -447,7 +450,7 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                         auto attackUp = cocos2d::Sprite::create(
                             "images/towers/attack_up.png");
                         attackUp->setPosition(cocos2d::Vec2(
-                            typeX + size * j + 40, typeY - size * i));
+                            typeX + size * j + 45, typeY - size * i));
                         levelScene->addChild(attackUp, 4);
                     }
                 }
@@ -469,7 +472,7 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                         auto attackUp = cocos2d::Sprite::create(
                             "images/towers/attack_up.png");
                         attackUp->setPosition(cocos2d::Vec2(
-                            typeX + size * j + 40, typeY - size * i));
+                            typeX + size * j + 45, typeY - size * i));
                         levelScene->addChild(attackUp, 4);
                         attackUp->scheduleOnce(
                             [attackUp](float dt) {

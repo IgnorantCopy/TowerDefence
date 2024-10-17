@@ -119,7 +119,8 @@ bool LevelScene::init(int level) {
     }
 
     // add background
-    std::string backgroundImage = "images/level" + std::to_string(level) + "_background.png";
+    std::string backgroundImage =
+        "images/level" + std::to_string(level) + "_background.png";
     auto background = Sprite::create(backgroundImage, Rect(0, 0, 2500, 1500));
     if (background == nullptr) {
         switch (level) {
@@ -136,7 +137,8 @@ bool LevelScene::init(int level) {
             break;
         }
     } else {
-        background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+        background->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                                     origin.y + visibleSize.height / 2));
         this->addChild(background, 0);
     }
 
@@ -1132,6 +1134,8 @@ void LevelScene::upgradeTower() {
     int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
     std::string path;
     std::unique_ptr<TowerFactoryBase> newTower;
+    auto isScaling =
+        std::unordered_map<std::string, std::any>{{"isScaling", false}};
     switch (this->map->get_ref(indexY, indexX)
                 .grid.tower.value()
                 ->status()
@@ -1170,39 +1174,45 @@ void LevelScene::upgradeTower() {
         return;
     case TowerType::Archer:
         path = "images/towers/archer_pro.png";
-        newTower = std::make_unique<TowerFactory<ArcherPlus>>();
+        newTower = std::make_unique<TowerFactory<ArcherPlus>>(isScaling);
         break;
     case TowerType::Bomber:
         path = "images/towers/bomber_pro.png";
-        newTower = std::make_unique<TowerFactory<BomberPlus>>();
+        newTower = std::make_unique<TowerFactory<BomberPlus>>(isScaling);
         break;
     case TowerType::CoreMagician:
         path = "images/towers/core_magician_pro.png";
-        newTower = std::make_unique<TowerFactory<CoreMagicianPlus>>();
+        newTower = std::make_unique<TowerFactory<CoreMagicianPlus>>(isScaling);
         break;
     case TowerType::DecelerateMagician:
         path = "images/towers/decelerate_magician_pro.png";
-        newTower = std::make_unique<TowerFactory<DecelerateMagicianPlus>>();
+        newTower =
+            std::make_unique<TowerFactory<DecelerateMagicianPlus>>(isScaling);
         break;
     case TowerType::DiffusiveMagician:
         path = "images/towers/diffusive_magician_pro.png";
-        newTower = std::make_unique<TowerFactory<DiffusiveMagicianPlus>>();
+        newTower =
+            std::make_unique<TowerFactory<DiffusiveMagicianPlus>>(isScaling);
         break;
     case TowerType::HighspeedArcher:
         path = "images/towers/highspeed_archer_pro.png";
-        newTower = std::make_unique<TowerFactory<HighspeedArcherPlus>>();
+        newTower =
+            std::make_unique<TowerFactory<HighspeedArcherPlus>>(isScaling);
         break;
     case TowerType::SpecialMagician:
         path = "images/towers/special_magician_pro.png";
-        newTower = std::make_unique<TowerFactory<SpecialMagicianPlus>>();
+        newTower =
+            std::make_unique<TowerFactory<SpecialMagicianPlus>>(isScaling);
         break;
     case TowerType::WeakenMagician:
         path = "images/towers/weaken_magician_pro.png";
-        newTower = std::make_unique<TowerFactory<WeakenMagicianPlus>>();
+        newTower =
+            std::make_unique<TowerFactory<WeakenMagicianPlus>>(isScaling);
         break;
     case TowerType::AggressiveMagician:
         path = "images/towers/aggressive_magician_pro.png";
-        newTower = std::make_unique<TowerFactory<AggressiveMagicianPlus>>();
+        newTower =
+            std::make_unique<TowerFactory<AggressiveMagicianPlus>>(isScaling);
         break;
     default:
         return;
@@ -1761,11 +1771,11 @@ void LevelScene::createEnemy() {
             enemySameTime.push_back(newEnemySprite);
             if (particle) {
                 newEnemySprite->addChild(particle, 6);
-                schedule(
-                    [particle, newEnemySprite](float dt) {
-                        particle->setPosition(newEnemySprite->getPosition());
-                    },
-                    1.0f / 30, "updateParticle");
+                //                schedule(
+                //                    [particle, newEnemySprite](float dt) {
+                //                        particle->setPosition(newEnemySprite->getPosition());
+                //                    },
+                //                    1.0f / 30, "updateParticle");
             }
             this->addChild(newEnemySprite, 5);
         }
