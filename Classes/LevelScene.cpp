@@ -706,7 +706,7 @@ void LevelScene::updateMoneyLabel() {
 void LevelScene::decreaseLife() {
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
-    if (this->map->health_ > 1000) {
+    if (this->map->health_ > 1000 || this->map->health_ <= 0) {
         this->lifeLabel->setString("0");
         this->lifeLabel->setPosition(
             cocos2d::Vec2(origin.x + 150,
@@ -1252,15 +1252,8 @@ void LevelScene::createMap(int level) {
         routes = {Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D], Dir[D],
                          Dir[D], Dir[L], Dir[L], Dir[L], Dir[U], Dir[U], Dir[R],
                          Dir[R], Dir[D], Dir[D], Dir[L], Dir[L], Dir[L]}),
-                  Route({Dir[L],
-                         Dir[L],
-                         Dir[L],
-                         Dir[L],
-                         {6, 0},
-                         Dir[R],
-                         Dir[R],
-                         Dir[R],
-                         Dir[R]}),
+                  Route({Dir[L], Dir[L], Dir[L], Dir[L], {6, 0},
+                         Dir[R], Dir[R], Dir[R], Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
@@ -1308,33 +1301,12 @@ void LevelScene::createMap(int level) {
             {{1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6}},
             {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
             {{2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}, {6, 6}},
-            {{1, 5},
-             {2, 7},
-             {3, 2},
-             {3, 3},
-             {4, 1},
-             {4, 3},
-             {5, 1},
-             {5, 3},
-             {6, 6}},
-            {{1, 5},
-             {2, 7},
-             {3, 2},
-             {3, 3},
-             {4, 1},
-             {4, 3},
-             {5, 1},
-             {5, 3},
-             {6, 6}},
-            {{1, 5},
-             {2, 7},
-             {3, 2},
-             {3, 3},
-             {4, 1},
-             {4, 3},
-             {5, 1},
-             {5, 3},
-             {6, 6}},
+            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1},
+             {5, 3}, {6, 6}},
+            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1},
+             {5, 3}, {6, 6}},
+            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1},
+             {5, 3}, {6, 6}},
             {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
             {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
             {{1, 9}, {3, 5}, {4, 8}, {5, 6}},
@@ -1356,34 +1328,16 @@ void LevelScene::createMap(int level) {
         map = new towerdefence::core::Map(
             width, height,
             [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
-        routes = {Route({Dir[L],
-                         Dir[L],
-                         Dir[L],
-                         {0, -8},
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[R]}),
+        routes = {Route({Dir[L], Dir[L], Dir[L], {0, -8}, Dir[D],
+                         Dir[D], Dir[D], Dir[D], Dir[D], Dir[D], Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[U], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[D], Dir[L]}),
-                  Route({Dir[L],
-                         Dir[L],
-                         Dir[L],
-                         {-6, -8},
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[R]}),
+                  Route({Dir[L], Dir[L], Dir[L], {-6, -8}, Dir[D],
+                         Dir[D], Dir[D], Dir[D], Dir[D], Dir[D], Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D], Dir[L],
                          Dir[L], Dir[U], Dir[U], Dir[U], Dir[U], Dir[L], Dir[L],
                          Dir[D], Dir[D], Dir[L], Dir[L]})};
@@ -1483,10 +1437,8 @@ void LevelScene::createMap(int level) {
                    Dir[D], Dir[R], Dir[R],    Dir[R], Dir[R], Dir[R], Dir[R]}),
             Route({Dir[D], Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R],
                    Dir[R], Dir[R], Dir[R]}),
-            Route({Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R],
-                   Dir[R]}),
-            Route({Dir[R], Dir[R], Dir[D], Dir[D], Dir[D], Dir[D], Dir[L],
-                   Dir[L]}),
+            Route({Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
+            Route({Dir[R], Dir[R], Dir[D], Dir[D], Dir[D], Dir[D], Dir[L], Dir[L]}),
             Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D],
                    Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
             Route({Dir[R], Dir[R], Dir[R],    Dir[R], {6, 3}, Dir[R], Dir[R],
@@ -1831,16 +1783,16 @@ void LevelScene::createEnemy() {
                     if (gameContinuing) {
                         enemySprites[i][j]->setVisible(true);
                         enemySprites[i][j]->setOpacity(0);
-                        auto fadeIn = FadeIn::create(0.5f);
+                        auto fadeIn = FadeIn::create(0.25f);
                         enemySprites[i][j]->runAction(fadeIn);
                         scheduleOnce([this, i, j](float dt) {
                             enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i][j].first,enemyPos[i][j].second,
                                                                            *enemyFactories[i][j]), enemySprites[i][j]);
-                        }, 0.5f, "AddEnemyToMap" + std::to_string(i) + std::to_string(j));
+                        }, 0.25f, "AddEnemyToMap" + std::to_string(i) + std::to_string(j));
                     }
                 }
             }
-        }, enemyCreateTime[i] - 0.5f, "createEnemy" + std::to_string(i));
+        }, enemyCreateTime[i] - 0.25f, "createEnemy" + std::to_string(i));
     }
 }
 
