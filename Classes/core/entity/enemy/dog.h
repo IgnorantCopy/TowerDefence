@@ -11,7 +11,7 @@ struct Dog final : Enemy {
     Dog(id::Id id, route::Route route) : Enemy(id, route) {}
 
     EnemyInfo info() const override {
-        return {90000000, {0, 0}, 19, EnemyType::Dog, 15};
+        return {900, {0, 0}, 19, EnemyType::Dog, 15};
     }
 };
 } // namespace core
