@@ -1785,26 +1785,28 @@ void LevelScene::createEnemy() {
     }
     this->map->enemy_alive = enemyNumber;
     for (size_t i = 0; i < enemyCreateType.size(); i++) {
-        scheduleOnce([this, i](float dt) {
-            if (gameContinuing) {
-                for (size_t j = 0; j < enemyCreateType[i].size(); j++) {
-                    if (enemyFirstDir[enemyCreateType[i][j].first - 1] == L) {
-                        enemySprites[i][j]->setFlippedX(true);
-                        enemySprites[i][j]->setFlippedY(false);
+        if (gameContinuing) {
+            for (size_t j = 0; j < enemyCreateType[i].size(); j++) {
+                if (enemyFirstDir[enemyCreateType[i][j].first - 1] == L) {
+                    enemySprites[i][j]->setFlippedX(true);
+                    enemySprites[i][j]->setFlippedY(false);
+                }
+                scheduleOnce([this, i, j](float dt) {
+                    if (this->gameContinuing) {
+                        enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i][j].first,
+                                             enemyPos[i][j].second,*enemyFactories[i][j]),enemySprites[i][j]);
                     }
-                    if (gameContinuing) {
+                }, enemyCreateTime[i] - 0.45f + 0.1f * j,"addEnemyToMap" + std::to_string(i) + std::to_string(j));
+                scheduleOnce([this, i, j](float dt) {
+                    if (this->gameContinuing) {
                         enemySprites[i][j]->setVisible(true);
                         enemySprites[i][j]->setOpacity(0);
                         auto fadeIn = FadeIn::create(0.25f);
                         enemySprites[i][j]->runAction(fadeIn);
-                        scheduleOnce([this, i, j](float dt) {
-                            enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i][j].first,enemyPos[i][j].second,
-                                                                           *enemyFactories[i][j]), enemySprites[i][j]);
-                        }, 0.25f, "AddEnemyToMap" + std::to_string(i) + std::to_string(j));
                     }
-                }
+                },enemyCreateTime[i] - 0.25f + 0.1f * j,"createEnemy" + std::to_string(i) + std::to_string(j));
             }
-        }, enemyCreateTime[i] - 0.25f, "createEnemy" + std::to_string(i));
+        }
     }
 }
 
