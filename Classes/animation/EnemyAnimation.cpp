@@ -163,7 +163,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                         cocos2d::Sprite *attackDown = cocos2d::Sprite::create(
                             "images/towers/attack_down.png");
                         attackDown->setPosition(
-                            cocos2d::Vec2(towerX - 40, towerY));
+                            cocos2d::Vec2(towerX - 45, towerY));
                         levelScene->addChild(attackDown, 4);
                         attackDown->scheduleOnce(
                             [attackDown](float dt) {
@@ -223,7 +223,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
             float towerY = towerSprite->getPositionY();
             cocos2d::Sprite *decelerate =
                 cocos2d::Sprite::create("images/towers/ice.png");
-            decelerate->setPosition(cocos2d::Vec2(towerX - 40, towerY + 40));
+            decelerate->setPosition(cocos2d::Vec2(towerX - 45, towerY + 45));
             levelScene->addChild(decelerate, 4);
             decelerate->scheduleOnce(
                 [decelerate](float dt) { decelerate->removeFromParent(); },
@@ -243,7 +243,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                         cocos2d::Sprite *silence = cocos2d::Sprite::create(
                             "images/towers/silence.png");
                         silence->setPosition(
-                            cocos2d::Vec2(towerX - 40, towerY - 40));
+                            cocos2d::Vec2(towerX - 45, towerY - 45));
                         levelScene->addChild(silence, 4);
                         silence->scheduleOnce(
                             [silence](float dt) {
@@ -272,7 +272,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                 cocos2d::Sprite *decelerate =
                     cocos2d::Sprite::create("images/towers/ice.png");
                 decelerate->setPosition(
-                    cocos2d::Vec2(towerX - 40, towerY + 40));
+                    cocos2d::Vec2(towerX - 45, towerY + 45));
                 levelScene->addChild(decelerate, 4);
                 decelerate->scheduleOnce(
                     [decelerate](float dt) { decelerate->removeFromParent(); },
@@ -293,7 +293,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                             cocos2d::Sprite *silence = cocos2d::Sprite::create(
                                 "images/towers/silence.png");
                             silence->setPosition(
-                                cocos2d::Vec2(towerX - 40, towerY - 40));
+                                cocos2d::Vec2(towerX - 45, towerY - 45));
                             levelScene->addChild(silence, 4);
                             silence->scheduleOnce(
                                 [silence](float dt) {
@@ -337,8 +337,9 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
     auto animation = cocos2d::Animation::createWithSpriteFrames(frames, 0.05f);
     auto animate = cocos2d::Animate::create(animation);
     auto callback = cocos2d::CallFunc::create(
-        [enemy]() { enemy->set_storage<size_t>("current_frame", 0); });
+        [enemy]() { enemy->set_storage<int>("current_frame", 0); });
     auto seq = cocos2d::Sequence::create(animate, callback, nullptr);
+    enemySprite->stopAllActions();
     enemySprite->runAction(seq);
 }
 
@@ -364,7 +365,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 41; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
+                prefix + diePath, cocos2d::Rect(0, 0, 1000, 1000)));
         }
         break;
     case EnemyType::Boss1:
@@ -391,7 +392,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 36; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
+                prefix + diePath, cocos2d::Rect(0, 0, 700, 700)));
         }
         break;
     case EnemyType::Destroyer:
@@ -409,7 +410,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 30; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
+                prefix + diePath, cocos2d::Rect(0, 0, 750, 750)));
         }
         break;
     case EnemyType::LifeUp:
@@ -418,7 +419,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 30; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
+                prefix + diePath, cocos2d::Rect(0, 0, 650, 650)));
         }
         break;
     case EnemyType::NotAttacked:
@@ -427,7 +428,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 30; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
+                prefix + diePath, cocos2d::Rect(0, 0, 450, 450)));
         }
         break;
     case EnemyType::Soldier:
@@ -436,7 +437,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 23; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
+                prefix + diePath, cocos2d::Rect(0, 0, 450, 450)));
         }
         break;
     case EnemyType::SpeedUp:
@@ -446,7 +447,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 28; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
+                prefix + diePath, cocos2d::Rect(0, 0, 400, 400)));
         }
         break;
     case EnemyType::Tank:
@@ -455,7 +456,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 27; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
+                prefix + diePath, cocos2d::Rect(0, 0, 550, 550)));
         }
         break;
     case EnemyType::Warlock:
@@ -464,7 +465,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 30; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
+                prefix + diePath, cocos2d::Rect(0, 0, 360, 360)));
         }
         break;
     case EnemyType::Worm:
@@ -473,7 +474,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 21; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
+                prefix + diePath, cocos2d::Rect(0, 0, 400, 400)));
         }
         for (int i = indexY - 1; i <= indexY + 1; i++) {
             for (int j = indexX - 1; j <= indexX + 1; j++) {
@@ -488,7 +489,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
                         cocos2d::Sprite *decelerate =
                             cocos2d::Sprite::create("images/towers/ice.png");
                         decelerate->setPosition(
-                            cocos2d::Vec2(towerX - 40, towerY + 40));
+                            cocos2d::Vec2(towerX - 45, towerY + 45));
                         levelScene->addChild(decelerate, 4);
                         decelerate->scheduleOnce(
                             [decelerate](float dt) {
