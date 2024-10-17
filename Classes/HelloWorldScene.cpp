@@ -52,6 +52,12 @@ bool HelloWorld::init() {
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
+    
+    if (firstTouch) {
+        // add bgm
+        auto player = CocosDenshion::SimpleAudioEngine::getInstance();
+        player->playBackgroundMusic("audio/menu_bgm.mp3", true);
+    }
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -141,10 +147,6 @@ bool HelloWorld::init() {
             background->setOpacity(0);
             auto fadeIn = FadeIn::create(3.0f);
             background->runAction(fadeIn);
-
-            // add bgm
-            auto player = CocosDenshion::SimpleAudioEngine::getInstance();
-            player->playBackgroundMusic("audio/menu_bgm.mp3", true);
         }
     }
 
