@@ -120,7 +120,7 @@ bool LevelScene::init(int level) {
         this->addChild(background, 0);
     }
 
-    createMap(level);
+    this->createMap(level);
 
     auto frameBase = Sprite::create("images/frame_base.png");
     if (frameBase == nullptr) {
