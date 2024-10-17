@@ -100,8 +100,10 @@ bool LevelScene::init(int level) {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     // create music player
-    player = CocosDenshion::SimpleAudioEngine::getInstance();
-    player->stopBackgroundMusic();
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
+    if (player->isBackgroundMusicPlaying()) {
+        player->stopBackgroundMusic();
+    }
     switch (level) {
     case 1:
         player->playBackgroundMusic("audio/level1_bgm.MP3", true);
@@ -140,7 +142,7 @@ bool LevelScene::init(int level) {
 
     // the back button to go back to the SelectLevel scene
     auto Back = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
-    auto backItem = MenuItemLabel::create(Back, [this](Ref *ref) {
+    auto backItem = MenuItemLabel::create(Back, [this, player](Ref *ref) {
         player->stopBackgroundMusic();
         player->playBackgroundMusic("audio/menu_bgm.MP3", true);
         Director::getInstance()->replaceScene(

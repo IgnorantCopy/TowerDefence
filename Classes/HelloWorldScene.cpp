@@ -55,7 +55,7 @@ bool HelloWorld::init() {
 
     // add bgm
     auto player = CocosDenshion::SimpleAudioEngine::getInstance();
-    player->playEffect("audio/menu_bgm.mp3", true);
+    player->playBackgroundMusic("audio/menu_bgm.mp3", true);
 
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program

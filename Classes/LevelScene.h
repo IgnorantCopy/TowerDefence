@@ -138,9 +138,6 @@ protected:
     cocos2d::MenuItemLabel *upgradeItem3 = nullptr;
     cocos2d::MenuItemLabel *cancelUpgradeItem = nullptr;
 
-    // music player
-    CocosDenshion::SimpleAudioEngine *player = nullptr;
-
     void addBullet(Tower *tower, Enemy *enemy);
 
     void upgradeTower();
