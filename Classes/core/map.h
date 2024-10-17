@@ -313,9 +313,6 @@ namespace towerdefence {
                 auto enemy = grid.remove_enemy(id).value();
                 auto &new_grid = grids.at(shape.index_of(row, col));
                 new_grid.enemies.push_back(std::move(enemy));
-                for (auto &[handle, f]: this->callbacks_.on_enemy_move) {
-                    f(*enemy,std::make_pair(r,c),std::make_pair(row,col));
-                }
                 enemy_refs_[id] = {row, col};
             }
             

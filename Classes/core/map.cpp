@@ -24,7 +24,7 @@ void Map::update() {
         auto &grid = ref.grid;
         if (grid.tower.has_value()) {
             auto &tower = grid.tower.value();
-            assert(this->enemy_refs_.count(tower->id) > 0);
+            assert(this->tower_refs_.count(tower->id) > 0);
             tower->on_tick(ref);
         }
 
