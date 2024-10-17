@@ -317,10 +317,10 @@ namespace towerdefence {
             }
             
             void reached_end(id::Id id) {
+                this->health_ -= 1;
                 for (auto &[handle, f]: this->callbacks_.on_escape) {
                     f(id);
                 }
-                this->health_ -= 1;
                 if(this->health_ == 0){
                     for (auto &[handle, f]: this->callbacks_.on_end) {
                         f(false);
