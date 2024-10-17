@@ -90,7 +90,7 @@ static void problemLoading(const char *filename) {
            "in front of filenames in Level1Scene.cpp\n");
 }
 
-bool LevelScene::init() {
+bool LevelScene::init(int level) {
     if (!Scene::init()) {
         return false;
     }
@@ -98,15 +98,29 @@ bool LevelScene::init() {
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    auto background =
-        Sprite::create("images/level1_background.png", Rect(0, 0, 2500, 1500));
+    // add background
+    std::string backgroundImage = "images/level" + std::to_string(level) + "_background.png";
+    auto background = Sprite::create(backgroundImage, Rect(0, 0, 2500, 1500));
     if (background == nullptr) {
-        problemLoading("'images/level1_background.png'");
+        switch(level) {
+        case 1:
+            problemLoading("'images/level1_background.png'");
+            break;
+        case 2:
+            problemLoading("'images/level2_background.png'");
+            break;
+        case 3:
+            problemLoading("'images/level3_background.png'");
+            break;
+        default:
+            break;
+        }
     } else {
-        background->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                                     origin.y + visibleSize.height / 2));
+        background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
         this->addChild(background, 0);
     }
+
+    this->createMap(level);
 
     auto frameBase = Sprite::create("images/frame_base.png");
     if (frameBase == nullptr) {
@@ -266,7 +280,6 @@ bool LevelScene::init() {
     // create map
     float x = origin.x + 350 + SIZE;
     float y = origin.y + visibleSize.height - SIZE;
-    createMap(1);
     for (size_t i = 0; i < height; i++) {
         for (size_t j = 0; j < width; j++) {
             Grid::Type type_ = map->grids[map->shape.index_of(i, j)].type;
@@ -651,7 +664,6 @@ void LevelScene::updateMoneyLabel() {
 }
 
 void LevelScene::decreaseLife() {
-    this->map->health_--;
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
     if (this->map->health_ <= 0) {
@@ -1763,33 +1775,24 @@ void LevelScene::createEnemy() {
         enemyPos.push_back(enemySameTimePos);
         enemyFactories.push_back(std::move(enemySameTimeFactories));
     }
+    this->map->enemy_alive = enemyNumber;
     for (size_t i = 0; i < enemyCreateType.size(); i++) {
-        scheduleOnce(
-            [this, i](float dt) {
-                for (size_t j = 0; j < enemyCreateType[i].size(); j++) {
-                    if (enemyFirstDir[enemyCreateType[i][j].first - 1] == L) {
-                        enemySprites[i][j]->setFlippedX(true);
-                        enemySprites[i][j]->setFlippedY(false);
-                    }
-                    enemySprites[i][j]->setVisible(true);
-                    enemySprites[i][j]->setOpacity(0);
-                    auto fadeIn = FadeIn::create(0.5f);
-                    enemySprites[i][j]->runAction(fadeIn);
-                    scheduleOnce(
-                        [this, i, j](float dt) {
-                            // TODO: fix the bug of "spawn_enemy_at"
-                            enemies.emplace_back(this->map->spawn_enemy_at(
-                                                     enemyPos[i][j].first,
-                                                     enemyPos[i][j].second,
-                                                     *enemyFactories[i][j]),
-                                                 enemySprites[i][j]);
-                        },
-                        0.5f,
-                        "AddEnemyToMap" + std::to_string(i) +
-                            std::to_string(j));
+        scheduleOnce([this, i](float dt) {
+            for(size_t j = 0; j < enemyCreateType[i].size(); j++) {
+                if (enemyFirstDir[enemyCreateType[i][j].first - 1] == L) {
+                    enemySprites[i][j]->setFlippedX(true);
+                    enemySprites[i][j]->setFlippedY(false);
                 }
-            },
-            enemyCreateTime[i] - 0.5f, "createEnemy" + std::to_string(i));
+                enemySprites[i][j]->setVisible(true);
+                enemySprites[i][j]->setOpacity(0);
+                auto fadeIn = FadeIn::create(0.5f);
+                enemySprites[i][j]->runAction(fadeIn);
+                scheduleOnce([this, i, j](float dt) {
+                    enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i][j].first,enemyPos[i][j].second,
+                                                                   *enemyFactories[i][j]), enemySprites[i][j]);
+                }, 0.5f, "AddEnemyToMap" + std::to_string(i) + std::to_string(j));
+            }
+        }, enemyCreateTime[i] - 0.5f, "createEnemy" + std::to_string(i));
     }
 }
 
