@@ -1,4 +1,5 @@
 #include "LevelScene.h"
+#include "SelectLevelScene.h"
 #include "animation/EnemyAnimation.h"
 #include "animation/TowerAnimation.h"
 #include "core/entity/enemy/Attack-down.h"
@@ -98,6 +99,23 @@ bool LevelScene::init(int level) {
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+    // create music player
+    player = CocosDenshion::SimpleAudioEngine::getInstance();
+    player->stopBackgroundMusic();
+    switch (level) {
+    case 1:
+        player->playBackgroundMusic("audio/level1_bgm.MP3", true);
+        break;
+    case 2:
+        player->playBackgroundMusic("audio/level2_bgm.MP3", true);
+        break;
+    case 3:
+        player->playBackgroundMusic("audio/level3_bgm.MP3", true);
+        break;
+    default:
+        break;
+    }
+
     // add background
     std::string backgroundImage = "images/level" + std::to_string(level) + "_background.png";
     auto background = Sprite::create(backgroundImage, Rect(0, 0, 2500, 1500));
@@ -119,6 +137,22 @@ bool LevelScene::init(int level) {
         background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
         this->addChild(background, 0);
     }
+
+    // the back button to go back to the SelectLevel scene
+    auto Back = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
+    auto backItem = MenuItemLabel::create(Back, [this](Ref *ref) {
+        player->stopBackgroundMusic();
+        player->playBackgroundMusic("audio/menu_bgm.MP3", true);
+        Director::getInstance()->replaceScene(
+            TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+    });
+    backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
+                               origin.y + visibleSize.height - 50));
+    Vector<MenuItem *> menuItems;
+    menuItems.pushBack(backItem);
+    auto menu = Menu::createWithArray(menuItems);
+    menu->setPosition(Vec2::ZERO);
+    this->addChild(menu, 1);
 
     this->createMap(level);
 
@@ -1841,10 +1875,12 @@ void LevelScene::gameOver(bool isWin) {
         upgradeItem3->setVisible(false);
         cancelUpgradeItem->setVisible(false);
     }
+
     if (isWin) {
-        // TODO: win
+        isWin = true;
+        // TODO: win the game
     } else {
-        // TODO: lose
+        // TODO: lose the game
     }
 }
 
