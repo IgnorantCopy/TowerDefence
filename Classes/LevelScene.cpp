@@ -316,10 +316,10 @@ bool LevelScene::init(int level) {
                 break;
             }
         });
-    this->addChild(this->deleteButton, 4);
-    this->addChild(this->upgradeButton, 4);
-    this->addChild(this->towerInfoButton, 4);
-    this->addChild(this->skillButton, 4);
+    this->addChild(this->deleteButton, 7);
+    this->addChild(this->upgradeButton, 7);
+    this->addChild(this->towerInfoButton, 7);
+    this->addChild(this->skillButton, 7);
 
     // create map
     float x = origin.x + 350 + SIZE;
