@@ -1877,7 +1877,7 @@ void LevelScene::gameOver(bool isWin) {
     }
 
     if (isWin) {
-        isWin = true;
+        Win = true;
         // TODO: win the game
     } else {
         // TODO: lose the game

@@ -160,7 +160,7 @@ protected:
     void hideTowerInfo(float x, float y);
 
     bool gameContinuing = true;
-    bool isWin = false;
+    bool Win = false;
     void gameOver(bool isWin);
 
 public:
