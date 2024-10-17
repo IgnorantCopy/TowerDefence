@@ -99,7 +99,7 @@ bool LevelScene::init() {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     auto background =
-            Sprite::create("images/level1_background.png", Rect(0, 0, 2500, 1500));
+        Sprite::create("images/level1_background.png", Rect(0, 0, 2500, 1500));
     if (background == nullptr) {
         problemLoading("'images/level1_background.png'");
     } else {
@@ -119,145 +119,145 @@ bool LevelScene::init() {
 
     float gap = 300;
     this->selectedTower =
-            Sprite::create("images/towers/archer_base_onblock.png");
+        Sprite::create("images/towers/archer_base_onblock.png");
     this->selectedTower->setVisible(false);
     this->selectedTower->setPosition(Vec2(origin.x + visibleSize.width / 2,
                                           origin.y + visibleSize.height / 2));
     this->addChild(this->selectedTower, 5);
     this->archerBaseSelector = ui::Button::create(
-            "images/towers/archer_base.png", "images/towers/archer_base.png",
-            "images/towers/archer_base_inactive.png");
+        "images/towers/archer_base.png", "images/towers/archer_base.png",
+        "images/towers/archer_base_inactive.png");
     this->archerBaseSelector->addTouchEventListener(
-            [this](Ref *ref, ui::Widget::TouchEventType type) {
-                switch (type) {
-                    case ui::Widget::TouchEventType::BEGAN:
-                        this->isSelecting = 1;
-                        this->selectedTower->setTexture(
-                                "images/towers/archer_base_onblock.png");
-                        break;
-                    case ui::Widget::TouchEventType::ENDED:
-                        break;
-                    default:
-                        break;
-                }
-            });
+        [this](Ref *ref, ui::Widget::TouchEventType type) {
+            switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                this->isSelecting = 1;
+                this->selectedTower->setTexture(
+                    "images/towers/archer_base_onblock.png");
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                break;
+            default:
+                break;
+            }
+        });
     this->archerBaseSelector->setPosition(
-            Vec2(origin.x + visibleSize.width / 2 - 2 * gap,
-                 origin.y + 1680 - visibleSize.height));
+        Vec2(origin.x + visibleSize.width / 2 - 2 * gap,
+             origin.y + 1680 - visibleSize.height));
     this->addChild(this->archerBaseSelector, 4);
 
     this->magicianBaseSelector = ui::Button::create(
-            "images/towers/magician_base.png", "images/towers/magician_base.png",
-            "images/towers/magician_base_inactive.png");
+        "images/towers/magician_base.png", "images/towers/magician_base.png",
+        "images/towers/magician_base_inactive.png");
     this->magicianBaseSelector->addTouchEventListener(
-            [this](Ref *ref, ui::Widget::TouchEventType type) {
-                switch (type) {
-                    case ui::Widget::TouchEventType::BEGAN:
-                        this->isSelecting = 2;
-                        this->selectedTower->setTexture(
-                                "images/towers/magician_base_onblock.png");
-                        break;
-                    case ui::Widget::TouchEventType::ENDED:
-                        break;
-                    default:
-                        break;
-                }
-            });
+        [this](Ref *ref, ui::Widget::TouchEventType type) {
+            switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                this->isSelecting = 2;
+                this->selectedTower->setTexture(
+                    "images/towers/magician_base_onblock.png");
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                break;
+            default:
+                break;
+            }
+        });
     this->magicianBaseSelector->setPosition(
-            Vec2(origin.x + visibleSize.width / 2,
-                 origin.y + 1680 - visibleSize.height));
+        Vec2(origin.x + visibleSize.width / 2,
+             origin.y + 1680 - visibleSize.height));
     this->addChild(this->magicianBaseSelector, 4);
 
     this->helperBaseSelector = ui::Button::create(
-            "images/towers/helper_base.png", "images/towers/helper_base.png",
-            "images/towers/helper_base_inactive.png");
+        "images/towers/helper_base.png", "images/towers/helper_base.png",
+        "images/towers/helper_base_inactive.png");
     this->helperBaseSelector->addTouchEventListener(
-            [this](Ref *ref, ui::Widget::TouchEventType type) {
-                switch (type) {
-                    case ui::Widget::TouchEventType::BEGAN:
-                        this->isSelecting = 3;
-                        this->selectedTower->setTexture(
-                                "images/towers/helper_base_onblock.png");
-                        break;
-                    case ui::Widget::TouchEventType::ENDED:
-                        break;
-                    default:
-                        break;
-                }
-            });
+        [this](Ref *ref, ui::Widget::TouchEventType type) {
+            switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                this->isSelecting = 3;
+                this->selectedTower->setTexture(
+                    "images/towers/helper_base_onblock.png");
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                break;
+            default:
+                break;
+            }
+        });
     this->helperBaseSelector->setPosition(
-            Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
-                 origin.y + 1680 - visibleSize.height));
+        Vec2(origin.x + visibleSize.width / 2 + 2 * gap,
+             origin.y + 1680 - visibleSize.height));
     this->addChild(this->helperBaseSelector, 4);
 
     // tower info
     this->deleteButton = ui::Button::create(
-            "images/delete.png", "images/delete.png", "images/delete.png");
+        "images/delete.png", "images/delete.png", "images/delete.png");
     this->deleteButton->setVisible(false);
     this->deleteButton->addTouchEventListener(
-            [this](Ref *ref, ui::Widget::TouchEventType type) {
-                switch (type) {
-                    case ui::Widget::TouchEventType::BEGAN:
-                        break;
-                    case ui::Widget::TouchEventType::ENDED:
-                        this->deleteTower();
-                        this->hideTowerInfo(0, 0);
-                        break;
-                    default:
-                        break;
-                }
-            });
+        [this](Ref *ref, ui::Widget::TouchEventType type) {
+            switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                this->deleteTower();
+                this->hideTowerInfo(0, 0);
+                break;
+            default:
+                break;
+            }
+        });
     this->upgradeButton =
-            ui::Button::create("images/upgrade.png", "images/upgrade.png",
-                               "images/upgrade_inactive.png");
+        ui::Button::create("images/upgrade.png", "images/upgrade.png",
+                           "images/upgrade_inactive.png");
     this->upgradeButton->setVisible(false);
     this->upgradeButton->addTouchEventListener(
-            [this](Ref *ref, ui::Widget::TouchEventType type) {
-                switch (type) {
-                    case ui::Widget::TouchEventType::BEGAN:
-                        break;
-                    case ui::Widget::TouchEventType::ENDED:
-                        this->upgradeTower();
-                        this->hideTowerInfo(0, 0);
-                        break;
-                    default:
-                        break;
-                }
-            });
+        [this](Ref *ref, ui::Widget::TouchEventType type) {
+            switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                this->upgradeTower();
+                this->hideTowerInfo(0, 0);
+                break;
+            default:
+                break;
+            }
+        });
     this->towerInfoButton = ui::Button::create(
-            "images/info.png", "images/info.png", "images/info.png");
+        "images/info.png", "images/info.png", "images/info.png");
     this->towerInfoButton->setVisible(false);
     this->towerInfoButton->addTouchEventListener(
-            [this](Ref *ref, ui::Widget::TouchEventType type) {
-                switch (type) {
-                    case ui::Widget::TouchEventType::BEGAN:
-                        break;
-                    case ui::Widget::TouchEventType::ENDED:
-                        Director::getInstance()->pushScene(
-                                TransitionTurnOffTiles::create(0.5f,
-                                                               manual::createScene()));
-                        break;
-                    default:
-                        break;
-                }
-            });
+        [this](Ref *ref, ui::Widget::TouchEventType type) {
+            switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                Director::getInstance()->pushScene(
+                    TransitionTurnOffTiles::create(0.5f,
+                                                   manual::createScene()));
+                break;
+            default:
+                break;
+            }
+        });
     this->skillButton =
-            ui::Button::create("images/towers/skill_icon/archer_base.png",
-                               "images/towers/skill_icon/archer_base.png",
-                               "images/towers/skill_icon/archer_base_inactive.png");
+        ui::Button::create("images/towers/skill_icon/archer_base.png",
+                           "images/towers/skill_icon/archer_base.png",
+                           "images/towers/skill_icon/archer_base_inactive.png");
     this->skillButton->setVisible(false);
     this->skillButton->addTouchEventListener(
-            [this](Ref *ref, ui::Widget::TouchEventType type) {
-                switch (type) {
-                    case ui::Widget::TouchEventType::BEGAN:
-                        break;
-                    case ui::Widget::TouchEventType::ENDED:
-                        this->executeSkill();
-                        break;
-                    default:
-                        break;
-                }
-            });
+        [this](Ref *ref, ui::Widget::TouchEventType type) {
+            switch (type) {
+            case ui::Widget::TouchEventType::BEGAN:
+                break;
+            case ui::Widget::TouchEventType::ENDED:
+                this->executeSkill();
+                break;
+            default:
+                break;
+            }
+        });
     this->addChild(this->deleteButton, 4);
     this->addChild(this->upgradeButton, 4);
     this->addChild(this->towerInfoButton, 4);
@@ -279,7 +279,7 @@ bool LevelScene::init() {
     }
 
     auto blockBackground =
-            Sprite::create("images/block_background.png", Rect(0, 0, 1680, 980));
+        Sprite::create("images/block_background.png", Rect(0, 0, 1680, 980));
     if (blockBackground == nullptr) {
         problemLoading("'images/block_background.png'");
     } else {
@@ -292,7 +292,7 @@ bool LevelScene::init() {
         problemLoading("'images/gold.png'");
     } else {
         money->setPosition(
-                Vec2(origin.x + 70, origin.y + visibleSize.height - 70));
+            Vec2(origin.x + 70, origin.y + visibleSize.height - 70));
         this->addChild(money, 1);
     }
     auto life = Sprite::create("images/life.png");
@@ -300,19 +300,19 @@ bool LevelScene::init() {
         problemLoading("'images/life.png'");
     } else {
         life->setPosition(
-                Vec2(origin.x + 70, origin.y + visibleSize.height - 180));
+            Vec2(origin.x + 70, origin.y + visibleSize.height - 180));
         this->addChild(life, 1);
     }
     this->moneyLabel = cocos2d::Label::createWithTTF(
-            std::to_string(this->map->cost_), "fonts/Bender/BENDER.OTF", 75);
+        std::to_string(this->map->cost_), "fonts/Bender/BENDER.OTF", 75);
     this->moneyLabel->setPosition(
-            cocos2d::Vec2(origin.x + 150 + 15 * log10(this->map->cost_),
-                          origin.y + visibleSize.height - 70));
+        cocos2d::Vec2(origin.x + 150 + 15 * log10(this->map->cost_),
+                      origin.y + visibleSize.height - 70));
     this->lifeLabel = cocos2d::Label::createWithTTF(
-            std::to_string(this->map->health_), "fonts/Bender/BENDER.OTF", 75);
+        std::to_string(this->map->health_), "fonts/Bender/BENDER.OTF", 75);
     this->lifeLabel->setPosition(
-            cocos2d::Vec2(origin.x + 150 + 15 * log10(this->map->health_),
-                          origin.y + visibleSize.height - 180));
+        cocos2d::Vec2(origin.x + 150 + 15 * log10(this->map->health_),
+                      origin.y + visibleSize.height - 180));
     this->addChild(this->moneyLabel, 1);
     this->addChild(this->lifeLabel, 1);
 
@@ -322,8 +322,8 @@ bool LevelScene::init() {
         problemLoading("'images/upgrade_background.png'");
     } else {
         this->upgradeBackground1->setPosition(
-                Vec2(origin.x + visibleSize.width / 2 - 800,
-                     origin.y + visibleSize.height / 2));
+            Vec2(origin.x + visibleSize.width / 2 - 800,
+                 origin.y + visibleSize.height / 2));
         this->addChild(this->upgradeBackground1, 5);
         this->upgradeBackground1->setVisible(false);
     }
@@ -332,8 +332,8 @@ bool LevelScene::init() {
         problemLoading("'images/upgrade_background.png'");
     } else {
         this->upgradeBackground2->setPosition(
-                Vec2(origin.x + visibleSize.width / 2,
-                     origin.y + visibleSize.height / 2));
+            Vec2(origin.x + visibleSize.width / 2,
+                 origin.y + visibleSize.height / 2));
         this->addChild(this->upgradeBackground2, 5);
         this->upgradeBackground2->setVisible(false);
     }
@@ -342,8 +342,8 @@ bool LevelScene::init() {
         problemLoading("'images/upgrade_background.png'");
     } else {
         this->upgradeBackground3->setPosition(
-                Vec2(origin.x + visibleSize.width / 2 + 800,
-                     origin.y + visibleSize.height / 2));
+            Vec2(origin.x + visibleSize.width / 2 + 800,
+                 origin.y + visibleSize.height / 2));
         this->addChild(this->upgradeBackground3, 5);
         this->upgradeBackground3->setVisible(false);
     }
@@ -353,8 +353,8 @@ bool LevelScene::init() {
         problemLoading("'images/towers/archer.png'");
     } else {
         this->upgradeTower1->setPosition(
-                Vec2(origin.x + visibleSize.width / 2 - 800,
-                     origin.y + visibleSize.height / 2 + 150));
+            Vec2(origin.x + visibleSize.width / 2 - 800,
+                 origin.y + visibleSize.height / 2 + 150));
         this->addChild(this->upgradeTower1, 6);
         this->upgradeTower1->setVisible(false);
     }
@@ -363,8 +363,8 @@ bool LevelScene::init() {
         problemLoading("'images/towers/bomber.png'");
     } else {
         this->upgradeTower2->setPosition(
-                Vec2(origin.x + visibleSize.width / 2,
-                     origin.y + visibleSize.height / 2 + 150));
+            Vec2(origin.x + visibleSize.width / 2,
+                 origin.y + visibleSize.height / 2 + 150));
         this->addChild(this->upgradeTower2, 6);
         this->upgradeTower2->setVisible(false);
     }
@@ -373,47 +373,47 @@ bool LevelScene::init() {
         problemLoading("'images/towers/highspeed_archer.png'");
     } else {
         this->upgradeTower3->setPosition(
-                Vec2(origin.x + visibleSize.width / 2 + 800,
-                     origin.y + visibleSize.height / 2 + 150));
+            Vec2(origin.x + visibleSize.width / 2 + 800,
+                 origin.y + visibleSize.height / 2 + 150));
         this->addChild(this->upgradeTower3, 6);
         this->upgradeTower3->setVisible(false);
     }
 
     auto upgradeLabel1 =
-            Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
+        Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
     this->upgradeItem1 = MenuItemLabel::create(upgradeLabel1, [this](Ref *ref) {
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
         std::unique_ptr<TowerFactoryBase> newTower;
         auto isScaling =
-                std::unordered_map<std::string, std::any>{{"isScaling", false}};
+            std::unordered_map<std::string, std::any>{{"isScaling", false}};
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         float typeX = origin.x + 350 + SIZE;
         float typeY = origin.y + visibleSize.height - SIZE;
         float x = towerSprite->getPositionX();
         float y = towerSprite->getPositionY();
-        int indexX = (int) ((x - typeX + 0.5f * SIZE) / SIZE);
-        int indexY = (int) ((typeY - y + 0.5f * SIZE) / SIZE);
+        int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+        int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
         std::string path;
         switch (this->map->get_ref(indexY, indexX)
-                .grid.tower.value()
-                ->status()
-                .tower_type_) {
-            case TowerType::ArcherBase:
-                path = "images/towers/archer.png";
-                newTower = std::make_unique<TowerFactory<Archer>>(isScaling);
-                break;
-            case TowerType::MagicianBase:
-                path = "images/towers/core_magician.png";
-                newTower = std::make_unique<TowerFactory<CoreMagician>>(isScaling);
-                break;
-            case TowerType::HelperBase:
-                path = "images/towers/decelerate_magician.png";
-                newTower =
-                        std::make_unique<TowerFactory<DecelerateMagician>>(isScaling);
-                break;
-            default:
-                break;
+                    .grid.tower.value()
+                    ->status()
+                    .tower_type_) {
+        case TowerType::ArcherBase:
+            path = "images/towers/archer.png";
+            newTower = std::make_unique<TowerFactory<Archer>>(isScaling);
+            break;
+        case TowerType::MagicianBase:
+            path = "images/towers/core_magician.png";
+            newTower = std::make_unique<TowerFactory<CoreMagician>>(isScaling);
+            break;
+        case TowerType::HelperBase:
+            path = "images/towers/decelerate_magician.png";
+            newTower =
+                std::make_unique<TowerFactory<DecelerateMagician>>(isScaling);
+            break;
+        default:
+            break;
         }
         this->deleteTower(false);
         auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
@@ -429,42 +429,42 @@ bool LevelScene::init() {
     upgradeItem1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800,
                                    origin.y + visibleSize.height / 2 - 150));
     auto upgradeLabel2 =
-            Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
+        Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
     this->upgradeItem2 = MenuItemLabel::create(upgradeLabel2, [this](Ref *ref) {
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
         std::unique_ptr<TowerFactoryBase> newTower;
         auto isScaling =
-                std::unordered_map<std::string, std::any>{{"isScaling", false}};
+            std::unordered_map<std::string, std::any>{{"isScaling", false}};
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         float typeX = origin.x + 350 + SIZE;
         float typeY = origin.y + visibleSize.height - SIZE;
         float x = towerSprite->getPositionX();
         float y = towerSprite->getPositionY();
-        int indexX = (int) ((x - typeX + 0.5f * SIZE) / SIZE);
-        int indexY = (int) ((typeY - y + 0.5f * SIZE) / SIZE);
+        int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+        int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
         std::string path;
         switch (this->map->get_ref(indexY, indexX)
-                .grid.tower.value()
-                ->status()
-                .tower_type_) {
-            case TowerType::ArcherBase:
-                path = "images/towers/highspeed_archer.png";
-                newTower =
-                        std::make_unique<TowerFactory<HighspeedArcher>>(isScaling);
-                break;
-            case TowerType::MagicianBase:
-                path = "images/towers/diffusive_magician.png";
-                newTower =
-                        std::make_unique<TowerFactory<DiffusiveMagician>>(isScaling);
-                break;
-            case TowerType::HelperBase:
-                path = "images/towers/weaken_magician.png";
-                newTower =
-                        std::make_unique<TowerFactory<WeakenMagician>>(isScaling);
-                break;
-            default:
-                break;
+                    .grid.tower.value()
+                    ->status()
+                    .tower_type_) {
+        case TowerType::ArcherBase:
+            path = "images/towers/highspeed_archer.png";
+            newTower =
+                std::make_unique<TowerFactory<HighspeedArcher>>(isScaling);
+            break;
+        case TowerType::MagicianBase:
+            path = "images/towers/diffusive_magician.png";
+            newTower =
+                std::make_unique<TowerFactory<DiffusiveMagician>>(isScaling);
+            break;
+        case TowerType::HelperBase:
+            path = "images/towers/weaken_magician.png";
+            newTower =
+                std::make_unique<TowerFactory<WeakenMagician>>(isScaling);
+            break;
+        default:
+            break;
         }
         this->deleteTower(false);
         auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
@@ -480,41 +480,41 @@ bool LevelScene::init() {
     upgradeItem2->setPosition(Vec2(origin.x + visibleSize.width / 2,
                                    origin.y + visibleSize.height / 2 - 150));
     auto upgradeLabel3 =
-            Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
+        Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
     this->upgradeItem3 = MenuItemLabel::create(upgradeLabel3, [this](Ref *ref) {
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
         std::unique_ptr<TowerFactoryBase> newTower;
         auto isScaling =
-                std::unordered_map<std::string, std::any>{{"isScaling", false}};
+            std::unordered_map<std::string, std::any>{{"isScaling", false}};
         auto visibleSize = Director::getInstance()->getVisibleSize();
         Vec2 origin = Director::getInstance()->getVisibleOrigin();
         float typeX = origin.x + 350 + SIZE;
         float typeY = origin.y + visibleSize.height - SIZE;
         float x = towerSprite->getPositionX();
         float y = towerSprite->getPositionY();
-        int indexX = (int) ((x - typeX + 0.5f * SIZE) / SIZE);
-        int indexY = (int) ((typeY - y + 0.5f * SIZE) / SIZE);
+        int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+        int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
         std::string path;
         switch (this->map->get_ref(indexY, indexX)
-                .grid.tower.value()
-                ->status()
-                .tower_type_) {
-            case TowerType::ArcherBase:
-                path = "images/towers/bomber.png";
-                newTower = std::make_unique<TowerFactory<Bomber>>(isScaling);
-                break;
-            case TowerType::MagicianBase:
-                path = "images/towers/special_magician.png";
-                newTower =
-                        std::make_unique<TowerFactory<SpecialMagician>>(isScaling);
-                break;
-            case TowerType::HelperBase:
-                path = "images/towers/aggressive_magician.png";
-                newTower =
-                        std::make_unique<TowerFactory<AggressiveMagician>>(isScaling);
-                break;
-            default:
-                break;
+                    .grid.tower.value()
+                    ->status()
+                    .tower_type_) {
+        case TowerType::ArcherBase:
+            path = "images/towers/bomber.png";
+            newTower = std::make_unique<TowerFactory<Bomber>>(isScaling);
+            break;
+        case TowerType::MagicianBase:
+            path = "images/towers/special_magician.png";
+            newTower =
+                std::make_unique<TowerFactory<SpecialMagician>>(isScaling);
+            break;
+        case TowerType::HelperBase:
+            path = "images/towers/aggressive_magician.png";
+            newTower =
+                std::make_unique<TowerFactory<AggressiveMagician>>(isScaling);
+            break;
+        default:
+            break;
         }
         this->deleteTower(false);
         auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
@@ -530,13 +530,13 @@ bool LevelScene::init() {
     upgradeItem3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800,
                                    origin.y + visibleSize.height / 2 - 150));
     auto cancelLabel =
-            Label::createWithTTF("Cancel", "fonts/Bender/BENDER.OTF", 75);
+        Label::createWithTTF("Cancel", "fonts/Bender/BENDER.OTF", 75);
     cancelLabel->setColor(Color3B(255, 0, 0));
     this->cancelUpgradeItem = MenuItemLabel::create(
-            cancelLabel, [this](Ref *ref) { this->hideUpgradeMenu(); });
+        cancelLabel, [this](Ref *ref) { this->hideUpgradeMenu(); });
     this->cancelUpgradeItem->setPosition(
-            Vec2(origin.x + visibleSize.width / 2,
-                 origin.y + visibleSize.height / 2 - 300));
+        Vec2(origin.x + visibleSize.width / 2,
+             origin.y + visibleSize.height / 2 - 300));
 
     Vector<MenuItem *> upgradeMenuItems;
     upgradeMenuItems.pushBack(this->upgradeItem1);
@@ -560,20 +560,20 @@ bool LevelScene::init() {
 
     // update the map and ui every frame time
     scheduleOnce(
-            [this](float dt) {
-                schedule(
-                        [this](float dt) {
-                            map->update();
-                            this->update();
-                        },
-                        1.0 / 30, "update");
-            },
-            1.0f, "gameLoading");
+        [this](float dt) {
+            schedule(
+                [this](float dt) {
+                    map->update();
+                    this->update();
+                },
+                1.0 / 30, "update");
+        },
+        1.0f, "gameLoading");
     return true;
 }
 
 Sprite *LevelScene::getTower(Id id) {
-    for (auto &pair: this->towers) {
+    for (auto &pair : this->towers) {
         if (pair.first == id) {
             return pair.second;
         }
@@ -582,7 +582,7 @@ Sprite *LevelScene::getTower(Id id) {
 }
 
 Sprite *LevelScene::getEnemy(Id id) {
-    for (auto &pair: this->enemies) {
+    for (auto &pair : this->enemies) {
         if (pair.first == id) {
             return pair.second;
         }
@@ -593,18 +593,18 @@ Sprite *LevelScene::getEnemy(Id id) {
 void LevelScene::addBullet(Tower *tower, Enemy *enemy) {
     Bullet *bullet = nullptr;
     switch (tower->status().tower_type_) {
-        case TowerType::ArcherBase:
-        case TowerType::Archer:
-        case TowerType::ArcherPlus:
-        case TowerType::HighspeedArcher:
-        case TowerType::HighspeedArcherPlus:
-        case TowerType::Bomber:
-        case TowerType::BomberPlus:
-            bullet = new Bullet(this, tower, enemy);
-            break;
-        default:
-            bullet = new MagicBullet(this, tower, enemy);
-            break;
+    case TowerType::ArcherBase:
+    case TowerType::Archer:
+    case TowerType::ArcherPlus:
+    case TowerType::HighspeedArcher:
+    case TowerType::HighspeedArcherPlus:
+    case TowerType::Bomber:
+    case TowerType::BomberPlus:
+        bullet = new Bullet(this, tower, enemy);
+        break;
+    default:
+        bullet = new MagicBullet(this, tower, enemy);
+        break;
     }
     this->bullets.push_back(bullet);
     this->addChild(bullet->getBullet(), 4);
@@ -645,8 +645,8 @@ void LevelScene::updateMoneyLabel() {
     if (this->moneyLabel != nullptr) {
         this->moneyLabel->setString(std::to_string(this->map->cost_));
         this->moneyLabel->setPosition(
-                cocos2d::Vec2(origin.x + 150 + 15 * log10(map->getcost_()),
-                              origin.y + visibleSize.height - 70));
+            cocos2d::Vec2(origin.x + 150 + 15 * log10(map->getcost_()),
+                          origin.y + visibleSize.height - 70));
     }
 }
 
@@ -659,8 +659,8 @@ void LevelScene::decreaseLife() {
     } else {
         this->lifeLabel->setString(std::to_string(this->map->health_));
         this->lifeLabel->setPosition(
-                cocos2d::Vec2(origin.x + 150 + 15 * log10(this->map->health_),
-                              origin.y + visibleSize.height - 180));
+            cocos2d::Vec2(origin.x + 150 + 15 * log10(this->map->health_),
+                          origin.y + visibleSize.height - 180));
     }
 }
 
@@ -707,41 +707,41 @@ void LevelScene::putTower(float x, float y) {
     float typeY = origin.y + visibleSize.height - SIZE;
     if (x >= typeX - 0.5f * SIZE && x <= typeX + 11.5f * SIZE &&
         y >= typeY - 6.5f * SIZE && y <= typeY + 0.5f * SIZE) {
-        int indexX = (int) ((x - typeX + 0.5f * SIZE) / SIZE);
-        int indexY = (int) ((typeY - y + 0.5f * SIZE) / SIZE);
+        int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+        int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
         if (this->type[indexY][indexX] == Grid::Type::BlockTower) {
             if (!this->map->get_ref(indexY, indexX).grid.tower.has_value()) {
                 std::string path = "images/towers/";
                 std::unique_ptr<TowerFactoryBase> newTower;
                 auto isScaling = std::unordered_map<std::string, std::any>{
-                        {"isScaling", false}};
+                    {"isScaling", false}};
                 switch (this->isSelecting) {
-                    case 1:
-                        path += "archer_base_onblock.png";
-                        newTower =
-                                std::make_unique<TowerFactory<ArcherBase>>(isScaling);
-                        break;
-                    case 2:
-                        path += "magician_base_onblock.png";
-                        newTower =
-                                std::make_unique<TowerFactory<MagicianBase>>(isScaling);
-                        break;
-                    case 3:
-                        path += "helper_base_onblock.png";
-                        newTower =
-                                std::make_unique<TowerFactory<HelperBase>>(isScaling);
-                        break;
-                    default:
-                        break;
+                case 1:
+                    path += "archer_base_onblock.png";
+                    newTower =
+                        std::make_unique<TowerFactory<ArcherBase>>(isScaling);
+                    break;
+                case 2:
+                    path += "magician_base_onblock.png";
+                    newTower =
+                        std::make_unique<TowerFactory<MagicianBase>>(isScaling);
+                    break;
+                case 3:
+                    path += "helper_base_onblock.png";
+                    newTower =
+                        std::make_unique<TowerFactory<HelperBase>>(isScaling);
+                    break;
+                default:
+                    break;
                 }
                 auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
                 auto newTowerSprite = Sprite::create(path);
                 newTowerSprite->setPosition(
-                        Vec2(typeX + indexX * SIZE, typeY - indexY * SIZE));
+                    Vec2(typeX + indexX * SIZE, typeY - indexY * SIZE));
                 this->addChild(newTowerSprite, 3);
                 this->towers.emplace_back(
-                        id.value(),
-                        newTowerSprite); // todo: handle spawning failure
+                    id.value(),
+                    newTowerSprite); // todo: handle spawning failure
                 this->updateMoneyLabel();
                 this->updateSelectorEnabled();
             }
@@ -758,12 +758,12 @@ void LevelScene::showTowerInfo(float x, float y) {
     float typeY = origin.y + visibleSize.height - SIZE;
     if (x >= typeX - 0.5f * SIZE && x <= typeX + 11.5f * SIZE &&
         y >= typeY - 6.5f * SIZE && y <= typeY + 0.5f * SIZE) {
-        int indexX = (int) ((x - typeX + 0.5f * SIZE) / SIZE);
-        int indexY = (int) ((typeY - y + 0.5f * SIZE) / SIZE);
+        int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+        int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
         if (this->type[indexY][indexX] == Grid::Type::BlockTower &&
             this->map->get_ref(indexY, indexX).grid.tower.has_value()) {
             Id towerId =
-                    this->map->get_ref(indexY, indexX).grid.tower.value()->id;
+                this->map->get_ref(indexY, indexX).grid.tower.value()->id;
             this->selectedTowerId = towerId;
             Sprite *towerSprite = this->getTower(towerId);
             if (towerSprite) {
@@ -783,131 +783,131 @@ void LevelScene::showTowerInfo(float x, float y) {
                 this->upgradeButton->setVisible(true);
 
                 TowerType towerType = this->map->get_ref(indexY, indexX)
-                        .grid.tower.value()
-                        ->status()
-                        .tower_type_;
+                                          .grid.tower.value()
+                                          ->status()
+                                          .tower_type_;
                 std::string skillIconPath;
                 switch (towerType) {
-                    case TowerType::ArcherBase:
-                        skillIconPath = "images/towers/skill_icon/archer_base";
-                        this->upgradeTower1Cost = this->archerCost;
-                        this->upgradeTower2Cost = this->highspeedArcherCost;
-                        this->upgradeTower3Cost = this->bomberCost;
-                        this->upgradeTowerCost =
-                                std::min(std::min(this->upgradeTower1Cost,
-                                                  this->upgradeTower2Cost),
-                                         this->upgradeTower3Cost);
-                        break;
-                    case TowerType::MagicianBase:
-                        skillIconPath = "images/towers/skill_icon/magician_base";
-                        this->upgradeTower1Cost = this->coreMagicianCost;
-                        this->upgradeTower2Cost = this->diffusiveMagicianCost;
-                        this->upgradeTower3Cost = this->specialMagicianCost;
-                        this->upgradeTowerCost =
-                                std::min(std::min(this->upgradeTower1Cost,
-                                                  this->upgradeTower2Cost),
-                                         this->upgradeTower3Cost);
-                        break;
-                    case TowerType::HelperBase:
-                        skillIconPath = "images/towers/skill_icon/helper_base";
-                        this->upgradeTower1Cost = this->decelerateMagicianCost;
-                        this->upgradeTower2Cost = this->weakenMagicianCost;
-                        this->upgradeTower3Cost = this->aggressiveMagicianCost;
-                        this->upgradeTowerCost =
-                                std::min(std::min(this->upgradeTower1Cost,
-                                                  this->upgradeTower2Cost),
-                                         this->upgradeTower3Cost);
-                        break;
-                    case TowerType::Archer:
-                        skillIconPath = "images/towers/skill_icon/archer";
-                        this->upgradeTowerCost = this->archerProCost;
-                        break;
-                    case TowerType::ArcherPlus:
-                        skillIconPath = "images/towers/skill_icon/archer_pro";
-                        this->upgradeTowerCost = 1000000;
-                        break;
-                    case TowerType::Bomber:
-                        skillIconPath = "images/towers/skill_icon/bomber";
-                        this->upgradeTowerCost = this->bomberProCost;
-                        break;
-                    case TowerType::BomberPlus:
-                        skillIconPath = "images/towers/skill_icon/bomber_pro";
-                        this->upgradeTowerCost = 1000000;
-                        break;
-                    case TowerType::CoreMagician:
-                        skillIconPath = "images/towers/skill_icon/core_magician";
-                        this->upgradeTowerCost = this->coreMagicianProCost;
-                        break;
-                    case TowerType::CoreMagicianPlus:
-                        skillIconPath =
-                                "images/towers/skill_icon/core_magician_pro";
-                        this->upgradeTowerCost = 1000000;
-                        break;
-                    case TowerType::DecelerateMagician:
-                        skillIconPath =
-                                "images/towers/skill_icon/decelerate_magician";
-                        this->upgradeTowerCost = this->decelerateMagicianProCost;
-                        break;
-                    case TowerType::DecelerateMagicianPlus:
-                        skillIconPath =
-                                "images/towers/skill_icon/decelerate_magician_pro";
-                        this->upgradeTowerCost = 1000000;
-                        break;
-                    case TowerType::DiffusiveMagician:
-                        skillIconPath =
-                                "images/towers/skill_icon/diffusive_magician";
-                        this->upgradeTowerCost = this->diffusiveMagicianProCost;
-                        break;
-                    case TowerType::DiffusiveMagicianPlus:
-                        skillIconPath =
-                                "images/towers/skill_icon/diffusive_magician_pro";
-                        this->upgradeTowerCost = 1000000;
-                        break;
-                    case TowerType::HighspeedArcher:
-                        skillIconPath = "images/towers/skill_icon/highspeed_archer";
-                        this->upgradeTowerCost = this->highspeedArcherProCost;
-                        break;
-                    case TowerType::HighspeedArcherPlus:
-                        skillIconPath =
-                                "images/towers/skill_icon/highspeed_archer_pro";
-                        this->upgradeTowerCost = 1000000;
-                        break;
-                    case TowerType::SpecialMagician:
-                        skillIconPath = "images/towers/skill_icon/special_magician";
-                        this->upgradeTowerCost = this->specialMagicianProCost;
-                        break;
-                    case TowerType::SpecialMagicianPlus:
-                        skillIconPath =
-                                "images/towers/skill_icon/special_magician_pro";
-                        this->upgradeTowerCost = 1000000;
-                        break;
-                    case TowerType::WeakenMagician:
-                        skillIconPath = "images/towers/skill_icon/weaken_magician";
-                        this->upgradeTowerCost = this->weakenMagicianProCost;
-                        break;
-                    case TowerType::WeakenMagicianPlus:
-                        skillIconPath =
-                                "images/towers/skill_icon/weaken_magician_pro";
-                        this->upgradeTowerCost = 1000000;
-                        break;
-                    case TowerType::AggressiveMagician:
-                        skillIconPath =
-                                "images/towers/skill_icon/aggressive_magician";
-                        this->upgradeTowerCost = this->aggressiveMagicianProCost;
-                        break;
-                    case TowerType::AggressiveMagicianPlus:
-                        skillIconPath =
-                                "images/towers/skill_icon/aggressive_magician_pro";
-                        this->upgradeTowerCost = 1000000;
-                        break;
-                    default:
-                        break;
+                case TowerType::ArcherBase:
+                    skillIconPath = "images/towers/skill_icon/archer_base";
+                    this->upgradeTower1Cost = this->archerCost;
+                    this->upgradeTower2Cost = this->highspeedArcherCost;
+                    this->upgradeTower3Cost = this->bomberCost;
+                    this->upgradeTowerCost =
+                        std::min(std::min(this->upgradeTower1Cost,
+                                          this->upgradeTower2Cost),
+                                 this->upgradeTower3Cost);
+                    break;
+                case TowerType::MagicianBase:
+                    skillIconPath = "images/towers/skill_icon/magician_base";
+                    this->upgradeTower1Cost = this->coreMagicianCost;
+                    this->upgradeTower2Cost = this->diffusiveMagicianCost;
+                    this->upgradeTower3Cost = this->specialMagicianCost;
+                    this->upgradeTowerCost =
+                        std::min(std::min(this->upgradeTower1Cost,
+                                          this->upgradeTower2Cost),
+                                 this->upgradeTower3Cost);
+                    break;
+                case TowerType::HelperBase:
+                    skillIconPath = "images/towers/skill_icon/helper_base";
+                    this->upgradeTower1Cost = this->decelerateMagicianCost;
+                    this->upgradeTower2Cost = this->weakenMagicianCost;
+                    this->upgradeTower3Cost = this->aggressiveMagicianCost;
+                    this->upgradeTowerCost =
+                        std::min(std::min(this->upgradeTower1Cost,
+                                          this->upgradeTower2Cost),
+                                 this->upgradeTower3Cost);
+                    break;
+                case TowerType::Archer:
+                    skillIconPath = "images/towers/skill_icon/archer";
+                    this->upgradeTowerCost = this->archerProCost;
+                    break;
+                case TowerType::ArcherPlus:
+                    skillIconPath = "images/towers/skill_icon/archer_pro";
+                    this->upgradeTowerCost = 1000000;
+                    break;
+                case TowerType::Bomber:
+                    skillIconPath = "images/towers/skill_icon/bomber";
+                    this->upgradeTowerCost = this->bomberProCost;
+                    break;
+                case TowerType::BomberPlus:
+                    skillIconPath = "images/towers/skill_icon/bomber_pro";
+                    this->upgradeTowerCost = 1000000;
+                    break;
+                case TowerType::CoreMagician:
+                    skillIconPath = "images/towers/skill_icon/core_magician";
+                    this->upgradeTowerCost = this->coreMagicianProCost;
+                    break;
+                case TowerType::CoreMagicianPlus:
+                    skillIconPath =
+                        "images/towers/skill_icon/core_magician_pro";
+                    this->upgradeTowerCost = 1000000;
+                    break;
+                case TowerType::DecelerateMagician:
+                    skillIconPath =
+                        "images/towers/skill_icon/decelerate_magician";
+                    this->upgradeTowerCost = this->decelerateMagicianProCost;
+                    break;
+                case TowerType::DecelerateMagicianPlus:
+                    skillIconPath =
+                        "images/towers/skill_icon/decelerate_magician_pro";
+                    this->upgradeTowerCost = 1000000;
+                    break;
+                case TowerType::DiffusiveMagician:
+                    skillIconPath =
+                        "images/towers/skill_icon/diffusive_magician";
+                    this->upgradeTowerCost = this->diffusiveMagicianProCost;
+                    break;
+                case TowerType::DiffusiveMagicianPlus:
+                    skillIconPath =
+                        "images/towers/skill_icon/diffusive_magician_pro";
+                    this->upgradeTowerCost = 1000000;
+                    break;
+                case TowerType::HighspeedArcher:
+                    skillIconPath = "images/towers/skill_icon/highspeed_archer";
+                    this->upgradeTowerCost = this->highspeedArcherProCost;
+                    break;
+                case TowerType::HighspeedArcherPlus:
+                    skillIconPath =
+                        "images/towers/skill_icon/highspeed_archer_pro";
+                    this->upgradeTowerCost = 1000000;
+                    break;
+                case TowerType::SpecialMagician:
+                    skillIconPath = "images/towers/skill_icon/special_magician";
+                    this->upgradeTowerCost = this->specialMagicianProCost;
+                    break;
+                case TowerType::SpecialMagicianPlus:
+                    skillIconPath =
+                        "images/towers/skill_icon/special_magician_pro";
+                    this->upgradeTowerCost = 1000000;
+                    break;
+                case TowerType::WeakenMagician:
+                    skillIconPath = "images/towers/skill_icon/weaken_magician";
+                    this->upgradeTowerCost = this->weakenMagicianProCost;
+                    break;
+                case TowerType::WeakenMagicianPlus:
+                    skillIconPath =
+                        "images/towers/skill_icon/weaken_magician_pro";
+                    this->upgradeTowerCost = 1000000;
+                    break;
+                case TowerType::AggressiveMagician:
+                    skillIconPath =
+                        "images/towers/skill_icon/aggressive_magician";
+                    this->upgradeTowerCost = this->aggressiveMagicianProCost;
+                    break;
+                case TowerType::AggressiveMagicianPlus:
+                    skillIconPath =
+                        "images/towers/skill_icon/aggressive_magician_pro";
+                    this->upgradeTowerCost = 1000000;
+                    break;
+                default:
+                    break;
                 }
                 updateUpgradeButtonEnabled();
                 this->skillButton->setScale(1.0f);
                 this->skillButton->loadTextures(
-                        skillIconPath + ".png", skillIconPath + ".png",
-                        skillIconPath + "_inactive.png");
+                    skillIconPath + ".png", skillIconPath + ".png",
+                    skillIconPath + "_inactive.png");
                 this->skillButton->setPosition(Vec2(towerX, towerY));
                 this->skillButton->setScale(0.1f);
                 this->skillButton->setVisible(true);
@@ -920,9 +920,9 @@ void LevelScene::showTowerInfo(float x, float y) {
 
                 auto towerInfoSpawn = Spawn::create(scale, move3, nullptr);
                 auto deleteSpawn =
-                        Spawn::create(scale->clone(), move2, nullptr);
+                    Spawn::create(scale->clone(), move2, nullptr);
                 auto upgradeSpawn =
-                        Spawn::create(scale->clone(), move4, nullptr);
+                    Spawn::create(scale->clone(), move4, nullptr);
                 auto skillSpawn = Spawn::create(scale->clone(), move1, nullptr);
 
                 this->towerInfoButton->runAction(towerInfoSpawn);
@@ -931,15 +931,15 @@ void LevelScene::showTowerInfo(float x, float y) {
                 this->skillButton->runAction(skillSpawn);
                 this->isShowingTowerInfo = true;
                 scheduleOnce(
-                        [this](float dt) {
-                            this->isShowingTowerInfo = false;
-                            scheduleOnce(
-                                    [this](float dt) {
-                                        this->isShowingTowerInfo = true;
-                                    },
-                                    0.1f, "resetTowerInfo");
-                        },
-                        0.2f, "preventHighSpeed");
+                    [this](float dt) {
+                        this->isShowingTowerInfo = false;
+                        scheduleOnce(
+                            [this](float dt) {
+                                this->isShowingTowerInfo = true;
+                            },
+                            0.1f, "resetTowerInfo");
+                    },
+                    0.2f, "preventHighSpeed");
             }
         }
     }
@@ -953,8 +953,8 @@ void LevelScene::hideTowerInfo(float x, float y) {
 
     if (x >= typeX - 0.5f * SIZE && x <= typeX + 11.5f * SIZE &&
         y >= typeY - 6.5f * SIZE && y <= typeY + 0.5f * SIZE) {
-        int indexX = (int) ((x - typeX + 0.5f * SIZE) / SIZE);
-        int indexY = (int) ((typeY - y + 0.5f * SIZE) / SIZE);
+        int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+        int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
         if (this->type[indexY][indexX] == Grid::Type::BlockTower &&
             this->map->get_ref(indexY, indexX).grid.tower.has_value()) {
             return;
@@ -978,14 +978,14 @@ void LevelScene::hideTowerInfo(float x, float y) {
     this->skillButton->runAction(skillSpawn);
     this->isShowingTowerInfo = true;
     scheduleOnce(
-            [this](float dt) {
-                this->towerInfoButton->setVisible(false);
-                this->deleteButton->setVisible(false);
-                this->upgradeButton->setVisible(false);
-                this->skillButton->setVisible(false);
-                this->isShowingTowerInfo = false;
-            },
-            0.2f, "hideTowerInfo");
+        [this](float dt) {
+            this->towerInfoButton->setVisible(false);
+            this->deleteButton->setVisible(false);
+            this->upgradeButton->setVisible(false);
+            this->skillButton->setVisible(false);
+            this->isShowingTowerInfo = false;
+        },
+        0.2f, "hideTowerInfo");
 }
 
 void LevelScene::showUpgradeMenu() {
@@ -1029,17 +1029,17 @@ void LevelScene::hideUpgradeMenu() {
     this->upgradeTower3->runAction(scale->clone());
     this->upgradeMenu->runAction(scale->clone());
     scheduleOnce(
-            [this](float dt) {
-                this->upgradeBackground1->setVisible(false);
-                this->upgradeBackground2->setVisible(false);
-                this->upgradeBackground3->setVisible(false);
-                this->upgradeTower1->setVisible(false);
-                this->upgradeTower2->setVisible(false);
-                this->upgradeTower3->setVisible(false);
-                this->upgradeMenu->setVisible(false);
-                this->isUpgrade = false;
-            },
-            0.3f, "hideUpgradeMenu");
+        [this](float dt) {
+            this->upgradeBackground1->setVisible(false);
+            this->upgradeBackground2->setVisible(false);
+            this->upgradeBackground3->setVisible(false);
+            this->upgradeTower1->setVisible(false);
+            this->upgradeTower2->setVisible(false);
+            this->upgradeTower3->setVisible(false);
+            this->upgradeMenu->setVisible(false);
+            this->isUpgrade = false;
+        },
+        0.3f, "hideUpgradeMenu");
 }
 
 void LevelScene::deleteTower(bool isReturn) {
@@ -1070,84 +1070,84 @@ void LevelScene::upgradeTower() {
     Sprite *towerSprite = this->getTower(this->selectedTowerId);
     float x = towerSprite->getPositionX();
     float y = towerSprite->getPositionY();
-    int indexX = (int) ((x - typeX + 0.5f * SIZE) / SIZE);
-    int indexY = (int) ((typeY - y + 0.5f * SIZE) / SIZE);
+    int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+    int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
     std::string path;
     std::unique_ptr<TowerFactoryBase> newTower;
     switch (this->map->get_ref(indexY, indexX)
-            .grid.tower.value()
-            ->status()
-            .tower_type_) {
-        case TowerType::ArcherBase:
-            this->upgradeTower1->setTexture("images/towers/archer.png");
-            this->upgradeTower2->setTexture("images/towers/highspeed_archer.png");
-            this->upgradeTower3->setTexture("images/towers/bomber.png");
-            this->upgradeTower1->setScale(2.0f);
-            this->upgradeTower2->setScale(2.0f);
-            this->upgradeTower3->setScale(2.0f);
-            updateUpgradeItemEnabled();
-            this->showUpgradeMenu();
-            return;
-        case TowerType::MagicianBase:
-            this->upgradeTower1->setTexture("images/towers/core_magician.png");
-            this->upgradeTower2->setTexture("images/towers/diffusive_magician.png");
-            this->upgradeTower3->setTexture("images/towers/special_magician.png");
-            this->upgradeTower1->setScale(2.0f);
-            this->upgradeTower2->setScale(2.0f);
-            this->upgradeTower3->setScale(2.0f);
-            updateUpgradeItemEnabled();
-            this->showUpgradeMenu();
-            return;
-        case TowerType::HelperBase:
-            this->upgradeTower1->setTexture(
-                    "images/towers/decelerate_magician.png");
-            this->upgradeTower2->setTexture("images/towers/weaken_magician.png");
-            this->upgradeTower3->setTexture(
-                    "images/towers/aggressive_magician.png");
-            this->upgradeTower1->setScale(2.0f);
-            this->upgradeTower2->setScale(2.0f);
-            this->upgradeTower3->setScale(2.0f);
-            updateUpgradeItemEnabled();
-            this->showUpgradeMenu();
-            return;
-        case TowerType::Archer:
-            path = "images/towers/archer_pro.png";
-            newTower = std::make_unique<TowerFactory<ArcherPlus>>();
-            break;
-        case TowerType::Bomber:
-            path = "images/towers/bomber_pro.png";
-            newTower = std::make_unique<TowerFactory<BomberPlus>>();
-            break;
-        case TowerType::CoreMagician:
-            path = "images/towers/core_magician_pro.png";
-            newTower = std::make_unique<TowerFactory<CoreMagicianPlus>>();
-            break;
-        case TowerType::DecelerateMagician:
-            path = "images/towers/decelerate_magician_pro.png";
-            newTower = std::make_unique<TowerFactory<DecelerateMagicianPlus>>();
-            break;
-        case TowerType::DiffusiveMagician:
-            path = "images/towers/diffusive_magician_pro.png";
-            newTower = std::make_unique<TowerFactory<DiffusiveMagicianPlus>>();
-            break;
-        case TowerType::HighspeedArcher:
-            path = "images/towers/highspeed_archer_pro.png";
-            newTower = std::make_unique<TowerFactory<HighspeedArcherPlus>>();
-            break;
-        case TowerType::SpecialMagician:
-            path = "images/towers/special_magician_pro.png";
-            newTower = std::make_unique<TowerFactory<SpecialMagicianPlus>>();
-            break;
-        case TowerType::WeakenMagician:
-            path = "images/towers/weaken_magician_pro.png";
-            newTower = std::make_unique<TowerFactory<WeakenMagicianPlus>>();
-            break;
-        case TowerType::AggressiveMagician:
-            path = "images/towers/aggressive_magician_pro.png";
-            newTower = std::make_unique<TowerFactory<AggressiveMagicianPlus>>();
-            break;
-        default:
-            return;
+                .grid.tower.value()
+                ->status()
+                .tower_type_) {
+    case TowerType::ArcherBase:
+        this->upgradeTower1->setTexture("images/towers/archer.png");
+        this->upgradeTower2->setTexture("images/towers/highspeed_archer.png");
+        this->upgradeTower3->setTexture("images/towers/bomber.png");
+        this->upgradeTower1->setScale(2.0f);
+        this->upgradeTower2->setScale(2.0f);
+        this->upgradeTower3->setScale(2.0f);
+        updateUpgradeItemEnabled();
+        this->showUpgradeMenu();
+        return;
+    case TowerType::MagicianBase:
+        this->upgradeTower1->setTexture("images/towers/core_magician.png");
+        this->upgradeTower2->setTexture("images/towers/diffusive_magician.png");
+        this->upgradeTower3->setTexture("images/towers/special_magician.png");
+        this->upgradeTower1->setScale(2.0f);
+        this->upgradeTower2->setScale(2.0f);
+        this->upgradeTower3->setScale(2.0f);
+        updateUpgradeItemEnabled();
+        this->showUpgradeMenu();
+        return;
+    case TowerType::HelperBase:
+        this->upgradeTower1->setTexture(
+            "images/towers/decelerate_magician.png");
+        this->upgradeTower2->setTexture("images/towers/weaken_magician.png");
+        this->upgradeTower3->setTexture(
+            "images/towers/aggressive_magician.png");
+        this->upgradeTower1->setScale(2.0f);
+        this->upgradeTower2->setScale(2.0f);
+        this->upgradeTower3->setScale(2.0f);
+        updateUpgradeItemEnabled();
+        this->showUpgradeMenu();
+        return;
+    case TowerType::Archer:
+        path = "images/towers/archer_pro.png";
+        newTower = std::make_unique<TowerFactory<ArcherPlus>>();
+        break;
+    case TowerType::Bomber:
+        path = "images/towers/bomber_pro.png";
+        newTower = std::make_unique<TowerFactory<BomberPlus>>();
+        break;
+    case TowerType::CoreMagician:
+        path = "images/towers/core_magician_pro.png";
+        newTower = std::make_unique<TowerFactory<CoreMagicianPlus>>();
+        break;
+    case TowerType::DecelerateMagician:
+        path = "images/towers/decelerate_magician_pro.png";
+        newTower = std::make_unique<TowerFactory<DecelerateMagicianPlus>>();
+        break;
+    case TowerType::DiffusiveMagician:
+        path = "images/towers/diffusive_magician_pro.png";
+        newTower = std::make_unique<TowerFactory<DiffusiveMagicianPlus>>();
+        break;
+    case TowerType::HighspeedArcher:
+        path = "images/towers/highspeed_archer_pro.png";
+        newTower = std::make_unique<TowerFactory<HighspeedArcherPlus>>();
+        break;
+    case TowerType::SpecialMagician:
+        path = "images/towers/special_magician_pro.png";
+        newTower = std::make_unique<TowerFactory<SpecialMagicianPlus>>();
+        break;
+    case TowerType::WeakenMagician:
+        path = "images/towers/weaken_magician_pro.png";
+        newTower = std::make_unique<TowerFactory<WeakenMagicianPlus>>();
+        break;
+    case TowerType::AggressiveMagician:
+        path = "images/towers/aggressive_magician_pro.png";
+        newTower = std::make_unique<TowerFactory<AggressiveMagicianPlus>>();
+        break;
+    default:
+        return;
     }
     this->deleteTower(false);
     auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
@@ -1177,408 +1177,391 @@ void LevelScene::menuCloseCallback(cocos2d::Ref *pSender) {
 
 void LevelScene::createMap(int level) {
     switch (level) {
-        case 1:
-            gridType = {{2, 0, 0, 0, 0, 5, 5, 3, 0, 0, 0, 2},
-                        {5, 4, 4, 4, 0, 4, 4, 4, 5, 5, 5, 5},
-                        {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
-                        {1, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2},
-                        {1, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 2},
-                        {5, 4, 4, 4, 4, 0, 4, 5, 4, 4, 4, 5},
-                        {2, 0, 0, 0, 0, 0, 5, 3, 0, 0, 0, 1}};
-            for (size_t i = 0; i < height; i++) {
-                for (size_t j = 0; j < width; j++) {
-                    type[i][j] = gridTypes[gridType[i][j]];
-                }
+    case 1:
+        gridType = {{2, 0, 0, 0, 0, 5, 5, 3, 0, 0, 0, 2},
+                    {5, 4, 4, 4, 0, 4, 4, 4, 5, 5, 5, 5},
+                    {1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+                    {1, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+                    {1, 0, 0, 0, 0, 0, 4, 4, 0, 0, 0, 2},
+                    {5, 4, 4, 4, 4, 0, 4, 5, 4, 4, 4, 5},
+                    {2, 0, 0, 0, 0, 0, 5, 3, 0, 0, 0, 1}};
+        for (size_t i = 0; i < height; i++) {
+            for (size_t j = 0; j < width; j++) {
+                type[i][j] = gridTypes[gridType[i][j]];
             }
-            map = new towerdefence::core::Map(
-                    width, height,
-                    [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
-            routes = {Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D], Dir[D],
-                             Dir[D], Dir[L], Dir[L], Dir[L], Dir[U], Dir[U], Dir[R],
-                             Dir[R], Dir[D], Dir[D], Dir[L], Dir[L], Dir[L]}),
-                      Route({Dir[L],
-                             Dir[L],
-                             Dir[L],
-                             Dir[L],
-                             {6, 0},
-                             Dir[R],
-                             Dir[R],
-                             Dir[R],
-                             Dir[R]}),
-                      Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
-                             Dir[L], Dir[L], Dir[L], Dir[L]}),
-                      Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
-                             Dir[L], Dir[D], Dir[L], Dir[L], Dir[U], Dir[L]}),
-                      Route({Dir[L], Dir[L], Dir[L], Dir[U], Dir[L], Dir[L], Dir[L],
-                             Dir[D], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L]}),
-                      Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[U],
-                             Dir[U], Dir[U], Dir[U], Dir[L], Dir[L], Dir[D],
-                             Dir[D], Dir[R], Dir[R], Dir[U], Dir[U], Dir[L],
-                             Dir[L], Dir[L], Dir[L], Dir[L]})};
-            enemyFirstDir = {R, L, L, L, L, R};
-            enemyCreateTime = {10.0, 11.0, 12.0, 15.0, 16.0, 17.0, 20.0,
-                               22.0, 24.0, 30.0, 33.0, 36.0, 39.0, 45.0,
-                               46.0, 47.0, 55.0, 57.0, 59.0, 65.0, 68.0,
-                               71.0, 72.0, 77.0, 80.0, 85.0, 95.0, 101.0,
-                               110.0, 120.0, 130.0, 145.0, 160.0, 180.0, 200.0};
-            enemyStartPos = {{0, 0},
-                             {0, 0},
-                             {0, 11},
-                             {2, 11},
-                             {3, 11},
-                             {4, 11},
-                             {6, 0}};
-            enemyCreateType = {
-                    {{3, 2}},
-                    {{3, 2}},
-                    {{3, 2}},
-                    {{3, 2}, {4, 1}, {5, 1}},
-                    {{3, 2}, {4, 1}, {5, 1}},
-                    {{3, 2}, {4, 1}, {5, 1}},
-                    {{3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-                    {{3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-                    {{3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-                    {{3, 3}, {3, 4}, {4, 3}, {4, 4}},
-                    {{3, 3}, {3, 4}, {4, 3}, {4, 4}},
-                    {{3, 3}, {3, 4}, {4, 3}, {4, 4}, {5, 3}, {5, 4}},
-                    {{3, 3}, {3, 4}, {4, 3}, {4, 4}, {5, 3}, {5, 4}},
-                    {{1, 7}, {3, 2}, {4, 1}, {5, 1}},
-                    {{1, 7}, {3, 2}, {4, 1}, {5, 1}},
-                    {{1, 7}, {3, 2}, {4, 1}, {5, 1}},
-                    {{1, 7}, {3, 3}, {4, 3}, {5, 4}},
-                    {{1, 7}, {3, 3}, {4, 3}, {5, 4}},
-                    {{1, 7}, {3, 3}, {4, 3}, {5, 4}},
-                    {{1, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-                    {{1, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-                    {{1, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-                    {{1, 5}},
-                    {{6, 6}},
-                    {{1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6}},
-                    {{1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6}},
-                    {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-                    {{2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}, {6, 6}},
-                    {{1, 5},
-                             {2, 7},
-                                     {3, 2},
-                                             {3, 3},
-                                                     {4, 1},
-                                                             {4, 3},
-                                                                     {5, 1},
-                                                                             {5, 3},
-                            {6, 6}},
-                    {{1, 5},
-                             {2, 7},
-                                     {3, 2},
-                                             {3, 3},
-                                                     {4, 1},
-                                                             {4, 3},
-                                                                     {5, 1},
-                                                                             {5, 3},
-                            {6, 6}},
-                    {{1, 5},
-                             {2, 7},
-                                     {3, 2},
-                                             {3, 3},
-                                                     {4, 1},
-                                                             {4, 3},
-                                                                     {5, 1},
-                                                                             {5, 3},
-                            {6, 6}},
-                    {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
-                    {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
-                    {{1, 9}, {3, 5}, {4, 8}, {5, 6}},
-                    {{1, 9}, {2, 7}, {3, 5}, {4, 8}, {5, 6}, {6, 9}}};
-            break;
-        case 2:
-            gridType = {{3, 5, 4, 4, 4, 4, 4, 5, 3, 0, 0, 2},
-                        {0, 5, 4, 0, 0, 0, 4, 4, 5, 5, 5, 5},
-                        {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
-                        {0, 1, 0, 0, 4, 0, 4, 0, 0, 0, 0, 2},
-                        {0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2},
-                        {0, 5, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5},
-                        {0, 1, 0, 4, 4, 4, 4, 4, 3, 0, 0, 2}};
-            for (size_t i = 0; i < height; i++) {
-                for (size_t j = 0; j < width; j++) {
-                    type[i][j] = gridTypes[gridType[i][j]];
-                }
+        }
+        map = new towerdefence::core::Map(
+            width, height,
+            [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
+        routes = {Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D], Dir[D],
+                         Dir[D], Dir[L], Dir[L], Dir[L], Dir[U], Dir[U], Dir[R],
+                         Dir[R], Dir[D], Dir[D], Dir[L], Dir[L], Dir[L]}),
+                  Route({Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         {6, 0},
+                         Dir[R],
+                         Dir[R],
+                         Dir[R],
+                         Dir[R]}),
+                  Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
+                         Dir[L], Dir[L], Dir[L], Dir[L]}),
+                  Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
+                         Dir[L], Dir[D], Dir[L], Dir[L], Dir[U], Dir[L]}),
+                  Route({Dir[L], Dir[L], Dir[L], Dir[U], Dir[L], Dir[L], Dir[L],
+                         Dir[D], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L]}),
+                  Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[U],
+                         Dir[U], Dir[U], Dir[U], Dir[L], Dir[L], Dir[D],
+                         Dir[D], Dir[R], Dir[R], Dir[U], Dir[U], Dir[L],
+                         Dir[L], Dir[L], Dir[L], Dir[L]})};
+        enemyFirstDir = {R, L, L, L, L, R};
+        enemyCreateTime = {10.0,  11.0,  12.0,  15.0,  16.0,  17.0,  20.0,
+                           22.0,  24.0,  30.0,  33.0,  36.0,  39.0,  45.0,
+                           46.0,  47.0,  55.0,  57.0,  59.0,  65.0,  68.0,
+                           71.0,  72.0,  77.0,  80.0,  85.0,  95.0,  101.0,
+                           110.0, 120.0, 130.0, 145.0, 160.0, 180.0, 200.0};
+        enemyStartPos = {{0, 0},  {0, 0},  {0, 11}, {2, 11},
+                         {3, 11}, {4, 11}, {6, 0}};
+        enemyCreateType = {
+            {{3, 2}},
+            {{3, 2}},
+            {{3, 2}},
+            {{3, 2}, {4, 1}, {5, 1}},
+            {{3, 2}, {4, 1}, {5, 1}},
+            {{3, 2}, {4, 1}, {5, 1}},
+            {{3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
+            {{3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
+            {{3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
+            {{3, 3}, {3, 4}, {4, 3}, {4, 4}},
+            {{3, 3}, {3, 4}, {4, 3}, {4, 4}},
+            {{3, 3}, {3, 4}, {4, 3}, {4, 4}, {5, 3}, {5, 4}},
+            {{3, 3}, {3, 4}, {4, 3}, {4, 4}, {5, 3}, {5, 4}},
+            {{1, 7}, {3, 2}, {4, 1}, {5, 1}},
+            {{1, 7}, {3, 2}, {4, 1}, {5, 1}},
+            {{1, 7}, {3, 2}, {4, 1}, {5, 1}},
+            {{1, 7}, {3, 3}, {4, 3}, {5, 4}},
+            {{1, 7}, {3, 3}, {4, 3}, {5, 4}},
+            {{1, 7}, {3, 3}, {4, 3}, {5, 4}},
+            {{1, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
+            {{1, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
+            {{1, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
+            {{1, 5}},
+            {{6, 6}},
+            {{1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6}},
+            {{1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6}},
+            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
+            {{2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}, {6, 6}},
+            {{1, 5},
+             {2, 7},
+             {3, 2},
+             {3, 3},
+             {4, 1},
+             {4, 3},
+             {5, 1},
+             {5, 3},
+             {6, 6}},
+            {{1, 5},
+             {2, 7},
+             {3, 2},
+             {3, 3},
+             {4, 1},
+             {4, 3},
+             {5, 1},
+             {5, 3},
+             {6, 6}},
+            {{1, 5},
+             {2, 7},
+             {3, 2},
+             {3, 3},
+             {4, 1},
+             {4, 3},
+             {5, 1},
+             {5, 3},
+             {6, 6}},
+            {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
+            {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
+            {{1, 9}, {3, 5}, {4, 8}, {5, 6}},
+            {{1, 9}, {2, 7}, {3, 5}, {4, 8}, {5, 6}, {6, 9}}};
+        break;
+    case 2:
+        gridType = {{3, 5, 4, 4, 4, 4, 4, 5, 3, 0, 0, 2},
+                    {0, 5, 4, 0, 0, 0, 4, 4, 5, 5, 5, 5},
+                    {0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+                    {0, 1, 0, 0, 4, 0, 4, 0, 0, 0, 0, 2},
+                    {0, 4, 4, 0, 0, 0, 0, 0, 0, 0, 0, 2},
+                    {0, 5, 0, 0, 0, 0, 0, 0, 5, 5, 5, 5},
+                    {0, 1, 0, 4, 4, 4, 4, 4, 3, 0, 0, 2}};
+        for (size_t i = 0; i < height; i++) {
+            for (size_t j = 0; j < width; j++) {
+                type[i][j] = gridTypes[gridType[i][j]];
             }
-            map = new towerdefence::core::Map(
-                    width, height,
-                    [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
-            routes = {Route({Dir[L],
-                             Dir[L],
-                             Dir[L],
-                             {0, -8},
-                             Dir[D],
-                             Dir[D],
-                             Dir[D],
-                             Dir[D],
-                             Dir[D],
-                             Dir[D],
-                             Dir[R]}),
-                      Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
-                             Dir[L], Dir[L], Dir[L]}),
-                      Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
-                             Dir[L], Dir[L], Dir[U], Dir[L], Dir[L]}),
-                      Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
-                             Dir[L], Dir[L], Dir[L], Dir[D], Dir[L]}),
-                      Route({Dir[L],
-                             Dir[L],
-                             Dir[L],
-                             {-6, -8},
-                             Dir[D],
-                             Dir[D],
-                             Dir[D],
-                             Dir[D],
-                             Dir[D],
-                             Dir[D],
-                             Dir[R]}),
-                      Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D], Dir[L],
-                             Dir[L], Dir[U], Dir[U], Dir[U], Dir[U], Dir[L], Dir[L],
-                             Dir[D], Dir[D], Dir[L], Dir[L]})};
-            enemyFirstDir = {L, L, L, L, L, L};
-            enemyCreateTime = {
-                    10.0, 12.0, 14.0, 16.0, 20.0, 22.0, 25.0, 27.0, 29.0,
-                    32.0, 35.0, 38.0, 41.0, 45.0, 50.0, 60.0, 70.0, 75.0,
-                    80.0, 81.0, 82.0, 83.0, 84.0, 85.0, 90.0, 92.0, 94.0,
-                    96.0, 98.0, 100.0, 105.0, 106.0, 107.0, 108.0, 109.0, 110.0,
-                    115.0, 120.0, 125.0, 150.0, 155.0, 160.0, 165.0, 170.0, 173.0,
-                    175.0, 178.0, 200.0, 205.0, 210.0, 215.0, 250.0, 255.0, 260.0,
-                    265.0, 270.0, 280.0, 290.0, 293.0, 295.0, 298.0, 300.0};
-            enemyStartPos = {{0, 0},
-                             {0, 11},
-                             {2, 11},
-                             {3, 11},
-                             {4, 11},
-                             {6, 11},
-                             {3, 11}};
-            enemyCreateType = {{{2, 2}},
-                               {{2, 2}},
-                               {{2, 2},  {3, 2},  {4, 2}},
-                               {{2, 2},  {3, 2},  {4, 2}},
-                               {{2, 2},  {3, 2},  {6, 1},  {4, 2}},
-                               {{2, 2},  {3, 2},  {6, 1},  {4, 2}},
-                               {{2, 3},  {3, 3},  {6, 1},  {4, 3}},
-                               {{2, 3},  {3, 3},  {6, 1},  {4, 3}},
-                               {{1, 4},  {2, 3},  {3, 3},  {6, 1},  {4, 3}},
-                               {{1, 4},  {2, 3},  {3, 3},  {6, 1},  {4, 3}},
-                               {{1, 4},  {2, 3},  {3, 3},  {6, 1},  {4, 3}, {5, 4}},
-                               {{1, 4},  {2, 3},  {3, 3},  {6, 1},  {4, 3}, {5, 4}},
-                               {{2, 3},  {3, 3},  {6, 5},  {4, 3}},
-                               {{2, 3},  {3, 3},  {6, 6},  {4, 3}},
-                               {{1, 5},  {2, 3},  {3, 4},  {4, 3},  {5, 6}},
-                               {{1, 5},  {2, 3},  {3, 4},  {4, 3},  {5, 6}},
-                               {{1, 5},  {2, 3},  {3, 7},  {4, 3},  {5, 6}},
-                               {{1, 5},  {2, 3},  {3, 7},  {4, 3},  {5, 6}},
-                               {{2, 2},  {3, 8},  {4, 2}},
-                               {{2, 2},  {3, 8},  {4, 2}},
-                               {{2, 2},  {3, 8},  {4, 2}},
-                               {{2, 2},  {3, 8},  {4, 2}},
-                               {{2, 2},  {3, 8},  {4, 2}},
-                               {{2, 2},  {3, 8},  {4, 2}},
-                               {{2, 5},  {6, 10}, {3, 6}},
-                               {{2, 5},  {6, 7},  {3, 6}},
-                               {{2, 5},  {6, 10}, {3, 6}},
-                               {{2, 5},  {6, 7},  {3, 6}},
-                               {{2, 5},  {6, 10}, {3, 6}},
-                               {{2, 5},  {6, 7},  {3, 6}},
-                               {{1, 7},  {2, 5},  {6, 9},  {4, 6}},
-                               {{5, 7}},
-                               {{1, 7}},
-                               {{5, 7}},
-                               {{1, 7}},
-                               {{2, 5},  {6, 9},  {4, 6},  {5, 7}},
-                               {{2, 7},  {6, 11}, {4, 7}},
-                               {{2, 7},  {6, 11}, {4, 7}},
-                               {{2, 7},  {6, 11}, {4, 7}},
-                               {{1, 7},  {2, 10}, {6, 9},  {4, 10}},
-                               {{6, 11}, {5, 7}},
-                               {{1, 7},  {2, 10}, {6, 9},  {4, 10}},
-                               {{6, 11}, {5, 7}},
-                               {{2, 1},  {3, 9},  {4, 1}},
-                               {{2, 5},  {6, 10}, {4, 6}},
-                               {{2, 1},  {3, 9},  {4, 1}},
-                               {{2, 5},  {6, 10}, {4, 6}},
-                               {{2, 9},  {6, 10}, {4, 9}},
-                               {{2, 11}, {6, 8},  {4, 11}},
-                               {{2, 9},  {6, 10}, {4, 9}},
-                               {{2, 11}, {6, 8},  {4, 11}},
-                               {{1, 11}, {2, 9},  {6, 9},  {4, 9}},
-                               {{2, 10}, {6, 10}, {4, 10}, {5, 11}},
-                               {{1, 11}, {2, 9},  {6, 9},  {4, 9}},
-                               {{2, 10}, {6, 10}, {4, 10}, {5, 11}},
-                               {{1, 11}, {2, 11}, {3, 11}, {4, 11}, {5, 11}},
-                               {{1, 11}, {2, 11}, {3, 11}, {4, 11}, {5, 11}},
-                               {{1, 11}, {2, 9},  {6, 10}, {4, 9}},
-                               {{2, 9},  {3, 8},  {4, 9}},
-                               {{2, 9},  {6, 10}, {4, 9},  {5, 11}},
-                               {{2, 8},  {3, 8},  {4, 8}},
-                               {{1, 11}, {2, 9},  {6, 10}, {4, 9},  {5, 11}}};
-            break;
-        case 3:
-            gridType = {{2, 0, 0, 0, 3, 2, 2, 5, 5, 5, 5, 5},
-                        {5, 5, 5, 4, 4, 0, 0, 0, 0, 0, 0, 2},
-                        {2, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4},
-                        {5, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
-                        {5, 4, 0, 4, 4, 0, 0, 0, 0, 0, 0, 1},
-                        {5, 4, 0, 4, 5, 5, 5, 4, 4, 4, 5, 5},
-                        {1, 0, 0, 5, 5, 5, 5, 3, 0, 0, 0, 3}};
-            for (size_t i = 0; i < height; i++) {
-                for (size_t j = 0; j < width; j++) {
-                    type[i][j] = gridTypes[gridType[i][j]];
-                }
+        }
+        map = new towerdefence::core::Map(
+            width, height,
+            [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
+        routes = {Route({Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         {0, -8},
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[R]}),
+                  Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
+                         Dir[L], Dir[L], Dir[L]}),
+                  Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
+                         Dir[L], Dir[L], Dir[U], Dir[L], Dir[L]}),
+                  Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
+                         Dir[L], Dir[L], Dir[L], Dir[D], Dir[L]}),
+                  Route({Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         {-6, -8},
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[R]}),
+                  Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D], Dir[L],
+                         Dir[L], Dir[U], Dir[U], Dir[U], Dir[U], Dir[L], Dir[L],
+                         Dir[D], Dir[D], Dir[L], Dir[L]})};
+        enemyFirstDir = {L, L, L, L, L, L};
+        enemyCreateTime = {
+            10.0,  12.0,  14.0,  16.0,  20.0,  22.0,  25.0,  27.0,  29.0,
+            32.0,  35.0,  38.0,  41.0,  45.0,  50.0,  60.0,  70.0,  75.0,
+            80.0,  81.0,  82.0,  83.0,  84.0,  85.0,  90.0,  92.0,  94.0,
+            96.0,  98.0,  100.0, 105.0, 106.0, 107.0, 108.0, 109.0, 110.0,
+            115.0, 120.0, 125.0, 150.0, 155.0, 160.0, 165.0, 170.0, 173.0,
+            175.0, 178.0, 200.0, 205.0, 210.0, 215.0, 250.0, 255.0, 260.0,
+            265.0, 270.0, 280.0, 290.0, 293.0, 295.0, 298.0, 300.0};
+        enemyStartPos = {{0, 0},  {0, 11}, {2, 11}, {3, 11},
+                         {4, 11}, {6, 11}, {3, 11}};
+        enemyCreateType = {{{2, 2}},
+                           {{2, 2}},
+                           {{2, 2}, {3, 2}, {4, 2}},
+                           {{2, 2}, {3, 2}, {4, 2}},
+                           {{2, 2}, {3, 2}, {6, 1}, {4, 2}},
+                           {{2, 2}, {3, 2}, {6, 1}, {4, 2}},
+                           {{2, 3}, {3, 3}, {6, 1}, {4, 3}},
+                           {{2, 3}, {3, 3}, {6, 1}, {4, 3}},
+                           {{1, 4}, {2, 3}, {3, 3}, {6, 1}, {4, 3}},
+                           {{1, 4}, {2, 3}, {3, 3}, {6, 1}, {4, 3}},
+                           {{1, 4}, {2, 3}, {3, 3}, {6, 1}, {4, 3}, {5, 4}},
+                           {{1, 4}, {2, 3}, {3, 3}, {6, 1}, {4, 3}, {5, 4}},
+                           {{2, 3}, {3, 3}, {6, 5}, {4, 3}},
+                           {{2, 3}, {3, 3}, {6, 6}, {4, 3}},
+                           {{1, 5}, {2, 3}, {3, 4}, {4, 3}, {5, 6}},
+                           {{1, 5}, {2, 3}, {3, 4}, {4, 3}, {5, 6}},
+                           {{1, 5}, {2, 3}, {3, 7}, {4, 3}, {5, 6}},
+                           {{1, 5}, {2, 3}, {3, 7}, {4, 3}, {5, 6}},
+                           {{2, 2}, {3, 8}, {4, 2}},
+                           {{2, 2}, {3, 8}, {4, 2}},
+                           {{2, 2}, {3, 8}, {4, 2}},
+                           {{2, 2}, {3, 8}, {4, 2}},
+                           {{2, 2}, {3, 8}, {4, 2}},
+                           {{2, 2}, {3, 8}, {4, 2}},
+                           {{2, 5}, {6, 10}, {3, 6}},
+                           {{2, 5}, {6, 7}, {3, 6}},
+                           {{2, 5}, {6, 10}, {3, 6}},
+                           {{2, 5}, {6, 7}, {3, 6}},
+                           {{2, 5}, {6, 10}, {3, 6}},
+                           {{2, 5}, {6, 7}, {3, 6}},
+                           {{1, 7}, {2, 5}, {6, 9}, {4, 6}},
+                           {{5, 7}},
+                           {{1, 7}},
+                           {{5, 7}},
+                           {{1, 7}},
+                           {{2, 5}, {6, 9}, {4, 6}, {5, 7}},
+                           {{2, 7}, {6, 11}, {4, 7}},
+                           {{2, 7}, {6, 11}, {4, 7}},
+                           {{2, 7}, {6, 11}, {4, 7}},
+                           {{1, 7}, {2, 10}, {6, 9}, {4, 10}},
+                           {{6, 11}, {5, 7}},
+                           {{1, 7}, {2, 10}, {6, 9}, {4, 10}},
+                           {{6, 11}, {5, 7}},
+                           {{2, 1}, {3, 9}, {4, 1}},
+                           {{2, 5}, {6, 10}, {4, 6}},
+                           {{2, 1}, {3, 9}, {4, 1}},
+                           {{2, 5}, {6, 10}, {4, 6}},
+                           {{2, 9}, {6, 10}, {4, 9}},
+                           {{2, 11}, {6, 8}, {4, 11}},
+                           {{2, 9}, {6, 10}, {4, 9}},
+                           {{2, 11}, {6, 8}, {4, 11}},
+                           {{1, 11}, {2, 9}, {6, 9}, {4, 9}},
+                           {{2, 10}, {6, 10}, {4, 10}, {5, 11}},
+                           {{1, 11}, {2, 9}, {6, 9}, {4, 9}},
+                           {{2, 10}, {6, 10}, {4, 10}, {5, 11}},
+                           {{1, 11}, {2, 11}, {3, 11}, {4, 11}, {5, 11}},
+                           {{1, 11}, {2, 11}, {3, 11}, {4, 11}, {5, 11}},
+                           {{1, 11}, {2, 9}, {6, 10}, {4, 9}},
+                           {{2, 9}, {3, 8}, {4, 9}},
+                           {{2, 9}, {6, 10}, {4, 9}, {5, 11}},
+                           {{2, 8}, {3, 8}, {4, 8}},
+                           {{1, 11}, {2, 9}, {6, 10}, {4, 9}, {5, 11}}};
+        break;
+    case 3:
+        gridType = {{2, 0, 0, 0, 3, 2, 2, 5, 5, 5, 5, 5},
+                    {5, 5, 5, 4, 4, 0, 0, 0, 0, 0, 0, 2},
+                    {2, 0, 0, 0, 0, 0, 0, 4, 4, 4, 4, 4},
+                    {5, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1},
+                    {5, 4, 0, 4, 4, 0, 0, 0, 0, 0, 0, 1},
+                    {5, 4, 0, 4, 5, 5, 5, 4, 4, 4, 5, 5},
+                    {1, 0, 0, 5, 5, 5, 5, 3, 0, 0, 0, 3}};
+        for (size_t i = 0; i < height; i++) {
+            for (size_t j = 0; j < width; j++) {
+                type[i][j] = gridTypes[gridType[i][j]];
             }
-            map = new towerdefence::core::Map(
-                    width, height,
-                    [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
-            routes = {
-                    Route({Dir[R], Dir[R], Dir[R], Dir[R], {6, 3}, Dir[R], Dir[R],
-                           Dir[R], Dir[R], {-3, -10}, Dir[R], Dir[R], Dir[R], Dir[R],
-                           Dir[D], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
-                    Route({Dir[D], Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R],
-                           Dir[R], Dir[R], Dir[R]}),
-                    Route({Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R],
-                           Dir[R]}),
-                    Route({Dir[R], Dir[R], Dir[D], Dir[D], Dir[D], Dir[D], Dir[L],
-                           Dir[L]}),
-                    Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D],
-                           Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
-                    Route({Dir[R], Dir[R], Dir[R], Dir[R], {6, 3}, Dir[R], Dir[R],
-                           Dir[R], Dir[R], {-3, -10}, Dir[R], Dir[R], Dir[R], Dir[R],
-                           Dir[R], Dir[U], Dir[L], Dir[D], Dir[R], Dir[U], Dir[L],
-                           Dir[D], Dir[R], Dir[U], Dir[L], Dir[L], Dir[L], Dir[L],
-                           Dir[D], Dir[D], Dir[D], Dir[D], Dir[L], Dir[L]}),
-                    Route({Dir[D], Dir[D], Dir[D], Dir[L], Dir[L], Dir[L], Dir[D],
-                           Dir[D], Dir[D], Dir[L], Dir[L]}),
-                    Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D],
-                           Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]})};
-            enemyFirstDir = {R, R, R, R, L, R, L, R};
-            enemyCreateTime = {
-                    10.0, 12.0, 14.0, 20.0, 22.0, 24.0, 28.0, 30.0, 32.0,
-                    34.0, 36.0, 38.0, 44.0, 46.0, 48.0, 50.0, 55.0, 58.0,
-                    60.0, 63.0, 65.0, 66.0, 67.0, 68.0, 69.0, 70.0, 71.0,
-                    72.0, 73.0, 74.0, 90.0, 100.0, 110.0, 120.0, 140.0, 145.0,
-                    150.0, 160.0, 165.0, 170.0, 175.0, 180.0, 185.0, 190.0, 195.0,
-                    200.0, 205.0, 206.0, 207.0, 208.0, 209.0, 210.0, 211.0, 212.0,
-                    213.0, 214.0, 230.0, 235.0, 240.0, 250.0, 260.0, 280.0, 281.0,
-                    282.0, 283.0, 284.0, 285.0, 286.0, 287.0, 288.0, 289.0, 290.0,
-                    295.0, 300.0, 310.0, 312.0, 315.0, 317.0, 320.0, 322.0, 325.0,
-                    327.0, 330.0, 335.0, 340.0, 345.0, 350.0, 355.0, 360.0, 365.0,
-                    370.0, 375.0, 380.0, 385.0, 390.0, 395.0, 400.0, 405.0, 410.0,
-                    415.0, 420.0};
-            enemyStartPos = {{0, 0},
-                             {0, 0},
-                             {0, 5},
-                             {0, 6},
-                             {2, 0},
-                             {1, 11},
-                             {0, 0},
-                             {0, 5},
-                             {2, 0}};
-            enemyCreateType = {{{7, 2},  {8, 2}},
-                               {{7, 2},  {8, 2}},
-                               {{7, 2},  {8, 2}},
-                               {{2, 2},  {3, 1}},
-                               {{2, 2},  {3, 1}},
-                               {{2, 2},  {3, 1}},
-                               {{2, 1},  {3, 1},  {8, 1}},
-                               {{2, 2},  {3, 2},  {8, 2}},
-                               {{2, 1},  {3, 1},  {8, 1}},
-                               {{2, 2},  {3, 2},  {8, 2}},
-                               {{2, 1},  {3, 1},  {8, 1}},
-                               {{2, 2},  {3, 2},  {8, 2}},
-                               {{7, 1},  {3, 1},  {4, 1},  {5, 1}},
-                               {{7, 3},  {3, 3},  {4, 2},  {5, 2}},
-                               {{7, 1},  {3, 1},  {4, 1},  {5, 1}},
-                               {{7, 3},  {3, 3},  {4, 2},  {5, 2}},
-                               {{1, 7},  {7, 1},  {3, 1},  {4, 4},  {5, 4}},
-                               {{7, 3},  {3, 3},  {4, 3},  {5, 3}},
-                               {{1, 7},  {7, 1},  {3, 1},  {4, 4},  {5, 4}},
-                               {{7, 3},  {3, 3},  {4, 3},  {5, 3}},
-                               {{1, 7},  {2, 5},  {3, 5},  {8, 1},  {5, 1}},
-                               {{8, 1},  {5, 1}},
-                               {{8, 1},  {5, 1}},
-                               {{8, 1},  {5, 1}},
-                               {{8, 1},  {5, 1}},
-                               {{1, 7},  {2, 6},  {3, 6},  {8, 1},  {5, 1}},
-                               {{8, 1},  {5, 1}},
-                               {{8, 1},  {5, 1}},
-                               {{8, 1},  {5, 1}},
-                               {{8, 1},  {5, 1}},
-                               {{1, 7},  {7, 5},  {3, 5},  {4, 6},  {5, 6}},
-                               {{1, 7},  {7, 6},  {3, 6},  {4, 5},  {5, 5}},
-                               {{1, 9},  {7, 5},  {3, 5},  {4, 6},  {5, 6}},
-                               {{1, 9},  {7, 6},  {3, 6},  {4, 5},  {5, 5}},
-                               {{1, 9},  {7, 7},  {3, 7}},
-                               {{1, 9},  {7, 7},  {3, 7}},
-                               {{1, 9},  {7, 7},  {3, 7}},
-                               {{1, 9},  {7, 7},  {3, 7},  {4, 7},  {5, 7}},
-                               {{1, 9},  {7, 5},  {3, 5},  {4, 5},  {5, 5}},
-                               {{1, 9},  {7, 6},  {3, 6},  {4, 6},  {5, 6}},
-                               {{1, 9},  {7, 7},  {3, 7},  {4, 7},  {5, 7}},
-                               {{1, 9},  {7, 5},  {3, 5},  {4, 5},  {5, 5}},
-                               {{1, 9},  {7, 6},  {3, 6},  {4, 6},  {5, 6}},
-                               {{1, 9},  {7, 7},  {3, 7},  {4, 7},  {5, 7}},
-                               {{1, 9},  {7, 5},  {3, 5},  {4, 5},  {5, 5}},
-                               {{1, 9},  {7, 6},  {3, 6},  {4, 6},  {5, 6}},
-                               {{1, 9},  {7, 1},  {3, 1},  {4, 1},  {5, 1}},
-                               {{7, 1},  {3, 1},  {4, 1},  {5, 1}},
-                               {{7, 2},  {3, 2},  {4, 2},  {5, 2}},
-                               {{7, 1},  {3, 1},  {4, 1},  {5, 1}},
-                               {{7, 2},  {3, 2},  {4, 2},  {5, 2}},
-                               {{1, 9},  {7, 1},  {3, 1},  {4, 1},  {5, 1}},
-                               {{7, 1},  {3, 1},  {4, 1},  {5, 1}},
-                               {{7, 5},  {3, 5},  {4, 5},  {5, 5}},
-                               {{7, 1},  {3, 1},  {4, 1},  {5, 1}},
-                               {{7, 6},  {3, 6},  {4, 6},  {5, 6}},
-                               {{2, 9},  {3, 9},  {8, 7},  {5, 7}},
-                               {{2, 7},  {3, 7},  {8, 9},  {5, 9}},
-                               {{2, 9},  {3, 9},  {8, 9},  {5, 9}},
-                               {{2, 9},  {3, 9},  {8, 9},  {5, 9}},
-                               {{2, 9},  {3, 9},  {8, 9},  {5, 9}},
-                               {{1, 11}, {2, 8},  {3, 8},  {8, 2},  {5, 2}},
-                               {{2, 2},  {3, 2},  {8, 2},  {5, 2}},
-                               {{2, 2},  {3, 2},  {8, 2},  {5, 2}},
-                               {{2, 2},  {3, 2},  {8, 2},  {5, 2}},
-                               {{2, 2},  {3, 2},  {8, 2},  {5, 2}},
-                               {{1, 11}, {2, 8},  {3, 8},  {8, 2},  {5, 2}},
-                               {{2, 2},  {3, 2},  {8, 2},  {5, 2}},
-                               {{2, 2},  {3, 2},  {8, 2},  {5, 2}},
-                               {{2, 2},  {3, 2},  {8, 2},  {5, 2}},
-                               {{2, 2},  {3, 2},  {8, 2},  {5, 2}},
-                               {{1, 11}, {2, 11}, {3, 11}},
-                               {{1, 11}, {2, 11}, {3, 11}},
-                               {{1, 11}, {2, 11}, {3, 11}},
-                               {{7, 10}, {3, 10}},
-                               {{7, 11}, {3, 11}},
-                               {{7, 8},  {3, 8}},
-                               {{7, 11}, {3, 11}},
-                               {{7, 10}, {3, 10}},
-                               {{7, 11}, {3, 11}},
-                               {{7, 8},  {3, 8}},
-                               {{7, 11}, {3, 11}},
-                               {{6, 12}, {7, 9},  {3, 9}}, /*****BOSS*****/
-                               {{1, 9},  {8, 10}, {5, 10}},
-                               {{7, 9},  {3, 9}},
-                               {{1, 9},  {8, 10}, {5, 10}},
-                               {{7, 9},  {3, 9}},
-                               {{1, 9}},
-                               {{1, 9},  {8, 11}, {5, 11}},
-                               {{1, 9},  {2, 10}, {3, 10}},
-                               {{1, 9},  {8, 11}, {5, 11}},
-                               {{1, 9},  {2, 10}, {3, 10}},
-                               {{1, 9}},
-                               {{1, 9}},
-                               {{1, 9},  {2, 8},  {3, 8},  {8, 11}, {5, 11}},
-                               {{1, 9},  {2, 10}, {3, 10}, {8, 9},  {5, 9}},
-                               {{1, 9},  {2, 8},  {3, 8},  {8, 11}, {5, 11}},
-                               {{1, 9},  {2, 10}, {3, 10}, {8, 9},  {5, 9}},
-                               {{1, 9},  {2, 8},  {3, 8},  {8, 11}, {5, 11}},
-                               {{1, 9},  {2, 10}, {3, 10}, {8, 9},  {5, 9}},
-                               {{1, 9},  {2, 9},  {3, 9},  {8, 9},  {5, 9}}};
-            break;
-        default:
-            break;
+        }
+        map = new towerdefence::core::Map(
+            width, height,
+            [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
+        routes = {
+            Route({Dir[R], Dir[R], Dir[R],    Dir[R], {6, 3}, Dir[R], Dir[R],
+                   Dir[R], Dir[R], {-3, -10}, Dir[R], Dir[R], Dir[R], Dir[R],
+                   Dir[D], Dir[R], Dir[R],    Dir[R], Dir[R], Dir[R], Dir[R]}),
+            Route({Dir[D], Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R],
+                   Dir[R], Dir[R], Dir[R]}),
+            Route({Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R],
+                   Dir[R]}),
+            Route({Dir[R], Dir[R], Dir[D], Dir[D], Dir[D], Dir[D], Dir[L],
+                   Dir[L]}),
+            Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D],
+                   Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
+            Route({Dir[R], Dir[R], Dir[R],    Dir[R], {6, 3}, Dir[R], Dir[R],
+                   Dir[R], Dir[R], {-3, -10}, Dir[R], Dir[R], Dir[R], Dir[R],
+                   Dir[R], Dir[U], Dir[L],    Dir[D], Dir[R], Dir[U], Dir[L],
+                   Dir[D], Dir[R], Dir[U],    Dir[L], Dir[L], Dir[L], Dir[L],
+                   Dir[D], Dir[D], Dir[D],    Dir[D], Dir[L], Dir[L]}),
+            Route({Dir[D], Dir[D], Dir[D], Dir[L], Dir[L], Dir[L], Dir[D],
+                   Dir[D], Dir[D], Dir[L], Dir[L]}),
+            Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D],
+                   Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]})};
+        enemyFirstDir = {R, R, R, R, L, R, L, R};
+        enemyCreateTime = {
+            10.0,  12.0,  14.0,  20.0,  22.0,  24.0,  28.0,  30.0,  32.0,
+            34.0,  36.0,  38.0,  44.0,  46.0,  48.0,  50.0,  55.0,  58.0,
+            60.0,  63.0,  65.0,  66.0,  67.0,  68.0,  69.0,  70.0,  71.0,
+            72.0,  73.0,  74.0,  90.0,  100.0, 110.0, 120.0, 140.0, 145.0,
+            150.0, 160.0, 165.0, 170.0, 175.0, 180.0, 185.0, 190.0, 195.0,
+            200.0, 205.0, 206.0, 207.0, 208.0, 209.0, 210.0, 211.0, 212.0,
+            213.0, 214.0, 230.0, 235.0, 240.0, 250.0, 260.0, 280.0, 281.0,
+            282.0, 283.0, 284.0, 285.0, 286.0, 287.0, 288.0, 289.0, 290.0,
+            295.0, 300.0, 310.0, 312.0, 315.0, 317.0, 320.0, 322.0, 325.0,
+            327.0, 330.0, 335.0, 340.0, 345.0, 350.0, 355.0, 360.0, 365.0,
+            370.0, 375.0, 380.0, 385.0, 390.0, 395.0, 400.0, 405.0, 410.0,
+            415.0, 420.0};
+        enemyStartPos = {{0, 0},  {0, 0}, {0, 5}, {0, 6}, {2, 0},
+                         {1, 11}, {0, 0}, {0, 5}, {2, 0}};
+        enemyCreateType = {{{7, 2}, {8, 2}},
+                           {{7, 2}, {8, 2}},
+                           {{7, 2}, {8, 2}},
+                           {{2, 2}, {3, 1}},
+                           {{2, 2}, {3, 1}},
+                           {{2, 2}, {3, 1}},
+                           {{2, 1}, {3, 1}, {8, 1}},
+                           {{2, 2}, {3, 2}, {8, 2}},
+                           {{2, 1}, {3, 1}, {8, 1}},
+                           {{2, 2}, {3, 2}, {8, 2}},
+                           {{2, 1}, {3, 1}, {8, 1}},
+                           {{2, 2}, {3, 2}, {8, 2}},
+                           {{7, 1}, {3, 1}, {4, 1}, {5, 1}},
+                           {{7, 3}, {3, 3}, {4, 2}, {5, 2}},
+                           {{7, 1}, {3, 1}, {4, 1}, {5, 1}},
+                           {{7, 3}, {3, 3}, {4, 2}, {5, 2}},
+                           {{1, 7}, {7, 1}, {3, 1}, {4, 4}, {5, 4}},
+                           {{7, 3}, {3, 3}, {4, 3}, {5, 3}},
+                           {{1, 7}, {7, 1}, {3, 1}, {4, 4}, {5, 4}},
+                           {{7, 3}, {3, 3}, {4, 3}, {5, 3}},
+                           {{1, 7}, {2, 5}, {3, 5}, {8, 1}, {5, 1}},
+                           {{8, 1}, {5, 1}},
+                           {{8, 1}, {5, 1}},
+                           {{8, 1}, {5, 1}},
+                           {{8, 1}, {5, 1}},
+                           {{1, 7}, {2, 6}, {3, 6}, {8, 1}, {5, 1}},
+                           {{8, 1}, {5, 1}},
+                           {{8, 1}, {5, 1}},
+                           {{8, 1}, {5, 1}},
+                           {{8, 1}, {5, 1}},
+                           {{1, 7}, {7, 5}, {3, 5}, {4, 6}, {5, 6}},
+                           {{1, 7}, {7, 6}, {3, 6}, {4, 5}, {5, 5}},
+                           {{1, 9}, {7, 5}, {3, 5}, {4, 6}, {5, 6}},
+                           {{1, 9}, {7, 6}, {3, 6}, {4, 5}, {5, 5}},
+                           {{1, 9}, {7, 7}, {3, 7}},
+                           {{1, 9}, {7, 7}, {3, 7}},
+                           {{1, 9}, {7, 7}, {3, 7}},
+                           {{1, 9}, {7, 7}, {3, 7}, {4, 7}, {5, 7}},
+                           {{1, 9}, {7, 5}, {3, 5}, {4, 5}, {5, 5}},
+                           {{1, 9}, {7, 6}, {3, 6}, {4, 6}, {5, 6}},
+                           {{1, 9}, {7, 7}, {3, 7}, {4, 7}, {5, 7}},
+                           {{1, 9}, {7, 5}, {3, 5}, {4, 5}, {5, 5}},
+                           {{1, 9}, {7, 6}, {3, 6}, {4, 6}, {5, 6}},
+                           {{1, 9}, {7, 7}, {3, 7}, {4, 7}, {5, 7}},
+                           {{1, 9}, {7, 5}, {3, 5}, {4, 5}, {5, 5}},
+                           {{1, 9}, {7, 6}, {3, 6}, {4, 6}, {5, 6}},
+                           {{1, 9}, {7, 1}, {3, 1}, {4, 1}, {5, 1}},
+                           {{7, 1}, {3, 1}, {4, 1}, {5, 1}},
+                           {{7, 2}, {3, 2}, {4, 2}, {5, 2}},
+                           {{7, 1}, {3, 1}, {4, 1}, {5, 1}},
+                           {{7, 2}, {3, 2}, {4, 2}, {5, 2}},
+                           {{1, 9}, {7, 1}, {3, 1}, {4, 1}, {5, 1}},
+                           {{7, 1}, {3, 1}, {4, 1}, {5, 1}},
+                           {{7, 5}, {3, 5}, {4, 5}, {5, 5}},
+                           {{7, 1}, {3, 1}, {4, 1}, {5, 1}},
+                           {{7, 6}, {3, 6}, {4, 6}, {5, 6}},
+                           {{2, 9}, {3, 9}, {8, 7}, {5, 7}},
+                           {{2, 7}, {3, 7}, {8, 9}, {5, 9}},
+                           {{2, 9}, {3, 9}, {8, 9}, {5, 9}},
+                           {{2, 9}, {3, 9}, {8, 9}, {5, 9}},
+                           {{2, 9}, {3, 9}, {8, 9}, {5, 9}},
+                           {{1, 11}, {2, 8}, {3, 8}, {8, 2}, {5, 2}},
+                           {{2, 2}, {3, 2}, {8, 2}, {5, 2}},
+                           {{2, 2}, {3, 2}, {8, 2}, {5, 2}},
+                           {{2, 2}, {3, 2}, {8, 2}, {5, 2}},
+                           {{2, 2}, {3, 2}, {8, 2}, {5, 2}},
+                           {{1, 11}, {2, 8}, {3, 8}, {8, 2}, {5, 2}},
+                           {{2, 2}, {3, 2}, {8, 2}, {5, 2}},
+                           {{2, 2}, {3, 2}, {8, 2}, {5, 2}},
+                           {{2, 2}, {3, 2}, {8, 2}, {5, 2}},
+                           {{2, 2}, {3, 2}, {8, 2}, {5, 2}},
+                           {{1, 11}, {2, 11}, {3, 11}},
+                           {{1, 11}, {2, 11}, {3, 11}},
+                           {{1, 11}, {2, 11}, {3, 11}},
+                           {{7, 10}, {3, 10}},
+                           {{7, 11}, {3, 11}},
+                           {{7, 8}, {3, 8}},
+                           {{7, 11}, {3, 11}},
+                           {{7, 10}, {3, 10}},
+                           {{7, 11}, {3, 11}},
+                           {{7, 8}, {3, 8}},
+                           {{7, 11}, {3, 11}},
+                           {{6, 12}, {7, 9}, {3, 9}}, /*****BOSS*****/
+                           {{1, 9}, {8, 10}, {5, 10}},
+                           {{7, 9}, {3, 9}},
+                           {{1, 9}, {8, 10}, {5, 10}},
+                           {{7, 9}, {3, 9}},
+                           {{1, 9}},
+                           {{1, 9}, {8, 11}, {5, 11}},
+                           {{1, 9}, {2, 10}, {3, 10}},
+                           {{1, 9}, {8, 11}, {5, 11}},
+                           {{1, 9}, {2, 10}, {3, 10}},
+                           {{1, 9}},
+                           {{1, 9}},
+                           {{1, 9}, {2, 8}, {3, 8}, {8, 11}, {5, 11}},
+                           {{1, 9}, {2, 10}, {3, 10}, {8, 9}, {5, 9}},
+                           {{1, 9}, {2, 8}, {3, 8}, {8, 11}, {5, 11}},
+                           {{1, 9}, {2, 10}, {3, 10}, {8, 9}, {5, 9}},
+                           {{1, 9}, {2, 8}, {3, 8}, {8, 11}, {5, 11}},
+                           {{1, 9}, {2, 10}, {3, 10}, {8, 9}, {5, 9}},
+                           {{1, 9}, {2, 9}, {3, 9}, {8, 9}, {5, 9}}};
+        break;
+    default:
+        break;
     }
 
     this->map->on_enemy_move([this](Enemy &enemy,
@@ -1590,26 +1573,30 @@ void LevelScene::createMap(int level) {
         this->addBullet(&tower, &enemy);
     });
     this->map->on_enemy_death(
-            [this](Enemy &enemy) { EnemyAnimation::dead(this, &enemy); });
+        [this](Enemy &enemy) { EnemyAnimation::dead(this, &enemy); });
     this->map->on_escape([this](Id id) {
         auto enemySprite = this->getEnemy(id);
         if (enemySprite) {
+            if (this->map->get_enemy_by_id(id).status().enemy_type_ ==
+                EnemyType::SpeedUp) {
+                unschedule("updateParticle");
+            }
             enemySprite->removeFromParent();
         }
         this->decreaseLife();
     });
     this->map->on_enemy_release_skill(
-            [this](Enemy &enemy, towerdefence::core::Map &map, uint32_t duration) {
-                EnemyAnimation::releaseSkill(this, &enemy, duration);
-            });
+        [this](Enemy &enemy, towerdefence::core::Map &map, uint32_t duration) {
+            EnemyAnimation::releaseSkill(this, &enemy, duration);
+        });
     this->map->on_tower_release_skill(
-            [this](Tower &tower, towerdefence::core::Map &map, uint32_t duration) {
-                TowerAnimation::releaseSkill(this, &tower, duration);
-            });
+        [this](Tower &tower, towerdefence::core::Map &map, uint32_t duration) {
+            TowerAnimation::releaseSkill(this, &tower, duration);
+        });
 }
 
 void LevelScene::onMouseDown(cocos2d::Event *event) {
-    EventMouse const *e = (EventMouse *) event;
+    EventMouse const *e = (EventMouse *)event;
     float x = e->getCursorX();
     float y = e->getCursorY();
 
@@ -1630,7 +1617,7 @@ void LevelScene::onMouseDown(cocos2d::Event *event) {
 }
 
 void LevelScene::onMouseUp(cocos2d::Event *event) {
-    EventMouse const *e = (EventMouse *) event;
+    EventMouse const *e = (EventMouse *)event;
     if (this->isSelecting && this->selectedTower &&
         e->getMouseButton() == EventMouse::MouseButton::BUTTON_RIGHT) {
         this->cancelSelect();
@@ -1638,7 +1625,7 @@ void LevelScene::onMouseUp(cocos2d::Event *event) {
 }
 
 void LevelScene::onMouseMove(cocos2d::Event *event) {
-    EventMouse const *e = (EventMouse *) event;
+    EventMouse const *e = (EventMouse *)event;
     float x = e->getCursorX();
     float y = e->getCursorY();
 
@@ -1650,11 +1637,11 @@ void LevelScene::onMouseMove(cocos2d::Event *event) {
         this->selectedTower->setVisible(true);
         if (x >= typeX - 0.5f * SIZE && x <= typeX + 11.5f * SIZE &&
             y >= typeY - 6.5f * SIZE && y <= typeY + 0.5f * SIZE) {
-            int indexX = (int) ((x - typeX + 0.5f * SIZE) / SIZE);
-            int indexY = (int) ((typeY - y + 0.5f * SIZE) / SIZE);
+            int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+            int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
             if (this->type[indexY][indexX] == Grid::Type::BlockTower) {
                 this->selectedTower->setPosition(
-                        Vec2(typeX + indexX * SIZE, typeY - indexY * SIZE));
+                    Vec2(typeX + indexX * SIZE, typeY - indexY * SIZE));
             } else {
                 this->selectedTower->setPosition(Vec2(x, y));
             }
@@ -1673,7 +1660,7 @@ void LevelScene::createEnemy() {
         std::vector<Sprite *> enemySameTime;
         std::vector<std::pair<size_t, size_t>> enemySameTimePos;
         std::vector<std::unique_ptr<EnemyFactoryBase>> enemySameTimeFactories;
-        for (auto &j: enemyCreateType[i]) {
+        for (auto &j : enemyCreateType[i]) {
             std::string enemyPath = "images/enemies/";
             size_t x = enemyStartPos[j.first].first;
             size_t y = enemyStartPos[j.first].second;
@@ -1681,80 +1668,80 @@ void LevelScene::createEnemy() {
             Route new_route = routes[j.first - 1];
             DirType firstDir = enemyFirstDir[j.first - 1];
             auto extra_storage =
-                    std::unordered_map<std::string, std::any>{{"current_frame", 0}};
+                std::unordered_map<std::string, std::any>{{"current_frame", 0}};
             std::unique_ptr<EnemyFactoryBase> newEnemy;
             enemyNumber++;
             ParticleSystemQuad *particle = nullptr;
             switch (enemyType[j.second - 1]) {
-                case EnemyType::Dog:
-                    enemyPath += "dog/move/dog_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Dog>>(new_route,
-                                                                   extra_storage);
-                    break;
-                case EnemyType::Soldier:
-                    enemyPath += "soldier/move/soldier_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Soldier>>(
-                            new_route, extra_storage);
-                    break;
-                case EnemyType::Worm:
-                    enemyPath += "worm/move/worm_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Worm>>(new_route,
-                                                                    extra_storage);
-                    break;
-                case EnemyType::Warlock:
-                    enemyPath += "warlock/move/warlock_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Warlock>>(
-                            new_route, extra_storage);
-                    break;
-                case EnemyType::Destroyer:
-                    enemyPath += "destroyer/move/destroyer_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Destroyer>>(
-                            new_route, extra_storage);
-                    break;
-                case EnemyType::Tank:
-                    enemyPath += "tank/move/tank_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Tank>>(new_route,
-                                                                    extra_storage);
-                    break;
-                case EnemyType::Crab:
-                    enemyPath += "crab/move/crab_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Crab>>(new_route,
-                                                                    extra_storage);
-                    break;
-                case EnemyType::SpeedUp:
-                    enemyPath += "speedUp/move/speedUp_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<SpeedUp>>(
-                            new_route, extra_storage);
-                    particle =
-                            ParticleSystemQuad::create("particles/speed_ring.plist");
-                    break;
-                case EnemyType::AttackDown:
-                    enemyPath += "attackDown/move/attackDown_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<AttackDown>>(
-                            new_route, extra_storage);
-                    break;
-                case EnemyType::LifeUp:
-                    enemyPath += "lifeUp/move/lifeUp_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<LifeUp>>(
-                            new_route, extra_storage);
-                    break;
-                case EnemyType::NotAttacked:
-                    enemyPath += "notAttacked/move/notAttacked_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<NotAttacked>>(
-                            new_route, extra_storage);
-                    break;
-                case EnemyType::Boss1:
-                    enemyPath += "boss/stage1/move/boss1_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Boss1>>(new_route,
-                                                                     extra_storage);
-                    break;
-                case EnemyType::Boss2:
-                    enemyPath += "boss/stage2/move/boss2_move00.png";
-                    newEnemy = std::make_unique<EnemyFactory<Boss2>>(new_route,
-                                                                     extra_storage);
-                    break;
-                default:
-                    break;
+            case EnemyType::Dog:
+                enemyPath += "dog/move/dog_move00.png";
+                newEnemy = std::make_unique<EnemyFactory<Dog>>(new_route,
+                                                               extra_storage);
+                break;
+            case EnemyType::Soldier:
+                enemyPath += "soldier/move/soldier_move00.png";
+                newEnemy = std::make_unique<EnemyFactory<Soldier>>(
+                    new_route, extra_storage);
+                break;
+            case EnemyType::Worm:
+                enemyPath += "worm/move/worm_move00.png";
+                newEnemy = std::make_unique<EnemyFactory<Worm>>(new_route,
+                                                                extra_storage);
+                break;
+            case EnemyType::Warlock:
+                enemyPath += "warlock/move/warlock_move00.png";
+                newEnemy = std::make_unique<EnemyFactory<Warlock>>(
+                    new_route, extra_storage);
+                break;
+            case EnemyType::Destroyer:
+                enemyPath += "destroyer/move/destroyer_move00.png";
+                newEnemy = std::make_unique<EnemyFactory<Destroyer>>(
+                    new_route, extra_storage);
+                break;
+            case EnemyType::Tank:
+                enemyPath += "tank/move/tank_move00.png";
+                newEnemy = std::make_unique<EnemyFactory<Tank>>(new_route,
+                                                                extra_storage);
+                break;
+            case EnemyType::Crab:
+                enemyPath += "crab/move/crab_move00.png";
+                newEnemy = std::make_unique<EnemyFactory<Crab>>(new_route,
+                                                                extra_storage);
+                break;
+            case EnemyType::SpeedUp:
+                enemyPath += "speedUp/move/speedUp_move00.png";
+                newEnemy = std::make_unique<EnemyFactory<SpeedUp>>(
+                    new_route, extra_storage);
+                particle =
+                    ParticleSystemQuad::create("particles/speed_ring.plist");
+                break;
+            case EnemyType::AttackDown:
+                enemyPath += "attackDown/move/attackDown_move00.png";
+                newEnemy = std::make_unique<EnemyFactory<AttackDown>>(
+                    new_route, extra_storage);
+                break;
+            case EnemyType::LifeUp:
+                enemyPath += "lifeUp/move/lifeUp_move00.png";
+                newEnemy = std::make_unique<EnemyFactory<LifeUp>>(
+                    new_route, extra_storage);
+                break;
+            case EnemyType::NotAttacked:
+                enemyPath += "notAttacked/move/notAttacked_move00.png";
+                newEnemy = std::make_unique<EnemyFactory<NotAttacked>>(
+                    new_route, extra_storage);
+                break;
+            case EnemyType::Boss1:
+                enemyPath += "boss/stage1/move/boss1_move00.png";
+                newEnemy = std::make_unique<EnemyFactory<Boss1>>(new_route,
+                                                                 extra_storage);
+                break;
+            case EnemyType::Boss2:
+                enemyPath += "boss/stage2/move/boss2_move00.png";
+                newEnemy = std::make_unique<EnemyFactory<Boss2>>(new_route,
+                                                                 extra_storage);
+                break;
+            default:
+                break;
             }
             enemySameTimeFactories.push_back(std::move(newEnemy));
             auto newEnemySprite = Sprite::create(enemyPath);
@@ -1763,12 +1750,12 @@ void LevelScene::createEnemy() {
             newEnemySprite->setVisible(false);
             enemySameTime.push_back(newEnemySprite);
             if (particle) {
-                newEnemySprite->addChild(particle);
+                newEnemySprite->addChild(particle, 4);
                 schedule(
-                        [particle, newEnemySprite](float dt) {
-                            particle->setPosition(newEnemySprite->getPosition());
-                        },
-                        1.0f / 30, "updateParticle");
+                    [particle, newEnemySprite](float dt) {
+                        particle->setPosition(newEnemySprite->getPosition());
+                    },
+                    1.0f / 30, "updateParticle");
             }
             this->addChild(newEnemySprite, 5);
         }
@@ -1778,31 +1765,31 @@ void LevelScene::createEnemy() {
     }
     for (size_t i = 0; i < enemyCreateType.size(); i++) {
         scheduleOnce(
-                [this, i](float dt) {
-                    for (size_t j = 0; j < enemyCreateType[i].size(); j++) {
-                        if (enemyFirstDir[enemyCreateType[i][j].first - 1] == L) {
-                            enemySprites[i][j]->setFlippedX(true);
-                            enemySprites[i][j]->setFlippedY(false);
-                        }
-                        enemySprites[i][j]->setVisible(true);
-                        enemySprites[i][j]->setOpacity(0);
-                        auto fadeIn = FadeIn::create(0.5f);
-                        enemySprites[i][j]->runAction(fadeIn);
-                        scheduleOnce(
-                                [this, i, j](float dt) {
-                                    // TODO: fix the bug of "spawn_enemy_at"
-                                    enemies.emplace_back(this->map->spawn_enemy_at(
-                                                                 enemyPos[i][j].first,
-                                                                 enemyPos[i][j].second,
-                                                                 *enemyFactories[i][j]),
-                                                         enemySprites[i][j]);
-                                },
-                                0.5f,
-                                "AddEnemyToMap" + std::to_string(i) +
-                                std::to_string(j));
+            [this, i](float dt) {
+                for (size_t j = 0; j < enemyCreateType[i].size(); j++) {
+                    if (enemyFirstDir[enemyCreateType[i][j].first - 1] == L) {
+                        enemySprites[i][j]->setFlippedX(true);
+                        enemySprites[i][j]->setFlippedY(false);
                     }
-                },
-                enemyCreateTime[i] - 0.5f, "createEnemy" + std::to_string(i));
+                    enemySprites[i][j]->setVisible(true);
+                    enemySprites[i][j]->setOpacity(0);
+                    auto fadeIn = FadeIn::create(0.5f);
+                    enemySprites[i][j]->runAction(fadeIn);
+                    scheduleOnce(
+                        [this, i, j](float dt) {
+                            // TODO: fix the bug of "spawn_enemy_at"
+                            enemies.emplace_back(this->map->spawn_enemy_at(
+                                                     enemyPos[i][j].first,
+                                                     enemyPos[i][j].second,
+                                                     *enemyFactories[i][j]),
+                                                 enemySprites[i][j]);
+                        },
+                        0.5f,
+                        "AddEnemyToMap" + std::to_string(i) +
+                            std::to_string(j));
+                }
+            },
+            enemyCreateTime[i] - 0.5f, "createEnemy" + std::to_string(i));
     }
 }
 
