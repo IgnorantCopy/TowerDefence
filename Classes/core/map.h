@@ -198,7 +198,7 @@ namespace towerdefence {
             Shape shape;
             
             uint32_t cost_ = 1000;
-            uint32_t health_{MAX_HEALTH};
+            uint32_t health_{300};
             uint32_t enemy_alive = 100;
             
             explicit Map(size_t width_, size_t height_,
@@ -317,10 +317,10 @@ namespace towerdefence {
             }
             
             void reached_end(id::Id id) {
+                this->health_ -= 1;
                 for (auto &[handle, f]: this->callbacks_.on_escape) {
                     f(id);
                 }
-                this->health_ -= 1;
                 if(this->health_ == 0){
                     for (auto &[handle, f]: this->callbacks_.on_end) {
                         f(false);
