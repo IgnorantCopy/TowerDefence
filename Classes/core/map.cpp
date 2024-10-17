@@ -58,7 +58,7 @@ void Map::update() {
 
                     try {
                         if (auto [dx, dy] = enemy->route_.next_direction();
-                            dx != 0 && dy != 0) {
+                            dx != 0 || dy != 0) {
                             auto nx = route::ssize(ref.row) + dx;
                             auto ny = route::ssize(ref.column) + dy;
                             assert(nx >= 0 && nx < this->shape.height_ &&

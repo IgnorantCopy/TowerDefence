@@ -62,8 +62,7 @@ void EnemyAnimation::move(LevelScene *levelScene,
     }
     int currentFrame = enemy->get_storage<int>("current_frame");
     std::string movePath = std::format("{:02d}.png", currentFrame);
-    enemy->set_storage<size_t>(
-        "current_frame", (currentFrame + 1) % enemy->status().total_frames_);
+    enemy->set_storage<int>("current_frame", (currentFrame + 1) % enemy->status().total_frames_);
     Id id = enemy->id;
     auto enemySprite = levelScene->getEnemy(id);
     enemySprite->setTexture(prefix + movePath);
