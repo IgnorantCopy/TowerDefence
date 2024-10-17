@@ -23,15 +23,6 @@ bool Level3Scene::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    // add the level3 background
-    auto background = Sprite::create("images/level3_background.png", Rect(0, 0, 2500, 1500));
-    if (background == nullptr) {
-        problemLoading("'images/level3_background.png'");
-    } else {
-        background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
-        this->addChild(background, 0);
-    }
-
     // add bgm
     auto player = CocosDenshion::SimpleAudioEngine::getInstance();
     player->playBackgroundMusic("audio/level3_bgm.MP3", true);

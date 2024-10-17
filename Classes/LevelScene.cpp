@@ -98,7 +98,30 @@ bool LevelScene::init(int level) {
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+    // add background
+    std::string backgroundImage = "images/level" + std::to_string(level) + "_background.png";
+    auto background = Sprite::create(backgroundImage, Rect(0, 0, 2500, 1500));
+    if (background == nullptr) {
+        switch(level) {
+        case 1:
+            problemLoading("'images/level1_background.png'");
+            break;
+        case 2:
+            problemLoading("'images/level2_background.png'");
+            break;
+        case 3:
+            problemLoading("'images/level3_background.png'");
+            break;
+        default:
+            break;
+        }
+    } else {
+        background->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2));
+        this->addChild(background, 0);
+    }
+
     createMap(level);
+
     auto frameBase = Sprite::create("images/frame_base.png");
     if (frameBase == nullptr) {
         problemLoading("'images/frame_base.png'");
