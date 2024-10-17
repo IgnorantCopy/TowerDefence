@@ -189,7 +189,7 @@ bool Bullet::isTouch() {
     float bulletX = this->bullet->getPositionX();
     float bulletY = this->bullet->getPositionY();
     float distance = sqrt(pow(enemyX - bulletX, 2) + pow(enemyY - bulletY, 2));
-    if (distance < 10.0f) {
+    if (distance < 50.0f) {
         return true;
     }
     return false;
