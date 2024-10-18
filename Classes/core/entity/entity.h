@@ -353,7 +353,8 @@ struct Tower : Entity,
 
         base.attack_ = std::max(0., base.attack_ * (1 + buffs.attack_));
         base.attack_interval_ =
-            base.attack_interval_ / (double(100 + buffs.attack_speed_) / 100);
+            std::max(1., base.attack_interval_ /
+                             (double(100 + buffs.attack_speed_) / 100));
         base.attack_radius_ += buffs.attack_radius_;
 
         return base;
