@@ -187,6 +187,8 @@ struct RouteMixin {
 
 struct MoveMixin {
     double move_progress_ = 0;
+
+    timer::Timer move_ = timer::Timer::never();
 };
 
 struct ExtraStorage {
@@ -303,7 +305,12 @@ struct Enemy : Entity,
     void on_tick(GridRef g) override;
     void on_death(GridRef g) override;
 
-    virtual void on_hit(int32_t atk, AttackType attack_type, GridRef g) ;
+    virtual void on_hit(int32_t atk, AttackType attack_type, GridRef g);
+
+    void reset_move_timer(const timer::Clock &clk) {
+        this->move_ = clk.with_period_sec(timer::TICK_PER_SECOND * 10. /
+                                          this->status().speed_);
+    }
 };
 
 struct TowerInfo {
@@ -428,6 +435,7 @@ std::unique_ptr<Enemy> EnemyFactory<T>::construct(id::Id id,
         static_assert(false, "Unsupported type");
     }
 
+    res->reset_move_timer(clk);
     res->storage_ = extra_storage;
 
     return res;

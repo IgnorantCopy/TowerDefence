@@ -45,16 +45,15 @@ void Map::update() {
                     return true;
                 }
 
-                assert(enemy->move_progress_ >= 0 &&
-                       enemy->move_progress_ <= 1);
+                // assert(enemy->move_progress_ >= 0 &&
+                //        enemy->move_progress_ <= 1);
 
-                enemy->move_progress_ +=
-                    0.1 * enemy->status().speed_ / timer::TICK_PER_SECOND;
+                // enemy->move_progress_ +=
+                //     0.1 * enemy->status().speed_ / timer::TICK_PER_SECOND;
 
-                assert(enemy->move_progress_ < 2);
+                // assert(enemy->move_progress_ < 2);
 
-                if (enemy->move_progress_ >= 1) {
-                    enemy->move_progress_ -= 1;
+                if (this->clock().is_triggered(enemy->move_)) {
 
                     try {
                         if (auto [dx, dy] = enemy->route_.next_direction();
