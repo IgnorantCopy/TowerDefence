@@ -667,6 +667,22 @@ void LevelScene::addBullet(Tower *tower, Enemy *enemy) {
     this->addChild(bullet->getBullet(), 4);
 }
 
+void LevelScene::updateParticles() {
+    for (auto it = this->enemyParticles.begin();
+         it != this->enemyParticles.end();) {
+        Id id = it->first;
+        auto particle = it->second;
+        auto enemy = this->getEnemy(id);
+        if (enemy) {
+            particle->setPosition(enemy->getPosition());
+            it++;
+        } else {
+            particle->removeFromParent();
+            it = this->enemyParticles.erase(it);
+        }
+    }
+}
+
 void LevelScene::updateBullets() {
     for (auto it = this->bullets.begin(); it != this->bullets.end();) {
         if ((*it)->getBullet()) {
@@ -1595,12 +1611,17 @@ void LevelScene::createMap(int level) {
     this->map->on_enemy_death(
         [this](Enemy &enemy) { EnemyAnimation::dead(this, &enemy); });
     this->map->on_escape([this](Id id) {
-        auto enemySprite = this->getEnemy(id);
-        if (enemySprite) {
-            if (this->map->get_enemy_by_id(id).status().enemy_type_ ==
-                EnemyType::SpeedUp) {
-                unschedule("updateParticle");
+        Sprite *enemySprite = nullptr;
+        for (auto it = this->enemies.begin(); it != this->enemies.end();) {
+            if (it->first == id) {
+                enemySprite = it->second;
+                it = this->enemies.erase(it);
+                break;
+            } else {
+                it++;
             }
+        }
+        if (enemySprite) {
             enemySprite->removeFromParent();
         }
         this->decreaseLife();
@@ -1691,7 +1712,6 @@ void LevelScene::createEnemy() {
                 std::unordered_map<std::string, std::any>{{"current_frame", 0}};
             std::unique_ptr<EnemyFactoryBase> newEnemy;
             enemyNumber++;
-            ParticleSystemQuad *particle = nullptr;
             switch (enemyType[j.second - 1]) {
             case EnemyType::Dog:
                 enemyPath += "dog/move/dog_move00.png";
@@ -1732,8 +1752,6 @@ void LevelScene::createEnemy() {
                 enemyPath += "speedUp/move/speedUp_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<SpeedUp>>(
                     new_route, extra_storage);
-                particle =
-                    ParticleSystemQuad::create("particles/speed_ring.plist");
                 break;
             case EnemyType::AttackDown:
                 enemyPath += "attackDown/move/attackDown_move00.png";
@@ -1769,14 +1787,6 @@ void LevelScene::createEnemy() {
             newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE));
             newEnemySprite->setVisible(false);
             enemySameTime.push_back(newEnemySprite);
-            if (particle) {
-                newEnemySprite->addChild(particle, 6);
-                //                schedule(
-                //                    [particle, newEnemySprite](float dt) {
-                //                        particle->setPosition(newEnemySprite->getPosition());
-                //                    },
-                //                    1.0f / 30, "updateParticle");
-            }
             this->addChild(newEnemySprite, 5);
         }
         enemySprites.push_back(enemySameTime);
@@ -1791,10 +1801,28 @@ void LevelScene::createEnemy() {
                     enemySprites[i][j]->setFlippedX(true);
                     enemySprites[i][j]->setFlippedY(false);
                 }
-                scheduleOnce([this, i, j](float dt) {
+                ParticleSystemQuad *particle = nullptr;
+                if (enemyType[enemyCreateType[i][j].second - 1] ==
+                    EnemyType::SpeedUp) {
+                    particle = ParticleSystemQuad::create(
+                        "particles/speed_ring.plist");
+                    particle->setPosition(
+                        enemySprites[i][j]->getPosition());
+                    particle->setVisible(false);
+                    this->addChild(particle, 4);
+                }
+                scheduleOnce([this, i, j, particle](float dt) {
                     if (this->gameContinuing) {
-                        enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i][j].first,
-                                             enemyPos[i][j].second,*enemyFactories[i][j]),enemySprites[i][j]);
+                        Id id = this->map->spawn_enemy_at(
+                            enemyPos[i][j].first,
+                            enemyPos[i][j].second,
+                            *enemyFactories[i][j]);
+                        if (particle) {
+                            enemyParticles.emplace_back(id,
+                                                        particle);
+                            particle->setVisible(true);
+                        }
+                        enemies.emplace_back(id, enemySprites[i][j]);
                     }
                 }, enemyCreateTime[i] - 0.45f + 0.1f * j,"addEnemyToMap" + std::to_string(i) + std::to_string(j));
                 scheduleOnce([this, i, j](float dt) {
@@ -1851,6 +1879,7 @@ void LevelScene::gameOver(bool isWin) {
 }
 
 void LevelScene::update() {
+    this->updateParticles();
     this->updateBullets();
     this->updateMoneyLabel();
     this->updateSelectorEnabled();

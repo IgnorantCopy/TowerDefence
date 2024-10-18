@@ -5,7 +5,6 @@
 #include "EnemyAnimation.h"
 
 size_t EnemyAnimation::transportCounter = 0;
-size_t EnemyAnimation::attackDownCounter = 0;
 size_t EnemyAnimation::notAttackedCounter = 0;
 
 static bool isInRange(int x1, int y1, int x2, int y2, int range) {
@@ -147,7 +146,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
         for (int i = 0; i < 45; i++) {
             std::string skillPath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + skillPath, cocos2d::Rect(0, 0, 850, 850)));
+                prefix + skillPath, cocos2d::Rect(0, 0, 1000, 1000)));
         }
         for (int i = indexY - 2; i <= indexY + 2; i++) {
             for (int j = indexX - 2; j <= indexX + 2; j++) {
@@ -179,14 +178,8 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
         particle =
             cocos2d::ParticleSystemQuad::create("particles/attack_ring.plist");
         if (particle) {
-            particle->scheduleOnce(
-                [levelScene, particle, x, y](float dt) {
-                    particle->setPosition(cocos2d::Vec2(x, y));
-                    levelScene->addChild(particle, 2);
-                },
-                0.6f,
-                "attackRing" +
-                    std::to_string(EnemyAnimation::attackDownCounter++));
+            particle->setPosition(cocos2d::Vec2(x, y));
+            levelScene->addChild(particle, 4);
         }
         break;
     case EnemyType::NotAttacked:
@@ -351,7 +344,20 @@ void EnemyAnimation::dead(LevelScene *levelScene,
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
     float typeX = origin.x + 350 + size;
     float typeY = origin.y + visibleSize.height - size;
-    auto enemySprite = levelScene->getEnemy(enemy->id);
+    cocos2d::Sprite *enemySprite = nullptr;
+    for (auto it = levelScene->enemies.begin();
+         it != levelScene->enemies.end();) {
+        if (it->first == enemy->id) {
+            enemySprite = it->second;
+            it = levelScene->enemies.erase(it);
+            break;
+        } else {
+            it++;
+        }
+    }
+    if (!enemySprite) {
+        return;
+    }
     float x = enemySprite->getPositionX();
     float y = enemySprite->getPositionY();
     int indexX = (int)((x - typeX + 0.5f * size) / size);
@@ -392,7 +398,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 36; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 700, 700)));
+                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
         }
         break;
     case EnemyType::Destroyer:
@@ -401,7 +407,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 30; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
+                prefix + diePath, cocos2d::Rect(0, 0, 900, 900)));
         }
         break;
     case EnemyType::Dog:
@@ -410,7 +416,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 30; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 750, 750)));
+                prefix + diePath, cocos2d::Rect(0, 0, 850, 850)));
         }
         break;
     case EnemyType::LifeUp:
@@ -419,7 +425,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 30; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 650, 650)));
+                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
         }
         break;
     case EnemyType::NotAttacked:
@@ -437,17 +443,16 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 23; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 450, 450)));
+                prefix + diePath, cocos2d::Rect(0, 0, 600, 600)));
         }
         break;
     case EnemyType::SpeedUp:
-        enemySprite->unschedule("updateParticle");
         prefix += "speedUp/die/speedUp_die";
         frames.reserve(28);
         for (int i = 0; i < 28; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 400, 400)));
+                prefix + diePath, cocos2d::Rect(0, 0, 600, 600)));
         }
         break;
     case EnemyType::Tank:
@@ -456,7 +461,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 27; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 550, 550)));
+                prefix + diePath, cocos2d::Rect(0, 0, 650, 650)));
         }
         break;
     case EnemyType::Warlock:
@@ -465,7 +470,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 30; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 360, 360)));
+                prefix + diePath, cocos2d::Rect(0, 0, 500, 500)));
         }
         break;
     case EnemyType::Worm:
