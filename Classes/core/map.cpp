@@ -1,9 +1,11 @@
 #include "map.h"
 #include "entity/entity.h"
+#include "id.h"
 #include <cassert>
 #include <cstddef>
 #include <iterator>
 #include <memory>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -34,11 +36,19 @@ void Map::update() {
         }
     }
 
+    std::unordered_set<id::Id> visited_enemies;
+
     for (auto ref : *this) {
 
         std::erase_if(
             ref.grid.enemies,
-            [ref, this](std::unique_ptr<Enemy> &enemy) mutable {
+            [ref, &visited_enemies, this](std::unique_ptr<Enemy> &enemy) mutable {
+                if (visited_enemies.contains(enemy->id)) {
+                    return false;
+                }
+
+                visited_enemies.insert(enemy->id);
+
                 if (enemy->realized_attack_ >= enemy->status().health_) {
                     enemy->on_death(ref);
 
