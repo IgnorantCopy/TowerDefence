@@ -196,7 +196,7 @@ struct Map {
         }
     };
 
-    static constexpr uint32_t MAX_HEALTH = 300;
+    static constexpr uint32_t MAX_HEALTH = 10;
 
     std::vector<Grid> grids;
     Shape shape;

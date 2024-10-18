@@ -1,5 +1,8 @@
 #include "LevelScene.h"
 #include "SelectLevelScene.h"
+#include "Level1Scene.h"
+#include "Level2Scene.h"
+#include "Level3Scene.h"
 #include "animation/EnemyAnimation.h"
 #include "animation/TowerAnimation.h"
 #include "core/entity/enemy/Attack-down.h"
@@ -96,6 +99,8 @@ bool LevelScene::init(int level) {
         return false;
     }
 
+    Level = level;
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -144,11 +149,13 @@ bool LevelScene::init(int level) {
 
     // the back button to go back to the SelectLevel scene
     auto Back = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
-    auto backItem = MenuItemLabel::create(Back, [this, player](Ref *ref) {
-        player->stopBackgroundMusic();
-        player->playBackgroundMusic("audio/menu_bgm.MP3", true);
-        Director::getInstance()->replaceScene(
-            TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+    backItem = MenuItemLabel::create(Back, [this, player](Ref *ref) {
+        if (gameContinuing) {
+            player->stopBackgroundMusic();
+            player->playBackgroundMusic("audio/menu_bgm.MP3", true);
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+        }
     });
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
                                origin.y + visibleSize.height - 50));
@@ -731,7 +738,6 @@ void LevelScene::decreaseLife() {
         this->lifeLabel->setPosition(
             cocos2d::Vec2(origin.x + 150,
                           origin.y + visibleSize.height - 180));
-        this->gameOver(false);
     } else {
         this->lifeLabel->setString(std::to_string(this->map->health_));
         this->lifeLabel->setPosition(
@@ -1634,6 +1640,10 @@ void LevelScene::createMap(int level) {
         [this](Tower &tower, towerdefence::core::Map &map, uint32_t duration) {
             TowerAnimation::releaseSkill(this, &tower, duration);
         });
+    this->map->on_end(
+        [this](bool isWin){
+            this->gameOver(isWin);
+        });
 }
 
 void LevelScene::onMouseDown(cocos2d::Event *event) {
@@ -1702,6 +1712,7 @@ void LevelScene::createEnemy() {
         std::vector<std::pair<size_t, size_t>> enemySameTimePos;
         std::vector<std::unique_ptr<EnemyFactoryBase>> enemySameTimeFactories;
         for (auto &j : enemyCreateType[i]) {
+            float delta = 0;
             std::string enemyPath = "images/enemies/";
             size_t x = enemyStartPos[j.first].first;
             size_t y = enemyStartPos[j.first].second;
@@ -1737,11 +1748,13 @@ void LevelScene::createEnemy() {
                 enemyPath += "destroyer/move/destroyer_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Destroyer>>(
                     new_route, extra_storage);
+                delta = 3.0;
                 break;
             case EnemyType::Tank:
                 enemyPath += "tank/move/tank_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Tank>>(new_route,
                                                                 extra_storage);
+                delta = 15.0;
                 break;
             case EnemyType::Crab:
                 enemyPath += "crab/move/crab_move00.png";
@@ -1757,6 +1770,7 @@ void LevelScene::createEnemy() {
                 enemyPath += "attackDown/move/attackDown_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<AttackDown>>(
                     new_route, extra_storage);
+                delta = 15.0;
                 break;
             case EnemyType::LifeUp:
                 enemyPath += "lifeUp/move/lifeUp_move00.png";
@@ -1784,7 +1798,7 @@ void LevelScene::createEnemy() {
             enemySameTimeFactories.push_back(std::move(newEnemy));
             auto newEnemySprite = Sprite::create(enemyPath);
             newEnemySprite->setScale(enemyScale[j.second - 1]);
-            newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE));
+            newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE + delta));
             newEnemySprite->setVisible(false);
             enemySameTime.push_back(newEnemySprite);
             this->addChild(newEnemySprite, 5);
@@ -1842,6 +1856,7 @@ void LevelScene::gameOver(bool isWin) {
     this->gameContinuing = false;
     unschedule("update");
     isSelecting = 0;
+    backItem->setVisible(false);
     archerBaseSelector->setEnabled(true);
     magicianBaseSelector->setEnabled(true);
     helperBaseSelector->setEnabled(true);
@@ -1869,13 +1884,154 @@ void LevelScene::gameOver(bool isWin) {
         upgradeItem3->setVisible(false);
         cancelUpgradeItem->setVisible(false);
     }
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
+
+    auto BackOver = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
+    auto backItemOver = MenuItemLabel::create(BackOver, [this, player](Ref *ref) {
+        player->stopBackgroundMusic();
+        player->playBackgroundMusic("audio/menu_bgm.mp3", true);
+        Director::getInstance()->replaceScene(
+            TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+    });
+    backItemOver->setPosition(Vec2(visibleSize.width / 2 + 450, visibleSize.height / 2 - 200));
+
+    auto RetryOver = Label::createWithTTF("Retry", "fonts/Bender/BENDER.OTF", 75);
+    auto retryItemOver = MenuItemLabel::create(RetryOver, [this, player](Ref *ref) {
+        player->stopBackgroundMusic();
+        switch (Level) {
+        case 1:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level1Scene::createScene()));
+            break;
+        case 2:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level2Scene::createScene()));
+            break;
+        case 3:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level3Scene::createScene()));
+            break;
+        default:
+            break;
+        }
+    });
+    retryItemOver->setPosition(Vec2(visibleSize.width / 2 - 450, visibleSize.height / 2 - 200));
+
+    auto ReplayOver = Label::createWithTTF("Replay", "fonts/Bender/BENDER.OTF", 75);
+    auto replayItemOver = MenuItemLabel::create(ReplayOver, [this, player](Ref *ref) {
+        player->stopBackgroundMusic();
+        switch (Level) {
+        case 1:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level1Scene::createScene()));
+            break;
+        case 2:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level2Scene::createScene()));
+            break;
+        case 3:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level3Scene::createScene()));
+            break;
+        default:
+            break;
+        }
+    });
+    if (Level == 3){
+        replayItemOver->setPosition(Vec2(visibleSize.width / 2 - 450, visibleSize.height / 2 - 200));
+    } else {
+        replayItemOver->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - 200));
+    }
+
+    auto nextLevelOver = Label::createWithTTF("Level " + std::to_string(Level + 1), "fonts/Bender/BENDER.OTF", 75);
+    auto nextLevelItemOver = MenuItemLabel::create(nextLevelOver, [this, player](Ref *ref) {
+        player->stopBackgroundMusic();
+        switch (Level) {
+        case 1:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level2Scene::createScene()));
+            break;
+        case 2:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level3Scene::createScene()));
+            break;
+        default:
+            break;
+        }
+    });
+    nextLevelItemOver->setPosition(Vec2(visibleSize.width / 2 - 500, visibleSize.height / 2 - 200));
+
+    Vector<MenuItem *> menuItemsOver;
+    menuItemsOver.pushBack(backItemOver);
 
     if (isWin) {
         Win = true;
-        // TODO: win the game
+        if (Level != 3) {
+            menuItemsOver.pushBack(nextLevelItemOver);
+        }
+        menuItemsOver.pushBack(replayItemOver);
+        int star = int(this->map->health_) / 5 + 1;
+        std::string starPath = "images/star" + std::to_string(star) + ".png";
+        auto starOver = Sprite::create(starPath);
+        starOver->setScale(0.6f);
+        starOver->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 60));
+        this->addChild(starOver, 11);
+        starOver->setVisible(false);
+        auto gameOverLabel = Label::createWithTTF("You Win!", "fonts/Bender/BENDER.OTF", 120);
+        gameOverLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 275));
+        this->addChild(gameOverLabel, 11);
+        gameOverLabel->setVisible(false);
+        scheduleOnce([this, gameOverLabel](float dt){
+            gameOverLabel->setVisible(true);
+            gameOverLabel->setOpacity(0);
+            auto fadein = FadeIn::create(0.5f);
+            gameOverLabel->runAction(fadein);
+        }, 1.0f, "gameOverLabel");
+        scheduleOnce([this, starOver](float dt){
+            starOver->setVisible(true);
+            starOver->setOpacity(0);
+            auto fadein = FadeIn::create(0.5f);
+            starOver->runAction(fadein);
+        }, 1.5f, "starOver");
+        // TODO: update SelectLevelScene
     } else {
-        // TODO: lose the game
+        menuItemsOver.pushBack(retryItemOver);
+        auto starOver = Sprite::create("images/star0.png");
+        starOver->setScale(0.6f);
+        starOver->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 60));
+        this->addChild(starOver, 11);
+        starOver->setVisible(false);
+        auto gameOverLabel = Label::createWithTTF("Game Over", "fonts/Bender/BENDER.OTF", 120);
+        gameOverLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 275));
+        this->addChild(gameOverLabel, 11);
+        gameOverLabel->setVisible(false);
+        scheduleOnce([this, gameOverLabel](float dt){
+            gameOverLabel->setVisible(true);
+            gameOverLabel->setOpacity(0);
+            auto fadein = FadeIn::create(0.5f);
+            gameOverLabel->runAction(fadein);
+        }, 1.0f, "gameOverLabel");
+        scheduleOnce([this, starOver](float dt){
+            starOver->setVisible(true);
+            starOver->setOpacity(0);
+            auto fadein = FadeIn::create(0.5f);
+            starOver->runAction(fadein);
+        }, 1.5f, "starOver");
     }
+
+    auto menuOver = Menu::createWithArray(menuItemsOver);
+    menuOver->setPosition(Vec2::ZERO);
+    this->addChild(menuOver, 11);
+    menuOver->setVisible(false);
+    scheduleOnce([this, menuOver](float dt){
+        menuOver->setVisible(true);
+        menuOver->setOpacity(0);
+        auto fadein = FadeIn::create(1.0f);
+        menuOver->runAction(fadein);
+    }, 2.0f, "menuOver");
 }
 
 void LevelScene::update() {

@@ -5,8 +5,12 @@
 
 class SelectLevelScene : public cocos2d::Scene
 {
-    bool level2Scene = true;
-    bool level3Scene = true;
+    int level1Scene = 2;
+    int level2Scene = 3;
+    int level3Scene = -1; // TODO: save the file to update these values
+    cocos2d::Sprite *level1Star = nullptr;
+    cocos2d::Sprite *level2Star = nullptr;
+    cocos2d::Sprite *level3Star = nullptr;
 
 public:
     static cocos2d::Scene* createScene();
