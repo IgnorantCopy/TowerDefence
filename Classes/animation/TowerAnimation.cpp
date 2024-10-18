@@ -102,7 +102,9 @@ void Bullet::explosion() {
         this->bullet->removeFromParent();
         return;
     }
-    if (this->isScaling) {
+    if (this->isScaling &&
+        (this->tower->status().tower_type_ == TowerType::Bomber ||
+         this->tower->status().tower_type_ == TowerType::BomberPlus)) {
         cocos2d::Vector<cocos2d::SpriteFrame *> frames;
         frames.reserve(44);
         for (int i = 0; i < 44; i++) {
@@ -287,6 +289,10 @@ void MagicBullet::explosion() {
     this->bullet->runAction(seq);
 }
 
+/* ---------------------- TowerAnimation ---------------------- */
+
+bool TowerAnimation::isOnEffect = false;
+
 void TowerAnimation::releaseSkill(LevelScene *levelScene,
                                   towerdefence::core::Tower *tower,
                                   float duration) {
@@ -313,28 +319,21 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
 
     auto *skillSprite =
         cocos2d::Sprite::create("images/bullet/skill/skill00.png");
-    skillSprite->setPosition(towerSprite->getPosition());
-    skillSprite->setScale(0.15f);
-    skillSprite->setOpacity(100);
-    towerSprite->addChild(skillSprite);
-    skillSprite->runAction(cocos2d::RepeatForever::create(animate));
     switch (tower->status().tower_type_) {
     case TowerType::HighspeedArcher:
     case TowerType::HighspeedArcherPlus:
     case TowerType::CoreMagician:
-        if (duration <= epsilon) {
-            towerSprite->removeAllChildren();
+        if (abs(duration - 1.0f) <= epsilon) {
+            tower->set_storage<bool>("isScaling", true);
         }
-        break;
+        return;
     case TowerType::Bomber:
     case TowerType::BomberPlus:
     case TowerType::SpecialMagician:
-        if (duration <= epsilon) {
-            towerSprite->removeAllChildren();
-        } else if (abs(duration - 1.0f) <= epsilon) {
+        if (abs(duration - 1.0f) <= epsilon) {
             tower->set_storage<bool>("isScaling", true);
         }
-        break;
+        return;
     case TowerType::ArcherBase:
     case TowerType::Archer:
     case TowerType::ArcherPlus:
@@ -425,6 +424,7 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                             "particles/decelerate.plist");
                         particle->setPosition(
                             cocos2d::Vec2(typeX + size * j, typeY - size * i));
+                        particle->setScale(0.25f);
                         levelScene->addChild(particle, 4);
                         particle->scheduleOnce(
                             [particle](float dt) {
@@ -445,8 +445,9 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                 if (i >= 0 && i < 7 && j >= 0 && j < 12) {
                     auto &grid = levelScene->map->get_ref(i, j).grid;
                     if (grid.type == Grid::Type::BlockTower &&
-                        isInRange(i, j, indexY, indexX, 3) && i != indexY &&
-                        j != indexX) {
+                        grid.tower.has_value() &&
+                        isInRange(i, j, indexY, indexX, 3) &&
+                        (i != indexY || j != indexX)) {
                         auto attackUp = cocos2d::Sprite::create(
                             "images/towers/attack_up.png");
                         attackUp->setPosition(cocos2d::Vec2(
@@ -456,19 +457,21 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                 }
             }
         }
+        if (!TowerAnimation::isOnEffect) {
+            TowerAnimation::isOnEffect = true;
+        } else {
+            return;
+        }
         break;
     case TowerType::AggressiveMagicianPlus:
-        skillSprite->scheduleOnce(
-            [skillSprite](float dt) { skillSprite->removeFromParent(); },
-            duration,
-            "remove" + std::to_string(TowerAnimation::removeCounter++));
         for (int i = indexY - 3; i <= indexY + 3; i++) {
             for (int j = indexX - 3; j <= indexX + 3; j++) {
                 if (i >= 0 && i < 7 && j >= 0 && j < 12) {
                     auto &grid = levelScene->map->get_ref(i, j).grid;
                     if (grid.type == Grid::Type::BlockTower &&
-                        isInRange(i, j, indexY, indexX, 3) && i != indexY &&
-                        j != indexX) {
+                        grid.tower.has_value() &&
+                        isInRange(i, j, indexY, indexX, 3) &&
+                        (i != indexY || j != indexX)) {
                         auto attackUp = cocos2d::Sprite::create(
                             "images/towers/attack_up.png");
                         attackUp->setPosition(cocos2d::Vec2(
@@ -486,8 +489,17 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                 }
             }
         }
+        skillSprite->scheduleOnce(
+            [skillSprite](float dt) { skillSprite->removeFromParent(); },
+            duration,
+            "remove" + std::to_string(TowerAnimation::removeCounter++));
         break;
     default:
         break;
     }
+    skillSprite->setPosition(towerSprite->getPosition());
+    skillSprite->setScale(0.15f);
+    skillSprite->setOpacity(100);
+    levelScene->addChild(skillSprite, 4);
+    skillSprite->runAction(cocos2d::RepeatForever::create(animate));
 }
