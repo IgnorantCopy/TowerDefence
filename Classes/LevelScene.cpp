@@ -1909,7 +1909,7 @@ void LevelScene::gameOver(bool isWin) {
         replayItemOver->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - 200));
     }
 
-    auto nextLevelOver = Label::createWithTTF("Next Level", "fonts/Bender/BENDER.OTF", 75);
+    auto nextLevelOver = Label::createWithTTF("Next LeveL", "fonts/Bender/BENDER.OTF", 75);
     auto nextLevelItemOver = MenuItemLabel::create(nextLevelOver, [this, player](Ref *ref) {
         player->stopBackgroundMusic();
         switch (Level) {
@@ -1936,9 +1936,31 @@ void LevelScene::gameOver(bool isWin) {
             menuItemsOver.pushBack(nextLevelItemOver);
         }
         menuItemsOver.pushBack(replayItemOver);
+
         // TODO: win the game
     } else {
         menuItemsOver.pushBack(retryItemOver);
+        auto starOver = Sprite::create("images/star0.png");
+        starOver->setScale(0.8f);
+        starOver->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 100));
+        this->addChild(starOver, 11);
+        starOver->setVisible(false);
+        auto gameOverLabel = Label::createWithTTF("Game Over", "fonts/Bender/BENDER.OTF", 120);
+        gameOverLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 275));
+        this->addChild(gameOverLabel, 11);
+        gameOverLabel->setVisible(false);
+        scheduleOnce([this, gameOverLabel](float dt){
+            gameOverLabel->setVisible(true);
+            gameOverLabel->setOpacity(0);
+            auto fadein = FadeIn::create(0.5f);
+            gameOverLabel->runAction(fadein);
+        }, 1.0f, "gameOverLabel");
+        scheduleOnce([this, starOver](float dt){
+            starOver->setVisible(true);
+            starOver->setOpacity(0);
+            auto fadein = FadeIn::create(0.5f);
+            starOver->runAction(fadein);
+        }, 1.5f, "starOver");
         // TODO: lose the game
     }
 
