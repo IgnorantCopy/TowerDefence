@@ -124,11 +124,80 @@ bool SelectLevelScene::init() {
     level3Button->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800,
                                    origin.y + visibleSize.height / 2));
 
-    if (level2Scene < 0) {
-        level2Button->setEnabled(false);
+    switch (level1Scene) {
+    case 1:
+        level1Star = Sprite::create("images/bronze.png");
+        level1Star->setPosition(Vec2(origin.x + visibleSize.width / 2 - 600,
+                                    origin.y + visibleSize.height / 2 + 400));
+        this->addChild(level1Star, 5);
+        break;
+    case 2:
+        level1Star = Sprite::create("images/silver.png");
+        level1Star->setPosition(Vec2(origin.x + visibleSize.width / 2 - 600,
+                                    origin.y + visibleSize.height / 2 + 400));
+        this->addChild(level1Star, 5);
+        break;
+    case 3:
+        level1Star = Sprite::create("images/golden.png");
+        level1Star->setPosition(Vec2(origin.x + visibleSize.width / 2 - 600,
+                                    origin.y + visibleSize.height / 2 + 400));
+        this->addChild(level1Star, 5);
+        break;
+    case 0:
+        break;
+    default:
+        level1Button->setEnabled(false);
+        break;
     }
-    if (level3Scene < 0) {
+    switch (level2Scene) {
+    case 1:
+        level2Star = Sprite::create("images/bronze.png");
+        level2Star->setPosition(Vec2(origin.x + visibleSize.width / 2 + 200,
+                                     origin.y + visibleSize.height / 2 + 400));
+        this->addChild(level2Star, 5);
+        break;
+    case 2:
+        level2Star = Sprite::create("images/silver.png");
+        level2Star->setPosition(Vec2(origin.x + visibleSize.width / 2 + 200,
+                                     origin.y + visibleSize.height / 2 + 400));
+        this->addChild(level2Star, 5);
+        break;
+    case 3:
+        level2Star = Sprite::create("images/golden.png");
+        level2Star->setPosition(Vec2(origin.x + visibleSize.width / 2 + 200,
+                                     origin.y + visibleSize.height / 2 + 400));
+        this->addChild(level2Star, 5);
+        break;
+    case 0:
+        break;
+    default:
+        level2Button->setEnabled(false);
+        break;
+    }
+    switch (level3Scene) {
+    case 1:
+        level3Star = Sprite::create("images/bronze.png");
+        level3Star->setPosition(Vec2(origin.x + visibleSize.width / 2 + 1000,
+                                     origin.y + visibleSize.height / 2 + 400));
+        this->addChild(level3Star, 5);
+        break;
+    case 2:
+        level3Star = Sprite::create("images/silver.png");
+        level3Star->setPosition(Vec2(origin.x + visibleSize.width / 2 + 1000,
+                                     origin.y + visibleSize.height / 2 + 400));
+        this->addChild(level3Star, 5);
+        break;
+    case 3:
+        level3Star = Sprite::create("images/golden.png");
+        level3Star->setPosition(Vec2(origin.x + visibleSize.width / 2 + 1000,
+                                     origin.y + visibleSize.height / 2 + 400));
+        this->addChild(level3Star, 5);
+        break;
+    case 0:
+        break;
+    default:
         level3Button->setEnabled(false);
+        break;
     }
     this->addChild(level1Button, 1);
     this->addChild(level2Button, 1);

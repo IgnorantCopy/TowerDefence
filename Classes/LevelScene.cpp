@@ -1970,13 +1970,35 @@ void LevelScene::gameOver(bool isWin) {
             menuItemsOver.pushBack(nextLevelItemOver);
         }
         menuItemsOver.pushBack(replayItemOver);
-
-        // TODO: win the game
+        int star = int(this->map->health_) / 5 + 1;
+        std::string starPath = "images/star" + std::to_string(star) + ".png";
+        auto starOver = Sprite::create(starPath);
+        starOver->setScale(0.6f);
+        starOver->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 60));
+        this->addChild(starOver, 11);
+        starOver->setVisible(false);
+        auto gameOverLabel = Label::createWithTTF("You Win!", "fonts/Bender/BENDER.OTF", 120);
+        gameOverLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 275));
+        this->addChild(gameOverLabel, 11);
+        gameOverLabel->setVisible(false);
+        scheduleOnce([this, gameOverLabel](float dt){
+            gameOverLabel->setVisible(true);
+            gameOverLabel->setOpacity(0);
+            auto fadein = FadeIn::create(0.5f);
+            gameOverLabel->runAction(fadein);
+        }, 1.0f, "gameOverLabel");
+        scheduleOnce([this, starOver](float dt){
+            starOver->setVisible(true);
+            starOver->setOpacity(0);
+            auto fadein = FadeIn::create(0.5f);
+            starOver->runAction(fadein);
+        }, 1.5f, "starOver");
+        // TODO: update SelectLevelScene
     } else {
         menuItemsOver.pushBack(retryItemOver);
         auto starOver = Sprite::create("images/star0.png");
-        starOver->setScale(0.8f);
-        starOver->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 100));
+        starOver->setScale(0.6f);
+        starOver->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 60));
         this->addChild(starOver, 11);
         starOver->setVisible(false);
         auto gameOverLabel = Label::createWithTTF("Game Over", "fonts/Bender/BENDER.OTF", 120);
@@ -1995,7 +2017,6 @@ void LevelScene::gameOver(bool isWin) {
             auto fadein = FadeIn::create(0.5f);
             starOver->runAction(fadein);
         }, 1.5f, "starOver");
-        // TODO: lose the game
     }
 
     auto menuOver = Menu::createWithArray(menuItemsOver);
