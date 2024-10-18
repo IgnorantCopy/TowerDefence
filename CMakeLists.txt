@@ -44,7 +44,7 @@ if (NOT DEFINED BUILD_ENGINE_DONE) # to test TowerDefence into root project
 endif()
 
 if (TOWERDEFENCE_SANITIZER)
-    if (WIN32 or WINDOWS)
+    if (WINDOWS)
         message("enabling sanitizer")
         add_compile_options(/fsanitize=address)
         add_link_options(/fsanitize=address)
