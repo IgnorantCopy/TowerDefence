@@ -738,7 +738,6 @@ void LevelScene::decreaseLife() {
         this->lifeLabel->setPosition(
             cocos2d::Vec2(origin.x + 150,
                           origin.y + visibleSize.height - 180));
-        this->gameOver(false);
     } else {
         this->lifeLabel->setString(std::to_string(this->map->health_));
         this->lifeLabel->setPosition(
@@ -1640,6 +1639,10 @@ void LevelScene::createMap(int level) {
     this->map->on_tower_release_skill(
         [this](Tower &tower, towerdefence::core::Map &map, uint32_t duration) {
             TowerAnimation::releaseSkill(this, &tower, duration);
+        });
+    this->map->on_end(
+        [this](bool isWin){
+            this->gameOver(isWin);
         });
 }
 
