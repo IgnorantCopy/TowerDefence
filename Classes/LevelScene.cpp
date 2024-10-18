@@ -1,5 +1,8 @@
 #include "LevelScene.h"
 #include "SelectLevelScene.h"
+#include "Level1Scene.h"
+#include "Level2Scene.h"
+#include "Level3Scene.h"
 #include "animation/EnemyAnimation.h"
 #include "animation/TowerAnimation.h"
 #include "core/entity/enemy/Attack-down.h"
@@ -96,6 +99,8 @@ bool LevelScene::init(int level) {
         return false;
     }
 
+    Level = level;
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -144,11 +149,13 @@ bool LevelScene::init(int level) {
 
     // the back button to go back to the SelectLevel scene
     auto Back = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
-    auto backItem = MenuItemLabel::create(Back, [this, player](Ref *ref) {
-        player->stopBackgroundMusic();
-        player->playBackgroundMusic("audio/menu_bgm.MP3", true);
-        Director::getInstance()->replaceScene(
-            TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+    backItem = MenuItemLabel::create(Back, [this, player](Ref *ref) {
+        if (gameContinuing) {
+            player->stopBackgroundMusic();
+            player->playBackgroundMusic("audio/menu_bgm.MP3", true);
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+        }
     });
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
                                origin.y + visibleSize.height - 50));
@@ -1681,6 +1688,7 @@ void LevelScene::createEnemy() {
         std::vector<std::pair<size_t, size_t>> enemySameTimePos;
         std::vector<std::unique_ptr<EnemyFactoryBase>> enemySameTimeFactories;
         for (auto &j : enemyCreateType[i]) {
+            float delta = 0;
             std::string enemyPath = "images/enemies/";
             size_t x = enemyStartPos[j.first].first;
             size_t y = enemyStartPos[j.first].second;
@@ -1739,6 +1747,7 @@ void LevelScene::createEnemy() {
                 enemyPath += "attackDown/move/attackDown_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<AttackDown>>(
                     new_route, extra_storage);
+                delta = 15.0;
                 break;
             case EnemyType::LifeUp:
                 enemyPath += "lifeUp/move/lifeUp_move00.png";
@@ -1766,7 +1775,7 @@ void LevelScene::createEnemy() {
             enemySameTimeFactories.push_back(std::move(newEnemy));
             auto newEnemySprite = Sprite::create(enemyPath);
             newEnemySprite->setScale(enemyScale[j.second - 1]);
-            newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE));
+            newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE + delta));
             newEnemySprite->setVisible(false);
             enemySameTime.push_back(newEnemySprite);
             if (particle) {
@@ -1794,11 +1803,7 @@ void LevelScene::createEnemy() {
                 scheduleOnce([this, i, j](float dt) {
                     if (this->gameContinuing) {
                         enemies.emplace_back(this->map->spawn_enemy_at(enemyPos[i][j].first,
-                                             enemyPos[i][j].second,*enemyFactories[i][j]),enemySprites[i][j]);
-                    }
-                }, enemyCreateTime[i] - 0.45f + 0.1f * j,"addEnemyToMap" + std::to_string(i) + std::to_string(j));
-                scheduleOnce([this, i, j](float dt) {
-                    if (this->gameContinuing) {
+                                                                       enemyPos[i][j].second,*enemyFactories[i][j]),enemySprites[i][j]);
                         enemySprites[i][j]->setVisible(true);
                         enemySprites[i][j]->setOpacity(0);
                         auto fadeIn = FadeIn::create(0.25f);
@@ -1814,6 +1819,7 @@ void LevelScene::gameOver(bool isWin) {
     this->gameContinuing = false;
     unschedule("update");
     isSelecting = 0;
+    backItem->setVisible(false);
     archerBaseSelector->setEnabled(true);
     magicianBaseSelector->setEnabled(true);
     helperBaseSelector->setEnabled(true);
@@ -1841,13 +1847,111 @@ void LevelScene::gameOver(bool isWin) {
         upgradeItem3->setVisible(false);
         cancelUpgradeItem->setVisible(false);
     }
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
+
+    auto BackOver = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
+    auto backItemOver = MenuItemLabel::create(BackOver, [this, player](Ref *ref) {
+        player->stopBackgroundMusic();
+        player->playBackgroundMusic("audio/menu_bgm.mp3", true);
+        Director::getInstance()->replaceScene(
+            TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+    });
+    backItemOver->setPosition(Vec2(visibleSize.width / 2 + 450, visibleSize.height / 2 - 200));
+
+    auto RetryOver = Label::createWithTTF("Retry", "fonts/Bender/BENDER.OTF", 75);
+    auto retryItemOver = MenuItemLabel::create(RetryOver, [this, player](Ref *ref) {
+        player->stopBackgroundMusic();
+        switch (Level) {
+        case 1:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level1Scene::createScene()));
+            break;
+        case 2:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level2Scene::createScene()));
+            break;
+        case 3:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level3Scene::createScene()));
+            break;
+        default:
+            break;
+        }
+    });
+    retryItemOver->setPosition(Vec2(visibleSize.width / 2 - 450, visibleSize.height / 2 - 200));
+
+    auto ReplayOver = Label::createWithTTF("Replay", "fonts/Bender/BENDER.OTF", 75);
+    auto replayItemOver = MenuItemLabel::create(ReplayOver, [this, player](Ref *ref) {
+        player->stopBackgroundMusic();
+        switch (Level) {
+        case 1:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level1Scene::createScene()));
+            break;
+        case 2:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level2Scene::createScene()));
+            break;
+        case 3:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level3Scene::createScene()));
+            break;
+        default:
+            break;
+        }
+    });
+    if (Level == 3){
+        replayItemOver->setPosition(Vec2(visibleSize.width / 2 - 450, visibleSize.height / 2 - 200));
+    } else {
+        replayItemOver->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - 200));
+    }
+
+    auto nextLevelOver = Label::createWithTTF("Next Level", "fonts/Bender/BENDER.OTF", 75);
+    auto nextLevelItemOver = MenuItemLabel::create(nextLevelOver, [this, player](Ref *ref) {
+        player->stopBackgroundMusic();
+        switch (Level) {
+        case 1:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level2Scene::createScene()));
+            break;
+        case 2:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level3Scene::createScene()));
+            break;
+        default:
+            break;
+        }
+    });
+    nextLevelItemOver->setPosition(Vec2(visibleSize.width / 2 - 500, visibleSize.height / 2 - 200));
+
+    Vector<MenuItem *> menuItemsOver;
+    menuItemsOver.pushBack(backItemOver);
 
     if (isWin) {
         Win = true;
+        if (Level != 3) {
+            menuItemsOver.pushBack(nextLevelItemOver);
+        }
+        menuItemsOver.pushBack(replayItemOver);
         // TODO: win the game
     } else {
+        menuItemsOver.pushBack(retryItemOver);
         // TODO: lose the game
     }
+
+    auto menuOver = Menu::createWithArray(menuItemsOver);
+    menuOver->setPosition(Vec2::ZERO);
+    this->addChild(menuOver, 11);
+    menuOver->setVisible(false);
+    scheduleOnce([this, menuOver](float dt){
+        menuOver->setVisible(true);
+        menuOver->setOpacity(0);
+        auto fadein = FadeIn::create(1.0f);
+        menuOver->runAction(fadein);
+    }, 2.0f, "menuOver");
 }
 
 void LevelScene::update() {

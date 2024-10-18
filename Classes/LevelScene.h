@@ -26,6 +26,7 @@ class Bullet;
 
 class LevelScene : public cocos2d::Scene {
 protected:
+    int Level = 0;
     Grid::Type type[7][12] = {Grid::Type::BlockPath};
     std::vector<std::vector<size_t>> gridType;
     std::vector<Grid::Type> gridTypes = {Grid::Type::BlockPath, Grid::Type::BlockIn, Grid::Type::BlockOut,
@@ -87,6 +88,7 @@ protected:
 
     // select tower
     int isSelecting = 0;
+    cocos2d::MenuItemLabel *backItem = nullptr;
     cocos2d::ui::Button *archerBaseSelector = nullptr;
     cocos2d::ui::Button *magicianBaseSelector = nullptr;
     cocos2d::ui::Button *helperBaseSelector = nullptr;
