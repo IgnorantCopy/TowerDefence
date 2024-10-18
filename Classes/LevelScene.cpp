@@ -1946,7 +1946,7 @@ void LevelScene::gameOver(bool isWin) {
         replayItemOver->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - 200));
     }
 
-    auto nextLevelOver = Label::createWithTTF("Next LeveL", "fonts/Bender/BENDER.OTF", 75);
+    auto nextLevelOver = Label::createWithTTF("Level " + std::to_string(Level + 1), "fonts/Bender/BENDER.OTF", 75);
     auto nextLevelItemOver = MenuItemLabel::create(nextLevelOver, [this, player](Ref *ref) {
         player->stopBackgroundMusic();
         switch (Level) {
