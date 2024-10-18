@@ -48,7 +48,7 @@ void Tower::on_tick(GridRef g) {
     auto &clk = g.clock();
     this->update_buff(clk);
     this->attack_.visit_period(
-        [interval = round(this->status().attack_interval_), &clk](timer::Timer::Period &p) {
+        [interval = std::round(this->status().attack_interval_), &clk](timer::Timer::Period &p) {
             auto progress = static_cast<double>((clk.elapased_ - p.start) % p.period) / p.period;
             auto new_progress = static_cast<uint32_t>(progress * interval);
             p.start = (p.start >= new_progress) ? (p.start - new_progress) : 0;
