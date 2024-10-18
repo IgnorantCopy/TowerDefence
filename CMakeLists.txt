@@ -41,7 +41,19 @@ if (NOT DEFINED BUILD_ENGINE_DONE) # to test TowerDefence into root project
 
     include(CocosBuildSet)
     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
-endif ()
+endif()
+
+if (TOWERDEFENCE_SANITIZER)
+    if (WIN32 or WINDOWS)
+        message("enabling sanitizer")
+        add_compile_options(/fsanitize=address)
+        add_link_options(/fsanitize=address)
+    else()
+        message("enabling sanitizer")
+        add_compile_options(-fsanitize=undefined,address)
+        add_link_options(-fsanitize=undefined,address)
+    endif()
+endif()
 
 add_library(core
         Classes/core/map.cpp
@@ -214,12 +226,7 @@ else ()
     add_library(${APP_NAME} SHARED ${all_code_files})
     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos/platform/android ${ENGINE_BINARY_PATH}/cocos/platform)
     target_link_libraries(${APP_NAME} -Wl,--whole-archive cpp_android_spec -Wl,--no-whole-archive)
-endif ()
-
-if (TOWERDEFENCE_SANITIZER)
-    add_compile_options(-fsanitize=address,undefined)
-    add_link_options(-fsanitize=address,undefined)
-endif ()
+endif()
 
 set_property(TARGET ${APP_NAME} PROPERTY CXX_STANDARD ${TOWERDEFENCE_CXX_STANDARD})
 target_link_libraries(${APP_NAME} cocos2d core)
