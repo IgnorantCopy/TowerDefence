@@ -1730,6 +1730,7 @@ void LevelScene::createEnemy() {
                 enemyPath += "tank/move/tank_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Tank>>(new_route,
                                                                 extra_storage);
+                delta = 15.0;
                 break;
             case EnemyType::Crab:
                 enemyPath += "crab/move/crab_move00.png";

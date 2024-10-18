@@ -124,10 +124,10 @@ bool SelectLevelScene::init() {
     level3Button->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800,
                                    origin.y + visibleSize.height / 2));
 
-    if (!level2Scene) {
+    if (level2Scene < 0) {
         level2Button->setEnabled(false);
     }
-    if (!level3Scene) {
+    if (level3Scene < 0) {
         level3Button->setEnabled(false);
     }
     this->addChild(level1Button, 1);

@@ -5,8 +5,9 @@
 
 class SelectLevelScene : public cocos2d::Scene
 {
-    bool level2Scene = true;
-    bool level3Scene = true;
+    int level1Scene = 0;
+    int level2Scene = -1;
+    int level3Scene = -1;
 
 public:
     static cocos2d::Scene* createScene();
