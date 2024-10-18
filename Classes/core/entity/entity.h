@@ -295,7 +295,7 @@ struct Enemy : Entity,
 
         base.health_ -= realized_attack_;
         base.defence_ += buffs.defence_correction_;
-        base.speed_ = base.speed_ * (1 + buffs.speed_);
+        base.speed_ = std::max(0., base.speed_ * (1 + buffs.speed_));
 
         return base;
     }
@@ -351,7 +351,7 @@ struct Tower : Entity,
         auto base = info();
         auto buffs = get_all_buff();
 
-        base.attack_ += buffs.attack_;
+        base.attack_ = std::max(0., base.attack_ * (1 + buffs.attack_));
         base.attack_interval_ =
             base.attack_interval_ / (double(100 + buffs.attack_speed_) / 100);
         base.attack_radius_ += buffs.attack_radius_;

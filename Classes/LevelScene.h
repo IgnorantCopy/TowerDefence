@@ -25,7 +25,7 @@ using towerdefence::core::Tower;
 class Bullet;
 
 class LevelScene : public cocos2d::Scene {
-  protected:
+protected:
     Grid::Type type[7][12] = {Grid::Type::BlockPath};
     std::vector<std::vector<size_t>> gridType;
     std::vector<Grid::Type> gridTypes = {
@@ -62,6 +62,7 @@ class LevelScene : public cocos2d::Scene {
         EnemyType::Crab,    EnemyType::SpeedUp,     EnemyType::AttackDown,
         EnemyType::LifeUp,  EnemyType::NotAttacked, EnemyType::Boss1,
         EnemyType::Boss2};
+    std::vector<float> enemyScale = {0.4, 0.2, 0.4, 0.4, 0.25, 0.4, 0.25, 0.4, 0.25, 0.25, 0.35, 0.5};
     std::vector<std::pair<Id, cocos2d::ParticleSystemQuad *>> enemyParticles;
 
     void createEnemy();
@@ -142,9 +143,6 @@ class LevelScene : public cocos2d::Scene {
     cocos2d::MenuItemLabel *upgradeItem3 = nullptr;
     cocos2d::MenuItemLabel *cancelUpgradeItem = nullptr;
 
-    // music player
-    CocosDenshion::SimpleAudioEngine *player = nullptr;
-
     void addBullet(Tower *tower, Enemy *enemy);
 
     void upgradeTower();
@@ -167,7 +165,7 @@ class LevelScene : public cocos2d::Scene {
     bool Win = false;
     void gameOver(bool isWin);
 
-  public:
+public:
     // the map of each level
     Map *map = nullptr;
     // towers

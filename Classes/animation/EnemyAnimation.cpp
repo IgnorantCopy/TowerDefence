@@ -443,7 +443,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 23; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 450, 450)));
+                prefix + diePath, cocos2d::Rect(0, 0, 600, 600)));
         }
         break;
     case EnemyType::SpeedUp:
@@ -470,7 +470,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 30; i++) {
             std::string diePath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 360, 360)));
+                prefix + diePath, cocos2d::Rect(0, 0, 500, 500)));
         }
         break;
     case EnemyType::Worm:

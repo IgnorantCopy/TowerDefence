@@ -41,6 +41,7 @@
 #include "ui/CocosGUI.h"
 #include <any>
 #include <memory>
+#include <ostream>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -99,8 +100,10 @@ bool LevelScene::init(int level) {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     // create music player
-    player = CocosDenshion::SimpleAudioEngine::getInstance();
-    player->stopBackgroundMusic();
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
+    if (player->isBackgroundMusicPlaying()) {
+        player->stopBackgroundMusic();
+    }
     switch (level) {
     case 1:
         player->playBackgroundMusic("audio/level1_bgm.MP3", true);
@@ -141,7 +144,7 @@ bool LevelScene::init(int level) {
 
     // the back button to go back to the SelectLevel scene
     auto Back = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
-    auto backItem = MenuItemLabel::create(Back, [this](Ref *ref) {
+    auto backItem = MenuItemLabel::create(Back, [this, player](Ref *ref) {
         player->stopBackgroundMusic();
         player->playBackgroundMusic("audio/menu_bgm.MP3", true);
         Director::getInstance()->replaceScene(
@@ -313,10 +316,10 @@ bool LevelScene::init(int level) {
                 break;
             }
         });
-    this->addChild(this->deleteButton, 4);
-    this->addChild(this->upgradeButton, 4);
-    this->addChild(this->towerInfoButton, 4);
-    this->addChild(this->skillButton, 4);
+    this->addChild(this->deleteButton, 7);
+    this->addChild(this->upgradeButton, 7);
+    this->addChild(this->towerInfoButton, 7);
+    this->addChild(this->skillButton, 7);
 
     // create map
     float x = origin.x + 350 + SIZE;
@@ -723,10 +726,11 @@ void LevelScene::updateMoneyLabel() {
 void LevelScene::decreaseLife() {
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
-    if (this->map->health_ > 1000) {
+    if (this->map->health_ > 1000 || this->map->health_ <= 0) {
         this->lifeLabel->setString("0");
         this->lifeLabel->setPosition(
-            cocos2d::Vec2(origin.x + 150, origin.y + visibleSize.height - 180));
+            cocos2d::Vec2(origin.x + 150,
+                          origin.y + visibleSize.height - 180));
         this->gameOver(false);
     } else {
         this->lifeLabel->setString(std::to_string(this->map->health_));
@@ -1276,15 +1280,8 @@ void LevelScene::createMap(int level) {
         routes = {Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D], Dir[D],
                          Dir[D], Dir[L], Dir[L], Dir[L], Dir[U], Dir[U], Dir[R],
                          Dir[R], Dir[D], Dir[D], Dir[L], Dir[L], Dir[L]}),
-                  Route({Dir[L],
-                         Dir[L],
-                         Dir[L],
-                         Dir[L],
-                         {6, 0},
-                         Dir[R],
-                         Dir[R],
-                         Dir[R],
-                         Dir[R]}),
+                  Route({Dir[L], Dir[L], Dir[L], Dir[L], {6, 0},
+                         Dir[R], Dir[R], Dir[R], Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
@@ -1332,33 +1329,12 @@ void LevelScene::createMap(int level) {
             {{1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6}},
             {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
             {{2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}, {6, 6}},
-            {{1, 5},
-             {2, 7},
-             {3, 2},
-             {3, 3},
-             {4, 1},
-             {4, 3},
-             {5, 1},
-             {5, 3},
-             {6, 6}},
-            {{1, 5},
-             {2, 7},
-             {3, 2},
-             {3, 3},
-             {4, 1},
-             {4, 3},
-             {5, 1},
-             {5, 3},
-             {6, 6}},
-            {{1, 5},
-             {2, 7},
-             {3, 2},
-             {3, 3},
-             {4, 1},
-             {4, 3},
-             {5, 1},
-             {5, 3},
-             {6, 6}},
+            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1},
+             {5, 3}, {6, 6}},
+            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1},
+             {5, 3}, {6, 6}},
+            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1},
+             {5, 3}, {6, 6}},
             {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
             {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
             {{1, 9}, {3, 5}, {4, 8}, {5, 6}},
@@ -1380,34 +1356,16 @@ void LevelScene::createMap(int level) {
         map = new towerdefence::core::Map(
             width, height,
             [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
-        routes = {Route({Dir[L],
-                         Dir[L],
-                         Dir[L],
-                         {0, -8},
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[R]}),
+        routes = {Route({Dir[L], Dir[L], Dir[L], {0, -8}, Dir[D],
+                         Dir[D], Dir[D], Dir[D], Dir[D], Dir[D], Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[U], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[D], Dir[L]}),
-                  Route({Dir[L],
-                         Dir[L],
-                         Dir[L],
-                         {-6, -8},
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[R]}),
+                  Route({Dir[L], Dir[L], Dir[L], {-6, -8}, Dir[D],
+                         Dir[D], Dir[D], Dir[D], Dir[D], Dir[D], Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D], Dir[L],
                          Dir[L], Dir[U], Dir[U], Dir[U], Dir[U], Dir[L], Dir[L],
                          Dir[D], Dir[D], Dir[L], Dir[L]})};
@@ -1507,10 +1465,8 @@ void LevelScene::createMap(int level) {
                    Dir[D], Dir[R], Dir[R],    Dir[R], Dir[R], Dir[R], Dir[R]}),
             Route({Dir[D], Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R],
                    Dir[R], Dir[R], Dir[R]}),
-            Route({Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R],
-                   Dir[R]}),
-            Route({Dir[R], Dir[R], Dir[D], Dir[D], Dir[D], Dir[D], Dir[L],
-                   Dir[L]}),
+            Route({Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
+            Route({Dir[R], Dir[R], Dir[D], Dir[D], Dir[D], Dir[D], Dir[L], Dir[L]}),
             Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D],
                    Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
             Route({Dir[R], Dir[R], Dir[R],    Dir[R], {6, 3}, Dir[R], Dir[R],
@@ -1827,7 +1783,7 @@ void LevelScene::createEnemy() {
             }
             enemySameTimeFactories.push_back(std::move(newEnemy));
             auto newEnemySprite = Sprite::create(enemyPath);
-            newEnemySprite->setScale(0.25f);
+            newEnemySprite->setScale(enemyScale[j.second - 1]);
             newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE));
             newEnemySprite->setVisible(false);
             enemySameTime.push_back(newEnemySprite);
@@ -1839,52 +1795,46 @@ void LevelScene::createEnemy() {
     }
     this->map->enemy_alive = enemyNumber;
     for (size_t i = 0; i < enemyCreateType.size(); i++) {
-        scheduleOnce(
-            [this, i](float dt) {
-                if (gameContinuing) {
-                    for (size_t j = 0; j < enemyCreateType[i].size(); j++) {
-                        ParticleSystemQuad *particle = nullptr;
-                        if (enemyType[enemyCreateType[i][j].second - 1] ==
-                            EnemyType::SpeedUp) {
-                            particle = ParticleSystemQuad::create(
-                                "particles/speed_ring.plist");
-                            particle->setPosition(
-                                enemySprites[i][j]->getPosition());
-                            particle->setVisible(false);
-                            this->addChild(particle, 4);
-                        }
-                        if (enemyFirstDir[enemyCreateType[i][j].first - 1] ==
-                            L) {
-                            enemySprites[i][j]->setFlippedX(true);
-                            enemySprites[i][j]->setFlippedY(false);
-                        }
-                        if (gameContinuing) {
-                            enemySprites[i][j]->setVisible(true);
-                            enemySprites[i][j]->setOpacity(0);
-                            auto fadeIn = FadeIn::create(0.5f);
-                            enemySprites[i][j]->runAction(fadeIn);
-                            scheduleOnce(
-                                [this, i, j, particle](float dt) {
-                                    Id id = this->map->spawn_enemy_at(
-                                        enemyPos[i][j].first,
-                                        enemyPos[i][j].second,
-                                        *enemyFactories[i][j]);
-                                    if (particle) {
-                                        enemyParticles.emplace_back(id,
-                                                                    particle);
-                                        particle->setVisible(true);
-                                    }
-                                    enemies.emplace_back(id,
-                                                         enemySprites[i][j]);
-                                },
-                                0.5f,
-                                "AddEnemyToMap" + std::to_string(i) +
-                                    std::to_string(j));
-                        }
-                    }
+        if (gameContinuing) {
+            for (size_t j = 0; j < enemyCreateType[i].size(); j++) {
+                if (enemyFirstDir[enemyCreateType[i][j].first - 1] == L) {
+                    enemySprites[i][j]->setFlippedX(true);
+                    enemySprites[i][j]->setFlippedY(false);
                 }
-            },
-            enemyCreateTime[i] - 0.5f, "createEnemy" + std::to_string(i));
+                ParticleSystemQuad *particle = nullptr;
+                if (enemyType[enemyCreateType[i][j].second - 1] ==
+                    EnemyType::SpeedUp) {
+                    particle = ParticleSystemQuad::create(
+                        "particles/speed_ring.plist");
+                    particle->setPosition(
+                        enemySprites[i][j]->getPosition());
+                    particle->setVisible(false);
+                    this->addChild(particle, 4);
+                }
+                scheduleOnce([this, i, j, particle](float dt) {
+                    if (this->gameContinuing) {
+                        Id id = this->map->spawn_enemy_at(
+                            enemyPos[i][j].first,
+                            enemyPos[i][j].second,
+                            *enemyFactories[i][j]);
+                        if (particle) {
+                            enemyParticles.emplace_back(id,
+                                                        particle);
+                            particle->setVisible(true);
+                        }
+                        enemies.emplace_back(id, enemySprites[i][j]);
+                    }
+                }, enemyCreateTime[i] - 0.45f + 0.1f * j,"addEnemyToMap" + std::to_string(i) + std::to_string(j));
+                scheduleOnce([this, i, j](float dt) {
+                    if (this->gameContinuing) {
+                        enemySprites[i][j]->setVisible(true);
+                        enemySprites[i][j]->setOpacity(0);
+                        auto fadeIn = FadeIn::create(0.25f);
+                        enemySprites[i][j]->runAction(fadeIn);
+                    }
+                },enemyCreateTime[i] - 0.25f + 0.1f * j,"createEnemy" + std::to_string(i) + std::to_string(j));
+            }
+        }
     }
 }
 
