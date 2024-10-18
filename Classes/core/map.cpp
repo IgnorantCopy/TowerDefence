@@ -1,9 +1,11 @@
 #include "map.h"
 #include "entity/entity.h"
+#include "id.h"
 #include <cassert>
 #include <cstddef>
 #include <iterator>
 #include <memory>
+#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -34,27 +36,34 @@ void Map::update() {
         }
     }
 
+    std::unordered_set<id::Id> visited_enemies;
+
     for (auto ref : *this) {
 
         std::erase_if(
             ref.grid.enemies,
-            [ref, this](std::unique_ptr<Enemy> &enemy) mutable {
+            [ref, &visited_enemies, this](std::unique_ptr<Enemy> &enemy) mutable {
+                if (visited_enemies.contains(enemy->id)) {
+                    return false;
+                }
+
+                visited_enemies.insert(enemy->id);
+
                 if (enemy->realized_attack_ >= enemy->status().health_) {
                     enemy->on_death(ref);
 
                     return true;
                 }
 
-                assert(enemy->move_progress_ >= 0 &&
-                       enemy->move_progress_ <= 1);
+                // assert(enemy->move_progress_ >= 0 &&
+                //        enemy->move_progress_ <= 1);
 
-                enemy->move_progress_ +=
-                    0.1 * enemy->status().speed_ / timer::TICK_PER_SECOND;
+                // enemy->move_progress_ +=
+                //     0.1 * enemy->status().speed_ / timer::TICK_PER_SECOND;
 
-                assert(enemy->move_progress_ < 2);
+                // assert(enemy->move_progress_ < 2);
 
-                if (enemy->move_progress_ >= 1) {
-                    enemy->move_progress_ -= 1;
+                if (this->clock().is_triggered(enemy->move_)) {
 
                     try {
                         if (auto [dx, dy] = enemy->route_.next_direction();

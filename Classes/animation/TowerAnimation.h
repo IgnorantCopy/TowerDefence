@@ -61,6 +61,7 @@ class TowerAnimation {
     constexpr const static float epsilon = 1e-6;
     constexpr const static float size = 140.0f;
     static size_t removeCounter;
+    static bool isOnEffect;
 
   public:
     static void releaseSkill(LevelScene *levelScene, Tower *tower,
