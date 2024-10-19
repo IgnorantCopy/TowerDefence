@@ -114,7 +114,6 @@ void Bullet::explosion() {
     this->isExploding = true;
     if (this->enemySprite == nullptr) {
         this->bullet->removeFromParent();
-        this->bullet->release();
         this->bullet = nullptr;
         return;
     }
@@ -124,7 +123,6 @@ void Bullet::explosion() {
         auto *animate = cocos2d::Animate::create(animation);
         auto callback = cocos2d::CallFunc::create([this]() {
             this->bullet->removeFromParent();
-            this->bullet->release();
             this->bullet = nullptr;
         });
         auto seq = cocos2d::Sequence::create(animate, callback, nullptr);
@@ -144,7 +142,6 @@ void Bullet::explosion() {
         }
         this->levelScene->addChild(particle, 4);
         this->bullet->removeFromParent();
-        this->bullet->release();
         this->bullet = nullptr;
     }
 }
@@ -155,7 +152,6 @@ void Bullet::move() {
     }
     if (this->enemySprite == nullptr) {
         this->bullet->removeFromParent();
-        this->bullet->release();
         this->bullet = nullptr;
         return;
     }
@@ -260,7 +256,6 @@ void MagicBullet::move() {
     }
     if (this->enemySprite == nullptr) {
         this->bullet->removeFromParent();
-        this->bullet->release();
         this->bullet = nullptr;
         return;
     }
@@ -277,7 +272,6 @@ void MagicBullet::explosion() {
     this->isExploding = true;
     if (this->enemySprite == nullptr) {
         this->bullet->removeFromParent();
-        this->bullet->release();
         this->bullet = nullptr;
         return;
     }
@@ -299,7 +293,6 @@ void MagicBullet::explosion() {
     auto *animate = cocos2d::Animate::create(animation);
     auto callback = cocos2d::CallFunc::create([this]() {
         this->bullet->removeFromParent();
-        this->bullet->release();
         this->bullet = nullptr;
     });
     auto seq = cocos2d::Sequence::create(animate, callback, nullptr);
@@ -351,7 +344,6 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                 skillSprite->scheduleOnce(
                     [skillSprite](float dt) {
                         skillSprite->removeFromParent();
-                        skillSprite->release();
                     },
                     duration - 3.0f,
                     "remove" + std::to_string(TowerAnimation::removeCounter++));
@@ -393,19 +385,13 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
     case TowerType::HelperBase:
     case TowerType::DecelerateMagician:
         skillSprite->scheduleOnce(
-            [skillSprite](float dt) {
-                skillSprite->removeFromParent();
-                skillSprite->release();
-            },
+            [skillSprite](float dt) { skillSprite->removeFromParent(); },
             duration,
             "remove" + std::to_string(TowerAnimation::removeCounter++));
         break;
     case TowerType::DiffusiveMagicianPlus:
         skillSprite->scheduleOnce(
-            [skillSprite](float dt) {
-                skillSprite->removeFromParent();
-                skillSprite->release();
-            },
+            [skillSprite](float dt) { skillSprite->removeFromParent(); },
             duration,
             "remove" + std::to_string(TowerAnimation::removeCounter++));
         for (int i = indexY - 3; i <= indexY + 3; i++) {
@@ -423,7 +409,6 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                         particle->scheduleOnce(
                             [particle](float dt) {
                                 particle->removeFromParent();
-                                particle->release();
                             },
                             duration,
                             "removeFire" +
@@ -439,10 +424,7 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
     case TowerType::WeakenMagician:
     case TowerType::WeakenMagicianPlus:
         skillSprite->scheduleOnce(
-            [skillSprite](float dt) {
-                skillSprite->removeFromParent();
-                skillSprite->release();
-            },
+            [skillSprite](float dt) { skillSprite->removeFromParent(); },
             duration,
             "remove" + std::to_string(TowerAnimation::removeCounter++));
         for (int i = indexY - 3; i <= indexY + 3; i++) {
@@ -460,7 +442,6 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                         particle->scheduleOnce(
                             [particle](float dt) {
                                 particle->removeFromParent();
-                                particle->release();
                             },
                             duration,
                             "removeWeaken" +
@@ -473,10 +454,7 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
         break;
     case TowerType::DecelerateMagicianPlus:
         skillSprite->scheduleOnce(
-            [skillSprite](float dt) {
-                skillSprite->removeFromParent();
-                skillSprite->release();
-            },
+            [skillSprite](float dt) { skillSprite->removeFromParent(); },
             duration,
             "remove" + std::to_string(TowerAnimation::removeCounter++));
         for (int i = indexY - 3; i <= indexY + 3; i++) {
@@ -494,7 +472,6 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                         particle->scheduleOnce(
                             [particle](float dt) {
                                 particle->removeFromParent();
-                                particle->release();
                             },
                             duration,
                             "removeDecelerate" +
@@ -546,7 +523,6 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
                         attackUp->scheduleOnce(
                             [attackUp](float dt) {
                                 attackUp->removeFromParent();
-                                attackUp->release();
                             },
                             duration,
                             "removeAttackUp" +
@@ -557,10 +533,7 @@ void TowerAnimation::releaseSkill(LevelScene *levelScene,
             }
         }
         skillSprite->scheduleOnce(
-            [skillSprite](float dt) {
-                skillSprite->removeFromParent();
-                skillSprite->release();
-            },
+            [skillSprite](float dt) { skillSprite->removeFromParent(); },
             duration,
             "remove" + std::to_string(TowerAnimation::removeCounter++));
         break;

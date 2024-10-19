@@ -184,6 +184,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
     int indexY = (int)((typeY - y + 0.5f * size) / size);
 
     cocos2d::ParticleSystemQuad *particle;
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
     int counter = 0;
     switch (enemy->status().enemy_type_) {
     case EnemyType::AttackDown:
@@ -213,7 +214,6 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                         attackDown->scheduleOnce(
                             [attackDown](float dt) {
                                 attackDown->removeFromParent();
-                                attackDown->release();
                             },
                             duration,
                             "attackDown" + std::to_string(i) +
@@ -228,8 +228,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
             particle->setPosition(cocos2d::Vec2(x, y));
             levelScene->addChild(particle, 4);
         }
-        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-            "audio/enemySkill.MP3");
+        player->playEffect("audio/enemySkill.MP3");
         break;
     case EnemyType::NotAttacked:
         enemySprite->setOpacity(50);
@@ -250,8 +249,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
             particle->setPosition(cocos2d::Vec2(x, y));
             levelScene->addChild(particle, 2);
         }
-        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
-            "audio/enemySkill.MP3");
+        player->playEffect("audio/enemySkill.MP3");
         return;
     case EnemyType::Boss1:
         prefix += "boss/stage1/skill1/boss1_skill1";
@@ -270,10 +268,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
             decelerate->setPosition(cocos2d::Vec2(towerX - 45, towerY + 45));
             levelScene->addChild(decelerate, 4);
             decelerate->scheduleOnce(
-                [decelerate](float dt) {
-                    decelerate->removeFromParent();
-                    decelerate->release();
-                },
+                [decelerate](float dt) { decelerate->removeFromParent(); },
                 duration, "decelerate" + std::to_string(counter++));
         }
         for (int i = indexY - 2; i <= indexY + 2; i++) {
@@ -295,7 +290,6 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                         silence->scheduleOnce(
                             [silence](float dt) {
                                 silence->removeFromParent();
-                                silence->release();
                             },
                             duration,
                             "silence" + std::to_string(i) + std::to_string(j));
@@ -323,10 +317,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                     cocos2d::Vec2(towerX - 45, towerY + 45));
                 levelScene->addChild(decelerate, 4);
                 decelerate->scheduleOnce(
-                    [decelerate](float dt) {
-                        decelerate->removeFromParent();
-                        decelerate->release();
-                    },
+                    [decelerate](float dt) { decelerate->removeFromParent(); },
                     duration, "decelerate" + std::to_string(counter++));
             }
         } else if (abs(duration - 15.0f) <= epsilon) {
@@ -349,7 +340,6 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                             silence->scheduleOnce(
                                 [silence](float dt) {
                                     silence->removeFromParent();
-                                    silence->release();
                                 },
                                 duration,
                                 "silence" + std::to_string(i) +
@@ -379,7 +369,6 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
             }
             if (nearestTower) {
                 nearestTower->removeFromParent();
-                nearestTower->release();
                 levelScene->map->withdraw_tower(nearestId);
             }
         }
@@ -559,7 +548,6 @@ void EnemyAnimation::dead(LevelScene *levelScene,
                         decelerate->scheduleOnce(
                             [decelerate](float dt) {
                                 decelerate->removeFromParent();
-                                decelerate->release();
                             },
                             10.0f,
                             "decelerate" + std::to_string(i) +
