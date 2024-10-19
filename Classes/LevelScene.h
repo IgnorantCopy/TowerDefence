@@ -26,6 +26,7 @@ class Bullet;
 
 class LevelScene : public cocos2d::Scene {
 protected:
+    int Level = 0;
     Grid::Type type[7][12] = {Grid::Type::BlockPath};
     std::vector<std::vector<size_t>> gridType;
     std::vector<Grid::Type> gridTypes = {
@@ -62,8 +63,8 @@ protected:
         EnemyType::Crab,    EnemyType::SpeedUp,     EnemyType::AttackDown,
         EnemyType::LifeUp,  EnemyType::NotAttacked, EnemyType::Boss1,
         EnemyType::Boss2};
-    std::vector<float> enemyScale = {0.4, 0.2, 0.4, 0.4, 0.25, 0.4, 0.25, 0.4, 0.25, 0.25, 0.35, 0.5};
-    std::vector<std::pair<Id, cocos2d::ParticleSystemQuad *>> enemyParticles;
+    std::vector<float> enemyScale = {0.4,  0.2, 0.4,  0.4,  0.25, 0.4,
+                                     0.25, 0.4, 0.25, 0.25, 0.35, 0.5};
 
     void createEnemy();
 
@@ -91,6 +92,7 @@ protected:
 
     // select tower
     int isSelecting = 0;
+    cocos2d::MenuItemLabel *backItem = nullptr;
     cocos2d::ui::Button *archerBaseSelector = nullptr;
     cocos2d::ui::Button *magicianBaseSelector = nullptr;
     cocos2d::ui::Button *helperBaseSelector = nullptr;

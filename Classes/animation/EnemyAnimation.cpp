@@ -4,7 +4,6 @@
 
 #include "EnemyAnimation.h"
 
-size_t EnemyAnimation::transportCounter = 0;
 size_t EnemyAnimation::notAttackedCounter = 0;
 
 static bool isInRange(int x1, int y1, int x2, int y2, int range) {
@@ -22,10 +21,10 @@ void EnemyAnimation::move(LevelScene *levelScene,
         prefix += "attackDown/move/attackDown_move";
         break;
     case EnemyType::Boss1:
-        prefix += "boss/stage1/move";
+        prefix += "boss/stage1/move/boss1_move";
         break;
     case EnemyType::Boss2:
-        prefix += "boss/stage2";
+        prefix += "boss/stage2/move/boss2_move";
         break;
     case EnemyType::Crab:
         prefix += "crab/move/crab_move";
@@ -110,7 +109,51 @@ void EnemyAnimation::transport(LevelScene *levelScene,
     auto enemySprite = levelScene->getEnemy(enemy->id);
     float duration = 1.0f / ((float)enemy->status().speed_ / 10.0f) / 4.0f;
     auto scaleDown = cocos2d::ScaleTo::create(duration, 0.1f);
-    auto scaleUp = cocos2d::ScaleTo::create(duration, 0.25f);
+    float scaleRate = 0.25f;
+    switch (enemy->status().enemy_type_) {
+    case EnemyType::Worm:
+        scaleRate = 0.4f;
+        break;
+    case EnemyType::Dog:
+        scaleRate = 0.2f;
+        break;
+    case EnemyType::Soldier:
+        scaleRate = 0.4f;
+        break;
+    case EnemyType::Warlock:
+        scaleRate = 0.4f;
+        break;
+    case EnemyType::Destroyer:
+        scaleRate = 0.25f;
+        break;
+    case EnemyType::Tank:
+        scaleRate = 0.4f;
+        break;
+    case EnemyType::Crab:
+        scaleRate = 0.25f;
+        break;
+    case EnemyType::SpeedUp:
+        scaleRate = 0.4f;
+        break;
+    case EnemyType::AttackDown:
+        scaleRate = 0.25f;
+        break;
+    case EnemyType::LifeUp:
+        scaleRate = 0.25f;
+        break;
+    case EnemyType::NotAttacked:
+        scaleRate = 0.35f;
+        break;
+    case EnemyType::Boss1:
+        scaleRate = 0.5f;
+        break;
+    case EnemyType::Boss2:
+        scaleRate = 0.5f;
+        break;
+    default:
+        break;
+    }
+    auto scaleUp = cocos2d::ScaleTo::create(duration, scaleRate);
 
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
@@ -132,6 +175,9 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
     float typeX = origin.x + 350 + size;
     float typeY = origin.y + visibleSize.height - size;
     auto enemySprite = levelScene->getEnemy(enemy->id);
+    if (enemySprite == nullptr) {
+        return;
+    }
     float x = enemySprite->getPositionX();
     float y = enemySprite->getPositionY();
     int indexX = (int)((x - typeX + 0.5f * size) / size);
@@ -167,6 +213,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                         attackDown->scheduleOnce(
                             [attackDown](float dt) {
                                 attackDown->removeFromParent();
+                                attackDown->release();
                             },
                             duration,
                             "attackDown" + std::to_string(i) +
@@ -181,6 +228,8 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
             particle->setPosition(cocos2d::Vec2(x, y));
             levelScene->addChild(particle, 4);
         }
+        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+            "audio/enemySkill.MP3");
         break;
     case EnemyType::NotAttacked:
         enemySprite->setOpacity(50);
@@ -201,11 +250,13 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
             particle->setPosition(cocos2d::Vec2(x, y));
             levelScene->addChild(particle, 2);
         }
+        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+            "audio/enemySkill.MP3");
         return;
     case EnemyType::Boss1:
-        prefix += "boss/stage1/skill/boss1_skill";
-        frames.reserve(50);
-        for (int i = 0; i < 50; i++) {
+        prefix += "boss/stage1/skill1/boss1_skill1";
+        frames.reserve(90);
+        for (int i = 0; i < 90; i++) {
             std::string skillPath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
                 prefix + skillPath, cocos2d::Rect(0, 0, 850, 850)));
@@ -219,7 +270,10 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
             decelerate->setPosition(cocos2d::Vec2(towerX - 45, towerY + 45));
             levelScene->addChild(decelerate, 4);
             decelerate->scheduleOnce(
-                [decelerate](float dt) { decelerate->removeFromParent(); },
+                [decelerate](float dt) {
+                    decelerate->removeFromParent();
+                    decelerate->release();
+                },
                 duration, "decelerate" + std::to_string(counter++));
         }
         for (int i = indexY - 2; i <= indexY + 2; i++) {
@@ -241,6 +295,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                         silence->scheduleOnce(
                             [silence](float dt) {
                                 silence->removeFromParent();
+                                silence->release();
                             },
                             duration,
                             "silence" + std::to_string(i) + std::to_string(j));
@@ -268,7 +323,10 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                     cocos2d::Vec2(towerX - 45, towerY + 45));
                 levelScene->addChild(decelerate, 4);
                 decelerate->scheduleOnce(
-                    [decelerate](float dt) { decelerate->removeFromParent(); },
+                    [decelerate](float dt) {
+                        decelerate->removeFromParent();
+                        decelerate->release();
+                    },
                     duration, "decelerate" + std::to_string(counter++));
             }
         } else if (abs(duration - 15.0f) <= epsilon) {
@@ -291,6 +349,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                             silence->scheduleOnce(
                                 [silence](float dt) {
                                     silence->removeFromParent();
+                                    silence->release();
                                 },
                                 duration,
                                 "silence" + std::to_string(i) +
@@ -320,6 +379,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
             }
             if (nearestTower) {
                 nearestTower->removeFromParent();
+                nearestTower->release();
                 levelScene->map->withdraw_tower(nearestId);
             }
         }
@@ -355,7 +415,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
             it++;
         }
     }
-    if (!enemySprite) {
+    if (enemySprite == nullptr) {
         return;
     }
     float x = enemySprite->getPositionX();
@@ -499,6 +559,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
                         decelerate->scheduleOnce(
                             [decelerate](float dt) {
                                 decelerate->removeFromParent();
+                                decelerate->release();
                             },
                             10.0f,
                             "decelerate" + std::to_string(i) +
@@ -525,7 +586,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
     auto animate = cocos2d::Animate::create(animation);
     auto delay = cocos2d::DelayTime::create(0.5f);
     auto fadeOut = cocos2d::FadeOut::create(1.0f);
-    auto remove = cocos2d::RemoveSelf::create(true);
+    auto remove = cocos2d::RemoveSelf::create();
     auto seq =
         cocos2d::Sequence::create(animate, delay, fadeOut, remove, nullptr);
     enemySprite->stopAllActions();

@@ -1,5 +1,8 @@
 #include "LevelScene.h"
 #include "SelectLevelScene.h"
+#include "Level1Scene.h"
+#include "Level2Scene.h"
+#include "Level3Scene.h"
 #include "animation/EnemyAnimation.h"
 #include "animation/TowerAnimation.h"
 #include "core/entity/enemy/Attack-down.h"
@@ -96,6 +99,8 @@ bool LevelScene::init(int level) {
         return false;
     }
 
+    Level = level;
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
@@ -144,11 +149,13 @@ bool LevelScene::init(int level) {
 
     // the back button to go back to the SelectLevel scene
     auto Back = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
-    auto backItem = MenuItemLabel::create(Back, [this, player](Ref *ref) {
-        player->stopBackgroundMusic();
-        player->playBackgroundMusic("audio/menu_bgm.MP3", true);
-        Director::getInstance()->replaceScene(
-            TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+    backItem = MenuItemLabel::create(Back, [this, player](Ref *ref) {
+        if (gameContinuing) {
+            player->stopBackgroundMusic();
+            player->playBackgroundMusic("audio/menu_bgm.MP3", true);
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+        }
     });
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
                                origin.y + visibleSize.height - 50));
@@ -438,7 +445,8 @@ bool LevelScene::init(int level) {
 
     auto upgradeLabel1 =
         Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
-    this->upgradeItem1 = MenuItemLabel::create(upgradeLabel1, [this](Ref *ref) {
+    this->upgradeItem1 = MenuItemLabel::create(upgradeLabel1, [this, player](
+                                                                  Ref *ref) {
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
         std::unique_ptr<TowerFactoryBase> newTower;
         auto isScaling =
@@ -482,108 +490,113 @@ bool LevelScene::init(int level) {
         this->updateMoneyLabel();
         this->updateSelectorEnabled();
         this->hideUpgradeMenu();
+        player->playEffect("audio/upgrade.MP3");
     });
     upgradeItem1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800,
                                    origin.y + visibleSize.height / 2 - 150));
     auto upgradeLabel2 =
         Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
-    this->upgradeItem2 = MenuItemLabel::create(upgradeLabel2, [this](Ref *ref) {
-        Sprite *towerSprite = this->getTower(this->selectedTowerId);
-        std::unique_ptr<TowerFactoryBase> newTower;
-        auto isScaling =
-            std::unordered_map<std::string, std::any>{{"isScaling", false}};
-        auto visibleSize = Director::getInstance()->getVisibleSize();
-        Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        float typeX = origin.x + 350 + SIZE;
-        float typeY = origin.y + visibleSize.height - SIZE;
-        float x = towerSprite->getPositionX();
-        float y = towerSprite->getPositionY();
-        int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
-        int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
-        std::string path;
-        switch (this->map->get_ref(indexY, indexX)
-                    .grid.tower.value()
-                    ->status()
-                    .tower_type_) {
-        case TowerType::ArcherBase:
-            path = "images/towers/highspeed_archer.png";
-            newTower =
-                std::make_unique<TowerFactory<HighspeedArcher>>(isScaling);
-            break;
-        case TowerType::MagicianBase:
-            path = "images/towers/diffusive_magician.png";
-            newTower =
-                std::make_unique<TowerFactory<DiffusiveMagician>>(isScaling);
-            break;
-        case TowerType::HelperBase:
-            path = "images/towers/weaken_magician.png";
-            newTower =
-                std::make_unique<TowerFactory<WeakenMagician>>(isScaling);
-            break;
-        default:
-            break;
-        }
-        this->deleteTower(false);
-        auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
-        auto newTowerSprite = Sprite::create(path);
-        newTowerSprite->setPosition(Vec2(x, y));
-        this->addChild(newTowerSprite, 3);
-        this->selectedTowerId = id.value();
-        this->towers.emplace_back(id.value(), newTowerSprite);
-        this->updateMoneyLabel();
-        this->updateSelectorEnabled();
-        this->hideUpgradeMenu();
-    });
+    this->upgradeItem2 =
+        MenuItemLabel::create(upgradeLabel2, [this, player](Ref *ref) {
+            Sprite *towerSprite = this->getTower(this->selectedTowerId);
+            std::unique_ptr<TowerFactoryBase> newTower;
+            auto isScaling =
+                std::unordered_map<std::string, std::any>{{"isScaling", false}};
+            auto visibleSize = Director::getInstance()->getVisibleSize();
+            Vec2 origin = Director::getInstance()->getVisibleOrigin();
+            float typeX = origin.x + 350 + SIZE;
+            float typeY = origin.y + visibleSize.height - SIZE;
+            float x = towerSprite->getPositionX();
+            float y = towerSprite->getPositionY();
+            int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+            int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
+            std::string path;
+            switch (this->map->get_ref(indexY, indexX)
+                        .grid.tower.value()
+                        ->status()
+                        .tower_type_) {
+            case TowerType::ArcherBase:
+                path = "images/towers/highspeed_archer.png";
+                newTower =
+                    std::make_unique<TowerFactory<HighspeedArcher>>(isScaling);
+                break;
+            case TowerType::MagicianBase:
+                path = "images/towers/diffusive_magician.png";
+                newTower = std::make_unique<TowerFactory<DiffusiveMagician>>(
+                    isScaling);
+                break;
+            case TowerType::HelperBase:
+                path = "images/towers/weaken_magician.png";
+                newTower =
+                    std::make_unique<TowerFactory<WeakenMagician>>(isScaling);
+                break;
+            default:
+                break;
+            }
+            this->deleteTower(false);
+            auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
+            auto newTowerSprite = Sprite::create(path);
+            newTowerSprite->setPosition(Vec2(x, y));
+            this->addChild(newTowerSprite, 3);
+            this->selectedTowerId = id.value();
+            this->towers.emplace_back(id.value(), newTowerSprite);
+            this->updateMoneyLabel();
+            this->updateSelectorEnabled();
+            this->hideUpgradeMenu();
+            player->playEffect("audio/upgrade.MP3");
+        });
     upgradeItem2->setPosition(Vec2(origin.x + visibleSize.width / 2,
                                    origin.y + visibleSize.height / 2 - 150));
     auto upgradeLabel3 =
         Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
-    this->upgradeItem3 = MenuItemLabel::create(upgradeLabel3, [this](Ref *ref) {
-        Sprite *towerSprite = this->getTower(this->selectedTowerId);
-        std::unique_ptr<TowerFactoryBase> newTower;
-        auto isScaling =
-            std::unordered_map<std::string, std::any>{{"isScaling", false}};
-        auto visibleSize = Director::getInstance()->getVisibleSize();
-        Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        float typeX = origin.x + 350 + SIZE;
-        float typeY = origin.y + visibleSize.height - SIZE;
-        float x = towerSprite->getPositionX();
-        float y = towerSprite->getPositionY();
-        int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
-        int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
-        std::string path;
-        switch (this->map->get_ref(indexY, indexX)
-                    .grid.tower.value()
-                    ->status()
-                    .tower_type_) {
-        case TowerType::ArcherBase:
-            path = "images/towers/bomber.png";
-            newTower = std::make_unique<TowerFactory<Bomber>>(isScaling);
-            break;
-        case TowerType::MagicianBase:
-            path = "images/towers/special_magician.png";
-            newTower =
-                std::make_unique<TowerFactory<SpecialMagician>>(isScaling);
-            break;
-        case TowerType::HelperBase:
-            path = "images/towers/aggressive_magician.png";
-            newTower =
-                std::make_unique<TowerFactory<AggressiveMagician>>(isScaling);
-            break;
-        default:
-            break;
-        }
-        this->deleteTower(false);
-        auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
-        auto newTowerSprite = Sprite::create(path);
-        newTowerSprite->setPosition(Vec2(x, y));
-        this->addChild(newTowerSprite, 3);
-        this->selectedTowerId = id.value();
-        this->towers.emplace_back(id.value(), newTowerSprite);
-        this->updateMoneyLabel();
-        this->updateSelectorEnabled();
-        this->hideUpgradeMenu();
-    });
+    this->upgradeItem3 =
+        MenuItemLabel::create(upgradeLabel3, [this, player](Ref *ref) {
+            Sprite *towerSprite = this->getTower(this->selectedTowerId);
+            std::unique_ptr<TowerFactoryBase> newTower;
+            auto isScaling =
+                std::unordered_map<std::string, std::any>{{"isScaling", false}};
+            auto visibleSize = Director::getInstance()->getVisibleSize();
+            Vec2 origin = Director::getInstance()->getVisibleOrigin();
+            float typeX = origin.x + 350 + SIZE;
+            float typeY = origin.y + visibleSize.height - SIZE;
+            float x = towerSprite->getPositionX();
+            float y = towerSprite->getPositionY();
+            int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+            int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
+            std::string path;
+            switch (this->map->get_ref(indexY, indexX)
+                        .grid.tower.value()
+                        ->status()
+                        .tower_type_) {
+            case TowerType::ArcherBase:
+                path = "images/towers/bomber.png";
+                newTower = std::make_unique<TowerFactory<Bomber>>(isScaling);
+                break;
+            case TowerType::MagicianBase:
+                path = "images/towers/special_magician.png";
+                newTower =
+                    std::make_unique<TowerFactory<SpecialMagician>>(isScaling);
+                break;
+            case TowerType::HelperBase:
+                path = "images/towers/aggressive_magician.png";
+                newTower = std::make_unique<TowerFactory<AggressiveMagician>>(
+                    isScaling);
+                break;
+            default:
+                break;
+            }
+            this->deleteTower(false);
+            auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
+            auto newTowerSprite = Sprite::create(path);
+            newTowerSprite->setPosition(Vec2(x, y));
+            this->addChild(newTowerSprite, 3);
+            this->selectedTowerId = id.value();
+            this->towers.emplace_back(id.value(), newTowerSprite);
+            this->updateMoneyLabel();
+            this->updateSelectorEnabled();
+            this->hideUpgradeMenu();
+            player->playEffect("audio/upgrade.MP3");
+        });
     upgradeItem3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800,
                                    origin.y + visibleSize.height / 2 - 150));
     auto cancelLabel =
@@ -668,24 +681,26 @@ void LevelScene::addBullet(Tower *tower, Enemy *enemy) {
 }
 
 void LevelScene::updateParticles() {
-    for (auto it = this->enemyParticles.begin();
-         it != this->enemyParticles.end();) {
-        Id id = it->first;
-        auto particle = it->second;
-        auto enemy = this->getEnemy(id);
-        if (enemy) {
-            particle->setPosition(enemy->getPosition());
-            it++;
-        } else {
-            particle->removeFromParent();
-            it = this->enemyParticles.erase(it);
+    for (const auto &enemy : this->enemies) {
+        Id id = enemy.first;
+        auto enemySprite = enemy.second;
+        auto &enemyEntity = this->map->get_enemy_by_id(id);
+        if (enemyEntity.status().enemy_type_ == EnemyType::SpeedUp &&
+            enemyEntity.get_storage<int>("current_frame") == 0) {
+            auto particle =
+                ParticleSystemQuad::create("particles/speed_ring.plist");
+            particle->setPosition(enemySprite->getPosition());
+            particle->setScale(0.5f);
+            this->addChild(particle, 4);
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+                "audio/enemySkill.MP3");
         }
     }
 }
 
 void LevelScene::updateBullets() {
     for (auto it = this->bullets.begin(); it != this->bullets.end();) {
-        if ((*it)->getBullet()) {
+        if ((*it)->getBullet() != nullptr) {
             (*it)->move();
             it++;
         } else {
@@ -731,12 +746,13 @@ void LevelScene::decreaseLife() {
         this->lifeLabel->setPosition(
             cocos2d::Vec2(origin.x + 150,
                           origin.y + visibleSize.height - 180));
-        this->gameOver(false);
     } else {
         this->lifeLabel->setString(std::to_string(this->map->health_));
         this->lifeLabel->setPosition(
             cocos2d::Vec2(origin.x + 150 + 15 * log10(this->map->health_),
                           origin.y + visibleSize.height - 180));
+        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+            "audio/decreaseHealth.MP3");
     }
 }
 
@@ -1128,6 +1144,7 @@ void LevelScene::deleteTower(bool isReturn) {
     }
     if (towerSprite) {
         towerSprite->removeFromParent();
+        towerSprite->release();
         if (isReturn) {
             this->map->withdraw_tower(this->selectedTowerId);
             this->updateMoneyLabel();
@@ -1152,6 +1169,7 @@ void LevelScene::upgradeTower() {
     std::unique_ptr<TowerFactoryBase> newTower;
     auto isScaling =
         std::unordered_map<std::string, std::any>{{"isScaling", false}};
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
     switch (this->map->get_ref(indexY, indexX)
                 .grid.tower.value()
                 ->status()
@@ -1191,44 +1209,53 @@ void LevelScene::upgradeTower() {
     case TowerType::Archer:
         path = "images/towers/archer_pro.png";
         newTower = std::make_unique<TowerFactory<ArcherPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::Bomber:
         path = "images/towers/bomber_pro.png";
         newTower = std::make_unique<TowerFactory<BomberPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::CoreMagician:
         path = "images/towers/core_magician_pro.png";
         newTower = std::make_unique<TowerFactory<CoreMagicianPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::DecelerateMagician:
         path = "images/towers/decelerate_magician_pro.png";
         newTower =
             std::make_unique<TowerFactory<DecelerateMagicianPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::DiffusiveMagician:
         path = "images/towers/diffusive_magician_pro.png";
         newTower =
             std::make_unique<TowerFactory<DiffusiveMagicianPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::HighspeedArcher:
         path = "images/towers/highspeed_archer_pro.png";
         newTower =
             std::make_unique<TowerFactory<HighspeedArcherPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::SpecialMagician:
         path = "images/towers/special_magician_pro.png";
         newTower =
             std::make_unique<TowerFactory<SpecialMagicianPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::WeakenMagician:
         path = "images/towers/weaken_magician_pro.png";
         newTower =
             std::make_unique<TowerFactory<WeakenMagicianPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::AggressiveMagician:
         path = "images/towers/aggressive_magician_pro.png";
         newTower =
             std::make_unique<TowerFactory<AggressiveMagicianPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     default:
         return;
@@ -1611,18 +1638,17 @@ void LevelScene::createMap(int level) {
     this->map->on_enemy_death(
         [this](Enemy &enemy) { EnemyAnimation::dead(this, &enemy); });
     this->map->on_escape([this](Id id) {
-        Sprite *enemySprite = nullptr;
         for (auto it = this->enemies.begin(); it != this->enemies.end();) {
             if (it->first == id) {
-                enemySprite = it->second;
+                auto enemySprite = it->second;
+                enemySprite->removeFromParent();
+                enemySprite->release();
+                enemySprite = nullptr;
                 it = this->enemies.erase(it);
                 break;
             } else {
                 it++;
             }
-        }
-        if (enemySprite) {
-            enemySprite->removeFromParent();
         }
         this->decreaseLife();
     });
@@ -1633,6 +1659,10 @@ void LevelScene::createMap(int level) {
     this->map->on_tower_release_skill(
         [this](Tower &tower, towerdefence::core::Map &map, uint32_t duration) {
             TowerAnimation::releaseSkill(this, &tower, duration);
+        });
+    this->map->on_end(
+        [this](bool isWin){
+            this->gameOver(isWin);
         });
 }
 
@@ -1702,6 +1732,7 @@ void LevelScene::createEnemy() {
         std::vector<std::pair<size_t, size_t>> enemySameTimePos;
         std::vector<std::unique_ptr<EnemyFactoryBase>> enemySameTimeFactories;
         for (auto &j : enemyCreateType[i]) {
+            float delta = 0;
             std::string enemyPath = "images/enemies/";
             size_t x = enemyStartPos[j.first].first;
             size_t y = enemyStartPos[j.first].second;
@@ -1737,11 +1768,13 @@ void LevelScene::createEnemy() {
                 enemyPath += "destroyer/move/destroyer_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Destroyer>>(
                     new_route, extra_storage);
+                delta = 3.0;
                 break;
             case EnemyType::Tank:
                 enemyPath += "tank/move/tank_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Tank>>(new_route,
                                                                 extra_storage);
+                delta = 15.0;
                 break;
             case EnemyType::Crab:
                 enemyPath += "crab/move/crab_move00.png";
@@ -1757,6 +1790,7 @@ void LevelScene::createEnemy() {
                 enemyPath += "attackDown/move/attackDown_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<AttackDown>>(
                     new_route, extra_storage);
+                delta = 15.0;
                 break;
             case EnemyType::LifeUp:
                 enemyPath += "lifeUp/move/lifeUp_move00.png";
@@ -1784,7 +1818,7 @@ void LevelScene::createEnemy() {
             enemySameTimeFactories.push_back(std::move(newEnemy));
             auto newEnemySprite = Sprite::create(enemyPath);
             newEnemySprite->setScale(enemyScale[j.second - 1]);
-            newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE));
+            newEnemySprite->setPosition(Vec2(X + y * SIZE, Y - x * SIZE + delta));
             newEnemySprite->setVisible(false);
             enemySameTime.push_back(newEnemySprite);
             this->addChild(newEnemySprite, 5);
@@ -1801,38 +1835,28 @@ void LevelScene::createEnemy() {
                     enemySprites[i][j]->setFlippedX(true);
                     enemySprites[i][j]->setFlippedY(false);
                 }
-                ParticleSystemQuad *particle = nullptr;
-                if (enemyType[enemyCreateType[i][j].second - 1] ==
-                    EnemyType::SpeedUp) {
-                    particle = ParticleSystemQuad::create(
-                        "particles/speed_ring.plist");
-                    particle->setPosition(
-                        enemySprites[i][j]->getPosition());
-                    particle->setVisible(false);
-                    this->addChild(particle, 4);
-                }
-                scheduleOnce([this, i, j, particle](float dt) {
-                    if (this->gameContinuing) {
-                        Id id = this->map->spawn_enemy_at(
-                            enemyPos[i][j].first,
-                            enemyPos[i][j].second,
-                            *enemyFactories[i][j]);
-                        if (particle) {
-                            enemyParticles.emplace_back(id,
-                                                        particle);
-                            particle->setVisible(true);
+                scheduleOnce(
+                    [this, i, j](float dt) {
+                        if (this->gameContinuing) {
+                            Id id = this->map->spawn_enemy_at(
+                                enemyPos[i][j].first, enemyPos[i][j].second,
+                                *enemyFactories[i][j]);
+                            enemies.emplace_back(id, enemySprites[i][j]);
                         }
-                        enemies.emplace_back(id, enemySprites[i][j]);
-                    }
-                }, enemyCreateTime[i] - 0.45f + 0.1f * j,"addEnemyToMap" + std::to_string(i) + std::to_string(j));
-                scheduleOnce([this, i, j](float dt) {
-                    if (this->gameContinuing) {
-                        enemySprites[i][j]->setVisible(true);
-                        enemySprites[i][j]->setOpacity(0);
-                        auto fadeIn = FadeIn::create(0.25f);
-                        enemySprites[i][j]->runAction(fadeIn);
-                    }
-                },enemyCreateTime[i] - 0.25f + 0.1f * j,"createEnemy" + std::to_string(i) + std::to_string(j));
+                    },
+                    enemyCreateTime[i] - 0.45f + 0.1f * j,
+                    "addEnemyToMap" + std::to_string(i) + std::to_string(j));
+                scheduleOnce(
+                    [this, i, j](float dt) {
+                        if (this->gameContinuing) {
+                            enemySprites[i][j]->setVisible(true);
+                            enemySprites[i][j]->setOpacity(0);
+                            auto fadeIn = FadeIn::create(0.25f);
+                            enemySprites[i][j]->runAction(fadeIn);
+                        }
+                    },
+                    enemyCreateTime[i] - 0.25f + 0.1f * j,
+                    "createEnemy" + std::to_string(i) + std::to_string(j));
             }
         }
     }
@@ -1842,6 +1866,7 @@ void LevelScene::gameOver(bool isWin) {
     this->gameContinuing = false;
     unschedule("update");
     isSelecting = 0;
+    backItem->setVisible(false);
     archerBaseSelector->setEnabled(true);
     magicianBaseSelector->setEnabled(true);
     helperBaseSelector->setEnabled(true);
@@ -1869,13 +1894,158 @@ void LevelScene::gameOver(bool isWin) {
         upgradeItem3->setVisible(false);
         cancelUpgradeItem->setVisible(false);
     }
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
+
+    auto BackOver = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
+    auto backItemOver = MenuItemLabel::create(BackOver, [this, player](Ref *ref) {
+        player->stopBackgroundMusic();
+        player->playBackgroundMusic("audio/menu_bgm.mp3", true);
+        Director::getInstance()->replaceScene(
+            TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+    });
+    backItemOver->setPosition(Vec2(visibleSize.width / 2 + 450, visibleSize.height / 2 - 200));
+
+    auto RetryOver = Label::createWithTTF("Retry", "fonts/Bender/BENDER.OTF", 75);
+    auto retryItemOver = MenuItemLabel::create(RetryOver, [this, player](Ref *ref) {
+        player->stopBackgroundMusic();
+        switch (Level) {
+        case 1:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level1Scene::createScene()));
+            break;
+        case 2:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level2Scene::createScene()));
+            break;
+        case 3:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level3Scene::createScene()));
+            break;
+        default:
+            break;
+        }
+    });
+    retryItemOver->setPosition(Vec2(visibleSize.width / 2 - 450, visibleSize.height / 2 - 200));
+
+    auto ReplayOver = Label::createWithTTF("Replay", "fonts/Bender/BENDER.OTF", 75);
+    auto replayItemOver = MenuItemLabel::create(ReplayOver, [this, player](Ref *ref) {
+        player->stopBackgroundMusic();
+        switch (Level) {
+        case 1:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level1Scene::createScene()));
+            break;
+        case 2:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level2Scene::createScene()));
+            break;
+        case 3:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level3Scene::createScene()));
+            break;
+        default:
+            break;
+        }
+    });
+    if (Level == 3){
+        replayItemOver->setPosition(Vec2(visibleSize.width / 2 - 450, visibleSize.height / 2 - 200));
+    } else {
+        replayItemOver->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 - 200));
+    }
+
+    auto nextLevelOver = Label::createWithTTF("Level " + std::to_string(Level + 1), "fonts/Bender/BENDER.OTF", 75);
+    auto nextLevelItemOver = MenuItemLabel::create(nextLevelOver, [this, player](Ref *ref) {
+        player->stopBackgroundMusic();
+        switch (Level) {
+        case 1:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level2Scene::createScene()));
+            break;
+        case 2:
+            Director::getInstance()->replaceScene(
+                TransitionCrossFade::create(0.4f,Level3Scene::createScene()));
+            break;
+        default:
+            break;
+        }
+    });
+    nextLevelItemOver->setPosition(Vec2(visibleSize.width / 2 - 500, visibleSize.height / 2 - 200));
+
+    Vector<MenuItem *> menuItemsOver;
+    menuItemsOver.pushBack(backItemOver);
 
     if (isWin) {
         Win = true;
-        // TODO: win the game
+        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+            "audio/success.MP3");
+        if (Level != 3) {
+            menuItemsOver.pushBack(nextLevelItemOver);
+        }
+        menuItemsOver.pushBack(replayItemOver);
+        int star = int(this->map->health_) / 5 + 1;
+        std::string starPath = "images/star" + std::to_string(star) + ".png";
+        auto starOver = Sprite::create(starPath);
+        starOver->setScale(0.6f);
+        starOver->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 60));
+        this->addChild(starOver, 11);
+        starOver->setVisible(false);
+        auto gameOverLabel = Label::createWithTTF("You Win!", "fonts/Bender/BENDER.OTF", 120);
+        gameOverLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 275));
+        this->addChild(gameOverLabel, 11);
+        gameOverLabel->setVisible(false);
+        scheduleOnce([this, gameOverLabel](float dt){
+            gameOverLabel->setVisible(true);
+            gameOverLabel->setOpacity(0);
+            auto fadein = FadeIn::create(0.5f);
+            gameOverLabel->runAction(fadein);
+        }, 1.0f, "gameOverLabel");
+        scheduleOnce([this, starOver](float dt){
+            starOver->setVisible(true);
+            starOver->setOpacity(0);
+            auto fadein = FadeIn::create(0.5f);
+            starOver->runAction(fadein);
+        }, 1.5f, "starOver");
+        // TODO: update SelectLevelScene
     } else {
-        // TODO: lose the game
+        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+            "audio/fail.MP3");
+        menuItemsOver.pushBack(retryItemOver);
+        auto starOver = Sprite::create("images/star0.png");
+        starOver->setScale(0.6f);
+        starOver->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 60));
+        this->addChild(starOver, 11);
+        starOver->setVisible(false);
+        auto gameOverLabel = Label::createWithTTF("Game Over", "fonts/Bender/BENDER.OTF", 120);
+        gameOverLabel->setPosition(Vec2(visibleSize.width / 2, visibleSize.height / 2 + 275));
+        this->addChild(gameOverLabel, 11);
+        gameOverLabel->setVisible(false);
+        scheduleOnce([this, gameOverLabel](float dt){
+            gameOverLabel->setVisible(true);
+            gameOverLabel->setOpacity(0);
+            auto fadein = FadeIn::create(0.5f);
+            gameOverLabel->runAction(fadein);
+        }, 1.0f, "gameOverLabel");
+        scheduleOnce([this, starOver](float dt){
+            starOver->setVisible(true);
+            starOver->setOpacity(0);
+            auto fadein = FadeIn::create(0.5f);
+            starOver->runAction(fadein);
+        }, 1.5f, "starOver");
     }
+
+    auto menuOver = Menu::createWithArray(menuItemsOver);
+    menuOver->setPosition(Vec2::ZERO);
+    this->addChild(menuOver, 11);
+    menuOver->setVisible(false);
+    scheduleOnce([this, menuOver](float dt){
+        menuOver->setVisible(true);
+        menuOver->setOpacity(0);
+        auto fadein = FadeIn::create(1.0f);
+        menuOver->runAction(fadein);
+    }, 2.0f, "menuOver");
 }
 
 void LevelScene::update() {
