@@ -1824,6 +1824,9 @@ void LevelScene::createEnemy() {
         enemyPos.push_back(enemySameTimePos);
         enemyFactories.push_back(std::move(enemySameTimeFactories));
     }
+    if (Level == 3) {
+        enemyNumber++;
+    }
     this->map->enemy_alive = enemyNumber;
     for (size_t i = 0; i < enemyCreateType.size(); i++) {
         if (gameContinuing) {
@@ -1841,7 +1844,7 @@ void LevelScene::createEnemy() {
                             enemies.emplace_back(id, enemySprites[i][j]);
                         }
                     },
-                    enemyCreateTime[i] + 0.25f + 0.1f * j,
+                    enemyCreateTime[i] + 0.1f * j,
                     "addEnemyToMap" + std::to_string(i) + std::to_string(j));
                 scheduleOnce(
                     [this, i, j](float dt) {
