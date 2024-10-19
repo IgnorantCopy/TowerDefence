@@ -25,7 +25,7 @@ using towerdefence::core::Tower;
 class Bullet;
 
 class LevelScene : public cocos2d::Scene {
-protected:
+  protected:
     int Level = 0;
     Grid::Type type[7][12] = {Grid::Type::BlockPath};
     std::vector<std::vector<size_t>> gridType;
@@ -167,7 +167,11 @@ protected:
     bool Win = false;
     void gameOver(bool isWin);
 
-public:
+  public:
+    ~LevelScene() {
+        if (map)
+            delete map;
+    }
     // the map of each level
     Map *map = nullptr;
     // towers

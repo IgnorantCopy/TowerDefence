@@ -3,6 +3,9 @@
 //
 
 #include "EnemyAnimation.h"
+#include "core/entity/enemy/Boss-2.h"
+
+using towerdefence::core::Boss2;
 
 size_t EnemyAnimation::notAttackedCounter = 0;
 
@@ -257,7 +260,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
         for (int i = 0; i < 90; i++) {
             std::string skillPath = std::format("{:02d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + skillPath, cocos2d::Rect(0, 0, 850, 850)));
+                prefix + skillPath, cocos2d::Rect(0, 0, 1000, 1000)));
         }
         for (const auto &tower : levelScene->towers) {
             auto towerSprite = tower.second;
@@ -299,14 +302,15 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
         }
         break;
     case EnemyType::Boss2:
-        prefix += "boss/stage2/skill/boss2_skill";
-        frames.reserve(50);
-        for (int i = 0; i < 50; i++) {
-            std::string skillPath = std::format("{:02d}.png", i);
-            frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + skillPath, cocos2d::Rect(0, 0, 850, 850)));
-        }
+        prefix += "boss/stage2/skill";
         if (abs(duration - 10.0f) <= epsilon) {
+            prefix += "1/boss2_skill1";
+            frames.reserve(90);
+            for (int i = 0; i < 90; i++) {
+                std::string skillPath = std::format("{:02d}.png", i);
+                frames.pushBack(cocos2d::SpriteFrame::create(
+                    prefix + skillPath, cocos2d::Rect(0, 0, 1000, 1000)));
+            }
             for (const auto &tower : levelScene->towers) {
                 auto towerSprite = tower.second;
                 float towerX = towerSprite->getPositionX();
@@ -321,6 +325,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                     duration, "decelerate" + std::to_string(counter++));
             }
         } else if (abs(duration - 15.0f) <= epsilon) {
+            prefix += "3/boss2_skill3";
             for (int i = indexY - 2; i <= indexY + 2; i++) {
                 for (int j = indexX - 2; j <= indexX + 2; j++) {
                     if (i >= 0 && i < 7 && j >= 0 && j < 12) {
@@ -352,6 +357,13 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
             cocos2d::Sprite *nearestTower = nullptr;
             int distance = 1000000;
             Id nearestId = levelScene->towers.begin()->first;
+            prefix += "2/boss2_skill2";
+            frames.reserve(48);
+            for (int i = 0; i < 48; i++) {
+                std::string skillPath = std::format("{:02d}.png", i);
+                frames.pushBack(cocos2d::SpriteFrame::create(
+                    prefix + skillPath, cocos2d::Rect(0, 0, 1000, 1000)));
+            }
             for (const auto &tower : levelScene->towers) {
                 auto id = tower.first;
                 auto towerSprite = tower.second;
@@ -429,13 +441,13 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 216; i++) {
             std::string diePath = std::format("{:03d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
+                prefix + diePath, cocos2d::Rect(0, 0, 1000, 1000)));
         }
         break;
     case EnemyType::Boss2:
         prefix += "boss/stage2/die/boss2_die";
-        frames.reserve(216);
-        for (int i = 0; i < 216; i++) {
+        frames.reserve(134);
+        for (int i = 0; i < 134; i++) {
             std::string diePath = std::format("{:03d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
                 prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
@@ -575,8 +587,34 @@ void EnemyAnimation::dead(LevelScene *levelScene,
     auto delay = cocos2d::DelayTime::create(0.5f);
     auto fadeOut = cocos2d::FadeOut::create(1.0f);
     auto remove = cocos2d::RemoveSelf::create();
-    auto seq =
-        cocos2d::Sequence::create(animate, delay, fadeOut, remove, nullptr);
+    cocos2d::Sequence *seq;
+    if (enemy->status().enemy_type_ == EnemyType::Boss1) {
+        auto callback = cocos2d::CallFunc::create([levelScene, enemy, indexX,
+                                                   indexY, x, y]() {
+            auto extra_storage =
+                std::unordered_map<std::string, std::any>{{"current_frame", 0}};
+            Route route = Route(enemy->route_.diffs);
+            route.pos = enemy->route_.pos;
+            std::unique_ptr<EnemyFactoryBase> newEnemy =
+                std::make_unique<EnemyFactory<Boss2>>(route, extra_storage);
+            Id id = levelScene->map->spawn_enemy_at(indexY, indexX, *newEnemy);
+            auto enemySprite = cocos2d::Sprite::create(
+                "images/enemies/boss/stage2/move/boss2_move00.png");
+            enemySprite->setPosition(x, y);
+            enemySprite->setScale(0.5f);
+            enemySprite->setOpacity(100);
+            levelScene->enemies.emplace_back(id, enemySprite);
+            levelScene->addChild(enemySprite, 3);
+            enemySprite->scheduleOnce(
+                [enemySprite](float dt) { enemySprite->setOpacity(255); }, 5.0f,
+                "boss2");
+        });
+        seq = cocos2d::Sequence::create(animate, delay, callback, remove,
+                                        nullptr);
+    } else {
+        seq =
+            cocos2d::Sequence::create(animate, delay, fadeOut, remove, nullptr);
+    }
     enemySprite->stopAllActions();
     enemySprite->runAction(seq);
 }
