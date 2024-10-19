@@ -1889,6 +1889,18 @@ void LevelScene::gameOver(bool isWin) {
 
     auto player = CocosDenshion::SimpleAudioEngine::getInstance();
 
+    auto backgroundOver =
+        Sprite::create("images/white_background.png", Rect(0, 0, 2500, 1500));
+    backgroundOver->setPosition(visibleSize.width / 2 + origin.x,
+                               visibleSize.height / 2 + origin.y);
+    backgroundOver->setColor(Color3B(128, 128, 128));
+    this->addChild(backgroundOver, 10);
+    backgroundOver->setOpacity(0);
+    scheduleOnce([this, backgroundOver](float dt) {
+        auto fadeTo = FadeTo::create(0.5f, 125);
+        backgroundOver->runAction(fadeTo);
+    }, 0.75f, "backgroundOver");
+
     auto BackOver = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
     auto backItemOver = MenuItemLabel::create(BackOver, [this, player](Ref *ref) {
         player->stopBackgroundMusic();
