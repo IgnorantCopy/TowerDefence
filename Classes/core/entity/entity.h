@@ -3,6 +3,7 @@
 
 #include <any>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
@@ -297,7 +298,7 @@ struct Enemy : Entity,
 
         base.health_ -= realized_attack_;
         base.defence_ += buffs.defence_correction_;
-        base.speed_ = std::max(0., base.speed_ * (1 + buffs.speed_));
+        base.speed_ = std::min(2.0 * base.speed_, std::max(0., base.speed_ * (1 + buffs.speed_)));
 
         return base;
     }
@@ -340,6 +341,11 @@ struct TowerInfo {
         copied.attack_ = a;
         return copied;
     }
+
+    uint32_t attack_interval() const noexcept {
+        return std::max(UINT32_C(1), static_cast<uint32_t>(std::round(
+                                         this->attack_interval_)));
+    }
 };
 
 struct Tower : Entity,
@@ -370,7 +376,8 @@ struct Tower : Entity,
     void on_tick(GridRef g) override;
 
     void reset_attack_timer(const timer::Clock &clk) {
-        this->attack_ = clk.with_period_sec(std::round(this->status().attack_interval_));
+        this->attack_ = clk.with_period_sec(
+            this->status().attack_interval());
     }
 };
 

@@ -26,6 +26,7 @@ void CoreMagicianPlus::on_tick(GridRef g) {
                 auto status = this->status();
 
                 e.on_hit(status.attack_, status.attack_type_,g);
+                g.on_enemy_attacked(e,*this);
             });
         } else {
 
@@ -34,6 +35,7 @@ void CoreMagicianPlus::on_tick(GridRef g) {
 
                 for (size_t i = 0; i < 4; ++i) {
                     e.on_hit(status.attack_, status.attack_type_, g);
+                    g.on_enemy_attacked(e,*this);
                 }
             });
         }
