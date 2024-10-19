@@ -34,6 +34,25 @@ void Enemy::on_tick(GridRef g) {
     auto &clk = g.clock();
 
     this->update_buff(clk);
+    auto speed = this->status().speed_;
+    if (speed == 0) {
+        this->move_.visit_period(
+            [](timer::Timer::Period &p) { p.period = UINT32_MAX; });
+    } else {
+        this->move_.visit_period([interval = timer::TICK_PER_SECOND * 10. /
+                                             this->status().speed_,
+                                  &clk](timer::Timer::Period &p) {
+            if (interval != p.period) {
+                auto progress =
+                    static_cast<double>((clk.elapased_ - p.start) % p.period) /
+                    p.period;
+                auto new_progress = static_cast<uint32_t>(progress * interval);
+                p.start =
+                    (p.start >= new_progress) ? (p.start - new_progress) : 0;
+                p.period = interval;
+            }
+        });
+    }
 }
 
 void Enemy::on_death(GridRef g) {
@@ -45,10 +64,18 @@ void Enemy::on_death(GridRef g) {
 }
 
 void Tower::on_tick(GridRef g) {
-    this->update_buff(g.clock());
+    auto &clk = g.clock();
+    this->update_buff(clk);
     this->attack_.visit_period(
-        [status = this->status()](timer::Timer::Period &p) {
-            p.period = status.attack_interval_;
+        [interval = std::round(this->status().attack_interval_),
+         &clk](timer::Timer::Period &p) {
+            auto progress =
+                static_cast<double>((clk.elapased_ - p.start) % p.period) /
+                p.period;
+            auto new_progress = static_cast<uint32_t>(progress * interval);
+            p.start = (p.start >= new_progress) ? (p.start - new_progress) : 0;
+            uint32_t next_period = interval;
+            p.period = (next_period > 0) ? next_period : 1;
         });
 }
 
