@@ -25,6 +25,11 @@ bool SelectLevelScene::init() {
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+    auto userDefault = UserDefault::getInstance();
+    int level1Scene = userDefault->getIntegerForKey("level1", 0);
+    int level2Scene = userDefault->getIntegerForKey("level2", 4);
+    int level3Scene = userDefault->getIntegerForKey("level3", 4);
+
     // add bgm
     auto player = CocosDenshion::SimpleAudioEngine::getInstance();
 

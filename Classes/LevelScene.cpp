@@ -2008,7 +2008,39 @@ void LevelScene::gameOver(bool isWin) {
             auto fadein = FadeIn::create(0.5f);
             starOver->runAction(fadein);
         }, 1.5f, "starOver");
-        // TODO: update SelectLevelScene
+
+        auto userDefault = UserDefault::getInstance();
+        int level1Scene = userDefault->getIntegerForKey("level1", 0);
+        int level2Scene = userDefault->getIntegerForKey("level2", 4);
+        int level3Scene = userDefault->getIntegerForKey("level3", 4);
+        switch (Level) {
+        case 1:
+            if (level1Scene < star) {
+                userDefault->setIntegerForKey("level1", star);
+                if (level2Scene == 4) {
+                    userDefault->setIntegerForKey("level2", 0);
+                }
+                userDefault->flush();
+            }
+            break;
+        case 2:
+            if (level2Scene < star) {
+                userDefault->setIntegerForKey("level2", star);
+                if (level3Scene == 4) {
+                    userDefault->setIntegerForKey("level3", 0);
+                }
+                userDefault->flush();
+            }
+            break;
+        case 3:
+            if (level3Scene < star) {
+                userDefault->setIntegerForKey("level3", star);
+                userDefault->flush();
+            }
+            break;
+        default:
+            break;
+        }
     } else {
         menuItemsOver.pushBack(retryItemOver);
         auto starOver = Sprite::create("images/star0.png");
