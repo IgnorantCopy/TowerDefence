@@ -9,6 +9,8 @@ namespace towerdefence::core {
     struct Boss1 final : Enemy {
         timer::Timer release_skill_;
 
+        timer::CallbackTimer<Boss1 &, GridRef> timeouts_;
+
         Boss1(id::Id id, route::Route route, const timer::Clock & clk);
 
         EnemyInfo info() const override {

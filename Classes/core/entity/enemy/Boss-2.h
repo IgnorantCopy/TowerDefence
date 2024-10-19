@@ -13,6 +13,8 @@ namespace towerdefence::core {
             timer::Timer withdraw;
         } release_skill_;
 
+        timer::CallbackTimer<Boss2 &, GridRef> timeouts_;
+
         Boss2(id::Id id, route::Route route, const timer::Clock & clk);
         Boss2() = delete;
 

@@ -30,18 +30,55 @@ void Boss2::on_tick(GridRef g) {
             add_buff_with_dur({this->id, Buff::SILENT}, Buff::silent(true), 15));
 
     if (g.clock().is_triggered(release_skill_.withdraw)) {
+        this->move_ = g.clock().never();
+        this->release_skill_.silent = g.clock().never();
+        this->release_skill_.dec_atk_spd = g.clock().never();
         if (auto &tower = g.get_nearest_tower(); tower.has_value()) {
             g.map.remove_tower((*tower)->id);
         }
         g.on_enemy_release_skill(*this, g.map, 0);
+        this->timeouts_.add_callback(
+            g.clock().with_duration(135), [](Boss2 &self, GridRef g) {
+                self.reset_move_timer(g.clock());
+                self.release_skill_.silent = g.clock().with_period_sec(30);
+                self.release_skill_.dec_atk_spd = g.clock().with_period_sec(20);
+
+                return false;
+
+            });
     }
 
     if (g.clock().is_triggered(release_skill_.dec_atk_spd)) {
+        this->move_ = g.clock().never();
+        this->release_skill_.silent = g.clock().never();
+        this->release_skill_.withdraw = g.clock().never();
         g.on_enemy_release_skill(*this, g.map, 10);
+        this->timeouts_.add_callback(
+            g.clock().with_duration(135), [](Boss2 &self, GridRef g) {
+                self.reset_move_timer(g.clock());
+                self.release_skill_.silent = g.clock().with_period_sec(30);
+                self.release_skill_.withdraw = g.clock().with_period_sec(40);
+
+                return false;
+
+            });
+
     }
 
     if (g.clock().is_triggered(release_skill_.silent)) {
+        this->move_ = g.clock().never();
+        this->release_skill_.dec_atk_spd = g.clock().never();
+        this->release_skill_.withdraw = g.clock().never();
         g.on_enemy_release_skill(*this, g.map, 15);
+        this->timeouts_.add_callback(
+            g.clock().with_duration(135), [](Boss2 &self, GridRef g) {
+                self.reset_move_timer(g.clock());
+                self.release_skill_.dec_atk_spd = g.clock().with_period_sec(20);
+                self.release_skill_.withdraw = g.clock().with_period_sec(40);
+
+                return false;
+
+            });
     }
 }
 }// namespace towerdefence::core
