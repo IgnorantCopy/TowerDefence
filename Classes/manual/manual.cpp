@@ -134,31 +134,31 @@ bool manual::init() {
             if (userDefault->getBoolForKey("clearItemShow", true) && !clearItem->isVisible()) {
                 clearItem->setVisible(true);
                 clearItem->setOpacity(0);
-                auto fadein = FadeIn::create(1.0f);
+                auto fadein = FadeIn::create(0.5f);
                 clearItem->runAction(fadein);
             }
             if (!musicLabel->isVisible()) {
-                auto fadein_1 = FadeIn::create(1.0f);
+                auto fadein_1 = FadeIn::create(0.5f);
                 musicSlider->setVisible(true);
                 musicSlider->setOpacity(0);
                 musicSlider->runAction(fadein_1);
-                auto fadein_2 = FadeIn::create(1.0f);
+                auto fadein_2 = FadeIn::create(0.5f);
                 effectSlider->setVisible(true);
                 effectSlider->setOpacity(0);
                 effectSlider->runAction(fadein_2);
-                auto fadein_3 = FadeIn::create(1.0f);
+                auto fadein_3 = FadeIn::create(0.5f);
                 musicLabel->setVisible(true);
                 musicLabel->setOpacity(0);
                 musicLabel->runAction(fadein_3);
-                auto fadein_4 = FadeIn::create(1.0f);
+                auto fadein_4 = FadeIn::create(0.5f);
                 effectLabel->setVisible(true);
                 effectLabel->setOpacity(0);
                 effectLabel->runAction(fadein_4);
-                auto fadein_5 = FadeIn::create(1.0f);
+                auto fadein_5 = FadeIn::create(0.5f);
                 musicVolume->setVisible(true);
                 musicVolume->setOpacity(0);
                 musicVolume->runAction(fadein_5);
-                auto fadein_6 = FadeIn::create(1.0f);
+                auto fadein_6 = FadeIn::create(0.5f);
                 effectVolume->setVisible(true);
                 effectVolume->setOpacity(0);
                 effectVolume->runAction(fadein_6);

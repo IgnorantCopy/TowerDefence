@@ -1846,7 +1846,7 @@ void LevelScene::createEnemy() {
                             enemies.emplace_back(id, enemySprites[i][j]);
                         }
                     },
-                    enemyCreateTime[i] - 0.45f + 0.1f * j,
+                    enemyCreateTime[i] + 0.1f * j,
                     "addEnemyToMap" + std::to_string(i) + std::to_string(j));
                 scheduleOnce(
                     [this, i, j](float dt) {
