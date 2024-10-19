@@ -5,7 +5,7 @@ namespace towerdefence {
 namespace core {
 
 void SpeedUp::on_tick(GridRef g) {
-    this->update_buff(g.clock());
+    Enemy::on_tick(g);
 
     for (auto grid : g.with_radius(1, linf_dis)) {
         grid.grid.with_enemy([this, &clk = g.clock()](Enemy &enemy) {

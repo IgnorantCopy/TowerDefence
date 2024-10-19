@@ -5,6 +5,7 @@ namespace towerdefence {
 namespace core {
 
 void LifeUp::on_tick(GridRef g) {
+    Enemy::on_tick(g);
     if (g.clock().is_triggered(release_skill_)) {
         for (auto ref : g.with_radius(2, l1_dis)) {
             ref.grid.with_enemy([g](Enemy &enemy) {

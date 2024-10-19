@@ -8,7 +8,7 @@ namespace core {
 AttackDown::AttackDown(id::Id id, route::Route route, const timer::Clock &clk) : Enemy(id, route), release_skill_(clk.with_period_sec(20)) {}
 
 void AttackDown::on_tick(GridRef g) {
-    this->update_buff(g.clock());
+    Enemy::on_tick(g);
 
     if (g.clock().is_triggered(release_skill_)) {
         this->move_ = g.clock().never();
