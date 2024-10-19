@@ -2120,3 +2120,10 @@ void LevelScene::update() {
     this->updateUpgradeItemEnabled();
     this->updateUpgradeButtonEnabled();
 }
+
+LevelScene::~LevelScene() {
+    if (map != nullptr) {
+        delete map;
+        map = nullptr;
+    }
+}

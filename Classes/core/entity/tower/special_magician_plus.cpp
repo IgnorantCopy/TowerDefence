@@ -26,6 +26,7 @@ namespace towerdefence {
                                                   Buff::defence_correction({0,-50}));
                             target_enemy.on_hit(self.status().attack_,
                                                 self.status().attack_type_,g);
+                            g.on_enemy_attacked(target_enemy,self);
                             target_enemy.remove_buff_from(self.id);
                             if (buffs.real_attack_ > 0) {
                                 target_enemy.on_hit(
