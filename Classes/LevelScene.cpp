@@ -438,7 +438,8 @@ bool LevelScene::init(int level) {
 
     auto upgradeLabel1 =
         Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
-    this->upgradeItem1 = MenuItemLabel::create(upgradeLabel1, [this](Ref *ref) {
+    this->upgradeItem1 = MenuItemLabel::create(upgradeLabel1, [this, player](
+                                                                  Ref *ref) {
         Sprite *towerSprite = this->getTower(this->selectedTowerId);
         std::unique_ptr<TowerFactoryBase> newTower;
         auto isScaling =
@@ -482,108 +483,113 @@ bool LevelScene::init(int level) {
         this->updateMoneyLabel();
         this->updateSelectorEnabled();
         this->hideUpgradeMenu();
+        player->playEffect("audio/upgrade.MP3");
     });
     upgradeItem1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800,
                                    origin.y + visibleSize.height / 2 - 150));
     auto upgradeLabel2 =
         Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
-    this->upgradeItem2 = MenuItemLabel::create(upgradeLabel2, [this](Ref *ref) {
-        Sprite *towerSprite = this->getTower(this->selectedTowerId);
-        std::unique_ptr<TowerFactoryBase> newTower;
-        auto isScaling =
-            std::unordered_map<std::string, std::any>{{"isScaling", false}};
-        auto visibleSize = Director::getInstance()->getVisibleSize();
-        Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        float typeX = origin.x + 350 + SIZE;
-        float typeY = origin.y + visibleSize.height - SIZE;
-        float x = towerSprite->getPositionX();
-        float y = towerSprite->getPositionY();
-        int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
-        int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
-        std::string path;
-        switch (this->map->get_ref(indexY, indexX)
-                    .grid.tower.value()
-                    ->status()
-                    .tower_type_) {
-        case TowerType::ArcherBase:
-            path = "images/towers/highspeed_archer.png";
-            newTower =
-                std::make_unique<TowerFactory<HighspeedArcher>>(isScaling);
-            break;
-        case TowerType::MagicianBase:
-            path = "images/towers/diffusive_magician.png";
-            newTower =
-                std::make_unique<TowerFactory<DiffusiveMagician>>(isScaling);
-            break;
-        case TowerType::HelperBase:
-            path = "images/towers/weaken_magician.png";
-            newTower =
-                std::make_unique<TowerFactory<WeakenMagician>>(isScaling);
-            break;
-        default:
-            break;
-        }
-        this->deleteTower(false);
-        auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
-        auto newTowerSprite = Sprite::create(path);
-        newTowerSprite->setPosition(Vec2(x, y));
-        this->addChild(newTowerSprite, 3);
-        this->selectedTowerId = id.value();
-        this->towers.emplace_back(id.value(), newTowerSprite);
-        this->updateMoneyLabel();
-        this->updateSelectorEnabled();
-        this->hideUpgradeMenu();
-    });
+    this->upgradeItem2 =
+        MenuItemLabel::create(upgradeLabel2, [this, player](Ref *ref) {
+            Sprite *towerSprite = this->getTower(this->selectedTowerId);
+            std::unique_ptr<TowerFactoryBase> newTower;
+            auto isScaling =
+                std::unordered_map<std::string, std::any>{{"isScaling", false}};
+            auto visibleSize = Director::getInstance()->getVisibleSize();
+            Vec2 origin = Director::getInstance()->getVisibleOrigin();
+            float typeX = origin.x + 350 + SIZE;
+            float typeY = origin.y + visibleSize.height - SIZE;
+            float x = towerSprite->getPositionX();
+            float y = towerSprite->getPositionY();
+            int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+            int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
+            std::string path;
+            switch (this->map->get_ref(indexY, indexX)
+                        .grid.tower.value()
+                        ->status()
+                        .tower_type_) {
+            case TowerType::ArcherBase:
+                path = "images/towers/highspeed_archer.png";
+                newTower =
+                    std::make_unique<TowerFactory<HighspeedArcher>>(isScaling);
+                break;
+            case TowerType::MagicianBase:
+                path = "images/towers/diffusive_magician.png";
+                newTower = std::make_unique<TowerFactory<DiffusiveMagician>>(
+                    isScaling);
+                break;
+            case TowerType::HelperBase:
+                path = "images/towers/weaken_magician.png";
+                newTower =
+                    std::make_unique<TowerFactory<WeakenMagician>>(isScaling);
+                break;
+            default:
+                break;
+            }
+            this->deleteTower(false);
+            auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
+            auto newTowerSprite = Sprite::create(path);
+            newTowerSprite->setPosition(Vec2(x, y));
+            this->addChild(newTowerSprite, 3);
+            this->selectedTowerId = id.value();
+            this->towers.emplace_back(id.value(), newTowerSprite);
+            this->updateMoneyLabel();
+            this->updateSelectorEnabled();
+            this->hideUpgradeMenu();
+            player->playEffect("audio/upgrade.MP3");
+        });
     upgradeItem2->setPosition(Vec2(origin.x + visibleSize.width / 2,
                                    origin.y + visibleSize.height / 2 - 150));
     auto upgradeLabel3 =
         Label::createWithTTF("Choose", "fonts/Bender/BENDER.OTF", 75);
-    this->upgradeItem3 = MenuItemLabel::create(upgradeLabel3, [this](Ref *ref) {
-        Sprite *towerSprite = this->getTower(this->selectedTowerId);
-        std::unique_ptr<TowerFactoryBase> newTower;
-        auto isScaling =
-            std::unordered_map<std::string, std::any>{{"isScaling", false}};
-        auto visibleSize = Director::getInstance()->getVisibleSize();
-        Vec2 origin = Director::getInstance()->getVisibleOrigin();
-        float typeX = origin.x + 350 + SIZE;
-        float typeY = origin.y + visibleSize.height - SIZE;
-        float x = towerSprite->getPositionX();
-        float y = towerSprite->getPositionY();
-        int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
-        int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
-        std::string path;
-        switch (this->map->get_ref(indexY, indexX)
-                    .grid.tower.value()
-                    ->status()
-                    .tower_type_) {
-        case TowerType::ArcherBase:
-            path = "images/towers/bomber.png";
-            newTower = std::make_unique<TowerFactory<Bomber>>(isScaling);
-            break;
-        case TowerType::MagicianBase:
-            path = "images/towers/special_magician.png";
-            newTower =
-                std::make_unique<TowerFactory<SpecialMagician>>(isScaling);
-            break;
-        case TowerType::HelperBase:
-            path = "images/towers/aggressive_magician.png";
-            newTower =
-                std::make_unique<TowerFactory<AggressiveMagician>>(isScaling);
-            break;
-        default:
-            break;
-        }
-        this->deleteTower(false);
-        auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
-        auto newTowerSprite = Sprite::create(path);
-        newTowerSprite->setPosition(Vec2(x, y));
-        this->addChild(newTowerSprite, 3);
-        this->selectedTowerId = id.value();
-        this->towers.emplace_back(id.value(), newTowerSprite);
-        this->updateMoneyLabel();
-        this->updateSelectorEnabled();
-        this->hideUpgradeMenu();
-    });
+    this->upgradeItem3 =
+        MenuItemLabel::create(upgradeLabel3, [this, player](Ref *ref) {
+            Sprite *towerSprite = this->getTower(this->selectedTowerId);
+            std::unique_ptr<TowerFactoryBase> newTower;
+            auto isScaling =
+                std::unordered_map<std::string, std::any>{{"isScaling", false}};
+            auto visibleSize = Director::getInstance()->getVisibleSize();
+            Vec2 origin = Director::getInstance()->getVisibleOrigin();
+            float typeX = origin.x + 350 + SIZE;
+            float typeY = origin.y + visibleSize.height - SIZE;
+            float x = towerSprite->getPositionX();
+            float y = towerSprite->getPositionY();
+            int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
+            int indexY = (int)((typeY - y + 0.5f * SIZE) / SIZE);
+            std::string path;
+            switch (this->map->get_ref(indexY, indexX)
+                        .grid.tower.value()
+                        ->status()
+                        .tower_type_) {
+            case TowerType::ArcherBase:
+                path = "images/towers/bomber.png";
+                newTower = std::make_unique<TowerFactory<Bomber>>(isScaling);
+                break;
+            case TowerType::MagicianBase:
+                path = "images/towers/special_magician.png";
+                newTower =
+                    std::make_unique<TowerFactory<SpecialMagician>>(isScaling);
+                break;
+            case TowerType::HelperBase:
+                path = "images/towers/aggressive_magician.png";
+                newTower = std::make_unique<TowerFactory<AggressiveMagician>>(
+                    isScaling);
+                break;
+            default:
+                break;
+            }
+            this->deleteTower(false);
+            auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
+            auto newTowerSprite = Sprite::create(path);
+            newTowerSprite->setPosition(Vec2(x, y));
+            this->addChild(newTowerSprite, 3);
+            this->selectedTowerId = id.value();
+            this->towers.emplace_back(id.value(), newTowerSprite);
+            this->updateMoneyLabel();
+            this->updateSelectorEnabled();
+            this->hideUpgradeMenu();
+            player->playEffect("audio/upgrade.MP3");
+        });
     upgradeItem3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800,
                                    origin.y + visibleSize.height / 2 - 150));
     auto cancelLabel =
@@ -668,24 +674,26 @@ void LevelScene::addBullet(Tower *tower, Enemy *enemy) {
 }
 
 void LevelScene::updateParticles() {
-    for (auto it = this->enemyParticles.begin();
-         it != this->enemyParticles.end();) {
-        Id id = it->first;
-        auto particle = it->second;
-        auto enemy = this->getEnemy(id);
-        if (enemy) {
-            particle->setPosition(enemy->getPosition());
-            it++;
-        } else {
-            particle->removeFromParent();
-            it = this->enemyParticles.erase(it);
+    for (const auto &enemy : this->enemies) {
+        Id id = enemy.first;
+        auto enemySprite = enemy.second;
+        auto &enemyEntity = this->map->get_enemy_by_id(id);
+        if (enemyEntity.status().enemy_type_ == EnemyType::SpeedUp &&
+            enemyEntity.get_storage<int>("current_frame") == 0) {
+            auto particle =
+                ParticleSystemQuad::create("particles/speed_ring.plist");
+            particle->setPosition(enemySprite->getPosition());
+            particle->setScale(0.5f);
+            this->addChild(particle, 4);
+            CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+                "audio/enemySkill.MP3");
         }
     }
 }
 
 void LevelScene::updateBullets() {
     for (auto it = this->bullets.begin(); it != this->bullets.end();) {
-        if ((*it)->getBullet()) {
+        if ((*it)->getBullet() != nullptr) {
             (*it)->move();
             it++;
         } else {
@@ -729,14 +737,15 @@ void LevelScene::decreaseLife() {
     if (this->map->health_ > 1000 || this->map->health_ <= 0) {
         this->lifeLabel->setString("0");
         this->lifeLabel->setPosition(
-            cocos2d::Vec2(origin.x + 150,
-                          origin.y + visibleSize.height - 180));
+            cocos2d::Vec2(origin.x + 150, origin.y + visibleSize.height - 180));
         this->gameOver(false);
     } else {
         this->lifeLabel->setString(std::to_string(this->map->health_));
         this->lifeLabel->setPosition(
             cocos2d::Vec2(origin.x + 150 + 15 * log10(this->map->health_),
                           origin.y + visibleSize.height - 180));
+        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+            "audio/decreaseHealth.MP3");
     }
 }
 
@@ -1128,6 +1137,7 @@ void LevelScene::deleteTower(bool isReturn) {
     }
     if (towerSprite) {
         towerSprite->removeFromParent();
+        towerSprite->release();
         if (isReturn) {
             this->map->withdraw_tower(this->selectedTowerId);
             this->updateMoneyLabel();
@@ -1152,6 +1162,7 @@ void LevelScene::upgradeTower() {
     std::unique_ptr<TowerFactoryBase> newTower;
     auto isScaling =
         std::unordered_map<std::string, std::any>{{"isScaling", false}};
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
     switch (this->map->get_ref(indexY, indexX)
                 .grid.tower.value()
                 ->status()
@@ -1191,44 +1202,53 @@ void LevelScene::upgradeTower() {
     case TowerType::Archer:
         path = "images/towers/archer_pro.png";
         newTower = std::make_unique<TowerFactory<ArcherPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::Bomber:
         path = "images/towers/bomber_pro.png";
         newTower = std::make_unique<TowerFactory<BomberPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::CoreMagician:
         path = "images/towers/core_magician_pro.png";
         newTower = std::make_unique<TowerFactory<CoreMagicianPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::DecelerateMagician:
         path = "images/towers/decelerate_magician_pro.png";
         newTower =
             std::make_unique<TowerFactory<DecelerateMagicianPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::DiffusiveMagician:
         path = "images/towers/diffusive_magician_pro.png";
         newTower =
             std::make_unique<TowerFactory<DiffusiveMagicianPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::HighspeedArcher:
         path = "images/towers/highspeed_archer_pro.png";
         newTower =
             std::make_unique<TowerFactory<HighspeedArcherPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::SpecialMagician:
         path = "images/towers/special_magician_pro.png";
         newTower =
             std::make_unique<TowerFactory<SpecialMagicianPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::WeakenMagician:
         path = "images/towers/weaken_magician_pro.png";
         newTower =
             std::make_unique<TowerFactory<WeakenMagicianPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     case TowerType::AggressiveMagician:
         path = "images/towers/aggressive_magician_pro.png";
         newTower =
             std::make_unique<TowerFactory<AggressiveMagicianPlus>>(isScaling);
+        player->playEffect("audio/upgrade.MP3", false);
         break;
     default:
         return;
@@ -1280,8 +1300,15 @@ void LevelScene::createMap(int level) {
         routes = {Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D], Dir[D],
                          Dir[D], Dir[L], Dir[L], Dir[L], Dir[U], Dir[U], Dir[R],
                          Dir[R], Dir[D], Dir[D], Dir[L], Dir[L], Dir[L]}),
-                  Route({Dir[L], Dir[L], Dir[L], Dir[L], {6, 0},
-                         Dir[R], Dir[R], Dir[R], Dir[R]}),
+                  Route({Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         {6, 0},
+                         Dir[R],
+                         Dir[R],
+                         Dir[R],
+                         Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
@@ -1329,12 +1356,33 @@ void LevelScene::createMap(int level) {
             {{1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6}},
             {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
             {{2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}, {6, 6}},
-            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1},
-             {5, 3}, {6, 6}},
-            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1},
-             {5, 3}, {6, 6}},
-            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1},
-             {5, 3}, {6, 6}},
+            {{1, 5},
+             {2, 7},
+             {3, 2},
+             {3, 3},
+             {4, 1},
+             {4, 3},
+             {5, 1},
+             {5, 3},
+             {6, 6}},
+            {{1, 5},
+             {2, 7},
+             {3, 2},
+             {3, 3},
+             {4, 1},
+             {4, 3},
+             {5, 1},
+             {5, 3},
+             {6, 6}},
+            {{1, 5},
+             {2, 7},
+             {3, 2},
+             {3, 3},
+             {4, 1},
+             {4, 3},
+             {5, 1},
+             {5, 3},
+             {6, 6}},
             {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
             {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
             {{1, 9}, {3, 5}, {4, 8}, {5, 6}},
@@ -1356,16 +1404,34 @@ void LevelScene::createMap(int level) {
         map = new towerdefence::core::Map(
             width, height,
             [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
-        routes = {Route({Dir[L], Dir[L], Dir[L], {0, -8}, Dir[D],
-                         Dir[D], Dir[D], Dir[D], Dir[D], Dir[D], Dir[R]}),
+        routes = {Route({Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         {0, -8},
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[U], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[D], Dir[L]}),
-                  Route({Dir[L], Dir[L], Dir[L], {-6, -8}, Dir[D],
-                         Dir[D], Dir[D], Dir[D], Dir[D], Dir[D], Dir[R]}),
+                  Route({Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         {-6, -8},
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D], Dir[L],
                          Dir[L], Dir[U], Dir[U], Dir[U], Dir[U], Dir[L], Dir[L],
                          Dir[D], Dir[D], Dir[L], Dir[L]})};
@@ -1465,8 +1531,10 @@ void LevelScene::createMap(int level) {
                    Dir[D], Dir[R], Dir[R],    Dir[R], Dir[R], Dir[R], Dir[R]}),
             Route({Dir[D], Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R],
                    Dir[R], Dir[R], Dir[R]}),
-            Route({Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
-            Route({Dir[R], Dir[R], Dir[D], Dir[D], Dir[D], Dir[D], Dir[L], Dir[L]}),
+            Route({Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R],
+                   Dir[R]}),
+            Route({Dir[R], Dir[R], Dir[D], Dir[D], Dir[D], Dir[D], Dir[L],
+                   Dir[L]}),
             Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D],
                    Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
             Route({Dir[R], Dir[R], Dir[R],    Dir[R], {6, 3}, Dir[R], Dir[R],
@@ -1611,18 +1679,17 @@ void LevelScene::createMap(int level) {
     this->map->on_enemy_death(
         [this](Enemy &enemy) { EnemyAnimation::dead(this, &enemy); });
     this->map->on_escape([this](Id id) {
-        Sprite *enemySprite = nullptr;
         for (auto it = this->enemies.begin(); it != this->enemies.end();) {
             if (it->first == id) {
-                enemySprite = it->second;
+                auto enemySprite = it->second;
+                enemySprite->removeFromParent();
+                enemySprite->release();
+                enemySprite = nullptr;
                 it = this->enemies.erase(it);
                 break;
             } else {
                 it++;
             }
-        }
-        if (enemySprite) {
-            enemySprite->removeFromParent();
         }
         this->decreaseLife();
     });
@@ -1801,38 +1868,28 @@ void LevelScene::createEnemy() {
                     enemySprites[i][j]->setFlippedX(true);
                     enemySprites[i][j]->setFlippedY(false);
                 }
-                ParticleSystemQuad *particle = nullptr;
-                if (enemyType[enemyCreateType[i][j].second - 1] ==
-                    EnemyType::SpeedUp) {
-                    particle = ParticleSystemQuad::create(
-                        "particles/speed_ring.plist");
-                    particle->setPosition(
-                        enemySprites[i][j]->getPosition());
-                    particle->setVisible(false);
-                    this->addChild(particle, 4);
-                }
-                scheduleOnce([this, i, j, particle](float dt) {
-                    if (this->gameContinuing) {
-                        Id id = this->map->spawn_enemy_at(
-                            enemyPos[i][j].first,
-                            enemyPos[i][j].second,
-                            *enemyFactories[i][j]);
-                        if (particle) {
-                            enemyParticles.emplace_back(id,
-                                                        particle);
-                            particle->setVisible(true);
+                scheduleOnce(
+                    [this, i, j](float dt) {
+                        if (this->gameContinuing) {
+                            Id id = this->map->spawn_enemy_at(
+                                enemyPos[i][j].first, enemyPos[i][j].second,
+                                *enemyFactories[i][j]);
+                            enemies.emplace_back(id, enemySprites[i][j]);
                         }
-                        enemies.emplace_back(id, enemySprites[i][j]);
-                    }
-                }, enemyCreateTime[i] - 0.45f + 0.1f * j,"addEnemyToMap" + std::to_string(i) + std::to_string(j));
-                scheduleOnce([this, i, j](float dt) {
-                    if (this->gameContinuing) {
-                        enemySprites[i][j]->setVisible(true);
-                        enemySprites[i][j]->setOpacity(0);
-                        auto fadeIn = FadeIn::create(0.25f);
-                        enemySprites[i][j]->runAction(fadeIn);
-                    }
-                },enemyCreateTime[i] - 0.25f + 0.1f * j,"createEnemy" + std::to_string(i) + std::to_string(j));
+                    },
+                    enemyCreateTime[i] - 0.45f + 0.1f * j,
+                    "addEnemyToMap" + std::to_string(i) + std::to_string(j));
+                scheduleOnce(
+                    [this, i, j](float dt) {
+                        if (this->gameContinuing) {
+                            enemySprites[i][j]->setVisible(true);
+                            enemySprites[i][j]->setOpacity(0);
+                            auto fadeIn = FadeIn::create(0.25f);
+                            enemySprites[i][j]->runAction(fadeIn);
+                        }
+                    },
+                    enemyCreateTime[i] - 0.25f + 0.1f * j,
+                    "createEnemy" + std::to_string(i) + std::to_string(j));
             }
         }
     }
@@ -1873,8 +1930,12 @@ void LevelScene::gameOver(bool isWin) {
     if (isWin) {
         Win = true;
         // TODO: win the game
+        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+            "audio/success.MP3");
     } else {
         // TODO: lose the game
+        CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
+            "audio/fail.MP3");
     }
 }
 
