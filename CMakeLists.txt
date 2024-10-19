@@ -70,6 +70,7 @@ add_library(core
         Classes/core/entity/entity.cpp
         Classes/core/timer.h
         Classes/core/id.h
+        Classes/core/entity/route.cpp
         Classes/core/entity/enemy/Attack-down.cpp
         Classes/core/entity/enemy/Attack-down.h
         Classes/core/entity/enemy/Boss-1.cpp

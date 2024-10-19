@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <functional>
+#include <iostream>
 #include <memory>
 #include <optional>
 #include <ranges>
@@ -214,6 +215,31 @@ struct Map {
                 grids.push_back(f(i, j));
             }
         }
+
+        this->on_end([](bool res) {
+            std::cout << std::format("game ends: {}", res) << std::endl;
+        });
+
+        this->on_enemy_attacked([](Enemy &e, Tower &t) {
+            std::cout << std::format("{}: attacked by {}", e.id.v, t.id.v)
+                      << std::endl;
+        });
+
+        this->on_enemy_death([](Enemy &e) { std::cout << std::format("{}: die", e.id.v) << std::endl; });
+
+        this->on_enemy_release_skill([](Enemy &e, auto &&, auto &&) {
+            std::cout << std::format("{} (enemy): releasing skill", e.id.v)
+                      << std::endl;
+        });
+// 
+        this->on_tower_release_skill([](Tower &t, auto &&, auto &&) {
+            std::cout << std::format("{} (tower): releasing skill", t.id.v)
+                      << std::endl;
+        });
+// 
+        this->on_escape([](id::Id id) {
+            std::cout << std::format("{}: escaped", id.v) << std::endl;
+        });
     }
 
     // register a callback function to be called whenver an entity releases a
@@ -284,6 +310,10 @@ struct Map {
 
         enemy_refs_.insert({id, {row, column}});
 
+        std::cout << std::format("{} (enemy): spawned at ({}, {})", id.v, row,
+                                 column)
+                  << std::endl;
+
         return id;
     }
 
@@ -295,6 +325,8 @@ struct Map {
 
     // throws std::out_of_range if id does not exist
     void remove_enemy(id::Id id) {
+        std::cout << std::format("{} (enemy): removing", id.v) << std::endl;
+
         auto [row, column] = enemy_refs_.at(id);
         auto &grid = grids.at(shape.index_of(row, column));
         auto res = grid.remove_enemy(id);
@@ -323,6 +355,8 @@ struct Map {
     }
 
     void reached_end(id::Id id) {
+        std::cout << std::format("{}: reached end", id.v) << std::endl;
+
         this->health_ -= 1;
         for (auto &[handle, f] : this->callbacks_.on_escape) {
             f(id);
@@ -360,6 +394,10 @@ struct Map {
 
         tower_refs_.insert({id, {row, column}});
 
+        std::cout << std::format("{} (tower): spawned at ({}, {})", id.v, row,
+                                 column)
+                  << std::endl;
+
         return id;
     }
 
@@ -374,6 +412,8 @@ struct Map {
     }
 
     std::unique_ptr<Tower> remove_tower(id::Id id) {
+        std::cout << std::format("{} (tower): removing", id.v) << std::endl;
+
         auto [row, column] = tower_refs_.at(id);
         auto &grid = grids.at(shape.index_of(row, column));
 
@@ -385,6 +425,8 @@ struct Map {
     }
 
     void withdraw_tower(id::Id id) {
+        std::cout << std::format("{}: withdrawing", id.v) << std::endl;
+
         auto tower = remove_tower(id);
         cost_ += tower->info().cost_ / 2;
     }

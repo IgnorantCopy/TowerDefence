@@ -2,6 +2,8 @@
 #define TOWERDEFENCE_CORE_ENTITY_ROUTE
 
 #include <cstddef>
+#include <format>
+#include <sstream>
 #include <stdexcept>
 #include <tuple>
 #include <type_traits>
@@ -34,17 +36,34 @@ struct Route {
     //
     // Route route = /* init */;
     // auto [x, y] = route.next_direction();
-    std::tuple<ssize, ssize> next_direction() try {
-        auto [x, y] = diffs.at(pos);
-        pos += 1;
-        return {x, y};
-    } catch (const std::out_of_range &) {
-        throw reached_end();
-    }
+    std::tuple<ssize, ssize> next_direction();
 
     size_t remaining_distance() const noexcept { return diffs.size() - pos; }
 };
 
 } // namespace towerdefence::core::route
+
+template<>
+struct std::formatter<towerdefence::core::route::Route>
+{ 
+    template<class ParseContext>
+    constexpr ParseContext::iterator parse(ParseContext& ctx)
+    {
+       return ctx.begin();
+    }
+ 
+    template<class FmtContext>
+    FmtContext::iterator format(towerdefence::core::route::Route& r, FmtContext& ctx) const
+    {
+       std::ostringstream out;
+       out << std::format("Route @ {} / {} : ", r.pos, r.diffs.size());
+    
+        for (auto [i, j] : r.diffs) {
+            out << std::format("({}, {}), ", i, j);
+        }
+
+        return std::ranges::copy(std::move(out).str(), ctx.out()).out;
+    }
+};
 
 #endif

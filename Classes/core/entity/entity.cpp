@@ -1,10 +1,10 @@
 #include "entity.h"
 #include "../map.h"
-#include "route.h"
 #include <cassert>
 #include <cmath>
 #include <cstdint>
-#include <stdexcept>
+#include <format>
+#include <iostream>
 
 namespace towerdefence::core {
 
@@ -31,6 +31,7 @@ void Enemy::on_hit(int32_t atk, AttackType attack_type, GridRef g) {
 }
 
 void Enemy::on_tick(GridRef g) {
+    std::cout << std::format("{} (enemy): on tick", this->id.v);
     auto &clk = g.clock();
 
     this->update_buff(clk);
@@ -58,24 +59,31 @@ void Enemy::on_tick(GridRef g) {
 void Enemy::on_death(GridRef g) {
     g.on_enemy_death(*this);
     g.map.enemy_alive -= 1;
-    if(g.map.enemy_alive == 0){
+    if (g.map.enemy_alive == 0) {
         g.on_end(true);
     }
 }
 
 void Tower::on_tick(GridRef g) {
+    std::cout << std::format("{} (tower): on tick", this->id.v);
+
     auto &clk = g.clock();
     this->update_buff(clk);
     this->attack_.visit_period(
-        [interval = std::round(this->status().attack_interval_ * 0.1),
+        [interval = std::round(this->status().attack_interval_),
          &clk](timer::Timer::Period &p) {
             auto progress =
                 static_cast<double>((clk.elapased_ - p.start) % p.period) /
                 p.period;
             auto new_progress = static_cast<uint32_t>(progress * interval);
+            std::cout << std::format("old progress: {}, new progress: {}", progress,
+                          new_progress);
+            std::cout << std::format("old p.start: {}, p.period: {}", p.start, p.period);
+
             p.start = (p.start >= new_progress) ? (p.start - new_progress) : 0;
             uint32_t next_period = interval;
             p.period = (next_period > 0) ? next_period : 1;
+            std::cout << std::format("new p.start: {}, p.period: {}", p.start, p.period);
         });
 }
 
