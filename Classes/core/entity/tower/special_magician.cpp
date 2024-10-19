@@ -22,7 +22,9 @@ namespace towerdefence {
                         enemy_grid->attack_enemies_in_radius(status.with_attack_radius(1).with_attack(status.attack_ * 1.5),
                                                                 linf_dis, g);
                         g.on_tower_release_skill(*this, g.map, 1);
-                        enemy_grid->on_enemy_attacked(**(enemy_grid->grid.enemies.begin()), *this);
+                        if(enemy_grid->grid.enemies.size()>0){
+                            enemy_grid->on_enemy_attacked(*(enemy_grid->grid.enemies.front()), *this);
+                        }
                     }else{
                         single_attack(*this,*enemy_grid);
                     }
