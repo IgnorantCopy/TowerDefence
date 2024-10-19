@@ -7,7 +7,7 @@ Boss2::Boss2(id::Id id, route::Route route, const timer::Clock &clk)
     : Enemy(id, route), release_skill_({clk.with_period_sec(20), clk.with_period_sec(30),
                                         clk.with_period_sec(40)}) {
     this->add_buff_in({id, Buff::INVINCIBLE}, Buff::invincible(true),
-                      clk.with_duration_sec(20));
+                      clk.with_duration_sec(5));
 }
 
 void Boss2::on_tick(GridRef g) {
