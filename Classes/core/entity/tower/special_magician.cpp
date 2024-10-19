@@ -25,6 +25,7 @@ namespace towerdefence {
                         if(enemy_grid->grid.enemies.size()>0){
                             enemy_grid->on_enemy_attacked(*(enemy_grid->grid.enemies.front()), *this);
                         }
+                        skill = false;
                     }else{
                         single_attack(*this,*enemy_grid);
                     }
