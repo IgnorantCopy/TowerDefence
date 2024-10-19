@@ -32,6 +32,8 @@ bool SelectLevelScene::init() {
 
     // add bgm
     auto player = CocosDenshion::SimpleAudioEngine::getInstance();
+    player->setBackgroundMusicVolume(float(userDefault->getIntegerForKey("musicVolume", 100)) / 100.0f);
+    player->setEffectsVolume(float(userDefault->getIntegerForKey("effectVolume", 100)) / 100.0f);
 
     auto closeItem = MenuItemImage::create(
         "CloseNormal.png", "CloseSelected.png",

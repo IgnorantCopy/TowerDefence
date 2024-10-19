@@ -1,6 +1,7 @@
 #include "manual.h"
 #include "ui/CocosGUI.h"
 #include "ui/UIWidget.h"
+#include "cocostudio/SimpleAudioEngine.h"
 #include "cocos2d.h"
 #include "HelloWorldScene.h"
 #include "core/entity/entity.h"
@@ -23,6 +24,7 @@ bool manual::init() {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     auto userDefault = UserDefault::getInstance();
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
 
     auto background = Sprite::create("images/manual_background.png", Rect(0, 0, 2500, 1500));
     if (background == nullptr) {
@@ -41,14 +43,85 @@ bool manual::init() {
     );
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100, origin.y + visibleSize.height - 50));
 
+    auto musicLabel = Label::createWithTTF("Music", "fonts/Bender/BENDER.OTF", 60);
+    musicLabel->setPosition(Vec2(origin.x + visibleSize.width / 2 - 500, origin.y + visibleSize.height / 2 + 555));
+    this->addChild(musicLabel, 5);
+    musicLabel->setVisible(false);
+    auto musicVolume = Label::createWithTTF(
+        std::to_string(userDefault->getIntegerForKey("musicVolume",100)), "fonts/Bender/BENDER.OTF", 60);
+    musicVolume->setPosition(Vec2(origin.x + visibleSize.width / 2 + 450, origin.y + visibleSize.height / 2 + 555));
+    this->addChild(musicVolume, 5);
+    musicVolume->setVisible(false);
+    auto musicSlider = ui::Slider::create();
+    musicSlider->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 550));
+    musicSlider->loadBarTexture("images/Bar.png");
+    musicSlider->loadSlidBallTextures("images/sliderBall.png", "images/sliderBall.png", "images/sliderBall.png");
+    musicSlider->loadProgressBarTexture("images/progressBar.png");
+    musicSlider->setPercent(userDefault->getIntegerForKey("musicVolume", 100));
+    musicSlider->addEventListener([this, userDefault, player, musicVolume](Ref *sender, ui::Slider::EventType type) {
+        switch (type) {
+        case ui::Slider::EventType::ON_PERCENTAGE_CHANGED: {
+            auto *slider = dynamic_cast<ui::Slider *>(sender);
+            int percent = slider->getPercent();
+            player->setBackgroundMusicVolume(float(percent) / 100.0f);
+            userDefault->setIntegerForKey("musicVolume", percent);
+            musicVolume->setString(std::to_string(percent));
+            break;
+        }
+        default:
+            break;
+        }
+    });
+    this->addChild(musicSlider, 5);
+    musicSlider->setVisible(false);
+
+    auto effectLabel = Label::createWithTTF("Sound", "fonts/Bender/BENDER.OTF", 60);
+    effectLabel->setPosition(Vec2(origin.x + visibleSize.width / 2 - 500, origin.y + visibleSize.height / 2 + 430));
+    this->addChild(effectLabel, 5);
+    effectLabel->setVisible(false);
+    auto effectVolume = Label::createWithTTF(
+        std::to_string(userDefault->getIntegerForKey("effectVolume",100)), "fonts/Bender/BENDER.OTF", 60);
+    effectVolume->setPosition(Vec2(origin.x + visibleSize.width / 2 + 450, origin.y + visibleSize.height / 2 + 430));
+    this->addChild(effectVolume, 5);
+    effectVolume->setVisible(false);
+    auto effectSlider = ui::Slider::create();
+    effectSlider->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 425));
+    effectSlider->loadBarTexture("images/Bar.png");
+    effectSlider->loadSlidBallTextures("images/sliderBall.png", "images/sliderBall.png", "images/sliderBall.png");
+    effectSlider->loadProgressBarTexture("images/progressBar.png");
+    effectSlider->setPercent(userDefault->getIntegerForKey("effectVolume", 100));
+    effectSlider->addEventListener([this, userDefault, player, effectVolume](Ref *sender, ui::Slider::EventType type) {
+        switch (type) {
+        case ui::Slider::EventType::ON_PERCENTAGE_CHANGED: {
+            auto *slider = dynamic_cast<ui::Slider *>(sender);
+            int percent = slider->getPercent();
+            player->setEffectsVolume(float(percent) / 100.0f);
+            userDefault->setIntegerForKey("effectVolume", percent);
+            effectVolume->setString(std::to_string(percent));
+            break;
+        }
+        default:
+            break;
+        }
+    });
+    this->addChild(effectSlider, 5);
+    effectSlider->setVisible(false);
+
     auto Clear = Label::createWithTTF("Clear Save Data", "fonts/Bender/BENDER.OTF", 75);
     auto clearItem = MenuItemLabel::create(
             Clear,
-            [this](Ref *ref) {
-                auto userDefault = UserDefault::getInstance();
+            [this, userDefault, player, musicSlider, effectSlider, musicVolume, effectVolume](Ref *ref) {
                 userDefault->setIntegerForKey("level1", 0);
                 userDefault->setIntegerForKey("level2", 4);
                 userDefault->setIntegerForKey("level3", 4);
+                userDefault->setIntegerForKey("musicVolume", 100);
+                userDefault->setIntegerForKey("effectVolume", 100);
+                musicSlider->setPercent(100);
+                effectSlider->setPercent(100);
+                musicVolume->setString("100");
+                effectVolume->setString("100");
+                player->setBackgroundMusicVolume(1.0f);
+                player->setEffectsVolume(1.0f);
         }
     );
     clearItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 275));
@@ -57,12 +130,38 @@ bool manual::init() {
     auto Setting = Label::createWithTTF("Setting", "fonts/Bender/BENDER.OTF", 75);
     auto settingItem = MenuItemLabel::create(
         Setting,
-        [this, clearItem, userDefault](Ref *ref) {
+        [this, clearItem, userDefault, musicSlider, effectSlider, musicLabel, musicVolume, effectLabel, effectVolume](Ref *ref) {
             if (userDefault->getBoolForKey("clearItemShow", true) && !clearItem->isVisible()) {
                 clearItem->setVisible(true);
                 clearItem->setOpacity(0);
                 auto fadein = FadeIn::create(1.0f);
                 clearItem->runAction(fadein);
+            }
+            if (!musicLabel->isVisible()) {
+                auto fadein_1 = FadeIn::create(1.0f);
+                musicSlider->setVisible(true);
+                musicSlider->setOpacity(0);
+                musicSlider->runAction(fadein_1);
+                auto fadein_2 = FadeIn::create(1.0f);
+                effectSlider->setVisible(true);
+                effectSlider->setOpacity(0);
+                effectSlider->runAction(fadein_2);
+                auto fadein_3 = FadeIn::create(1.0f);
+                musicLabel->setVisible(true);
+                musicLabel->setOpacity(0);
+                musicLabel->runAction(fadein_3);
+                auto fadein_4 = FadeIn::create(1.0f);
+                effectLabel->setVisible(true);
+                effectLabel->setOpacity(0);
+                effectLabel->runAction(fadein_4);
+                auto fadein_5 = FadeIn::create(1.0f);
+                musicVolume->setVisible(true);
+                musicVolume->setOpacity(0);
+                musicVolume->runAction(fadein_5);
+                auto fadein_6 = FadeIn::create(1.0f);
+                effectVolume->setVisible(true);
+                effectVolume->setOpacity(0);
+                effectVolume->runAction(fadein_6);
             }
         }
     );

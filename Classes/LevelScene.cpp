@@ -103,16 +103,12 @@ bool LevelScene::init(int level) {
 
     auto userDefault = UserDefault::getInstance();
     userDefault->setBoolForKey("clearItemShow", false);
-    userDefault->flush();
 
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     // create music player
     auto player = CocosDenshion::SimpleAudioEngine::getInstance();
-    if (player->isBackgroundMusicPlaying()) {
-        player->stopBackgroundMusic();
-    }
     switch (level) {
     case 1:
         player->playBackgroundMusic("audio/level1_bgm.MP3", true);
@@ -126,6 +122,8 @@ bool LevelScene::init(int level) {
     default:
         break;
     }
+    player->setBackgroundMusicVolume(float(userDefault->getIntegerForKey("musicVolume", 100)) / 100.0f);
+    player->setEffectsVolume(float(userDefault->getIntegerForKey("effectVolume", 100)) / 100.0f);
 
     // add background
     std::string backgroundImage =
@@ -2024,7 +2022,6 @@ void LevelScene::gameOver(bool isWin) {
                 if (level2Scene == 4) {
                     userDefault->setIntegerForKey("level2", 0);
                 }
-                userDefault->flush();
             }
             break;
         case 2:
@@ -2033,13 +2030,11 @@ void LevelScene::gameOver(bool isWin) {
                 if (level3Scene == 4) {
                     userDefault->setIntegerForKey("level3", 0);
                 }
-                userDefault->flush();
             }
             break;
         case 3:
             if (level3Scene < star) {
                 userDefault->setIntegerForKey("level3", star);
-                userDefault->flush();
             }
             break;
         default:
