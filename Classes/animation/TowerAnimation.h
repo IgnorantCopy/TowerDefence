@@ -19,9 +19,11 @@ class LevelScene;
 
 class Bullet {
   protected:
-    cocos2d::Sprite *bullet;
-    Tower *tower;
-    Enemy *enemy;
+    cocos2d::RefPtr<cocos2d::Sprite> bullet;
+    cocos2d::RefPtr<cocos2d::Sprite> enemySprite;
+    cocos2d::Vector<cocos2d::SpriteFrame *> explosionFrames;
+    Id towerId;
+    Id enemyId;
     LevelScene *levelScene;
     float dx;
     float dy;
@@ -33,7 +35,7 @@ class Bullet {
   public:
     Bullet(LevelScene *levelScene, Tower *tower, Enemy *enemy);
 
-    cocos2d::Sprite *getBullet() const { return bullet; }
+    cocos2d::RefPtr<cocos2d::Sprite> getBullet() const { return this->bullet; }
 
     virtual void move();
 

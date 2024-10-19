@@ -17,7 +17,6 @@ using towerdefence::core::id::Id;
 class EnemyAnimation {
     const static int size = 140;
     constexpr const static float epsilon = 1e-6;
-    static size_t transportCounter;
     static size_t notAttackedCounter;
 
   public:
