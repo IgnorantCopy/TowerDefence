@@ -22,7 +22,7 @@ jobs:
       # To add more build types (Release, Debug, RelWithDebInfo, etc.) customize the build_type list.
       matrix:
         os: [windows-latest]
-        build_type: [Release]
+        build_type: [Debug]
         c_compiler: [cl]
         include:
           - os: windows-latest
@@ -46,6 +46,7 @@ jobs:
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -S ${{ github.workspace }}
         -A Win32
+        -DTOWERDEFENCE_SANITIZER=ON
 
     - name: Build
       # Build your program with the given configuration. Note that --config is needed because the default Windows generator is a multi-config generator (Visual Studio generator).
