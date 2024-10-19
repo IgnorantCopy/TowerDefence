@@ -25,6 +25,7 @@
 #include "main.h"
 #include "AppDelegate.h"
 #include "cocos2d.h"
+#include <cstdio>
 
 USING_NS_CC;
 
@@ -36,6 +37,10 @@ int WINAPI _tWinMain(HINSTANCE hInstance,
     UNREFERENCED_PARAMETER(hPrevInstance);
     UNREFERENCED_PARAMETER(lpCmdLine);
 
+#if defined (TOWERDEFENCE_SANITIZER) || (!defined (NDEBUG))
+    std::freopen("stderr.log", "w", stderr);
+    std::freopen("stdout.log", "w", stdout);
+#endif
     // create the application instance
     AppDelegate app;
     return Application::getInstance()->run();
