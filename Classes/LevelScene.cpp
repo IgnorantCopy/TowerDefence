@@ -101,6 +101,10 @@ bool LevelScene::init(int level) {
 
     Level = level;
 
+    auto userDefault = UserDefault::getInstance();
+    userDefault->setBoolForKey("clearItemShow", false);
+    userDefault->flush();
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 

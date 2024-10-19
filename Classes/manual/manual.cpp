@@ -22,6 +22,8 @@ bool manual::init() {
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+    auto userDefault = UserDefault::getInstance();
+
     auto background = Sprite::create("images/manual_background.png", Rect(0, 0, 2500, 1500));
     if (background == nullptr) {
         problemLoading("'images/manual_background.png'");
@@ -38,8 +40,38 @@ bool manual::init() {
             }
     );
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100, origin.y + visibleSize.height - 50));
+
+    auto Clear = Label::createWithTTF("Clear Save Data", "fonts/Bender/BENDER.OTF", 75);
+    auto clearItem = MenuItemLabel::create(
+            Clear,
+            [this](Ref *ref) {
+                auto userDefault = UserDefault::getInstance();
+                userDefault->setIntegerForKey("level1", 0);
+                userDefault->setIntegerForKey("level2", 4);
+                userDefault->setIntegerForKey("level3", 4);
+        }
+    );
+    clearItem->setPosition(Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height / 2 + 275));
+    clearItem->setVisible(false);
+
+    auto Setting = Label::createWithTTF("Setting", "fonts/Bender/BENDER.OTF", 75);
+    auto settingItem = MenuItemLabel::create(
+        Setting,
+        [this, clearItem, userDefault](Ref *ref) {
+            if (userDefault->getBoolForKey("clearItemShow", true) && !clearItem->isVisible()) {
+                clearItem->setVisible(true);
+                clearItem->setOpacity(0);
+                auto fadein = FadeIn::create(1.0f);
+                clearItem->runAction(fadein);
+            }
+        }
+    );
+    settingItem->setPosition(Vec2(origin.x + 150, origin.y + visibleSize.height - 50));
+
     Vector<MenuItem *> MenuItems;
     MenuItems.pushBack(backItem);
+    MenuItems.pushBack(clearItem);
+    MenuItems.pushBack(settingItem);
     auto menu = Menu::createWithArray(MenuItems);
     this->addChild(menu, MenuItems.size());
     menu->setPosition(Vec2::ZERO);
@@ -78,7 +110,7 @@ bool manual::init() {
     auto description = Label::createWithTTF("", "fonts/manual_font/SourceHanSerifCN-Bold-2.otf", 30);;
     description->setString(content_archer_base);
     description->setColor(Color3B::YELLOW);
-    description->setPosition(Vec2(origin.x + 2000, origin.y + 700));
+    description->setPosition(Vec2(origin.x + 2000, origin.y + 520));
     this->addChild(description, 1);
 
     auto button_ArcherBase = ui::Button::create("images/manual/archer_base.png");
