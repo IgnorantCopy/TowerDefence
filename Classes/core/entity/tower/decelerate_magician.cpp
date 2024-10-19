@@ -21,10 +21,12 @@ void DecelerateMagician::on_tick(GridRef g) {
 
                 for (size_t i = 0; i < ((this->skill_) ? size_t(3) : size_t(1)); ++i) {
                     e.on_hit(status.attack_, status.attack_type_, g);
+                    g.on_enemy_attacked(e,*this);
                     e.add_buff_in({this->id, Buff::DECREASE_SPEED},
                                   Buff::speed(-0.4), clk.with_duration_sec(2));
                 }
             });
+
         }
     }
 

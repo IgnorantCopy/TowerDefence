@@ -327,7 +327,7 @@ struct Map {
         for (auto &[handle, f] : this->callbacks_.on_escape) {
             f(id);
         }
-        if (this->health_ == 0||this->health_ > 1000) {
+        if (this->health_ == 0) {
             for (auto &[handle, f] : this->callbacks_.on_end) {
                 f(false);
             }

@@ -3,6 +3,7 @@
 
 #include <any>
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <cstdint>
 #include <functional>
@@ -308,7 +309,7 @@ struct Enemy : Entity,
     virtual void on_hit(int32_t atk, AttackType attack_type, GridRef g);
 
     void reset_move_timer(const timer::Clock &clk) {
-        this->move_ = clk.with_period_sec(timer::TICK_PER_SECOND * 10. /
+        this->move_ = clk.with_period(timer::TICK_PER_SECOND * 10. /
                                           this->status().speed_);
     }
 };
@@ -370,7 +371,7 @@ struct Tower : Entity,
     void on_tick(GridRef g) override;
 
     void reset_attack_timer(const timer::Clock &clk) {
-        this->attack_ = clk.with_period_sec(std::round(this->status().attack_interval_));
+        this->attack_ = clk.with_period_sec(std::round(this->status().attack_interval_ * 0.1));
     }
 };
 

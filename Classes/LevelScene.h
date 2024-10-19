@@ -196,6 +196,8 @@ public:
     void deleteTower(bool isReturn = true);
 
     virtual bool init(int level);
+
+    ~LevelScene() override;
 };
 
 #endif // TOWERDEFENCE_LEVELSCENE_H
