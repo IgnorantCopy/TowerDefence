@@ -35,6 +35,13 @@ if (XCODE)
     endif ()
 endif ()
 
+if (TOWERDEFENCE_SANITIZER)
+    if (WIN32)
+        message("disable annotation on windows")
+        add_compile_definitions("_DISABLE_VECTOR_ANNOTATION" "_DISABLE_STRING_ANNOTATION")
+    endif()
+endif()
+
 if (NOT DEFINED BUILD_ENGINE_DONE) # to test TowerDefence into root project
     set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cocos2d)
     set(CMAKE_MODULE_PATH ${COCOS2DX_ROOT_PATH}/cmake/Modules/)
@@ -42,6 +49,19 @@ if (NOT DEFINED BUILD_ENGINE_DONE) # to test TowerDefence into root project
     include(CocosBuildSet)
     add_subdirectory(${COCOS2DX_ROOT_PATH}/cocos ${ENGINE_BINARY_PATH}/cocos/core)
 endif ()
+
+if (TOWERDEFENCE_SANITIZER)
+    if (WINDOWS)
+        message("enabling sanitizer")
+        add_compile_options("/fsanitize=address")
+        add_link_options("/fsanitize=address")
+        add_compile_definitions("TOWERDEFENCE_SANITIZER")
+    else()
+        message("enabling sanitizer")
+        add_compile_options(-fsanitize=undefined,address)
+        add_link_options(-fsanitize=undefined,address)
+    endif()
+endif()
 
 add_library(core
         Classes/core/map.cpp
