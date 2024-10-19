@@ -370,7 +370,7 @@ struct Tower : Entity,
     void on_tick(GridRef g) override;
 
     void reset_attack_timer(const timer::Clock &clk) {
-        this->attack_ = clk.with_period_sec(std::round(this->status().attack_interval_));
+        this->attack_ = clk.with_period_sec(std::round(this->status().attack_interval_ * 0.1));
     }
 };
 
