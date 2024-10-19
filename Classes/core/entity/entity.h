@@ -298,7 +298,7 @@ struct Enemy : Entity,
 
         base.health_ -= realized_attack_;
         base.defence_ += buffs.defence_correction_;
-        base.speed_ = std::max(0., base.speed_ * (1 + buffs.speed_));
+        base.speed_ = std::min(2.0 * base.speed_, std::max(0., base.speed_ * (1 + buffs.speed_)));
 
         return base;
     }
