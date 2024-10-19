@@ -101,14 +101,14 @@ bool LevelScene::init(int level) {
 
     Level = level;
 
+    auto userDefault = UserDefault::getInstance();
+    userDefault->setBoolForKey("clearItemShow", false);
+
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     // create music player
     auto player = CocosDenshion::SimpleAudioEngine::getInstance();
-    if (player->isBackgroundMusicPlaying()) {
-        player->stopBackgroundMusic();
-    }
     switch (level) {
     case 1:
         player->playBackgroundMusic("audio/level1_bgm.MP3", true);
@@ -122,6 +122,8 @@ bool LevelScene::init(int level) {
     default:
         break;
     }
+    player->setBackgroundMusicVolume(float(userDefault->getIntegerForKey("musicVolume", 100)) / 100.0f);
+    player->setEffectsVolume(float(userDefault->getIntegerForKey("effectVolume", 100)) / 100.0f);
 
     // add background
     std::string backgroundImage =
@@ -1899,6 +1901,18 @@ void LevelScene::gameOver(bool isWin) {
 
     auto player = CocosDenshion::SimpleAudioEngine::getInstance();
 
+    auto backgroundOver =
+        Sprite::create("images/white_background.png", Rect(0, 0, 2500, 1500));
+    backgroundOver->setPosition(visibleSize.width / 2 + origin.x,
+                               visibleSize.height / 2 + origin.y);
+    backgroundOver->setColor(Color3B(128, 128, 128));
+    this->addChild(backgroundOver, 10);
+    backgroundOver->setOpacity(0);
+    scheduleOnce([this, backgroundOver](float dt) {
+        auto fadeTo = FadeTo::create(0.5f, 125);
+        backgroundOver->runAction(fadeTo);
+    }, 0.75f, "backgroundOver");
+
     auto BackOver = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
     auto backItemOver = MenuItemLabel::create(BackOver, [this, player](Ref *ref) {
         player->stopBackgroundMusic();
@@ -2008,7 +2022,36 @@ void LevelScene::gameOver(bool isWin) {
             auto fadein = FadeIn::create(0.5f);
             starOver->runAction(fadein);
         }, 1.5f, "starOver");
-        // TODO: update SelectLevelScene
+
+        auto userDefault = UserDefault::getInstance();
+        int level1Scene = userDefault->getIntegerForKey("level1", 0);
+        int level2Scene = userDefault->getIntegerForKey("level2", 4);
+        int level3Scene = userDefault->getIntegerForKey("level3", 4);
+        switch (Level) {
+        case 1:
+            if (level1Scene < star) {
+                userDefault->setIntegerForKey("level1", star);
+                if (level2Scene == 4) {
+                    userDefault->setIntegerForKey("level2", 0);
+                }
+            }
+            break;
+        case 2:
+            if (level2Scene < star) {
+                userDefault->setIntegerForKey("level2", star);
+                if (level3Scene == 4) {
+                    userDefault->setIntegerForKey("level3", 0);
+                }
+            }
+            break;
+        case 3:
+            if (level3Scene < star) {
+                userDefault->setIntegerForKey("level3", star);
+            }
+            break;
+        default:
+            break;
+        }
     } else {
         CocosDenshion::SimpleAudioEngine::getInstance()->playEffect(
             "audio/fail.MP3");

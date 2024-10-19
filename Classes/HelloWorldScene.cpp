@@ -53,12 +53,17 @@ bool HelloWorld::init() {
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
+    auto userDefault = UserDefault::getInstance();
+    auto player = CocosDenshion::SimpleAudioEngine::getInstance();
+
+    userDefault->setBoolForKey("clearItemShow", true);
+
     if (firstTouch) {
         // add bgm
-        auto player = CocosDenshion::SimpleAudioEngine::getInstance();
         player->playBackgroundMusic("audio/menu_bgm.mp3", true);
     }
-
+    player->setBackgroundMusicVolume(float(userDefault->getIntegerForKey("musicVolume", 100)) / 100.0f);
+    player->setEffectsVolume(float(userDefault->getIntegerForKey("effectVolume", 100)) / 100.0f);
     /////////////////////////////
     // 2. add a menu item with "X" image, which is clicked to quit the program
     //    you may modify it.
