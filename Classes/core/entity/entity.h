@@ -308,7 +308,7 @@ struct Enemy : Entity,
     virtual void on_hit(int32_t atk, AttackType attack_type, GridRef g);
 
     void reset_move_timer(const timer::Clock &clk) {
-        this->move_ = clk.with_period_sec(timer::TICK_PER_SECOND * 10. /
+        this->move_ = clk.with_period(timer::TICK_PER_SECOND * 10. /
                                           this->status().speed_);
     }
 };
