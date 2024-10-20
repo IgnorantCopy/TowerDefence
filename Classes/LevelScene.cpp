@@ -1331,7 +1331,7 @@ void LevelScene::createMap(int level) {
         enemyStartPos = {{0, 0},  {0, 0},  {0, 11}, {2, 11},
                          {3, 11}, {4, 11}, {6, 0}};
         enemyCreateType = {
-            {{3, 2}},
+            {{3, 12}},
             {{3, 2}},
             {{3, 2}},
             {{3, 2}, {4, 1}, {5, 1}},
@@ -1813,11 +1813,13 @@ void LevelScene::createEnemy() {
                 enemyPath += "boss/stage1/move/boss1_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Boss1>>(new_route,
                                                                  extra_storage);
+                delta = 50.0;
                 break;
             case EnemyType::Boss2:
                 enemyPath += "boss/stage2/move/boss2_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Boss2>>(new_route,
                                                                  extra_storage);
+                delta = 50.0;
                 break;
             default:
                 break;
