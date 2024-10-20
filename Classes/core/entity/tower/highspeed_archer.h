@@ -11,7 +11,7 @@ namespace towerdefence::core {
         HighspeedArcher(id::Id id, const timer::Clock & clk);
         HighspeedArcher() = delete;
 
-        static constexpr TowerInfo INFO { 1000, 10, 0, 10, 2, AttackType::Physics, TowerType::HighspeedArcher};
+        static constexpr TowerInfo INFO { 800, 10, 0, 10, 2, AttackType::Physics, TowerType::HighspeedArcher};
         TowerInfo info() const override { return INFO; }
 
         bool skill = false;
