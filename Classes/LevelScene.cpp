@@ -268,7 +268,7 @@ bool LevelScene::init(int level) {
             case ui::Widget::TouchEventType::BEGAN:
                 break;
             case ui::Widget::TouchEventType::ENDED:
-                this->deleteTower();
+                this->map->withdraw_tower(this->selectedTowerId);
                 this->hideTowerInfo(0, 0);
                 break;
             default:
@@ -483,7 +483,7 @@ bool LevelScene::init(int level) {
         default:
             break;
         }
-        this->deleteTower(false);
+        this->map->remove_tower(this->selectedTowerId);
         auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
         auto newTowerSprite = Sprite::create(path);
         newTowerSprite->setPosition(Vec2(x, y));
@@ -536,7 +536,7 @@ bool LevelScene::init(int level) {
             default:
                 break;
             }
-            this->deleteTower(false);
+            this->map->remove_tower(this->selectedTowerId);
             auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
             auto newTowerSprite = Sprite::create(path);
             newTowerSprite->setPosition(Vec2(x, y));
@@ -588,7 +588,7 @@ bool LevelScene::init(int level) {
             default:
                 break;
             }
-            this->deleteTower(false);
+            this->map->remove_tower(this->selectedTowerId);
             auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
             auto newTowerSprite = Sprite::create(path);
             newTowerSprite->setPosition(Vec2(x, y));
@@ -1137,23 +1137,16 @@ void LevelScene::hideUpgradeMenu() {
         0.3f, "hideUpgradeMenu");
 }
 
-void LevelScene::deleteTower(bool isReturn) {
+void LevelScene::deleteTower() {
     Sprite *towerSprite = this->getTower(this->selectedTowerId);
     for (auto it = this->towers.begin(); it != this->towers.end(); ++it) {
         if (it->first == this->selectedTowerId) {
-            this->towers.erase(it);
+            it = this->towers.erase(it);
             break;
         }
     }
     if (towerSprite) {
         towerSprite->removeFromParent();
-        if (isReturn) {
-            this->map->withdraw_tower(this->selectedTowerId);
-            this->updateMoneyLabel();
-            this->updateSelectorEnabled();
-        } else {
-            this->map->remove_tower(this->selectedTowerId);
-        }
     }
 }
 
@@ -1262,7 +1255,7 @@ void LevelScene::upgradeTower() {
     default:
         return;
     }
-    this->deleteTower(false);
+    this->map->remove_tower(this->selectedTowerId);
     auto id = this->map->spawn_tower_at(indexY, indexX, *newTower);
     Sprite *newTowerSprite = Sprite::create(path);
     newTowerSprite->setPosition(Vec2(x, y));
@@ -1309,8 +1302,15 @@ void LevelScene::createMap(int level) {
         routes = {Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D], Dir[D],
                          Dir[D], Dir[L], Dir[L], Dir[L], Dir[U], Dir[U], Dir[R],
                          Dir[R], Dir[D], Dir[D], Dir[L], Dir[L], Dir[L]}),
-                  Route({Dir[L], Dir[L], Dir[L], Dir[L], {6, 0}, Dir[R],
-                         Dir[R], Dir[R], Dir[R]}),
+                  Route({Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         {6, 0},
+                         Dir[R],
+                         Dir[R],
+                         Dir[R],
+                         Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
@@ -1358,12 +1358,33 @@ void LevelScene::createMap(int level) {
             {{1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6}},
             {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
             {{2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}, {6, 6}},
-            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1},
-             {4, 3}, {5, 1}, {5, 3}, {6, 6}},
-            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1},
-             {4, 3}, {5, 1}, {5, 3}, {6, 6}},
-            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1},
-             {4, 3}, {5, 1}, {5, 3}, {6, 6}},
+            {{1, 5},
+             {2, 7},
+             {3, 2},
+             {3, 3},
+             {4, 1},
+             {4, 3},
+             {5, 1},
+             {5, 3},
+             {6, 6}},
+            {{1, 5},
+             {2, 7},
+             {3, 2},
+             {3, 3},
+             {4, 1},
+             {4, 3},
+             {5, 1},
+             {5, 3},
+             {6, 6}},
+            {{1, 5},
+             {2, 7},
+             {3, 2},
+             {3, 3},
+             {4, 1},
+             {4, 3},
+             {5, 1},
+             {5, 3},
+             {6, 6}},
             {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
             {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
             {{1, 9}, {3, 5}, {4, 8}, {5, 6}},
@@ -1385,16 +1406,34 @@ void LevelScene::createMap(int level) {
         map = new towerdefence::core::Map(
             width, height,
             [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
-        routes = {Route({Dir[L], Dir[L], Dir[L], {0, -8}, Dir[D],
-                         Dir[D], Dir[D], Dir[D], Dir[D], Dir[D], Dir[R]}),
+        routes = {Route({Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         {0, -8},
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[U], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[D], Dir[L]}),
-                  Route({Dir[L], Dir[L], Dir[L], {-6, -8}, Dir[D], Dir[D],
-                         Dir[D], Dir[D], Dir[D], Dir[D], Dir[R]}),
+                  Route({Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         {-6, -8},
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D], Dir[L],
                          Dir[L], Dir[U], Dir[U], Dir[U], Dir[U], Dir[L], Dir[L],
                          Dir[D], Dir[D], Dir[L], Dir[L]})};
@@ -1489,9 +1528,9 @@ void LevelScene::createMap(int level) {
             width, height,
             [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
         routes = {
-            Route({Dir[R], Dir[R], Dir[R], Dir[R], {6, 3}, Dir[R], Dir[R],
+            Route({Dir[R], Dir[R], Dir[R],    Dir[R], {6, 3}, Dir[R], Dir[R],
                    Dir[R], Dir[R], {-3, -10}, Dir[R], Dir[R], Dir[R], Dir[R],
-                   Dir[D], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
+                   Dir[D], Dir[R], Dir[R],    Dir[R], Dir[R], Dir[R], Dir[R]}),
             Route({Dir[D], Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R],
                    Dir[R], Dir[R], Dir[R]}),
             Route({Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R],
@@ -1500,11 +1539,11 @@ void LevelScene::createMap(int level) {
                    Dir[L]}),
             Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D],
                    Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
-            Route({Dir[R], Dir[R], Dir[R], Dir[R], {6, 3}, Dir[R], Dir[R],
+            Route({Dir[R], Dir[R], Dir[R],    Dir[R], {6, 3}, Dir[R], Dir[R],
                    Dir[R], Dir[R], {-3, -10}, Dir[R], Dir[R], Dir[R], Dir[R],
-                   Dir[R], Dir[U], Dir[L], Dir[D], Dir[R], Dir[U], Dir[L],
-                   Dir[D], Dir[R], Dir[U], Dir[L], Dir[L], Dir[L], Dir[L],
-                   Dir[D], Dir[D], Dir[D], Dir[D], Dir[L], Dir[L]}),
+                   Dir[R], Dir[U], Dir[L],    Dir[D], Dir[R], Dir[U], Dir[L],
+                   Dir[D], Dir[R], Dir[U],    Dir[L], Dir[L], Dir[L], Dir[L],
+                   Dir[D], Dir[D], Dir[D],    Dir[D], Dir[L], Dir[L]}),
             Route({Dir[D], Dir[D], Dir[D], Dir[L], Dir[L], Dir[L], Dir[D],
                    Dir[D], Dir[D], Dir[L], Dir[L]}),
             Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D],
@@ -1670,6 +1709,7 @@ void LevelScene::createMap(int level) {
             TowerAnimation::releaseSkill(this, &tower, duration);
         });
     this->map->on_end([this](bool isWin) { this->gameOver(isWin); });
+    this->map->on_tower_removed([this](Tower &tower) { this->deleteTower(); });
 }
 
 void LevelScene::onMouseDown(cocos2d::Event *event) {
@@ -1867,7 +1907,8 @@ void LevelScene::createEnemy() {
                                     *enemyFactories[i][j]);
                                 enemies.emplace_back(id, enemySprites[i][j]);
                             });
-                            auto spawn = Spawn::create(fadeIn, callback, nullptr);
+                            auto spawn =
+                                Spawn::create(fadeIn, callback, nullptr);
                             enemySprites[i][j]->runAction(spawn);
                         }
                     },

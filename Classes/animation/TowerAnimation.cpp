@@ -84,6 +84,11 @@ Bullet::Bullet(LevelScene *levelScene, towerdefence::core::Tower *tower,
         break;
     }
     auto *towerSprite = this->levelScene->getTower(this->towerId);
+    if (towerSprite == nullptr) {
+        this->bullet->removeFromParent();
+        this->bullet = nullptr;
+        return;
+    }
     float towerX = towerSprite->getPositionX();
     float towerY = towerSprite->getPositionY();
     this->enemySprite =
