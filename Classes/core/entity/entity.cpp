@@ -31,7 +31,7 @@ void Enemy::on_hit(int32_t atk, AttackType attack_type, GridRef g) {
 }
 
 void Enemy::on_tick(GridRef g) {
-    std::cout << std::format("{} (enemy): on tick", this->id.v);
+    std::cout << std::format("{} (enemy): on tick", this->id.v) << std::endl;
     auto &clk = g.clock();
 
     this->update_buff(clk);
@@ -65,7 +65,7 @@ void Enemy::on_death(GridRef g) {
 }
 
 void Tower::on_tick(GridRef g) {
-    std::cout << std::format("{} (tower): on tick", this->id.v);
+    std::cout << std::format("{} (tower): on tick", this->id.v) << std::endl;
 
     auto &clk = g.clock();
     this->update_buff(clk);
@@ -77,13 +77,13 @@ void Tower::on_tick(GridRef g) {
                 p.period;
             auto new_progress = static_cast<uint32_t>(progress * interval);
             std::cout << std::format("old progress: {}, new progress: {}", progress,
-                          new_progress);
-            std::cout << std::format("old p.start: {}, p.period: {}", p.start, p.period);
+                          new_progress) << std::endl;
+            std::cout << std::format("old p.start: {}, p.period: {}", p.start, p.period) << std::endl;
 
             p.start = (p.start >= new_progress) ? (p.start - new_progress) : 0;
             uint32_t next_period = interval;
             p.period = (next_period > 0) ? next_period : 1;
-            std::cout << std::format("new p.start: {}, p.period: {}", p.start, p.period);
+            std::cout << std::format("new p.start: {}, p.period: {}", p.start, p.period) << std::endl;
         });
 }
 

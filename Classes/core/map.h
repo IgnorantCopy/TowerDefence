@@ -225,18 +225,20 @@ struct Map {
                       << std::endl;
         });
 
-        this->on_enemy_death([](Enemy &e) { std::cout << std::format("{}: die", e.id.v) << std::endl; });
+        this->on_enemy_death([](Enemy &e) {
+            std::cout << std::format("{}: die", e.id.v) << std::endl;
+        });
 
         this->on_enemy_release_skill([](Enemy &e, auto &&, auto &&) {
             std::cout << std::format("{} (enemy): releasing skill", e.id.v)
                       << std::endl;
         });
-// 
+
         this->on_tower_release_skill([](Tower &t, auto &&, auto &&) {
             std::cout << std::format("{} (tower): releasing skill", t.id.v)
                       << std::endl;
         });
-// 
+
         this->on_escape([](id::Id id) {
             std::cout << std::format("{}: escaped", id.v) << std::endl;
         });
@@ -310,8 +312,8 @@ struct Map {
 
         enemy_refs_.insert({id, {row, column}});
 
-        std::cout << std::format("{} (enemy): spawned at ({}, {})", id.v, row,
-                                 column)
+        std::cout << std::format("{} (enemy): {} spawned at ({}, {})", id.v,
+                                 typeid(enemy).name(), row, column)
                   << std::endl;
 
         return id;
@@ -394,8 +396,8 @@ struct Map {
 
         tower_refs_.insert({id, {row, column}});
 
-        std::cout << std::format("{} (tower): spawned at ({}, {})", id.v, row,
-                                 column)
+        std::cout << std::format("{} (tower): {} spawned at ({}, {})", id.v,
+                                 typeid(tower).name(), row, column)
                   << std::endl;
 
         return id;
