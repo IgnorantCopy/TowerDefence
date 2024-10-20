@@ -735,10 +735,16 @@ void LevelScene::updateMoneyLabel() {
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
     if (this->moneyLabel != nullptr) {
-        this->moneyLabel->setString(std::to_string(this->map->cost_));
-        this->moneyLabel->setPosition(
-            cocos2d::Vec2(origin.x + 150 + 15 * log10(map->getcost_()),
-                          origin.y + visibleSize.height - 70));
+        if (this->map->cost_ == 0) {
+            this->moneyLabel->setString("0");
+            this->moneyLabel->setPosition(
+                cocos2d::Vec2(origin.x + 150, origin.y + visibleSize.height - 70));
+        } else {
+            this->moneyLabel->setString(std::to_string(this->map->cost_));
+            this->moneyLabel->setPosition(
+                cocos2d::Vec2(origin.x + 150 + 15 * log10(map->getcost_()),
+                              origin.y + visibleSize.height - 70));
+        }
     }
 }
 
