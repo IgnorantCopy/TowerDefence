@@ -1850,10 +1850,6 @@ void LevelScene::createEnemy() {
                 scheduleOnce(
                     [this, i, j](float dt) {
                         if (this->gameContinuing) {
-                            Id id = this->map->spawn_enemy_at(
-                                enemyPos[i][j].first, enemyPos[i][j].second,
-                                *enemyFactories[i][j]);
-                            enemies.emplace_back(id, enemySprites[i][j]);
                             enemySprites[i][j]->setVisible(true);
                             enemySprites[i][j]->setOpacity(0);
                             if (enemyType[enemyCreateType[i][j].second - 1] ==
@@ -1865,7 +1861,14 @@ void LevelScene::createEnemy() {
                                     "audio/level3_bgm2.MP3", true);
                             }
                             auto fadeIn = FadeIn::create(0.25f);
-                            enemySprites[i][j]->runAction(fadeIn);
+                            auto callback = CallFunc::create([this, i, j]() {
+                                Id id = this->map->spawn_enemy_at(
+                                    enemyPos[i][j].first, enemyPos[i][j].second,
+                                    *enemyFactories[i][j]);
+                                enemies.emplace_back(id, enemySprites[i][j]);
+                            });
+                            auto spawn = Spawn::create(fadeIn, callback, nullptr);
+                            enemySprites[i][j]->runAction(spawn);
                         }
                     },
                     enemyCreateTime[i] + 0.1f * j,
