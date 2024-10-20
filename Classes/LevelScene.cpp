@@ -680,7 +680,9 @@ void LevelScene::addBullet(Tower *tower, Enemy *enemy) {
         break;
     }
     this->bullets.push_back(bullet);
-    this->addChild(bullet->getBullet(), 4);
+    if (bullet->getBullet() != nullptr) {
+        this->addChild(bullet->getBullet(), 4);
+    }
 }
 
 void LevelScene::updateParticles() {
