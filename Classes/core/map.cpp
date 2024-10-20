@@ -1,10 +1,14 @@
 #include "map.h"
 #include "entity/entity.h"
 #include "id.h"
+
 #include <cassert>
 #include <cstddef>
+#include <format>
+#include <iostream>
 #include <iterator>
 #include <memory>
+#include <ostream>
 #include <unordered_set>
 #include <utility>
 #include <vector>
@@ -17,11 +21,17 @@ GridRef Map::iterator::operator*() {
 }
 
 void Map::update() {
+    clock_.on_tick();
+
+    std::cout << std::format("tick {}:", this->clock_.elapased_) << std::endl;
+
     if (clock_.is_triggered(cost_timer_)) {
         cost_++;
     }
-    clock_.on_tick();
     this->timeouts_.on_tick(this->clock(), *this);
+
+    std::cout << std::format("total enemies: {}", enemy_refs_.size()) << std::endl;
+
     for (auto ref : *this) {
         auto &grid = ref.grid;
         if (grid.tower.has_value()) {
@@ -68,6 +78,8 @@ void Map::update() {
                     try {
                         if (auto [dx, dy] = enemy->route_.next_direction();
                             dx != 0 || dy != 0) {
+                            std::cout << std::format("{}: moving", enemy->id.v) << std::endl;
+
                             auto nx = route::ssize(ref.row) + dx;
                             auto ny = route::ssize(ref.column) + dy;
                             assert(nx >= 0 && nx < this->shape.height_ &&
