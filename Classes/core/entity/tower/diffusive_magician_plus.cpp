@@ -8,6 +8,8 @@ void DiffusiveMagicianPlus::on_tick(GridRef g) {
 
     auto &clk = g.clock();
 
+    timeouts_.on_tick(clk, *this, g);
+
     if (clk.is_triggered(this->attack_)) {
         auto grids = g.with_radius(this->status().attack_radius_, linf_dis);
         auto it = grid_of_nearest_enemy(grids);

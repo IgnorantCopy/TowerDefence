@@ -367,7 +367,7 @@ struct Tower : Entity,
         base.attack_ = std::max(0., base.attack_ * (1 + buffs.attack_));
         base.attack_interval_ =
             std::max(1., base.attack_interval_ /
-                             (double(100 + buffs.attack_speed_) / 100));
+                             (std::max(0.01, double(100 + buffs.attack_speed_)) / 100));
         base.attack_radius_ += buffs.attack_radius_;
 
         return base;
@@ -376,7 +376,7 @@ struct Tower : Entity,
     void on_tick(GridRef g) override;
 
     void reset_attack_timer(const timer::Clock &clk) {
-        this->attack_ = clk.with_period_sec(
+        this->attack_ = clk.with_period(
             this->status().attack_interval());
     }
 };
