@@ -193,7 +193,7 @@ class LevelScene : public cocos2d::Scene {
 
     cocos2d::Sprite *getEnemy(Id id);
 
-    void deleteTower(bool isReturn = true);
+    void deleteTower();
 
     virtual bool init(int level);
 
