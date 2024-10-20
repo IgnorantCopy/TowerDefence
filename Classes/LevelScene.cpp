@@ -44,7 +44,6 @@
 #include "ui/CocosGUI.h"
 #include <any>
 #include <memory>
-#include <ostream>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -117,13 +116,15 @@ bool LevelScene::init(int level) {
         player->playBackgroundMusic("audio/level2_bgm.MP3", true);
         break;
     case 3:
-        player->playBackgroundMusic("audio/level3_bgm.MP3", true);
+        player->playBackgroundMusic("audio/level3_bgm1.MP3", true);
         break;
     default:
         break;
     }
-    player->setBackgroundMusicVolume(float(userDefault->getIntegerForKey("musicVolume", 100)) / 100.0f);
-    player->setEffectsVolume(float(userDefault->getIntegerForKey("effectVolume", 100)) / 100.0f);
+    player->setBackgroundMusicVolume(
+        float(userDefault->getIntegerForKey("musicVolume", 100)) / 100.0f);
+    player->setEffectsVolume(
+        float(userDefault->getIntegerForKey("effectVolume", 100)) / 100.0f);
 
     // add background
     std::string backgroundImage =
@@ -1307,8 +1308,15 @@ void LevelScene::createMap(int level) {
         routes = {Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D], Dir[D],
                          Dir[D], Dir[L], Dir[L], Dir[L], Dir[U], Dir[U], Dir[R],
                          Dir[R], Dir[D], Dir[D], Dir[L], Dir[L], Dir[L]}),
-                  Route({Dir[L], Dir[L], Dir[L], Dir[L], {6, 0},
-                         Dir[R], Dir[R], Dir[R], Dir[R]}),
+                  Route({Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         {6, 0},
+                         Dir[R],
+                         Dir[R],
+                         Dir[R],
+                         Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
@@ -1356,12 +1364,33 @@ void LevelScene::createMap(int level) {
             {{1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6}},
             {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
             {{2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}, {6, 6}},
-            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1},
-             {5, 3}, {6, 6}},
-            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1},
-             {5, 3}, {6, 6}},
-            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1},
-             {5, 3}, {6, 6}},
+            {{1, 5},
+             {2, 7},
+             {3, 2},
+             {3, 3},
+             {4, 1},
+             {4, 3},
+             {5, 1},
+             {5, 3},
+             {6, 6}},
+            {{1, 5},
+             {2, 7},
+             {3, 2},
+             {3, 3},
+             {4, 1},
+             {4, 3},
+             {5, 1},
+             {5, 3},
+             {6, 6}},
+            {{1, 5},
+             {2, 7},
+             {3, 2},
+             {3, 3},
+             {4, 1},
+             {4, 3},
+             {5, 1},
+             {5, 3},
+             {6, 6}},
             {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
             {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
             {{1, 9}, {3, 5}, {4, 8}, {5, 6}},
@@ -1383,16 +1412,34 @@ void LevelScene::createMap(int level) {
         map = new towerdefence::core::Map(
             width, height,
             [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
-        routes = {Route({Dir[L], Dir[L], Dir[L], {0, -8}, Dir[D],
-                         Dir[D], Dir[D], Dir[D], Dir[D], Dir[D], Dir[R]}),
+        routes = {Route({Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         {0, -8},
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[U], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[D], Dir[L]}),
-                  Route({Dir[L], Dir[L], Dir[L], {-6, -8}, Dir[D],
-                         Dir[D], Dir[D], Dir[D], Dir[D], Dir[D], Dir[R]}),
+                  Route({Dir[L],
+                         Dir[L],
+                         Dir[L],
+                         {-6, -8},
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[D],
+                         Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D], Dir[L],
                          Dir[L], Dir[U], Dir[U], Dir[U], Dir[U], Dir[L], Dir[L],
                          Dir[D], Dir[D], Dir[L], Dir[L]})};
@@ -1492,8 +1539,10 @@ void LevelScene::createMap(int level) {
                    Dir[D], Dir[R], Dir[R],    Dir[R], Dir[R], Dir[R], Dir[R]}),
             Route({Dir[D], Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R],
                    Dir[R], Dir[R], Dir[R]}),
-            Route({Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
-            Route({Dir[R], Dir[R], Dir[D], Dir[D], Dir[D], Dir[D], Dir[L], Dir[L]}),
+            Route({Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R],
+                   Dir[R]}),
+            Route({Dir[R], Dir[R], Dir[D], Dir[D], Dir[D], Dir[D], Dir[L],
+                   Dir[L]}),
             Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D],
                    Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
             Route({Dir[R], Dir[R], Dir[R],    Dir[R], {6, 3}, Dir[R], Dir[R],
@@ -1638,16 +1687,22 @@ void LevelScene::createMap(int level) {
     this->map->on_enemy_death(
         [this](Enemy &enemy) { EnemyAnimation::dead(this, &enemy); });
     this->map->on_escape([this](Id id) {
+        auto &enemy = this->map->get_enemy_by_id(id);
         for (auto it = this->enemies.begin(); it != this->enemies.end();) {
             if (it->first == id) {
                 auto enemySprite = it->second;
                 enemySprite->removeFromParent();
-                enemySprite = nullptr;
                 it = this->enemies.erase(it);
                 break;
             } else {
                 it++;
             }
+        }
+        if (enemy.status().enemy_type_ == EnemyType::Boss1 ||
+            enemy.status().enemy_type_ == EnemyType::Boss2) {
+            this->gameOver(false);
+            this->lifeLabel->setString("0");
+            return;
         }
         this->decreaseLife();
     });
@@ -1848,6 +1903,14 @@ void LevelScene::createEnemy() {
                         if (this->gameContinuing) {
                             enemySprites[i][j]->setVisible(true);
                             enemySprites[i][j]->setOpacity(0);
+                            if (enemyType[enemyCreateType[i][j].second - 1] ==
+                                EnemyType::Boss1) {
+                                auto player = CocosDenshion::SimpleAudioEngine::
+                                    getInstance();
+                                player->stopBackgroundMusic();
+                                player->playBackgroundMusic(
+                                    "audio/level3_bgm2.MP3", true);
+                            }
                             auto fadeIn = FadeIn::create(0.25f);
                             enemySprites[i][j]->runAction(fadeIn);
                         }
@@ -1899,14 +1962,16 @@ void LevelScene::gameOver(bool isWin) {
     auto backgroundOver =
         Sprite::create("images/white_background.png", Rect(0, 0, 2500, 1500));
     backgroundOver->setPosition(visibleSize.width / 2 + origin.x,
-                               visibleSize.height / 2 + origin.y);
+                                visibleSize.height / 2 + origin.y);
     backgroundOver->setColor(Color3B(128, 128, 128));
     this->addChild(backgroundOver, 10);
     backgroundOver->setOpacity(0);
-    scheduleOnce([this, backgroundOver](float dt) {
-        auto fadeTo = FadeTo::create(0.5f, 125);
-        backgroundOver->runAction(fadeTo);
-    }, 0.75f, "backgroundOver");
+    scheduleOnce(
+        [this, backgroundOver](float dt) {
+            auto fadeTo = FadeTo::create(0.5f, 125);
+            backgroundOver->runAction(fadeTo);
+        },
+        0.75f, "backgroundOver");
 
     auto BackOver = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
     auto backItemOver =
@@ -2022,18 +2087,22 @@ void LevelScene::gameOver(bool isWin) {
             Vec2(visibleSize.width / 2, visibleSize.height / 2 + 275));
         this->addChild(gameOverLabel, 11);
         gameOverLabel->setVisible(false);
-        scheduleOnce([this, gameOverLabel](float dt){
-            gameOverLabel->setVisible(true);
-            gameOverLabel->setOpacity(0);
-            auto fadein = FadeIn::create(0.5f);
-            gameOverLabel->runAction(fadein);
-        }, 1.0f, "gameOverLabel");
-        scheduleOnce([this, starOver](float dt){
-            starOver->setVisible(true);
-            starOver->setOpacity(0);
-            auto fadein = FadeIn::create(0.5f);
-            starOver->runAction(fadein);
-        }, 1.5f, "starOver");
+        scheduleOnce(
+            [this, gameOverLabel](float dt) {
+                gameOverLabel->setVisible(true);
+                gameOverLabel->setOpacity(0);
+                auto fadein = FadeIn::create(0.5f);
+                gameOverLabel->runAction(fadein);
+            },
+            1.0f, "gameOverLabel");
+        scheduleOnce(
+            [this, starOver](float dt) {
+                starOver->setVisible(true);
+                starOver->setOpacity(0);
+                auto fadein = FadeIn::create(0.5f);
+                starOver->runAction(fadein);
+            },
+            1.5f, "starOver");
 
         auto userDefault = UserDefault::getInstance();
         int level1Scene = userDefault->getIntegerForKey("level1", 0);

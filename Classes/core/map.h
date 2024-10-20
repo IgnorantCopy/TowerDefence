@@ -201,7 +201,7 @@ struct Map {
     std::vector<Grid> grids;
     Shape shape;
 
-    uint32_t cost_ = 1000;
+    uint32_t cost_ = 10;
     uint32_t health_{MAX_HEALTH};
     uint32_t enemy_alive = 100;
 
