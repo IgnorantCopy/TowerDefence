@@ -1331,7 +1331,7 @@ void LevelScene::createMap(int level) {
         enemyStartPos = {{0, 0},  {0, 0},  {0, 11}, {2, 11},
                          {3, 11}, {4, 11}, {6, 0}};
         enemyCreateType = {
-            {{3, 12}},
+            {{3, 2}},
             {{3, 2}},
             {{3, 2}},
             {{3, 2}, {4, 1}, {5, 1}},
