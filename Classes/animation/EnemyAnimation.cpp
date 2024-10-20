@@ -327,6 +327,12 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
             }
         } else if (abs(duration - 15.0f) <= epsilon) {
             prefix += "3/boss2_skill3";
+            frames.reserve(110);
+            for (int i = 0; i < 110; i++) {
+                std::string skillPath = std::format("{:03d}.png", i);
+                frames.pushBack(cocos2d::SpriteFrame::create(
+                    prefix + skillPath, cocos2d::Rect(0, 0, 1000, 1000)));
+            }
             for (int i = indexY - 2; i <= indexY + 2; i++) {
                 for (int j = indexX - 2; j <= indexX + 2; j++) {
                     if (i >= 0 && i < 7 && j >= 0 && j < 12) {
