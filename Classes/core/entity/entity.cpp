@@ -49,7 +49,7 @@ void Enemy::on_tick(GridRef g) {
                     p.period;
                 auto new_progress = static_cast<uint32_t>(progress * interval);
                 p.start =
-                    (p.start >= new_progress) ? (p.start - new_progress) : 0;
+                    (clk.elapased_ >= new_progress) ? (clk.elapased_ - new_progress) : 0;
                 p.period = interval;
             }
         });
@@ -80,7 +80,7 @@ void Tower::on_tick(GridRef g) {
                           new_progress) << std::endl;
             std::cout << std::format("old p.start: {}, p.period: {}", p.start, p.period) << std::endl;
 
-            p.start = (p.start >= new_progress) ? (p.start - new_progress) : 0;
+            p.start = (clk.elapased_ >= new_progress) ? (clk.elapased_ - new_progress) : 0;
             uint32_t next_period = interval;
             p.period = (next_period > 0) ? next_period : 1;
             std::cout << std::format("new p.start: {}, p.period: {}", p.start, p.period) << std::endl;
