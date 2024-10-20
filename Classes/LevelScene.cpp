@@ -629,11 +629,10 @@ bool LevelScene::init(int level) {
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener,
                                                              this);
 
-    this->createEnemy();
-
     // update the map and ui every frame time
     scheduleOnce(
         [this](float dt) {
+            this->createEnemy();
             schedule(
                 [this](float dt) {
                     map->update();
@@ -641,7 +640,7 @@ bool LevelScene::init(int level) {
                 },
                 1.0 / 30, "update");
         },
-        1.0f, "gameLoading");
+        0.5f, "gameLoading");
     return true;
 }
 
