@@ -448,7 +448,7 @@ struct GridRef {
         // todo: optimize to O(radix) algorithm
         for (size_t i = 0; i < map.shape.height_; ++i) {
             for (size_t j = 0; j < map.shape.width_; ++j) {
-                if (dis(row, column, i, j) <= radius && map.grids[i*map.shape.width_+j].type != Grid::Type::BlockOut) {
+                if (dis(row, column, i, j) <= radius && map.grids[map.shape.index_of(i,j)].type != Grid::Type::BlockOut) {
                     res.emplace_back(map, i, j);
                 }
             }
