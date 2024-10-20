@@ -71,7 +71,7 @@ void Boss2::on_tick(GridRef g) {
         this->release_skill_.withdraw = g.clock().never();
         g.on_enemy_release_skill(*this, g.map, 15);
         this->timeouts_.add_callback(
-            g.clock().with_duration(135), [](Boss2 &self, GridRef g) {
+            g.clock().with_duration(165), [](Boss2 &self, GridRef g) {
                 self.reset_move_timer(g.clock());
                 self.release_skill_.dec_atk_spd = g.clock().with_period_sec(20);
                 self.release_skill_.withdraw = g.clock().with_period_sec(40);
