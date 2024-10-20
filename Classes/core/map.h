@@ -508,6 +508,7 @@ struct GridRef {
         for (auto ref : this->with_radius(status.attack_radius_, dis)) {
             ref.grid.with_enemy([&](Enemy &e) {
                 e.on_hit(status.attack_, status.attack_type_, g);
+                std::cout << "fxxking enemy\n";
             });
         }
     }
