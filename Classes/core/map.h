@@ -201,7 +201,7 @@ struct Map {
     std::vector<Grid> grids;
     Shape shape;
 
-    uint32_t cost_ = 1000;
+    uint32_t cost_ = 10;
     uint32_t health_{MAX_HEALTH};
     uint32_t enemy_alive = 100;
 
@@ -448,7 +448,7 @@ struct GridRef {
         // todo: optimize to O(radix) algorithm
         for (size_t i = 0; i < map.shape.height_; ++i) {
             for (size_t j = 0; j < map.shape.width_; ++j) {
-                if (dis(row, column, i, j) <= radius) {
+                if (dis(row, column, i, j) <= radius && map.grids[map.shape.index_of(i,j)].type != Grid::Type::BlockOut) {
                     res.emplace_back(map, i, j);
                 }
             }
