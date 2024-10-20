@@ -107,7 +107,7 @@ bool manual::init() {
     this->addChild(effectSlider, 5);
     effectSlider->setVisible(false);
 
-    auto Clear = Label::createWithTTF("Clear Save Data", "fonts/Bender/BENDER.OTF", 75);
+    auto Clear = Label::createWithTTF("Clear Saved Data", "fonts/Bender/BENDER.OTF", 75);
     auto clearItem = MenuItemLabel::create(
             Clear,
             [this, userDefault, player, musicSlider, effectSlider, musicVolume, effectVolume](Ref *ref) {
