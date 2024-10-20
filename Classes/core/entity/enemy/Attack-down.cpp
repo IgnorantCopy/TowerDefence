@@ -10,6 +10,8 @@ AttackDown::AttackDown(id::Id id, route::Route route, const timer::Clock &clk) :
 void AttackDown::on_tick(GridRef g) {
     Enemy::on_tick(g);
 
+    this->timeouts_.on_tick(g.clock(), *this, g);
+
     if (g.clock().is_triggered(release_skill_)) {
         this->move_ = g.clock().never();
         for (auto grid : g.with_radius(2, l1_dis)) {

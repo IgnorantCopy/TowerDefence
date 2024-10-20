@@ -13,6 +13,8 @@ Boss2::Boss2(id::Id id, route::Route route, const timer::Clock &clk)
 void Boss2::on_tick(GridRef g) {
     Enemy::on_tick(g);
 
+    this->timeouts_.on_tick(g.clock(), *this, g);
+
     auto add_buff_with_dur = [&clk = g.clock()](BuffIdentifier id, Buff b,
                                                 uint32_t dur) {
         return [=, &clk](Tower &tower) {
