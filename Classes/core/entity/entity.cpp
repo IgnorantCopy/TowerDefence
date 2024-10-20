@@ -1,10 +1,10 @@
 #include "entity.h"
 #include "../map.h"
-#include "route.h"
 #include <cassert>
 #include <cmath>
 #include <cstdint>
-#include <stdexcept>
+#include <format>
+#include <iostream>
 
 namespace towerdefence::core {
 
@@ -31,44 +31,87 @@ void Enemy::on_hit(int32_t atk, AttackType attack_type, GridRef g) {
 }
 
 void Enemy::on_tick(GridRef g) {
+    std::cout << std::format("{} (enemy): on tick", this->id.v) << std::endl;
     auto &clk = g.clock();
 
     this->update_buff(clk);
-
-    assert(this->move_progress_ >= 0 && this->move_progress_ <= 1);
-
-    this->move_progress_ +=
-        0.1 * this->status().speed_ / timer::TICK_PER_SECOND;
-
-    auto moves = static_cast<uint32_t>(std::floor(this->move_progress_));
-    this->move_progress_ = std::fmod(this->move_progress_, 1);
-
-    for (uint32_t i = 0; i < moves; ++i) {
-        try {
-            auto [dx, dy] = this->route_.next_direction();
-            auto nx = route::ssize(g.row) + dx;
-            auto ny = route::ssize(g.column) + dy;
-            assert(nx >= 0 && nx < g.map.shape.height_ && ny >= 0 &&
-                   ny < g.map.shape.width_);
-            g.map.move_enemy_to(this->id, nx, ny);
-        } catch (const route::reached_end &) {
-            g.map.reached_end(this->id); // todo: fix UAF in reached_end
-            break;
-        }
+    auto speed = this->status().speed_;
+    if (speed == 0) {
+        this->move_.visit_period(
+            [](timer::Timer::Period &p) { p.period = UINT32_MAX; });
+    } else {
+        this->move_.visit_period([interval = timer::TICK_PER_SECOND * 10. /
+                                             this->status().speed_,
+                                  &clk](timer::Timer::Period &p) {
+            std::cout << std::format("old interval: {} new interval: {}",
+                                     p.period, interval)
+                      << std::endl;
+            if (interval != p.period) {
+                auto progress =
+                    static_cast<double>((clk.elapased_ - p.start) % p.period) /
+                    p.period;
+                auto new_progress = static_cast<uint32_t>(progress * interval);
+                std::cout << std::format("old progress: {}, new progress: {}",
+                                         progress, new_progress)
+                          << std::endl;
+                std::cout << std::format("old p.start: {}, p.period: {}",
+                                         p.start, p.period)
+                          << std::endl;
+                p.start = (clk.elapased_ >= new_progress)
+                              ? (clk.elapased_ - new_progress)
+                              : 0;
+                p.period = interval;
+                std::cout << std::format("new p.start: {}, p.period: {}",
+                                         p.start, p.period)
+                          << std::endl;
+            }
+        });
     }
-
-    assert(this->move_progress_ >= 0 && this->move_progress_ <= 1);
 }
 
 void Enemy::on_death(GridRef g) {
     g.on_enemy_death(*this);
+    g.map.enemy_alive -= 1;
+    if (g.map.enemy_alive == 0) {
+        g.on_end(true);
+    }
 }
 
 void Tower::on_tick(GridRef g) {
-    this->update_buff(g.clock());
+    std::cout << std::format("{} (tower): on tick", this->id.v) << std::endl;
+
+    auto &clk = g.clock();
+    this->update_buff(clk);
+    std::cout << std::format("attack interval: {} {}\n",
+                             this->status().attack_interval_,
+                             this->status().attack_interval());
     this->attack_.visit_period(
-        [status = this->status()](timer::Timer::Period &p) {
-            p.period = status.attack_interval_;
+        [interval = std::round(this->status().attack_interval_),
+         &clk](timer::Timer::Period &p) {
+            std::cout << std::format("old interval: {} new interval: {}",
+                                     p.period, interval)
+                      << std::endl;
+            if (interval != p.period) {
+                auto progress =
+                    static_cast<double>((clk.elapased_ - p.start) % p.period) /
+                    p.period;
+                auto new_progress = static_cast<uint32_t>(progress * interval);
+                std::cout << std::format("old progress: {}, new progress: {}",
+                                         progress, new_progress)
+                          << std::endl;
+                std::cout << std::format("old p.start: {}, p.period: {}",
+                                         p.start, p.period)
+                          << std::endl;
+
+                p.start = (clk.elapased_ >= new_progress)
+                              ? (clk.elapased_ - new_progress)
+                              : 0;
+                uint32_t next_period = interval;
+                p.period = (next_period > 0) ? next_period : 1;
+                std::cout << std::format("new p.start: {}, p.period: {}",
+                                         p.start, p.period)
+                          << std::endl;
+            }
         });
 }
 

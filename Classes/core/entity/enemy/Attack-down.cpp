@@ -8,9 +8,12 @@ namespace core {
 AttackDown::AttackDown(id::Id id, route::Route route, const timer::Clock &clk) : Enemy(id, route), release_skill_(clk.with_period_sec(20)) {}
 
 void AttackDown::on_tick(GridRef g) {
-    this->update_buff(g.clock());
+    Enemy::on_tick(g);
+
+    this->timeouts_.on_tick(g.clock(), *this, g);
 
     if (g.clock().is_triggered(release_skill_)) {
+        this->move_ = g.clock().never();
         for (auto grid : g.with_radius(2, l1_dis)) {
             grid.grid.with_tower(
                 [this, &clk = g.clock()](std::unique_ptr<Tower> &tower) {
@@ -21,6 +24,13 @@ void AttackDown::on_tick(GridRef g) {
                 });
         }
         g.on_enemy_release_skill(*this, g.map, 25);
+        this->timeouts_.add_callback(
+        g.clock().with_duration(68), [](AttackDown &self, GridRef g) {
+            self.reset_move_timer(g.clock());
+
+            return false;
+
+            });
     }
 }
 
