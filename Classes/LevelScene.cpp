@@ -1570,7 +1570,7 @@ void LevelScene::createMap(int level) {
             415.0, 420.0};
         enemyStartPos = {{0, 0},  {0, 0}, {0, 5}, {0, 6}, {2, 0},
                          {1, 11}, {0, 0}, {0, 5}, {2, 0}};
-        enemyCreateType = {{{7, 12}, {8, 2}},
+        enemyCreateType = {{{7, 2}, {8, 2}},
                            {{7, 2}, {8, 2}},
                            {{7, 2}, {8, 2}},
                            {{2, 2}, {3, 1}},
@@ -1687,6 +1687,7 @@ void LevelScene::createMap(int level) {
     this->map->on_enemy_death(
         [this](Enemy &enemy) { EnemyAnimation::dead(this, &enemy); });
     this->map->on_escape([this](Id id) {
+        auto &enemy = this->map->get_enemy_by_id(id);
         for (auto it = this->enemies.begin(); it != this->enemies.end();) {
             if (it->first == id) {
                 auto enemySprite = it->second;
@@ -1696,6 +1697,12 @@ void LevelScene::createMap(int level) {
             } else {
                 it++;
             }
+        }
+        if (enemy.status().enemy_type_ == EnemyType::Boss1 ||
+            enemy.status().enemy_type_ == EnemyType::Boss2) {
+            this->gameOver(false);
+            this->lifeLabel->setString("0");
+            return;
         }
         this->decreaseLife();
     });

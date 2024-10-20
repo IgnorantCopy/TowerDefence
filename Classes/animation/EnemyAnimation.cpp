@@ -8,6 +8,7 @@
 using towerdefence::core::Boss2;
 
 size_t EnemyAnimation::notAttackedCounter = 0;
+std::unique_ptr<EnemyFactoryBase> EnemyAnimation::boss = nullptr;
 
 static bool isInRange(int x1, int y1, int x2, int y2, int range) {
     return abs(x1 - x2) + abs(y1 - y2) <= range;
@@ -424,6 +425,11 @@ void EnemyAnimation::dead(LevelScene *levelScene,
     int indexX = (int)((x - typeX + 0.5f * size) / size);
     int indexY = (int)((typeY - y + 0.5f * size) / size);
 
+    auto extra_storage =
+        std::unordered_map<std::string, std::any>{{"current_frame", 0}};
+    Route route = Route(enemy->route_.diffs);
+    route.pos = enemy->route_.pos;
+
     cocos2d::ParticleSystemQuad *particle;
     switch (enemy->status().enemy_type_) {
     case EnemyType::AttackDown:
@@ -443,6 +449,8 @@ void EnemyAnimation::dead(LevelScene *levelScene,
             frames.pushBack(cocos2d::SpriteFrame::create(
                 prefix + diePath, cocos2d::Rect(0, 0, 1000, 1000)));
         }
+        EnemyAnimation::boss =
+            std::make_unique<EnemyFactory<Boss2>>(route, extra_storage);
         break;
     case EnemyType::Boss2:
         prefix += "boss/stage2/die/boss2_die";
@@ -589,25 +597,22 @@ void EnemyAnimation::dead(LevelScene *levelScene,
     auto remove = cocos2d::RemoveSelf::create();
     cocos2d::Sequence *seq;
     if (enemy->status().enemy_type_ == EnemyType::Boss1) {
-        auto callback = cocos2d::CallFunc::create([levelScene, enemy, indexX,
-                                                   indexY, x, y]() {
-            auto extra_storage =
-                std::unordered_map<std::string, std::any>{{"current_frame", 0}};
-            Route route = Route(enemy->route_.diffs);
-            route.pos = enemy->route_.pos;
-            std::unique_ptr<EnemyFactoryBase> newEnemy =
-                std::make_unique<EnemyFactory<Boss2>>(route, extra_storage);
-            Id id = levelScene->map->spawn_enemy_at(indexY, indexX, *newEnemy);
-            auto enemySprite = cocos2d::Sprite::create(
-                "images/enemies/boss/stage2/move/boss2_move00.png");
-            enemySprite->setPosition(x, y);
-            enemySprite->setScale(0.5f);
-            enemySprite->setOpacity(100);
-            levelScene->enemies.emplace_back(id, enemySprite);
-            levelScene->addChild(enemySprite, 3);
-            enemySprite->scheduleOnce(
-                [enemySprite](float dt) { enemySprite->setOpacity(255); }, 5.0f,
-                "boss2");
+        auto callback = cocos2d::CallFunc::create([levelScene, indexX, indexY,
+                                                   x, y]() {
+            if (EnemyAnimation::boss) {
+                Id id = levelScene->map->spawn_enemy_at(indexY, indexX,
+                                                        *EnemyAnimation::boss);
+                auto enemySprite = cocos2d::Sprite::create(
+                    "images/enemies/boss/stage2/move/boss2_move00.png");
+                enemySprite->setPosition(x, y);
+                enemySprite->setScale(0.5f);
+                enemySprite->setOpacity(100);
+                levelScene->enemies.emplace_back(id, enemySprite);
+                levelScene->addChild(enemySprite, 3);
+                enemySprite->scheduleOnce(
+                    [enemySprite](float dt) { enemySprite->setOpacity(255); },
+                    5.0f, "boss2");
+            }
         });
         seq = cocos2d::Sequence::create(animate, delay, callback, remove,
                                         nullptr);
