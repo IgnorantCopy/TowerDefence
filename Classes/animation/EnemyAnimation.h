@@ -18,6 +18,7 @@ class EnemyAnimation {
     const static int size = 140;
     constexpr const static float epsilon = 1e-6;
     static size_t notAttackedCounter;
+    static std::unique_ptr<EnemyFactoryBase> boss;
 
   public:
     static void move(LevelScene *levelScene, Enemy *enemy,

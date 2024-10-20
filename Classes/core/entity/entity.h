@@ -298,7 +298,7 @@ struct Enemy : Entity,
 
         base.health_ -= realized_attack_;
         base.defence_ += buffs.defence_correction_;
-        base.speed_ = std::max(0., base.speed_ * (1 + buffs.speed_));
+        base.speed_ = std::min(2.0 * base.speed_, std::max(0., base.speed_ * (1 + buffs.speed_)));
 
         return base;
     }
@@ -309,7 +309,7 @@ struct Enemy : Entity,
     virtual void on_hit(int32_t atk, AttackType attack_type, GridRef g);
 
     void reset_move_timer(const timer::Clock &clk) {
-        this->move_ = clk.with_period(timer::TICK_PER_SECOND * 10. /
+        this->move_ = clk.with_period_sec(timer::TICK_PER_SECOND * 10. /
                                           this->status().speed_);
     }
 };
@@ -341,6 +341,11 @@ struct TowerInfo {
         copied.attack_ = a;
         return copied;
     }
+
+    uint32_t attack_interval() const noexcept {
+        return std::max(UINT32_C(1), static_cast<uint32_t>(std::round(
+                                         this->attack_interval_)));
+    }
 };
 
 struct Tower : Entity,
@@ -371,7 +376,8 @@ struct Tower : Entity,
     void on_tick(GridRef g) override;
 
     void reset_attack_timer(const timer::Clock &clk) {
-        this->attack_ = clk.with_period_sec(std::round(this->status().attack_interval_ * 0.1));
+        this->attack_ = clk.with_period_sec(
+            this->status().attack_interval());
     }
 };
 
