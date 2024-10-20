@@ -174,6 +174,7 @@ class LevelScene : public cocos2d::Scene {
     std::vector<std::pair<Id, cocos2d::Sprite *>> towers;
     // enemies
     std::vector<std::pair<Id, cocos2d::Sprite *>> enemies;
+    std::vector<std::pair<Id, std::pair<size_t, size_t>>> enemiesPath;
     // bullets
     std::vector<Bullet *> bullets;
 
@@ -192,6 +193,8 @@ class LevelScene : public cocos2d::Scene {
     cocos2d::Sprite *getTower(Id id);
 
     cocos2d::Sprite *getEnemy(Id id);
+
+    std::pair<size_t, size_t> getEnemyPath(Id id);
 
     void deleteTower(bool isReturn = true);
 

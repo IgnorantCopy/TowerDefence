@@ -149,10 +149,10 @@ void EnemyAnimation::transport(LevelScene *levelScene,
         scaleRate = 0.35f;
         break;
     case EnemyType::Boss1:
-        scaleRate = 0.5f;
+        scaleRate = 0.4f;
         break;
     case EnemyType::Boss2:
-        scaleRate = 0.5f;
+        scaleRate = 0.4f;
         break;
     default:
         break;
@@ -184,6 +184,8 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
     }
     float x = enemySprite->getPositionX();
     float y = enemySprite->getPositionY();
+    float delta_x = 0.0f;
+    float delta_y = 0.0f;
     int indexX = (int)((x - typeX + 0.5f * size) / size);
     int indexY = (int)((typeY - y + 0.5f * size) / size);
 
@@ -426,8 +428,11 @@ void EnemyAnimation::dead(LevelScene *levelScene,
     if (enemySprite == nullptr) {
         return;
     }
+    enemySprite->setOpacity(255);
     float x = enemySprite->getPositionX();
     float y = enemySprite->getPositionY();
+    float delta_x = 0.0f;
+    float delta_y = 0.0f;
     int indexX = (int)((x - typeX + 0.5f * size) / size);
     int indexY = (int)((typeY - y + 0.5f * size) / size);
 

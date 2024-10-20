@@ -662,6 +662,15 @@ Sprite *LevelScene::getEnemy(Id id) {
     return nullptr;
 }
 
+std::pair<size_t, size_t> LevelScene::getEnemyPath(towerdefence::core::id::Id id) {
+    for (auto &pair : this->enemiesPath) {
+        if (pair.first == id) {
+            return pair.second;
+        }
+    }
+    return {100, 100};
+}
+
 void LevelScene::addBullet(Tower *tower, Enemy *enemy) {
     Bullet *bullet = nullptr;
     switch (tower->status().tower_type_) {
@@ -1872,6 +1881,7 @@ void LevelScene::createEnemy() {
                                     enemyPos[i][j].first, enemyPos[i][j].second,
                                     *enemyFactories[i][j]);
                                 enemies.emplace_back(id, enemySprites[i][j]);
+                                enemiesPath.emplace_back(id, enemyPos[i][j]);
                             });
                             auto spawn = Spawn::create(fadeIn, callback, nullptr);
                             enemySprites[i][j]->runAction(spawn);
