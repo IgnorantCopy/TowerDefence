@@ -88,6 +88,11 @@ Bullet::Bullet(LevelScene *levelScene, towerdefence::core::Tower *tower,
     float towerY = towerSprite->getPositionY();
     this->enemySprite =
         cocos2d::makeRef(this->levelScene->getEnemy(this->enemyId));
+    if (this->enemySprite == nullptr) {
+        this->bullet->removeFromParent();
+        this->bullet = nullptr;
+        return;
+    }
     float enemyX = this->enemySprite->getPositionX();
     float enemyY = this->enemySprite->getPositionY();
     this->bullet->setPosition(towerX, towerY);
