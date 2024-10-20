@@ -151,6 +151,7 @@ struct Map {
         CallbackContainer<Tower &, towerdefence::core::Map &, uint32_t>
             on_tower_release_skill;
         CallbackContainer<Enemy &> on_enemy_death;
+        CallbackContainer<Tower &> on_tower_removed;
         CallbackContainer<Enemy &, std::pair<size_t, size_t>,
                           std::pair<size_t, size_t>>
             on_enemy_move;
@@ -268,6 +269,12 @@ struct Map {
     CallbackHandle on_enemy_death(std::function<void(Enemy &)> f) {
         CallbackHandle handle{this->assign_id()};
         this->callbacks_.on_enemy_death.insert({handle, f});
+        return handle;
+    }
+
+    CallbackHandle on_tower_removed(std::function<void(Tower &)> f) {
+        CallbackHandle handle{this->assign_id()};
+        this->callbacks_.on_tower_removed.insert({handle, f});
         return handle;
     }
 
@@ -420,6 +427,10 @@ struct Map {
         auto &grid = grids.at(shape.index_of(row, column));
 
         assert(grid.tower.value()->id == id);
+        for (auto [handle, f] : this->callbacks_.on_tower_removed) {
+            f(**grid.tower);
+        }
+
         auto tower = grid.remove_tower();
         tower_refs_.erase(id);
 

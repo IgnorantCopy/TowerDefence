@@ -629,11 +629,10 @@ bool LevelScene::init(int level) {
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener,
                                                              this);
 
-    this->createEnemy();
-
     // update the map and ui every frame time
     scheduleOnce(
         [this](float dt) {
+            this->createEnemy();
             schedule(
                 [this](float dt) {
                     map->update();
@@ -641,7 +640,7 @@ bool LevelScene::init(int level) {
                 },
                 1.0 / 30, "update");
         },
-        1.0f, "gameLoading");
+        0.5f, "gameLoading");
     return true;
 }
 
@@ -1813,11 +1812,13 @@ void LevelScene::createEnemy() {
                 enemyPath += "boss/stage1/move/boss1_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Boss1>>(new_route,
                                                                  extra_storage);
+                delta = 50.0;
                 break;
             case EnemyType::Boss2:
                 enemyPath += "boss/stage2/move/boss2_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Boss2>>(new_route,
                                                                  extra_storage);
+                delta = 50.0;
                 break;
             default:
                 break;
@@ -1849,10 +1850,6 @@ void LevelScene::createEnemy() {
                 scheduleOnce(
                     [this, i, j](float dt) {
                         if (this->gameContinuing) {
-                            Id id = this->map->spawn_enemy_at(
-                                enemyPos[i][j].first, enemyPos[i][j].second,
-                                *enemyFactories[i][j]);
-                            enemies.emplace_back(id, enemySprites[i][j]);
                             enemySprites[i][j]->setVisible(true);
                             enemySprites[i][j]->setOpacity(0);
                             if (enemyType[enemyCreateType[i][j].second - 1] ==
@@ -1864,7 +1861,14 @@ void LevelScene::createEnemy() {
                                     "audio/level3_bgm2.MP3", true);
                             }
                             auto fadeIn = FadeIn::create(0.25f);
-                            enemySprites[i][j]->runAction(fadeIn);
+                            auto callback = CallFunc::create([this, i, j]() {
+                                Id id = this->map->spawn_enemy_at(
+                                    enemyPos[i][j].first, enemyPos[i][j].second,
+                                    *enemyFactories[i][j]);
+                                enemies.emplace_back(id, enemySprites[i][j]);
+                            });
+                            auto spawn = Spawn::create(fadeIn, callback, nullptr);
+                            enemySprites[i][j]->runAction(spawn);
                         }
                     },
                     enemyCreateTime[i] + 0.1f * j,
