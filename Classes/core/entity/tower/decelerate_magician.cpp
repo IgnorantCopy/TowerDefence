@@ -11,6 +11,7 @@ void DecelerateMagician::on_tick(GridRef g) {
     Tower::on_tick(g);
 
     auto &clk = g.clock();
+    this->timeouts_.on_tick(clk, *this, g);
 
     if (clk.is_triggered(this->attack_)) {
         auto grids = g.with_radius(this->status().attack_radius_, linf_dis);
