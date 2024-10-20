@@ -168,10 +168,6 @@ class LevelScene : public cocos2d::Scene {
     void gameOver(bool isWin);
 
   public:
-    ~LevelScene() {
-        if (map)
-            delete map;
-    }
     // the map of each level
     Map *map = nullptr;
     // towers
@@ -200,6 +196,8 @@ class LevelScene : public cocos2d::Scene {
     void deleteTower(bool isReturn = true);
 
     virtual bool init(int level);
+
+    ~LevelScene() override;
 };
 
 #endif // TOWERDEFENCE_LEVELSCENE_H

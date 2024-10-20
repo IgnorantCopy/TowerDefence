@@ -1308,15 +1308,8 @@ void LevelScene::createMap(int level) {
         routes = {Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D], Dir[D],
                          Dir[D], Dir[L], Dir[L], Dir[L], Dir[U], Dir[U], Dir[R],
                          Dir[R], Dir[D], Dir[D], Dir[L], Dir[L], Dir[L]}),
-                  Route({Dir[L],
-                         Dir[L],
-                         Dir[L],
-                         Dir[L],
-                         {6, 0},
-                         Dir[R],
-                         Dir[R],
-                         Dir[R],
-                         Dir[R]}),
+                  Route({Dir[L], Dir[L], Dir[L], Dir[L], {6, 0}, Dir[R],
+                         Dir[R], Dir[R], Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
@@ -1364,33 +1357,12 @@ void LevelScene::createMap(int level) {
             {{1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6}},
             {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
             {{2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}, {6, 6}},
-            {{1, 5},
-             {2, 7},
-             {3, 2},
-             {3, 3},
-             {4, 1},
-             {4, 3},
-             {5, 1},
-             {5, 3},
-             {6, 6}},
-            {{1, 5},
-             {2, 7},
-             {3, 2},
-             {3, 3},
-             {4, 1},
-             {4, 3},
-             {5, 1},
-             {5, 3},
-             {6, 6}},
-            {{1, 5},
-             {2, 7},
-             {3, 2},
-             {3, 3},
-             {4, 1},
-             {4, 3},
-             {5, 1},
-             {5, 3},
-             {6, 6}},
+            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1},
+             {4, 3}, {5, 1}, {5, 3}, {6, 6}},
+            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1},
+             {4, 3}, {5, 1}, {5, 3}, {6, 6}},
+            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1},
+             {4, 3}, {5, 1}, {5, 3}, {6, 6}},
             {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
             {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
             {{1, 9}, {3, 5}, {4, 8}, {5, 6}},
@@ -1412,34 +1384,16 @@ void LevelScene::createMap(int level) {
         map = new towerdefence::core::Map(
             width, height,
             [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
-        routes = {Route({Dir[L],
-                         Dir[L],
-                         Dir[L],
-                         {0, -8},
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[R]}),
+        routes = {Route({Dir[L], Dir[L], Dir[L], {0, -8}, Dir[D],
+                         Dir[D], Dir[D], Dir[D], Dir[D], Dir[D], Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[U], Dir[L], Dir[L]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[L], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[D], Dir[L]}),
-                  Route({Dir[L],
-                         Dir[L],
-                         Dir[L],
-                         {-6, -8},
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[D],
-                         Dir[R]}),
+                  Route({Dir[L], Dir[L], Dir[L], {-6, -8}, Dir[D], Dir[D],
+                         Dir[D], Dir[D], Dir[D], Dir[D], Dir[R]}),
                   Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D], Dir[L],
                          Dir[L], Dir[U], Dir[U], Dir[U], Dir[U], Dir[L], Dir[L],
                          Dir[D], Dir[D], Dir[L], Dir[L]})};
@@ -1534,9 +1488,9 @@ void LevelScene::createMap(int level) {
             width, height,
             [&](size_t x, size_t y) -> Grid { return Grid(type[x][y]); });
         routes = {
-            Route({Dir[R], Dir[R], Dir[R],    Dir[R], {6, 3}, Dir[R], Dir[R],
+            Route({Dir[R], Dir[R], Dir[R], Dir[R], {6, 3}, Dir[R], Dir[R],
                    Dir[R], Dir[R], {-3, -10}, Dir[R], Dir[R], Dir[R], Dir[R],
-                   Dir[D], Dir[R], Dir[R],    Dir[R], Dir[R], Dir[R], Dir[R]}),
+                   Dir[D], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
             Route({Dir[D], Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R],
                    Dir[R], Dir[R], Dir[R]}),
             Route({Dir[D], Dir[D], Dir[D], Dir[R], Dir[R], Dir[R], Dir[R],
@@ -1545,11 +1499,11 @@ void LevelScene::createMap(int level) {
                    Dir[L]}),
             Route({Dir[L], Dir[L], Dir[L], Dir[L], Dir[L], Dir[D], Dir[D],
                    Dir[R], Dir[R], Dir[R], Dir[R], Dir[R]}),
-            Route({Dir[R], Dir[R], Dir[R],    Dir[R], {6, 3}, Dir[R], Dir[R],
+            Route({Dir[R], Dir[R], Dir[R], Dir[R], {6, 3}, Dir[R], Dir[R],
                    Dir[R], Dir[R], {-3, -10}, Dir[R], Dir[R], Dir[R], Dir[R],
-                   Dir[R], Dir[U], Dir[L],    Dir[D], Dir[R], Dir[U], Dir[L],
-                   Dir[D], Dir[R], Dir[U],    Dir[L], Dir[L], Dir[L], Dir[L],
-                   Dir[D], Dir[D], Dir[D],    Dir[D], Dir[L], Dir[L]}),
+                   Dir[R], Dir[U], Dir[L], Dir[D], Dir[R], Dir[U], Dir[L],
+                   Dir[D], Dir[R], Dir[U], Dir[L], Dir[L], Dir[L], Dir[L],
+                   Dir[D], Dir[D], Dir[D], Dir[D], Dir[L], Dir[L]}),
             Route({Dir[D], Dir[D], Dir[D], Dir[L], Dir[L], Dir[L], Dir[D],
                    Dir[D], Dir[D], Dir[L], Dir[L]}),
             Route({Dir[R], Dir[R], Dir[R], Dir[R], Dir[R], Dir[D], Dir[D],
@@ -1879,6 +1833,9 @@ void LevelScene::createEnemy() {
         enemyPos.push_back(enemySameTimePos);
         enemyFactories.push_back(std::move(enemySameTimeFactories));
     }
+    if (Level == 3) {
+        enemyNumber++;
+    }
     this->map->enemy_alive = enemyNumber;
     for (size_t i = 0; i < enemyCreateType.size(); i++) {
         if (gameContinuing) {
@@ -1894,13 +1851,6 @@ void LevelScene::createEnemy() {
                                 enemyPos[i][j].first, enemyPos[i][j].second,
                                 *enemyFactories[i][j]);
                             enemies.emplace_back(id, enemySprites[i][j]);
-                        }
-                    },
-                    enemyCreateTime[i] + 0.25f + 0.1f * j,
-                    "addEnemyToMap" + std::to_string(i) + std::to_string(j));
-                scheduleOnce(
-                    [this, i, j](float dt) {
-                        if (this->gameContinuing) {
                             enemySprites[i][j]->setVisible(true);
                             enemySprites[i][j]->setOpacity(0);
                             if (enemyType[enemyCreateType[i][j].second - 1] ==
@@ -1915,7 +1865,7 @@ void LevelScene::createEnemy() {
                             enemySprites[i][j]->runAction(fadeIn);
                         }
                     },
-                    enemyCreateTime[i] - 0.25f + 0.1f * j,
+                    enemyCreateTime[i] + 0.1f * j,
                     "createEnemy" + std::to_string(i) + std::to_string(j));
             }
         }
@@ -2188,4 +2138,11 @@ void LevelScene::update() {
     this->updateSelectorEnabled();
     this->updateUpgradeItemEnabled();
     this->updateUpgradeButtonEnabled();
+}
+
+LevelScene::~LevelScene() {
+    if (map != nullptr) {
+        delete map;
+        map = nullptr;
+    }
 }
