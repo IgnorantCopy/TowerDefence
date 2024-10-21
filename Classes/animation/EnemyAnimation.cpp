@@ -521,8 +521,8 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         break;
     case EnemyType::Destroyer:
         scale = 0.25;
-        delta_x = -40.0;
-        delta_y = 17.0;
+        delta_x = 32.0;
+        delta_y = 15.0;
         prefix += "destroyer/die/destroyer_die";
         frames.reserve(30);
         for (int i = 0; i < 30; i++) {
