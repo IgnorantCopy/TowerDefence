@@ -149,7 +149,9 @@ struct Clock {
     bool is_triggered(Timer clk) const {
         return std::visit(
             overloaded{[this](const Timer::Period &p) {
-                           return (elapased_ - p.start) % p.period == 0;
+                           return (elapased_ - p.start) %
+                                      ((p.period) ? p.period : 1) ==
+                                  0;
                        },
                        [this](const Timer::Duration &d) {
                            return d.duration == elapased_ - d.start;

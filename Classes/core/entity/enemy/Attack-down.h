@@ -11,6 +11,8 @@ struct AttackDown final : Enemy {
     timer::Timer release_skill_;
     std::unordered_set<id::Id> has_buff_;
 
+    timer::CallbackTimer<AttackDown &, GridRef> timeouts_;
+
     AttackDown(id::Id id, route::Route route, const timer::Clock & clk);
     AttackDown() = delete;
 

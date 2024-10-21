@@ -19,8 +19,9 @@ namespace towerdefence {
                         auto status = this->status();
 
                         e.on_hit(status.attack_, status.attack_type_, g);
+                        g.on_enemy_attacked(e,*this);
                         e.add_buff_in({this->id, Buff::DECREASE_SPEED},
-                                      Buff::speed(-40),
+                                      Buff::speed(-0.4),
                                       clk.with_duration_sec(2));
                     });
                 }
@@ -34,7 +35,7 @@ namespace towerdefence {
                 for (auto ref : g.with_radius(status.attack_radius_, linf_dis)) {
                     ref.grid.with_enemy([this, clk](Enemy &enemy) {
                         enemy.add_buff_in({this->id, Buff::DECREASE_SPEED},
-                                          Buff::speed(-80),
+                                          Buff::speed(-0.8),
                                           clk.with_duration_sec(35));
                     });
                 }

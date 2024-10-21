@@ -4,18 +4,17 @@
 #include "../entity.h"
 
 namespace towerdefence {
-    namespace core {
+namespace core {
 
-        struct Dog final : Enemy {
+struct Dog final : Enemy {
 
-            Dog(id::Id id, route::Route route): Enemy(id, route) {}
+    Dog(id::Id id, route::Route route) : Enemy(id, route) {}
 
-            EnemyInfo info() const override {
-                return { 900, { 0, 0 }, 19, EnemyType::Dog, 15};
-            }
-        };
-    } // namespace core
+    EnemyInfo info() const override {
+        return {900, {0, 0}, 19, EnemyType::Dog, 15};
+    }
+};
+} // namespace core
 } // namespace towerdefence
 
-
-#endif //TOWERDEFENCE_DOG_H
+#endif // TOWERDEFENCE_DOG_H
