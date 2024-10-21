@@ -56,30 +56,19 @@ void Boss2::on_tick(GridRef g) {
             g.map.remove_tower((*tower)->id);
         }
         g.on_enemy_release_skill(*this, g.map, 0);
-        this->timeouts_.add_callback(
-            g.clock().with_duration(72), reset_timer);
+        this->timeouts_.add_callback(g.clock().with_duration(72), reset_timer);
     }
 
     if (g.clock().is_triggered(release_skill_.dec_atk_spd)) {
         turn_off_all_timer();
         g.on_enemy_release_skill(*this, g.map, 10);
-        this->timeouts_.add_callback(
-            g.clock().with_duration(135), reset_timer);
+        this->timeouts_.add_callback(g.clock().with_duration(135), reset_timer);
     }
 
     if (g.clock().is_triggered(release_skill_.silent)) {
-        this->move_ = g.clock().never();
-        this->release_skill_.dec_atk_spd = g.clock().never();
-        this->release_skill_.withdraw = g.clock().never();
+        turn_off_all_timer();
         g.on_enemy_release_skill(*this, g.map, 15);
-        this->timeouts_.add_callback(
-            g.clock().with_duration(165), [](Boss2 &self, GridRef g) {
-                self.reset_move_timer(g.clock());
-                self.release_skill_.dec_atk_spd = g.clock().with_period_sec(20);
-                self.release_skill_.withdraw = g.clock().with_period_sec(40);
-
-                return false;
-            });
+        this->timeouts_.add_callback(g.clock().with_duration(165), reset_timer);
     }
 }
 } // namespace towerdefence::core
