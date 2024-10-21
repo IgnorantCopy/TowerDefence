@@ -39,8 +39,8 @@ if (TOWERDEFENCE_SANITIZER)
     if (WIN32)
         message("disable annotation on windows")
         add_compile_definitions("_DISABLE_VECTOR_ANNOTATION" "_DISABLE_STRING_ANNOTATION")
-    endif()
-endif()
+    endif ()
+endif ()
 
 if (NOT DEFINED BUILD_ENGINE_DONE) # to test TowerDefence into root project
     set(COCOS2DX_ROOT_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cocos2d)
@@ -56,12 +56,12 @@ if (TOWERDEFENCE_SANITIZER)
         add_compile_options("/fsanitize=address")
         add_link_options("/fsanitize=address")
         add_compile_definitions("TOWERDEFENCE_SANITIZER")
-    else()
+    else ()
         message("enabling sanitizer")
         add_compile_options(-fsanitize=undefined,address)
         add_link_options(-fsanitize=undefined,address)
-    endif()
-endif()
+    endif ()
+endif ()
 
 add_library(core
         Classes/core/map.cpp
@@ -226,8 +226,8 @@ endif ()
 
 # mark app complie info and libs info
 set(all_code_files
-    ${GAME_HEADER}
-    ${GAME_SOURCE}
+        ${GAME_HEADER}
+        ${GAME_SOURCE}
         Classes/plot/plot_1.cpp
         Classes/plot/plot_1.h
         Classes/plot/plot_2.cpp
@@ -236,6 +236,8 @@ set(all_code_files
         Classes/plot/plot_3.h
         Classes/plot/plot_4.cpp
         Classes/plot/plot_4.h
+        Classes/plot/plot.cpp
+        Classes/plot/plot.h
 
 )
 if (NOT ANDROID)
