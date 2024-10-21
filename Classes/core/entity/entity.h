@@ -484,6 +484,9 @@ std::unique_ptr<Tower> TowerFactory<T>::construct(id::Id id,
     }
 
     res->reset_attack_timer(clk);
+    res->attack_.visit_period([](timer::Timer::Period &p){
+        p.start += 1;
+    });
     res->storage_ = extra_storage;
 
     return res;
