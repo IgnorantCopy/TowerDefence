@@ -226,8 +226,17 @@ endif ()
 
 # mark app complie info and libs info
 set(all_code_files
-        ${GAME_HEADER}
-        ${GAME_SOURCE}
+    ${GAME_HEADER}
+    ${GAME_SOURCE}
+        Classes/plot/plot_1.cpp
+        Classes/plot/plot_1.h
+        Classes/plot/plot_2.cpp
+        Classes/plot/plot_2.h
+        Classes/plot/plot_3.cpp
+        Classes/plot/plot_3.h
+        Classes/plot/plot_4.cpp
+        Classes/plot/plot_4.h
+
 )
 if (NOT ANDROID)
     add_executable(${APP_NAME} ${all_code_files})
