@@ -662,7 +662,8 @@ Sprite *LevelScene::getEnemy(Id id) {
     return nullptr;
 }
 
-std::pair<size_t, size_t> LevelScene::getEnemyPath(towerdefence::core::id::Id id) {
+std::pair<size_t, size_t>
+LevelScene::getEnemyPath(towerdefence::core::id::Id id) {
     for (auto &pair : this->enemiesPath) {
         if (pair.first == id) {
             return pair.second;
@@ -746,8 +747,8 @@ void LevelScene::updateMoneyLabel() {
     if (this->moneyLabel != nullptr) {
         if (this->map->cost_ == 0) {
             this->moneyLabel->setString("0");
-            this->moneyLabel->setPosition(
-                cocos2d::Vec2(origin.x + 150, origin.y + visibleSize.height - 70));
+            this->moneyLabel->setPosition(cocos2d::Vec2(
+                origin.x + 150, origin.y + visibleSize.height - 70));
         } else {
             this->moneyLabel->setString(std::to_string(this->map->cost_));
             this->moneyLabel->setPosition(
@@ -1153,7 +1154,7 @@ void LevelScene::hideUpgradeMenu() {
 }
 
 void LevelScene::deleteTower() {
-    Sprite *towerSprite = this->getTower(this->selectedTowerId);
+    auto towerSprite = RefPtr<Sprite>(this->getTower(this->selectedTowerId));
     for (auto it = this->towers.begin(); it != this->towers.end(); ++it) {
         if (it->first == this->selectedTowerId) {
             it = this->towers.erase(it);
@@ -1170,7 +1171,10 @@ void LevelScene::upgradeTower() {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     float typeX = origin.x + 350 + SIZE;
     float typeY = origin.y + visibleSize.height - SIZE;
-    Sprite *towerSprite = this->getTower(this->selectedTowerId);
+    auto towerSprite = RefPtr<Sprite>(this->getTower(this->selectedTowerId));
+    if (!towerSprite) {
+        return;
+    }
     float x = towerSprite->getPositionX();
     float y = towerSprite->getPositionY();
     int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
@@ -1337,73 +1341,10 @@ void LevelScene::createMap(int level) {
                          Dir[D], Dir[R], Dir[R], Dir[U], Dir[U], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[L]})};
         enemyFirstDir = {R, L, L, L, L, R};
-        enemyCreateTime = {10.0,  11.0,  12.0,  15.0,  16.0,  17.0,  20.0,
-                           22.0,  24.0,  30.0,  33.0,  36.0,  39.0,  45.0,
-                           46.0,  47.0,  55.0,  57.0,  59.0,  65.0,  68.0,
-                           71.0,  72.0,  77.0,  80.0,  85.0,  95.0,  101.0,
-                           110.0, 120.0, 130.0, 145.0, 160.0, 180.0, 200.0};
+        enemyCreateTime = {1.0, 2.0, 5.0};
         enemyStartPos = {{0, 0},  {0, 0},  {0, 11}, {2, 11},
                          {3, 11}, {4, 11}, {6, 0}};
-        enemyCreateType = {
-            {{3, 2}},
-            {{3, 2}},
-            {{3, 2}},
-            {{3, 2}, {4, 1}, {5, 1}},
-            {{3, 2}, {4, 1}, {5, 1}},
-            {{3, 2}, {4, 1}, {5, 1}},
-            {{3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-            {{3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-            {{3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-            {{3, 3}, {3, 4}, {4, 3}, {4, 4}},
-            {{3, 3}, {3, 4}, {4, 3}, {4, 4}},
-            {{3, 3}, {3, 4}, {4, 3}, {4, 4}, {5, 3}, {5, 4}},
-            {{3, 3}, {3, 4}, {4, 3}, {4, 4}, {5, 3}, {5, 4}},
-            {{1, 7}, {3, 2}, {4, 1}, {5, 1}},
-            {{1, 7}, {3, 2}, {4, 1}, {5, 1}},
-            {{1, 7}, {3, 2}, {4, 1}, {5, 1}},
-            {{1, 7}, {3, 3}, {4, 3}, {5, 4}},
-            {{1, 7}, {3, 3}, {4, 3}, {5, 4}},
-            {{1, 7}, {3, 3}, {4, 3}, {5, 4}},
-            {{1, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-            {{1, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-            {{1, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-            {{1, 5}},
-            {{6, 6}},
-            {{1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6}},
-            {{1, 5}, {2, 7}, {3, 2}, {4, 1}, {5, 1}, {6, 6}},
-            {{1, 5}, {2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}},
-            {{2, 7}, {3, 2}, {3, 3}, {4, 1}, {4, 3}, {5, 1}, {5, 3}, {6, 6}},
-            {{1, 5},
-             {2, 7},
-             {3, 2},
-             {3, 3},
-             {4, 1},
-             {4, 3},
-             {5, 1},
-             {5, 3},
-             {6, 6}},
-            {{1, 5},
-             {2, 7},
-             {3, 2},
-             {3, 3},
-             {4, 1},
-             {4, 3},
-             {5, 1},
-             {5, 3},
-             {6, 6}},
-            {{1, 5},
-             {2, 7},
-             {3, 2},
-             {3, 3},
-             {4, 1},
-             {4, 3},
-             {5, 1},
-             {5, 3},
-             {6, 6}},
-            {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
-            {{2, 7}, {3, 5}, {4, 8}, {5, 6}},
-            {{1, 9}, {3, 5}, {4, 8}, {5, 6}},
-            {{1, 9}, {2, 7}, {3, 5}, {4, 8}, {5, 6}, {6, 9}}};
+        enemyCreateType = {{{4, 8}}, {{3, 2}, {5, 2}}, {{1, 9}}, {}};
         break;
     case 2:
         gridType = {{3, 5, 4, 4, 4, 4, 4, 5, 3, 0, 0, 2},
@@ -1895,7 +1836,7 @@ void LevelScene::createEnemy() {
         enemyPos.push_back(enemySameTimePos);
         enemyFactories.push_back(std::move(enemySameTimeFactories));
     }
-    if (Level == 3) {
+    if (Level == 3 || Level == 1) {
         enemyNumber++;
     }
     this->map->enemy_alive = enemyNumber;
