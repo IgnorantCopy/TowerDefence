@@ -18,7 +18,6 @@ namespace towerdefence::core {
         }
 
         void on_tick(GridRef g) override;
-        void on_death(GridRef g) override;
     };
 } // namespace towerdefence::core
 
