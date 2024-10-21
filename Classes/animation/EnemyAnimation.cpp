@@ -203,11 +203,11 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
     float delta_x = 0.0f;
     float delta_y = 0.0f;
     float delayTime = 0.0f;
-    int indexX = int(currentPos.first);
-    int indexY = int(currentPos.second);
+    int indexY = int(currentPos.first);
+    int indexX = int(currentPos.second);
     for (int i = 0; i < enemy->route_.pos; i++) {
-        indexX += enemy->route_.diffs[i].first;
-        indexY += enemy->route_.diffs[i].second;
+        indexY += enemy->route_.diffs[i].first;
+        indexX += enemy->route_.diffs[i].second;
     }
 
     cocos2d::ParticleSystemQuad *particle;
@@ -255,8 +255,8 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
         particle =
             cocos2d::ParticleSystemQuad::create("particles/attack_ring.plist");
         if (particle) {
-            particle->setPosition(cocos2d::Vec2(typeX + float(indexY) * size,
-                                                typeY - float(indexX) * size + delta_Y));
+            particle->setPosition(cocos2d::Vec2(typeX + float(indexX) * size,
+                                                typeY - float(indexY) * size + delta_Y));
             levelScene->addChild(particle, 4);
         }
         player->playEffect("audio/enemySkill.MP3");
@@ -283,7 +283,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
         player->playEffect("audio/enemySkill.MP3");
         return;
     case EnemyType::Boss1:
-        delta_x = 20.0;
+        delta_x = 10.0;
         delta_y = 40.0;
         delta_X = 18.0;
         delta_Y = 25.0;
@@ -334,8 +334,11 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
         }
         break;
     case EnemyType::Boss2:
+        delta_Y = 25.0;
         prefix += "boss/stage2/skill";
         if (abs(duration - 10.0f) <= epsilon) {
+            delta_x = -10.0;
+            delta_y = 40.0;
             prefix += "1/boss2_skill1";
             frames.reserve(90);
             for (int i = 0; i < 90; i++) {
@@ -407,16 +410,16 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
     default:
         return;
     }
-    enemySprite->setPosition(cocos2d::Vec2(typeX + float(indexY) * size + delta_X + delta_x,
-                                           typeY - float(indexX) * size + delta_Y + delta_y));
+    enemySprite->setPosition(cocos2d::Vec2(typeX + float(indexX) * size + delta_X + delta_x,
+                                           typeY - float(indexY) * size + delta_Y + delta_y));
     auto animation = cocos2d::Animation::createWithSpriteFrames(frames, 0.05f);
     auto animate = cocos2d::Animate::create(animation);
     auto delay = cocos2d::DelayTime::create(delayTime);
     auto callback = cocos2d::CallFunc::create(
         [enemy, enemySprite, typeX, typeY, indexX, indexY, delta_X, delta_Y]() {
             enemy->set_storage<int>("current_frame", 0);
-            enemySprite->setPosition(cocos2d::Vec2(typeX + float(indexY) * size + delta_X,
-                                                   typeY - float(indexX) * size + delta_Y));
+            enemySprite->setPosition(cocos2d::Vec2(typeX + float(indexX) * size + delta_X,
+                                                   typeY - float(indexY) * size + delta_Y));
         });
     auto seq = cocos2d::Sequence::create(animate, delay, callback, nullptr);
     enemySprite->stopAllActions();
@@ -456,11 +459,11 @@ void EnemyAnimation::dead(LevelScene *levelScene,
     }
     int index_x = (int)((x - typeX + 0.5f * size) / size);
     int index_y = (int)((typeY - y + 0.5f * size) / size);
-    int indexX = int(currentPos.first);
-    int indexY = int(currentPos.second);
+    int indexY = int(currentPos.first);
+    int indexX = int(currentPos.second);
     for (int i = 0; i < enemy->route_.pos; i++) {
-        indexX += enemy->route_.diffs[i].first;
-        indexY += enemy->route_.diffs[i].second;
+        indexY += enemy->route_.diffs[i].first;
+        indexX += enemy->route_.diffs[i].second;
     }
 
     auto extra_storage =
@@ -657,16 +660,17 @@ void EnemyAnimation::dead(LevelScene *levelScene,
     auto remove = cocos2d::RemoveSelf::create();
     cocos2d::Sequence *seq;
     if (enemy->status().enemy_type_ == EnemyType::Boss1) {
-        auto callback = cocos2d::CallFunc::create([levelScene, indexX, indexY, typeX, typeY]() {
+        auto callback = cocos2d::CallFunc::create([levelScene, indexX, indexY, typeX, typeY, currentPos]() {
             if (EnemyAnimation::boss) {
                 Id id = levelScene->map->spawn_enemy_at(indexY, indexX,
                                                         *EnemyAnimation::boss);
                 auto newEnemySprite = cocos2d::Sprite::create(
                     "images/enemies/boss/stage2/move/boss2_move00.png");
-                newEnemySprite->setPosition(typeX + float(indexY * size) + 10.0f, typeY - float(indexX * size) + 63.0f);
+                newEnemySprite->setPosition(typeX + float(indexX * size) + 10.0f, typeY - float(indexY * size) + 63.0f);
                 newEnemySprite->setScale(0.45f);
                 newEnemySprite->setOpacity(100);
                 levelScene->enemies.emplace_back(id, newEnemySprite);
+                levelScene->enemiesPath.emplace_back(id, currentPos);
                 levelScene->addChild(newEnemySprite, 5);
                 newEnemySprite->scheduleOnce(
                     [newEnemySprite](float dt) { newEnemySprite->setOpacity(255); },
