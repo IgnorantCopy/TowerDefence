@@ -429,7 +429,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
     auto callback =
         cocos2d::CallFunc::create([enemy, enemySprite, temp, typeX, typeY,
                                    indexX, indexY, delta_X, delta_Y]() {
-            enemy->set_storage<int>("current_frame", 0);
+            //            enemy->set_storage<int>("current_frame", 0);
             enemySprite->setVisible(true);
             enemySprite->getActionManager()->resumeTarget(enemySprite);
             temp->removeFromParent();
