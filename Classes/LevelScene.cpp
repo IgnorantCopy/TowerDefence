@@ -662,6 +662,15 @@ Sprite *LevelScene::getEnemy(Id id) {
     return nullptr;
 }
 
+std::pair<size_t, size_t> LevelScene::getEnemyPath(towerdefence::core::id::Id id) {
+    for (auto &pair : this->enemiesPath) {
+        if (pair.first == id) {
+            return pair.second;
+        }
+    }
+    return {100, 100};
+}
+
 void LevelScene::addBullet(Tower *tower, Enemy *enemy) {
     Bullet *bullet = nullptr;
     switch (tower->status().tower_type_) {
@@ -735,10 +744,16 @@ void LevelScene::updateMoneyLabel() {
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
     if (this->moneyLabel != nullptr) {
-        this->moneyLabel->setString(std::to_string(this->map->cost_));
-        this->moneyLabel->setPosition(
-            cocos2d::Vec2(origin.x + 150 + 15 * log10(map->getcost_()),
-                          origin.y + visibleSize.height - 70));
+        if (this->map->cost_ == 0) {
+            this->moneyLabel->setString("0");
+            this->moneyLabel->setPosition(
+                cocos2d::Vec2(origin.x + 150, origin.y + visibleSize.height - 70));
+        } else {
+            this->moneyLabel->setString(std::to_string(this->map->cost_));
+            this->moneyLabel->setPosition(
+                cocos2d::Vec2(origin.x + 150 + 15 * log10(map->getcost_()),
+                              origin.y + visibleSize.height - 70));
+        }
     }
 }
 
@@ -1778,7 +1793,8 @@ void LevelScene::createEnemy() {
         std::vector<std::pair<size_t, size_t>> enemySameTimePos;
         std::vector<std::unique_ptr<EnemyFactoryBase>> enemySameTimeFactories;
         for (auto &j : enemyCreateType[i]) {
-            float delta = 0;
+            float delta_x = 0;
+            float delta_y = 0;
             std::string enemyPath = "images/enemies/";
             size_t x = enemyStartPos[j.first].first;
             size_t y = enemyStartPos[j.first].second;
@@ -1809,18 +1825,19 @@ void LevelScene::createEnemy() {
                 enemyPath += "warlock/move/warlock_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Warlock>>(
                     new_route, extra_storage);
+                delta_y = 10.0;
                 break;
             case EnemyType::Destroyer:
                 enemyPath += "destroyer/move/destroyer_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Destroyer>>(
                     new_route, extra_storage);
-                delta = 3.0;
+                delta_y = 3.0;
                 break;
             case EnemyType::Tank:
                 enemyPath += "tank/move/tank_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Tank>>(new_route,
                                                                 extra_storage);
-                delta = 15.0;
+                delta_y = 15.0;
                 break;
             case EnemyType::Crab:
                 enemyPath += "crab/move/crab_move00.png";
@@ -1836,12 +1853,13 @@ void LevelScene::createEnemy() {
                 enemyPath += "attackDown/move/attackDown_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<AttackDown>>(
                     new_route, extra_storage);
-                delta = 15.0;
+                delta_y = 15.0;
                 break;
             case EnemyType::LifeUp:
                 enemyPath += "lifeUp/move/lifeUp_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<LifeUp>>(
                     new_route, extra_storage);
+                delta_y = 5.0;
                 break;
             case EnemyType::NotAttacked:
                 enemyPath += "notAttacked/move/notAttacked_move00.png";
@@ -1852,13 +1870,14 @@ void LevelScene::createEnemy() {
                 enemyPath += "boss/stage1/move/boss1_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Boss1>>(new_route,
                                                                  extra_storage);
-                delta = 50.0;
+                delta_x = 18.0;
+                delta_y = 25.0;
                 break;
             case EnemyType::Boss2:
                 enemyPath += "boss/stage2/move/boss2_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Boss2>>(new_route,
                                                                  extra_storage);
-                delta = 50.0;
+                delta_y = 25.0;
                 break;
             default:
                 break;
@@ -1867,7 +1886,7 @@ void LevelScene::createEnemy() {
             auto newEnemySprite = Sprite::create(enemyPath);
             newEnemySprite->setScale(enemyScale[j.second - 1]);
             newEnemySprite->setPosition(
-                Vec2(X + y * SIZE, Y - x * SIZE + delta));
+                Vec2(X + y * SIZE + delta_x, Y - x * SIZE + delta_y));
             newEnemySprite->setVisible(false);
             enemySameTime.push_back(newEnemySprite);
             this->addChild(newEnemySprite, 5);
@@ -1906,6 +1925,7 @@ void LevelScene::createEnemy() {
                                     enemyPos[i][j].first, enemyPos[i][j].second,
                                     *enemyFactories[i][j]);
                                 enemies.emplace_back(id, enemySprites[i][j]);
+                                enemiesPath.emplace_back(id, enemyPos[i][j]);
                             });
                             auto spawn =
                                 Spawn::create(fadeIn, callback, nullptr);
