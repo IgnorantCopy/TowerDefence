@@ -310,7 +310,12 @@ struct Enemy : Entity,
 
     void reset_move_timer(const timer::Clock &clk) {
         this->move_ = clk.with_period(timer::TICK_PER_SECOND * 10. /
-                                          this->status().speed_);
+                                      this->status().speed_);
+    }
+
+    void reset_move_timer_next(const timer::Clock &clk) {
+        this->move_ = clk.with_period_next(timer::TICK_PER_SECOND * 10. /
+                                           this->status().speed_);
     }
 };
 

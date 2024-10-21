@@ -42,7 +42,7 @@ void Boss2::on_tick(GridRef g) {
     auto reset_timer = [](Boss2 &self, GridRef g) {
         auto &clk = g.clock();
 
-        self.reset_move_timer(clk);
+        self.reset_move_timer_next(clk);
         self.release_skill_.silent = clk.with_period_next_sec(30);
         self.release_skill_.dec_atk_spd = clk.with_period_next_sec(20);
         self.release_skill_.withdraw = clk.with_period_next_sec(40);

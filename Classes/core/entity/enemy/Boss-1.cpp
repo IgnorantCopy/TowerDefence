@@ -1,6 +1,5 @@
 #include "Boss-1.h"
 #include "../../map.h"
-#include "Boss-2.h"
 
 namespace towerdefence {
 namespace core {
@@ -27,7 +26,7 @@ void Boss1::on_tick(GridRef g) {
         g.on_enemy_release_skill(*this, g.map, 10);
         this->timeouts_.add_callback(
             g.clock().with_duration(135), [](Boss1 &self, GridRef g) {
-                self.reset_move_timer(g.clock());
+                self.reset_move_timer_next(g.clock());
 
                 return false;
 

@@ -26,7 +26,7 @@ void AttackDown::on_tick(GridRef g) {
         g.on_enemy_release_skill(*this, g.map, 25);
         this->timeouts_.add_callback(
         g.clock().with_duration(68), [](AttackDown &self, GridRef g) {
-            self.reset_move_timer(g.clock());
+            self.reset_move_timer_next(g.clock());
 
             return false;
 
