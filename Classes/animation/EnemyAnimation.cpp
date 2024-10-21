@@ -172,7 +172,8 @@ void EnemyAnimation::transport(LevelScene *levelScene,
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
     float x = origin.x + 350 + size * (targetPos.second + 1) + delta_x;
-    float y = origin.y + visibleSize.height - size * (targetPos.first + 1) + delta_y;
+    float y =
+        origin.y + visibleSize.height - size * (targetPos.first + 1) + delta_y;
     auto callback = cocos2d::CallFunc::create(
         [enemySprite, x, y]() { enemySprite->setPosition(x, y); });
     auto seq = cocos2d::Sequence::create(scaleDown, callback, scaleUp, nullptr);
@@ -255,8 +256,9 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
         particle =
             cocos2d::ParticleSystemQuad::create("particles/attack_ring.plist");
         if (particle) {
-            particle->setPosition(cocos2d::Vec2(typeX + float(indexX) * size,
-                                                typeY - float(indexY) * size + delta_Y));
+            particle->setPosition(
+                cocos2d::Vec2(typeX + float(indexX) * size,
+                              typeY - float(indexY) * size + delta_Y));
             levelScene->addChild(particle, 4);
         }
         player->playEffect("audio/enemySkill.MP3");
@@ -411,20 +413,36 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
     default:
         return;
     }
-    enemySprite->setPosition(cocos2d::Vec2(typeX + float(indexX) * size + delta_X + delta_x,
-                                           typeY - float(indexY) * size + delta_Y + delta_y));
+    //    enemySprite->setPosition(cocos2d::Vec2(typeX + float(indexX) * size +
+    //    delta_X + delta_x,
+    //                                           typeY - float(indexY) * size +
+    //                                           delta_Y + delta_y));
+    enemySprite->setVisible(false);
+    auto temp = cocos2d::Sprite::createWithTexture(enemySprite->getTexture());
+    temp->setPosition(enemySprite->getPosition());
+    temp->setScale(enemySprite->getScale());
+    temp->setFlippedX(enemySprite->isFlippedX());
+    levelScene->addChild(temp, 3);
     auto animation = cocos2d::Animation::createWithSpriteFrames(frames, 0.05f);
     auto animate = cocos2d::Animate::create(animation);
     auto delay = cocos2d::DelayTime::create(delayTime);
-    auto callback = cocos2d::CallFunc::create(
-        [enemy, enemySprite, typeX, typeY, indexX, indexY, delta_X, delta_Y]() {
+    auto callback =
+        cocos2d::CallFunc::create([enemy, enemySprite, temp, typeX, typeY,
+                                   indexX, indexY, delta_X, delta_Y]() {
             enemy->set_storage<int>("current_frame", 0);
-            enemySprite->setPosition(cocos2d::Vec2(typeX + float(indexX) * size + delta_X,
-                                                   typeY - float(indexY) * size + delta_Y));
+            enemySprite->setVisible(true);
+            enemySprite->getActionManager()->resumeTarget(enemySprite);
+            temp->removeFromParent();
+            //            enemySprite->setPosition(cocos2d::Vec2(typeX +
+            //            float(indexX) * size + delta_X,
+            //                                                   typeY -
+            //                                                   float(indexY) *
+            //                                                   size +
+            //                                                   delta_Y));
         });
     auto seq = cocos2d::Sequence::create(animate, delay, callback, nullptr);
-    enemySprite->stopAllActions();
-    enemySprite->runAction(seq);
+    enemySprite->getActionManager()->pauseTarget(enemySprite);
+    temp->runAction(seq);
 }
 
 void EnemyAnimation::dead(LevelScene *levelScene,
@@ -663,20 +681,25 @@ void EnemyAnimation::dead(LevelScene *levelScene,
     auto remove = cocos2d::RemoveSelf::create();
     cocos2d::Sequence *seq;
     if (enemy->status().enemy_type_ == EnemyType::Boss1) {
-        auto callback = cocos2d::CallFunc::create([levelScene, indexX, indexY, typeX, typeY, currentPos]() {
+        auto callback = cocos2d::CallFunc::create([levelScene, indexX, indexY,
+                                                   typeX, typeY, currentPos]() {
             if (EnemyAnimation::boss) {
                 Id id = levelScene->map->spawn_enemy_at(indexY, indexX,
                                                         *EnemyAnimation::boss);
                 auto newEnemySprite = cocos2d::Sprite::create(
                     "images/enemies/boss/stage2/move/boss2_move00.png");
-                newEnemySprite->setPosition(typeX + float(indexX * size) + 10.0f, typeY - float(indexY * size) + 63.0f);
+                newEnemySprite->setPosition(
+                    typeX + float(indexX * size) + 10.0f,
+                    typeY - float(indexY * size) + 63.0f);
                 newEnemySprite->setScale(0.45f);
                 newEnemySprite->setOpacity(100);
                 levelScene->enemies.emplace_back(id, newEnemySprite);
                 levelScene->enemiesPath.emplace_back(id, currentPos);
                 levelScene->addChild(newEnemySprite, 5);
                 newEnemySprite->scheduleOnce(
-                    [newEnemySprite](float dt) { newEnemySprite->setOpacity(255); },
+                    [newEnemySprite](float dt) {
+                        newEnemySprite->setOpacity(255);
+                    },
                     5.0f, "boss2");
             }
         });
