@@ -25,7 +25,7 @@ bool plot::init() {
     auto Back = Label::createWithTTF("Back", "fonts/Bender/BENDER.OTF", 75);
     auto backItem = MenuItemLabel::create(Back, [this](Ref *ref) {
         Director::getInstance()->replaceScene(
-            TransitionCrossFade::create(0.4f, SelectLevelScene::createScene()));
+            TransitionFade::create(0.4f, SelectLevelScene::createScene()));
     });
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
                                origin.y + visibleSize.height - 50));

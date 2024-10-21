@@ -662,7 +662,8 @@ Sprite *LevelScene::getEnemy(Id id) {
     return nullptr;
 }
 
-std::pair<size_t, size_t> LevelScene::getEnemyPath(towerdefence::core::id::Id id) {
+std::pair<size_t, size_t>
+LevelScene::getEnemyPath(towerdefence::core::id::Id id) {
     for (auto &pair : this->enemiesPath) {
         if (pair.first == id) {
             return pair.second;
@@ -746,8 +747,8 @@ void LevelScene::updateMoneyLabel() {
     if (this->moneyLabel != nullptr) {
         if (this->map->cost_ == 0) {
             this->moneyLabel->setString("0");
-            this->moneyLabel->setPosition(
-                cocos2d::Vec2(origin.x + 150, origin.y + visibleSize.height - 70));
+            this->moneyLabel->setPosition(cocos2d::Vec2(
+                origin.x + 150, origin.y + visibleSize.height - 70));
         } else {
             this->moneyLabel->setString(std::to_string(this->map->cost_));
             this->moneyLabel->setPosition(
@@ -1153,7 +1154,7 @@ void LevelScene::hideUpgradeMenu() {
 }
 
 void LevelScene::deleteTower() {
-    Sprite *towerSprite = this->getTower(this->selectedTowerId);
+    auto towerSprite = RefPtr<Sprite>(this->getTower(this->selectedTowerId));
     for (auto it = this->towers.begin(); it != this->towers.end(); ++it) {
         if (it->first == this->selectedTowerId) {
             it = this->towers.erase(it);
@@ -1170,7 +1171,10 @@ void LevelScene::upgradeTower() {
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
     float typeX = origin.x + 350 + SIZE;
     float typeY = origin.y + visibleSize.height - SIZE;
-    Sprite *towerSprite = this->getTower(this->selectedTowerId);
+    auto towerSprite = RefPtr<Sprite>(this->getTower(this->selectedTowerId));
+    if (!towerSprite) {
+        return;
+    }
     float x = towerSprite->getPositionX();
     float y = towerSprite->getPositionY();
     int indexX = (int)((x - typeX + 0.5f * SIZE) / SIZE);
@@ -1897,9 +1901,6 @@ void LevelScene::createEnemy() {
     }
     if (Level == 3) {
         enemyNumber++;
-    }
-    if (this->map->cost_ != this->cost) {
-        this->map->cost_ = this->cost;
     }
     this->map->enemy_alive = enemyNumber;
     for (size_t i = 0; i < enemyCreateType.size(); i++) {

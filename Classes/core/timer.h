@@ -155,6 +155,12 @@ struct Timer {
         return std::visit(overloaded{f, [](auto &&) {}}, clk);
     }
 
+    template <class F>
+        requires std::is_invocable_v<F, PeriodNext &>
+    void visit_period_next(F f) {
+        return std::visit(overloaded{f, [](auto &&) {}}, clk);
+    }
+
     bool operator==(const Timer &rhs) const noexcept {
         return std::visit(overloaded{[&](auto &&v) { return v == rhs; }},
                           rhs.clk);
@@ -202,7 +208,9 @@ struct Clock {
         return this->with_period(secs * 30);
     }
 
-    Timer with_period_next(uint32_t p) const { return Timer::period_next(p, elapased_); }
+    Timer with_period_next(uint32_t p) const {
+        return Timer::period_next(p, elapased_);
+    }
 
     Timer with_period_next_sec(uint32_t secs) const {
         return this->with_period_next(secs * 30);
