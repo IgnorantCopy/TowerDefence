@@ -2,18 +2,15 @@
 #define PLOT_1_H
 
 #include "cocos2d.h"
+#include "plot.h"
 
-class plot_1 : public cocos2d::Scene {
+class plot_1 : public plot {
   public:
     static cocos2d::Scene *createScene();
 
-    virtual bool init();
+    bool init() override;
 
     CREATE_FUNC(plot_1);
-
-    void onMouseDown(cocos2d::Event *event);
-
-    void onMouseUp(cocos2d::Event *event);
 };
 
 #endif // PLOT_1_H
