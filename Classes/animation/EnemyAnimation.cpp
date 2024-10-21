@@ -192,8 +192,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
     float delta_Y = 0.0f;
     float delta_x = 0.0f;
     float delta_y = 0.0f;
-    int delayFrame = 0;
-    float delayTime = 1.0f / FrameTime;
+    float delayTime = 0.0f;
     int indexX = int(currentPos.first);
     int indexY = int(currentPos.second);
     for (int i = 0; i < enemy->route_.pos; i++) {
@@ -208,7 +207,7 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
     case EnemyType::AttackDown:
         delta_y = 34.0;
         delta_Y = 15.0;
-        delayFrame = 45;
+        delayTime = 0.054;
         prefix += "attackDown/skill/attackDown_skill";
         frames.reserve(45);
         for (int i = 0; i < 45; i++) {
@@ -421,13 +420,14 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                                            typeY - float(indexX) * size + delta_Y + delta_y));
     auto animation = cocos2d::Animation::createWithSpriteFrames(frames, 0.05f);
     auto animate = cocos2d::Animate::create(animation);
+    auto delay = cocos2d::DelayTime::create(delayTime);
     auto callback = cocos2d::CallFunc::create(
         [enemy, enemySprite, typeX, typeY, indexX, indexY, delta_X, delta_Y]() {
             enemy->set_storage<int>("current_frame", 0);
             enemySprite->setPosition(cocos2d::Vec2(typeX + float(indexY) * size + delta_X,
                                                    typeY - float(indexX) * size + delta_Y));
         });
-    auto seq = cocos2d::Sequence::create(animate, callback, nullptr);
+    auto seq = cocos2d::Sequence::create(animate, delay, callback, nullptr);
     enemySprite->stopAllActions();
     enemySprite->runAction(seq);
 }
