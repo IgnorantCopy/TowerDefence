@@ -114,6 +114,8 @@ void EnemyAnimation::transport(LevelScene *levelScene,
     float duration = 1.0f / ((float)enemy->status().speed_ / 10.0f) / 4.0f;
     auto scaleDown = cocos2d::ScaleTo::create(duration, 0.1f);
     float scaleRate = 0.25f;
+    float delta_x = 0.0f;
+    float delta_y = 0.0f;
     switch (enemy->status().enemy_type_) {
     case EnemyType::Worm:
         scaleRate = 0.4f;
@@ -126,12 +128,15 @@ void EnemyAnimation::transport(LevelScene *levelScene,
         break;
     case EnemyType::Warlock:
         scaleRate = 0.4f;
+        delta_y = 10.0;
         break;
     case EnemyType::Destroyer:
         scaleRate = 0.25f;
+        delta_y = 3.0;
         break;
     case EnemyType::Tank:
         scaleRate = 0.4f;
+        delta_y = 15.0;
         break;
     case EnemyType::Crab:
         scaleRate = 0.25f;
@@ -141,18 +146,23 @@ void EnemyAnimation::transport(LevelScene *levelScene,
         break;
     case EnemyType::AttackDown:
         scaleRate = 0.25f;
+        delta_y = 15.0;
         break;
     case EnemyType::LifeUp:
         scaleRate = 0.25f;
+        delta_y = 5.0;
         break;
     case EnemyType::NotAttacked:
         scaleRate = 0.35f;
         break;
     case EnemyType::Boss1:
         scaleRate = 0.4f;
+        delta_x = 18.0;
+        delta_y = 25.0;
         break;
     case EnemyType::Boss2:
-        scaleRate = 0.4f;
+        scaleRate = 0.45f;
+        delta_y = 25.0;
         break;
     default:
         break;
@@ -161,8 +171,8 @@ void EnemyAnimation::transport(LevelScene *levelScene,
 
     auto visibleSize = cocos2d::Director::getInstance()->getVisibleSize();
     cocos2d::Vec2 origin = cocos2d::Director::getInstance()->getVisibleOrigin();
-    float x = origin.x + 350 + size * (targetPos.second + 1);
-    float y = origin.y + visibleSize.height - size * (targetPos.first + 1);
+    float x = origin.x + 350 + size * (targetPos.second + 1) + delta_x;
+    float y = origin.y + visibleSize.height - size * (targetPos.first + 1) + delta_y;
     auto callback = cocos2d::CallFunc::create(
         [enemySprite, x, y]() { enemySprite->setPosition(x, y); });
     auto seq = cocos2d::Sequence::create(scaleDown, callback, scaleUp, nullptr);
@@ -454,11 +464,11 @@ void EnemyAnimation::dead(LevelScene *levelScene,
     if (enemySprite == nullptr) {
         return;
     }
-    enemySprite->setOpacity(255);
     float x = enemySprite->getPositionX();
     float y = enemySprite->getPositionY();
     float delta_x = 0.0f;
     float delta_y = 0.0f;
+    float scale = 1.0f;
     std::pair<size_t, size_t> currentPos = levelScene->getEnemyPath(enemy->id);
     if (currentPos.first == 100 && currentPos.second == 100) {
         return;
@@ -480,6 +490,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
     cocos2d::ParticleSystemQuad *particle;
     switch (enemy->status().enemy_type_) {
     case EnemyType::AttackDown:
+        scale = 0.25;
         prefix += "attackDown/die/attackDown_die";
         frames.reserve(41);
         for (int i = 0; i < 41; i++) {
@@ -489,6 +500,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         }
         break;
     case EnemyType::Boss1:
+        scale = 0.4;
         delta_x = 13.0;
         prefix += "boss/stage1/die/boss1_die";
         frames.reserve(216);
@@ -501,6 +513,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
             std::make_unique<EnemyFactory<Boss2>>(route, extra_storage);
         break;
     case EnemyType::Boss2:
+        scale = 0.45;
         prefix += "boss/stage2/die/boss2_die";
         frames.reserve(134);
         for (int i = 0; i < 134; i++) {
@@ -510,6 +523,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         }
         break;
     case EnemyType::Crab:
+        scale = 0.25;
         prefix += "crab/die/crab_die";
         frames.reserve(36);
         for (int i = 0; i < 36; i++) {
@@ -519,6 +533,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         }
         break;
     case EnemyType::Destroyer:
+        scale = 0.25;
         delta_x = -40.0;
         delta_y = 17.0;
         prefix += "destroyer/die/destroyer_die";
@@ -530,6 +545,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         }
         break;
     case EnemyType::Dog:
+        scale = 0.2;
         prefix += "dog/die/dog_die";
         frames.reserve(30);
         for (int i = 0; i < 30; i++) {
@@ -539,6 +555,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         }
         break;
     case EnemyType::LifeUp:
+        scale = 0.25;
         delta_x = -5.0;
         prefix += "lifeUp/die/lifeUp_die";
         frames.reserve(30);
@@ -549,6 +566,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         }
         break;
     case EnemyType::NotAttacked:
+        scale = 0.35;
         delta_x = 3.0;
         prefix += "notAttacked/die/notAttacked_die";
         frames.reserve(30);
@@ -559,6 +577,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         }
         break;
     case EnemyType::Soldier:
+        scale = 0.4;
         prefix += "soldier/die/soldier_die";
         frames.reserve(23);
         for (int i = 0; i < 23; i++) {
@@ -568,6 +587,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         }
         break;
     case EnemyType::SpeedUp:
+        scale = 0.4;
         delta_y = -6.0;
         prefix += "speedUp/die/speedUp_die";
         frames.reserve(28);
@@ -578,6 +598,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         }
         break;
     case EnemyType::Tank:
+        scale = 0.4;
         delta_x = -10.0;
         delta_y = 10.0;
         prefix += "tank/die/tank_die";
@@ -589,6 +610,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         }
         break;
     case EnemyType::Warlock:
+        scale = 0.4;
         delta_y = -27.0;
         prefix += "warlock/die/warlock_die";
         frames.reserve(30);
@@ -599,6 +621,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         }
         break;
     case EnemyType::Worm:
+        scale = 0.4;
         prefix += "worm/die/worm_die";
         frames.reserve(21);
         for (int i = 0; i < 21; i++) {
@@ -675,6 +698,8 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         seq =
             cocos2d::Sequence::create(animate, delay, fadeOut, remove, nullptr);
     }
+    enemySprite->setOpacity(255);
+    enemySprite->setScale(scale);
     enemySprite->setPosition(x + delta_x, y + delta_y);
     enemySprite->stopAllActions();
     enemySprite->runAction(seq);

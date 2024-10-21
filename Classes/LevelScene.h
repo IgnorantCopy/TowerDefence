@@ -64,7 +64,7 @@ class LevelScene : public cocos2d::Scene {
         EnemyType::LifeUp,  EnemyType::NotAttacked, EnemyType::Boss1,
         EnemyType::Boss2};
     std::vector<float> enemyScale = {0.4,  0.2, 0.4,  0.4,  0.25, 0.4,
-                                     0.25, 0.4, 0.25, 0.25, 0.35, 0.4};
+                                     0.25, 0.4, 0.25, 0.25, 0.35, 0.4, 0.45};
 
     void createEnemy();
 
