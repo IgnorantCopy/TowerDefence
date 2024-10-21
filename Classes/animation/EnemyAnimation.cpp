@@ -413,13 +413,12 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
     default:
         return;
     }
-    //    enemySprite->setPosition(cocos2d::Vec2(typeX + float(indexX) * size +
-    //    delta_X + delta_x,
-    //                                           typeY - float(indexY) * size +
-    //                                           delta_Y + delta_y));
     enemySprite->setVisible(false);
     auto temp = cocos2d::Sprite::createWithTexture(enemySprite->getTexture());
-    temp->setPosition(enemySprite->getPosition());
+    //    temp->setPosition(enemySprite->getPosition());
+    temp->setPosition(
+        cocos2d::Vec2(typeX + float(indexX) * size + delta_X + delta_x,
+                      typeY - float(indexY) * size + delta_Y + delta_y));
     temp->setScale(enemySprite->getScale());
     temp->setFlippedX(enemySprite->isFlippedX());
     levelScene->addChild(temp, 3);
@@ -433,12 +432,6 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
             enemySprite->setVisible(true);
             enemySprite->getActionManager()->resumeTarget(enemySprite);
             temp->removeFromParent();
-            //            enemySprite->setPosition(cocos2d::Vec2(typeX +
-            //            float(indexX) * size + delta_X,
-            //                                                   typeY -
-            //                                                   float(indexY) *
-            //                                                   size +
-            //                                                   delta_Y));
         });
     auto seq = cocos2d::Sequence::create(animate, delay, callback, nullptr);
     enemySprite->getActionManager()->pauseTarget(enemySprite);

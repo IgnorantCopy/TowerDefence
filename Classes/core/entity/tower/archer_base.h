@@ -12,7 +12,7 @@ struct ArcherBase final : Tower {
     ArcherBase() = delete;
 
     static constexpr TowerInfo INFO{
-        99999, 7, 10, 15, 2, AttackType::Physics, TowerType::ArcherBase};
+        500, 7, 10, 15, 2, AttackType::Physics, TowerType::ArcherBase};
     TowerInfo info() const override { return INFO; }
 
     void on_tick(GridRef g) override;
