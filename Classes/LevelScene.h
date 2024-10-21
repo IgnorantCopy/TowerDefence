@@ -64,7 +64,8 @@ class LevelScene : public cocos2d::Scene {
         EnemyType::LifeUp,  EnemyType::NotAttacked, EnemyType::Boss1,
         EnemyType::Boss2};
     std::vector<float> enemyScale = {0.4,  0.2, 0.4,  0.4,  0.25, 0.4,
-                                     0.25, 0.4, 0.25, 0.25, 0.35, 0.4};
+                                     0.25, 0.4, 0.25, 0.25, 0.35, 0.4,
+                                     0.45};
 
     void createEnemy();
 
@@ -174,6 +175,7 @@ class LevelScene : public cocos2d::Scene {
     std::vector<std::pair<Id, cocos2d::Sprite *>> towers;
     // enemies
     std::vector<std::pair<Id, cocos2d::Sprite *>> enemies;
+    std::vector<std::pair<Id, std::pair<size_t, size_t>>> enemiesPath;
     // bullets
     std::vector<Bullet *> bullets;
 
@@ -194,6 +196,8 @@ class LevelScene : public cocos2d::Scene {
     cocos2d::Sprite *getEnemy(Id id);
 
     void deleteTower();
+
+    std::pair<size_t, size_t> getEnemyPath(Id id);
 
     virtual bool init(int level);
 
