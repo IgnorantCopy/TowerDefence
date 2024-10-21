@@ -72,28 +72,32 @@ bool SelectLevelScene::init() {
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
                                origin.y + visibleSize.height - 50));
 
-    auto button_plot_1 = ui::Button::create("images/plot_1.png");
+    auto button_plot_1 = ui::Button::create("images/plot_1.png",
+                                            "images/plot_1.png", "images/plot_lock.png");
     button_plot_1->addClickEventListener([](Ref* sender)
     {
         Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, plot_1::createScene()));
     });
     button_plot_1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 980,origin.y + visibleSize.height / 2 + 420));
 
-    auto button_plot_2 = ui::Button::create("images/plot_2.png");
+    auto button_plot_2 = ui::Button::create("images/plot_2.png",
+                                            "images/plot_2.png", "images/plot_lock.png");
     button_plot_2->addClickEventListener([](Ref* sender)
     {
         Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, plot_2::createScene()));
     });
     button_plot_2->setPosition(Vec2(origin.x + visibleSize.width / 2 - 380,origin.y + visibleSize.height / 2 + 420));
 
-    auto button_plot_3 = ui::Button::create("images/plot_3.png");
+    auto button_plot_3 = ui::Button::create("images/plot_3.png",
+                                            "images/plot_3.png", "images/plot_lock.png");
     button_plot_3->addClickEventListener([](Ref* sender)
     {
         Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, plot_3::createScene()));
     });
     button_plot_3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 220,origin.y + visibleSize.height / 2 + 420));
 
-    auto button_plot_4 = ui::Button::create("images/plot_4.png");
+    auto button_plot_4 = ui::Button::create("images/plot_4.png",
+                                            "images/plot_4.png", "images/plot_lock.png");
     button_plot_4->addClickEventListener([](Ref* sender)
     {
         Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, plot_4::createScene()));
@@ -192,8 +196,10 @@ bool SelectLevelScene::init() {
         this->addChild(level1Star, 5);
         break;
     case 0:
+        button_plot_2->setEnabled(false);
         break;
     default:
+        button_plot_2->setEnabled(false);
         level1Button->setEnabled(false);
         break;
     }
@@ -220,8 +226,10 @@ bool SelectLevelScene::init() {
         this->addChild(level2Star, 5);
         break;
     case 0:
+        button_plot_3->setEnabled(false);
         break;
     default:
+        button_plot_3->setEnabled(false);
         level2Button->setEnabled(false);
         break;
     }
@@ -248,8 +256,10 @@ bool SelectLevelScene::init() {
         this->addChild(level3Star, 5);
         break;
     case 0:
+        button_plot_4->setEnabled(false);
         break;
     default:
+        button_plot_4->setEnabled(false);
         level3Button->setEnabled(false);
         break;
     }
