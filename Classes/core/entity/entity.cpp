@@ -1,5 +1,6 @@
 #include "entity.h"
 #include "../map.h"
+#include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <cstdint>
@@ -10,6 +11,36 @@ namespace towerdefence::core {
 
 void Entity::on_death(GridRef g) {}
 void Entity::on_tick(GridRef g) {}
+
+auto update_by_interval(double interval, const timer::Clock &clk) {
+    return [=, &clk](timer::Timer::Period &p) {
+        std::cout << std::format("old interval: {} new interval: {}", p.period,
+                                 interval)
+                  << std::endl;
+        if (interval != p.period) {
+            auto progress =
+                static_cast<double>((clk.elapased_ - p.start) % p.period) /
+                p.period;
+            auto new_progress = std::max(
+                UINT32_C(1), static_cast<uint32_t>(progress * interval));
+            std::cout << std::format("old progress: {}, new progress: {}",
+                                     progress, new_progress)
+                      << std::endl;
+            std::cout << std::format("old p.start: {}, p.period: {}", p.start,
+                                     p.period)
+                      << std::endl;
+
+            p.start = (clk.elapased_ >= new_progress)
+                          ? (clk.elapased_ - new_progress)
+                          : 0;
+            uint32_t next_period = interval;
+            p.period = (next_period > 0) ? next_period : 1;
+            std::cout << std::format("new p.start: {}, p.period: {}", p.start,
+                                     p.period)
+                      << std::endl;
+        }
+    };
+}
 
 void Enemy::on_hit(int32_t atk, AttackType attack_type, GridRef g) {
     switch (attack_type) {
@@ -40,32 +71,8 @@ void Enemy::on_tick(GridRef g) {
         this->move_.visit_period(
             [](timer::Timer::Period &p) { p.period = UINT32_MAX; });
     } else {
-        this->move_.visit_period([interval = timer::TICK_PER_SECOND * 10. /
-                                             this->status().speed_,
-                                  &clk](timer::Timer::Period &p) {
-            std::cout << std::format("old interval: {} new interval: {}",
-                                     p.period, interval)
-                      << std::endl;
-            if (interval != p.period) {
-                auto progress =
-                    static_cast<double>((clk.elapased_ - p.start) % p.period) /
-                    p.period;
-                auto new_progress = static_cast<uint32_t>(progress * interval);
-                std::cout << std::format("old progress: {}, new progress: {}",
-                                         progress, new_progress)
-                          << std::endl;
-                std::cout << std::format("old p.start: {}, p.period: {}",
-                                         p.start, p.period)
-                          << std::endl;
-                p.start = (clk.elapased_ >= new_progress)
-                              ? (clk.elapased_ - new_progress)
-                              : 0;
-                p.period = interval;
-                std::cout << std::format("new p.start: {}, p.period: {}",
-                                         p.start, p.period)
-                          << std::endl;
-            }
-        });
+        this->move_.visit_period(update_by_interval(
+            timer::TICK_PER_SECOND * 10. / this->status().speed_, clk));
     }
 }
 
@@ -86,33 +93,7 @@ void Tower::on_tick(GridRef g) {
                              this->status().attack_interval_,
                              this->status().attack_interval());
     this->attack_.visit_period(
-        [interval = std::round(this->status().attack_interval_),
-         &clk](timer::Timer::Period &p) {
-            std::cout << std::format("old interval: {} new interval: {}",
-                                     p.period, interval)
-                      << std::endl;
-            if (interval != p.period) {
-                auto progress =
-                    static_cast<double>((clk.elapased_ - p.start) % p.period) /
-                    p.period;
-                auto new_progress = static_cast<uint32_t>(progress * interval);
-                std::cout << std::format("old progress: {}, new progress: {}",
-                                         progress, new_progress)
-                          << std::endl;
-                std::cout << std::format("old p.start: {}, p.period: {}",
-                                         p.start, p.period)
-                          << std::endl;
-
-                p.start = (clk.elapased_ >= new_progress)
-                              ? (clk.elapased_ - new_progress)
-                              : 0;
-                uint32_t next_period = interval;
-                p.period = (next_period > 0) ? next_period : 1;
-                std::cout << std::format("new p.start: {}, p.period: {}",
-                                         p.start, p.period)
-                          << std::endl;
-            }
-        });
+        update_by_interval(std::round(this->status().attack_interval_), clk));
 }
 
 std::vector<GridRef>::iterator get_enemy_grid(Tower &tower,
