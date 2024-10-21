@@ -283,9 +283,9 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
         player->playEffect("audio/enemySkill.MP3");
         return;
     case EnemyType::Boss1:
-        delta_x = 10.0;
+        delta_x = -13.0;
         delta_y = 40.0;
-        delta_X = 18.0;
+        delta_X = 10.0;
         delta_Y = 25.0;
         prefix += "boss/stage1/skill1/boss1_skill1";
         frames.reserve(90);
