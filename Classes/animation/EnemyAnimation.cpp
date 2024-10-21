@@ -402,25 +402,6 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                 frames.pushBack(cocos2d::SpriteFrame::create(
                     prefix + skillPath, cocos2d::Rect(0, 0, 1000, 1000)));
             }
-            for (const auto &tower : levelScene->towers) {
-                auto id = tower.first;
-                auto towerSprite = tower.second;
-                float towerX = towerSprite->getPositionX();
-                float towerY = towerSprite->getPositionY();
-                int towerIndexX = (int)((towerX - typeX + 0.5f * size) / size);
-                int towerIndexY = (int)((typeY - towerY + 0.5f * size) / size);
-                auto temp =
-                    abs(indexX - towerIndexX) + abs(indexY - towerIndexY);
-                if (temp < distance) {
-                    nearestTower = towerSprite;
-                    distance = temp;
-                    nearestId = id;
-                }
-            }
-            if (nearestTower) {
-                nearestTower->removeFromParent();
-                levelScene->map->withdraw_tower(nearestId);
-            }
         }
         break;
     default:
@@ -519,7 +500,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         for (int i = 0; i < 134; i++) {
             std::string diePath = std::format("{:03d}.png", i);
             frames.pushBack(cocos2d::SpriteFrame::create(
-                prefix + diePath, cocos2d::Rect(0, 0, 800, 800)));
+                prefix + diePath, cocos2d::Rect(0, 0, 1000, 1000)));
         }
         break;
     case EnemyType::Crab:

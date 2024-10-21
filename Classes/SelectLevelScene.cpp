@@ -3,8 +3,12 @@
 #include "Level1Scene.h"
 #include "Level2Scene.h"
 #include "Level3Scene.h"
-#include "cocostudio/SimpleAudioEngine.h"
+#include "plot/plot_1.h"
+#include "plot/plot_2.h"
+#include "plot/plot_3.h"
+#include "plot/plot_4.h"
 #include "ui/CocosGUI.h"
+#include "cocostudio/SimpleAudioEngine.h"
 
 USING_NS_CC;
 
@@ -68,6 +72,40 @@ bool SelectLevelScene::init() {
     backItem->setPosition(Vec2(origin.x + visibleSize.width - 100,
                                origin.y + visibleSize.height - 50));
 
+    auto button_plot_1 = ui::Button::create("images/plot_1.png");
+    button_plot_1->addClickEventListener([](Ref* sender)
+    {
+        Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, plot_1::createScene()));
+    });
+    button_plot_1->setPosition(Vec2(origin.x + visibleSize.width / 2 - 980,origin.y + visibleSize.height / 2 + 320));
+
+    auto button_plot_2 = ui::Button::create("images/plot_2.png");
+    button_plot_2->addClickEventListener([](Ref* sender)
+    {
+        Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, plot_2::createScene()));
+    });
+    button_plot_2->setPosition(Vec2(origin.x + visibleSize.width / 2 - 380,origin.y + visibleSize.height / 2 + 320));
+
+    auto button_plot_3 = ui::Button::create("images/plot_3.png");
+    button_plot_3->addClickEventListener([](Ref* sender)
+    {
+        Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, plot_3::createScene()));
+    });
+    button_plot_3->setPosition(Vec2(origin.x + visibleSize.width / 2 + 220,origin.y + visibleSize.height / 2 + 320));
+
+    auto button_plot_4 = ui::Button::create("images/plot_4.png");
+    button_plot_4->addClickEventListener([](Ref* sender)
+    {
+        Director::getInstance()->replaceScene(TransitionCrossFade::create(0.4f, plot_4::createScene()));
+    });
+    button_plot_4->setPosition(Vec2(origin.x + visibleSize.width / 2 + 820,origin.y + visibleSize.height / 2 + 320));
+
+    this->addChild(button_plot_1,1);
+    this->addChild(button_plot_2,1);
+    this->addChild(button_plot_3,1);
+    this->addChild(button_plot_4,1);
+
+
     auto level1Button = ui::Button::create(
         "images/level1_background_select.png",
         "images/level1_background_select.png", "images/locked.png");
@@ -84,10 +122,10 @@ bool SelectLevelScene::init() {
                 break;
             default:
                 break;
-            }
-        });
-    level1Button->setPosition(Vec2(origin.x + visibleSize.width / 2 - 800,
-                                   origin.y + visibleSize.height / 2));
+        }
+    });
+    level1Button->setPosition(Vec2(origin.x + visibleSize.width / 2 - 680,
+                                        origin.y + visibleSize.height / 2 - 320));
 
     auto level2Button = ui::Button::create(
         "images/level2_background_select.png",
@@ -105,10 +143,10 @@ bool SelectLevelScene::init() {
                 break;
             default:
                 break;
-            }
-        });
-    level2Button->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                                   origin.y + visibleSize.height / 2));
+        }
+    });
+    level2Button->setPosition(Vec2(origin.x + visibleSize.width / 2 - 80,
+                                        origin.y + visibleSize.height / 2 - 320));
 
     auto level3Button = ui::Button::create(
         "images/level3_background_select.png",
@@ -126,10 +164,10 @@ bool SelectLevelScene::init() {
                 break;
             default:
                 break;
-            }
-        });
-    level3Button->setPosition(Vec2(origin.x + visibleSize.width / 2 + 800,
-                                   origin.y + visibleSize.height / 2));
+        }
+    });
+    level3Button->setPosition(Vec2(origin.x + visibleSize.width / 2 + 520,
+                                        origin.y + visibleSize.height / 2 - 320));
 
     switch (level1Scene) {
     case 1:
