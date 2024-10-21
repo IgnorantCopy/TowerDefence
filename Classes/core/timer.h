@@ -47,6 +47,18 @@ struct Timer {
         }
     };
 
+    struct PeriodNext {
+        uint32_t period = 1;
+        uint32_t start = 0;
+
+        bool operator==(const PeriodNext &rhs) const = default;
+
+        bool operator==(const Timer &rhs) const noexcept {
+            return std::visit(overloaded{cmp<PeriodNext>(*this), def(false)},
+                              rhs.clk);
+        }
+    };
+
     struct Duration {
         uint32_t duration = 0;
         uint32_t start = 0;
@@ -81,12 +93,16 @@ struct Timer {
         }
     };
 
-    std::variant<Period, Duration, Before, Never> clk;
+    std::variant<Period, PeriodNext, Duration, Before, Never> clk;
 
     struct hasher {
         size_t operator()(const Timer &t) const noexcept {
             return std::visit(
                 overloaded{[](const Period &p) {
+                               return std::hash<uint64_t>{}(
+                                   uint64_t(p.period) << 32 | p.start);
+                           },
+                           [](const PeriodNext &p) {
                                return std::hash<uint64_t>{}(
                                    uint64_t(p.period) << 32 | p.start);
                            },
@@ -110,6 +126,10 @@ struct Timer {
 
     constexpr static Timer period(uint32_t period, uint32_t start) {
         return {Period{period, start}};
+    }
+
+    constexpr static Timer period_next(uint32_t period, uint32_t start) {
+        return {PeriodNext{period, start}};
     }
 
     constexpr static Timer duration(uint32_t duration, uint32_t start) {
@@ -149,9 +169,11 @@ struct Clock {
     bool is_triggered(Timer clk) const {
         return std::visit(
             overloaded{[this](const Timer::Period &p) {
-                           return (elapased_ - p.start) %
-                                      ((p.period) ? p.period : 1) ==
-                                  0;
+                           return (elapased_ - p.start) % p.period == 0;
+                       },
+                       [this](const Timer::PeriodNext &p) {
+                           return (elapased_ != p.start) &&
+                                  ((elapased_ - p.start) % p.period == 0);
                        },
                        [this](const Timer::Duration &d) {
                            return d.duration == elapased_ - d.start;
@@ -178,6 +200,12 @@ struct Clock {
 
     Timer with_period_sec(uint32_t secs) const {
         return this->with_period(secs * 30);
+    }
+
+    Timer with_period_next(uint32_t p) const { return Timer::period_next(p, elapased_); }
+
+    Timer with_period_next_sec(uint32_t secs) const {
+        return this->with_period_next(secs * 30);
     }
 
     Timer with_before(uint32_t duration, uint32_t period = 1) const {
