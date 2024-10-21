@@ -17,7 +17,9 @@ auto update_by_interval(double interval, const timer::Clock &clk) {
         std::cout << std::format("old interval: {} new interval: {}", p.period,
                                  interval)
                   << std::endl;
-        if (interval != p.period) {
+        uint32_t next_period = std::max(UINT32_C(1), static_cast<uint32_t>(interval));
+
+        if (next_period != p.period) {
             auto progress =
                 static_cast<double>((clk.elapased_ - p.start) % p.period) /
                 p.period;
@@ -33,7 +35,6 @@ auto update_by_interval(double interval, const timer::Clock &clk) {
             p.start = (clk.elapased_ >= new_progress)
                           ? (clk.elapased_ - new_progress)
                           : 0;
-            uint32_t next_period = interval;
             p.period = (next_period > 0) ? next_period : 1;
             std::cout << std::format("new p.start: {}, p.period: {}", p.start,
                                      p.period)
