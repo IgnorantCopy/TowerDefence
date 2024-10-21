@@ -26,6 +26,7 @@ class Bullet;
 
 class LevelScene : public cocos2d::Scene {
   protected:
+    uint32_t cost = 10;
     int Level = 0;
     Grid::Type type[7][12] = {Grid::Type::BlockPath};
     std::vector<std::vector<size_t>> gridType;

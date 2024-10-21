@@ -1898,6 +1898,9 @@ void LevelScene::createEnemy() {
     if (Level == 3) {
         enemyNumber++;
     }
+    if (this->map->cost_ != this->cost) {
+        this->map->cost_ = this->cost;
+    }
     this->map->enemy_alive = enemyNumber;
     for (size_t i = 0; i < enemyCreateType.size(); i++) {
         if (gameContinuing) {
