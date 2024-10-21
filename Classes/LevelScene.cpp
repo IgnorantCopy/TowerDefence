@@ -1870,7 +1870,7 @@ void LevelScene::createEnemy() {
                 enemyPath += "boss/stage1/move/boss1_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Boss1>>(new_route,
                                                                  extra_storage);
-                delta_x = 18.0;
+                delta_x = 10.0;
                 delta_y = 25.0;
                 break;
             case EnemyType::Boss2:
