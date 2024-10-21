@@ -1337,7 +1337,7 @@ void LevelScene::createMap(int level) {
                          Dir[D], Dir[R], Dir[R], Dir[U], Dir[U], Dir[L],
                          Dir[L], Dir[L], Dir[L], Dir[L]})};
         enemyFirstDir = {R, L, L, L, L, R};
-        enemyCreateTime = {10.0,  11.0,  12.0,  15.0,  16.0,  17.0,  20.0,
+        enemyCreateTime = {1.0,  11.0,  12.0,  15.0,  16.0,  17.0,  20.0,
                            22.0,  24.0,  30.0,  33.0,  36.0,  39.0,  45.0,
                            46.0,  47.0,  55.0,  57.0,  59.0,  65.0,  68.0,
                            71.0,  72.0,  77.0,  80.0,  85.0,  95.0,  101.0,
@@ -1753,7 +1753,8 @@ void LevelScene::createEnemy() {
         std::vector<std::pair<size_t, size_t>> enemySameTimePos;
         std::vector<std::unique_ptr<EnemyFactoryBase>> enemySameTimeFactories;
         for (auto &j : enemyCreateType[i]) {
-            float delta = 0;
+            float delta_x = 0;
+            float delta_y = 0;
             std::string enemyPath = "images/enemies/";
             size_t x = enemyStartPos[j.first].first;
             size_t y = enemyStartPos[j.first].second;
@@ -1784,18 +1785,19 @@ void LevelScene::createEnemy() {
                 enemyPath += "warlock/move/warlock_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Warlock>>(
                     new_route, extra_storage);
+                delta_y = 10.0;
                 break;
             case EnemyType::Destroyer:
                 enemyPath += "destroyer/move/destroyer_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Destroyer>>(
                     new_route, extra_storage);
-                delta = 3.0;
+                delta_y = 3.0;
                 break;
             case EnemyType::Tank:
                 enemyPath += "tank/move/tank_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Tank>>(new_route,
                                                                 extra_storage);
-                delta = 15.0;
+                delta_y = 15.0;
                 break;
             case EnemyType::Crab:
                 enemyPath += "crab/move/crab_move00.png";
@@ -1811,12 +1813,13 @@ void LevelScene::createEnemy() {
                 enemyPath += "attackDown/move/attackDown_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<AttackDown>>(
                     new_route, extra_storage);
-                delta = 15.0;
+                delta_y = 15.0;
                 break;
             case EnemyType::LifeUp:
                 enemyPath += "lifeUp/move/lifeUp_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<LifeUp>>(
                     new_route, extra_storage);
+                delta_y = 5.0;
                 break;
             case EnemyType::NotAttacked:
                 enemyPath += "notAttacked/move/notAttacked_move00.png";
@@ -1827,13 +1830,14 @@ void LevelScene::createEnemy() {
                 enemyPath += "boss/stage1/move/boss1_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Boss1>>(new_route,
                                                                  extra_storage);
-                delta = 50.0;
+                delta_x = 18.0;
+                delta_y = 25.0;
                 break;
             case EnemyType::Boss2:
                 enemyPath += "boss/stage2/move/boss2_move00.png";
                 newEnemy = std::make_unique<EnemyFactory<Boss2>>(new_route,
                                                                  extra_storage);
-                delta = 50.0;
+                delta_y = 25.0;
                 break;
             default:
                 break;
@@ -1842,7 +1846,7 @@ void LevelScene::createEnemy() {
             auto newEnemySprite = Sprite::create(enemyPath);
             newEnemySprite->setScale(enemyScale[j.second - 1]);
             newEnemySprite->setPosition(
-                Vec2(X + y * SIZE, Y - x * SIZE + delta));
+                Vec2(X + y * SIZE + delta_x, Y - x * SIZE + delta_y));
             newEnemySprite->setVisible(false);
             enemySameTime.push_back(newEnemySprite);
             this->addChild(newEnemySprite, 5);

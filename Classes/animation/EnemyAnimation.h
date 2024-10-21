@@ -16,6 +16,8 @@ using towerdefence::core::id::Id;
 
 class EnemyAnimation {
     const static int size = 140;
+    // the FrameTime in 1s
+    const static uint32_t FrameTime = 30;
     constexpr const static float epsilon = 1e-6;
     static size_t notAttackedCounter;
     static std::unique_ptr<EnemyFactoryBase> boss;
