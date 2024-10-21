@@ -1898,9 +1898,6 @@ void LevelScene::createEnemy() {
     if (Level == 3) {
         enemyNumber++;
     }
-    if (this->map->health_ != this->health) {
-        this->map->health_ = this->health;
-    }
     if (this->map->cost_ != this->cost) {
         this->map->cost_ = this->cost;
     }
