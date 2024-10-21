@@ -283,7 +283,6 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
         player->playEffect("audio/enemySkill.MP3");
         return;
     case EnemyType::Boss1:
-        delta_x = -13.0;
         delta_y = 40.0;
         delta_X = 10.0;
         delta_Y = 25.0;
@@ -337,8 +336,8 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
         delta_Y = 25.0;
         prefix += "boss/stage2/skill";
         if (abs(duration - 10.0f) <= epsilon) {
-            delta_x = -10.0;
-            delta_y = 40.0;
+            delta_x = -20.0;
+            delta_y = 95.0;
             prefix += "1/boss2_skill1";
             frames.reserve(90);
             for (int i = 0; i < 90; i++) {
@@ -395,6 +394,8 @@ void EnemyAnimation::releaseSkill(LevelScene *levelScene,
                 }
             }
         } else if (duration <= epsilon && !levelScene->towers.empty()) {
+            delta_x = -15.0;
+            delta_y = 90.0;
             cocos2d::Sprite *nearestTower = nullptr;
             int distance = 1000000;
             Id nearestId = levelScene->towers.begin()->first;
@@ -498,6 +499,8 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         break;
     case EnemyType::Boss2:
         scale = 0.45;
+        delta_x = -25.0;
+        delta_y = 10.0;
         prefix += "boss/stage2/die/boss2_die";
         frames.reserve(134);
         for (int i = 0; i < 134; i++) {
