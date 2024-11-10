@@ -162,7 +162,8 @@ void EnemyAnimation::transport(LevelScene *levelScene,
         break;
     case EnemyType::Boss2:
         scaleRate = 0.45f;
-        delta_y = 25.0;
+        delta_x = 10.0;
+        delta_y = 63.0;
         break;
     default:
         break;
@@ -532,7 +533,7 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         break;
     case EnemyType::Destroyer:
         scale = 0.25;
-        delta_x = 32.0;
+        delta_x = 15.0;
         delta_y = 15.0;
         prefix += "destroyer/die/destroyer_die";
         frames.reserve(30);
