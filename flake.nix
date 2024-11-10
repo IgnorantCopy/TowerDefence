@@ -17,16 +17,22 @@
         pcre2
         mount
       ];
-      dev-deps = with pkgs; [ (llvmPackages_19.clang-tools.override {
+      dev-deps = with pkgs; [
+        (llvmPackages_19.clang-tools.override {
           clang = clang_19.override {
             cc = gcc14.cc;
             useCcForLibs = true;
           };
           # enableLibcxx = true;
-      }) just gdb ];
+        })
+        just
+        gdb
+      ];
     in {
       devShells.x86_64-linux.default =
-        pkgs.mkShell.override { stdenv = pkgs.gcc14Stdenv; } { packages = build-deps ++ dev-deps ++ deps; };
+        pkgs.mkShell.override { stdenv = pkgs.gcc14Stdenv; } {
+          packages = build-deps ++ dev-deps ++ deps;
+        };
 
       packages.x86_64-linux = {
         doc = let
@@ -65,7 +71,8 @@
         };
 
         tower-defence = pkgs.gcc14Stdenv.mkDerivation rec {
-          name = "tower-defence";
+          name = "TowerDefence";
+          version = "0.1.0";
           src = ./.;
           buildInputs = deps;
           nativeBuildInputs = build-deps ++ (with pkgs; [ patchelf ]);
@@ -73,12 +80,17 @@
           doCheck = false;
           installPhase = ''
             cp -r bin/TowerDefence/ $out/
-            cp ../cocos2d/external/linux-specific/fmod/prebuilt/64-bit/libfmod.so -r $out/libfmod.so.6
+            cp ../cocos2d/external/linux-specific/fmod/prebuilt/64-bit/libfmod.so $out/libfmod.so.6
             patchelf --add-rpath $out $out/TowerDefence
           '';
           cmakeFlags =
             [ "-DCMAKE_SKIP_BUILD_RPATH=ON" "-DCMAKE_SKIP_INSTALL_RPATH=OFF" ];
         };
+      };
+
+      apps.x86_64-linux.tower-defence = {
+        type = "app";
+        program = "${self.packages.x86_64-linux.tower-defence}/TowerDefence";
       };
     };
 }
