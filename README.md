@@ -48,7 +48,7 @@ int level1Scene = userDefault->getIntegerForKey("level1", 0);
 ![SavedData3](README.assets/SavedData3.png){width=600}
 ![SavedData1](README.assets/SavedData1.png){width=600}
 
-## 2.5 剧
+## 2.5 剧情
 
 ……
 
