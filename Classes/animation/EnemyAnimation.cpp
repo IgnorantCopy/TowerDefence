@@ -656,12 +656,9 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         particle =
             cocos2d::ParticleSystemQuad::create("particles/icy_ring.plist");
         if (particle) {
-            particle->scheduleOnce(
-                [levelScene, particle, x, y](float dt) {
-                    particle->setPosition(cocos2d::Vec2(x, y));
-                    levelScene->addChild(particle, 2);
-                },
-                0.4f, "icyRing");
+            particle->setPosition(cocos2d::Vec2(x, y));
+            particle->setScale(0.5f);
+            levelScene->addChild(particle, 2);
         }
         break;
     default:
@@ -673,7 +670,10 @@ void EnemyAnimation::dead(LevelScene *levelScene,
     auto fadeOut = cocos2d::FadeOut::create(1.0f);
     auto remove = cocos2d::RemoveSelf::create();
     cocos2d::Sequence *seq;
-    if (enemy->status().enemy_type_ == EnemyType::Boss1) {
+    if (enemy->status().enemy_type_ != EnemyType::Boss1) {
+        seq =
+            cocos2d::Sequence::create(animate, delay, fadeOut, remove, nullptr);
+    } else {
         auto callback = cocos2d::CallFunc::create([levelScene, indexX, indexY,
                                                    typeX, typeY, currentPos]() {
             if (EnemyAnimation::boss) {
@@ -698,9 +698,6 @@ void EnemyAnimation::dead(LevelScene *levelScene,
         });
         seq = cocos2d::Sequence::create(animate, delay, callback, remove,
                                         nullptr);
-    } else {
-        seq =
-            cocos2d::Sequence::create(animate, delay, fadeOut, remove, nullptr);
     }
     enemySprite->setOpacity(255);
     enemySprite->setScale(scale);
