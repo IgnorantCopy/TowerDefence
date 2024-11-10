@@ -3,14 +3,15 @@
 
 #include "cocos2d.h"
 
-class manual: public cocos2d::Scene
-{
-public:
-    static cocos2d::Scene* createScene();
+class manual : public cocos2d::Scene {
+  public:
+    static cocos2d::Scene *createScene();
 
     virtual bool init();
 
     CREATE_FUNC(manual);
+
+    void onMouseDown(cocos2d::Event *event);
 };
 
-#endif  // __MANUAL_H__
+#endif // __MANUAL_H__
